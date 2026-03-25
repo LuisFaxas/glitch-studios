@@ -116,7 +116,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01.4-01-PLAN.md -- Sidebar overhaul: logo fix + glow, horizontal tiles, padding, glitch hover, compact mode, scroll, mobile overlay, social widget
+- [x] 01.4-01-PLAN.md -- Sidebar overhaul: logo fix + glow, horizontal tiles, padding, glitch hover, compact mode, scroll, mobile overlay, social widget
 - [x] 01.4-02-PLAN.md -- Home page + routes: hero visibility, empty section fallbacks, beats placeholder, about→artists, services detail + mobile accordion
 - [ ] 01.4-03-PLAN.md -- Design consistency: footer restyle, contact form, blog cards, typography, filter pills, 404 button, page padding
 

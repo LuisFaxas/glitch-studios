@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Ready to execute
-stopped_at: Completed 01.4-02-PLAN.md
-last_updated: "2026-03-25T16:00:29.030Z"
+stopped_at: Completed 01.4-01-PLAN.md
+last_updated: "2026-03-25T16:02:03.009Z"
 progress:
   total_phases: 8
   completed_phases: 4
   total_plans: 15
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-25)
 ## Current Position
 
 Phase: 01.4 (visual-polish) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -58,6 +58,7 @@ Plan: 2 of 3
 | Phase 01.2 P02 | 3min | 3 tasks | 8 files |
 | Phase 01.2 P03 | 7min | 3 tasks | 17 files |
 | Phase 01.4 P02 | 2min | 2 tasks | 8 files |
+| Phase 01.4 P01 | 3min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -93,6 +94,8 @@ Recent decisions affecting current work:
 - [Phase 01.2]: All Tailwind gray-* classes replaced with explicit monochrome hex values
 - [Phase 01.4]: Promise.allSettled for resilient home page DB queries -- hero renders even if DB is down
 - [Phase 01.4]: Scanline repeating-linear-gradient on hero bg for texture without asset dependency
+- [Phase 01.4]: Tile layout prop defaults to vertical -- horizontal is opt-in to prevent widget regressions
+- [Phase 01.4]: Glitch hover duplicates content into overlay div (not empty span) for visible clip-path effect
 
 ### Roadmap Evolution
 
@@ -112,6 +115,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T16:00:29.023Z
-Stopped at: Completed 01.4-02-PLAN.md
+Last session: 2026-03-25T16:02:03.004Z
+Stopped at: Completed 01.4-01-PLAN.md
 Resume file: None
