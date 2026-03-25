@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Globe, ExternalLink } from "lucide-react"
+import { Camera, Video, Headphones } from "lucide-react"
 import { GlitchLogo } from "@/components/layout/glitch-logo"
 import { NewsletterForm } from "@/components/forms/newsletter-form"
 
@@ -12,20 +12,20 @@ const navLinks = [
 ]
 
 const socialLinks = [
-  { label: "Instagram", href: "https://instagram.com", icon: Globe },
-  { label: "YouTube", href: "https://youtube.com", icon: ExternalLink },
-  { label: "SoundCloud", href: "https://soundcloud.com", icon: Globe },
+  { label: "Instagram", href: "https://instagram.com", icon: Camera },
+  { label: "YouTube", href: "https://youtube.com", icon: Video },
+  { label: "SoundCloud", href: "https://soundcloud.com", icon: Headphones },
 ]
 
 export function Footer() {
   return (
-    <footer className="border-t border-gray-800 bg-gray-900">
+    <footer className="border-t border-[#222222] bg-[#111111]">
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-8">
         <div className="grid gap-8 md:grid-cols-3">
           {/* Column 1: Logo + Tagline */}
           <div className="space-y-4">
             <GlitchLogo size="sm" animate={false} />
-            <p className="text-sm text-gray-400">Music. Video. Vision.</p>
+            <p className="font-mono text-xs uppercase tracking-[0.05em] text-[#888888]">Music. Video. Vision.</p>
           </div>
 
           {/* Column 2: Nav Links + Social */}
@@ -35,7 +35,7 @@ export function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-gray-400 transition-colors hover:text-white"
+                  className="font-mono text-xs uppercase tracking-[0.05em] text-[#888888] transition-colors hover:text-[#f5f5f0]"
                 >
                   {link.label}
                 </Link>
@@ -48,10 +48,10 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 transition-colors hover:text-white"
-                  aria-label={social.label}
+                  className="flex items-center gap-2 text-[#888888] hover:text-[#f5f5f0] transition-colors font-mono text-xs uppercase tracking-[0.05em]"
                 >
-                  <social.icon className="size-5" />
+                  <social.icon className="size-4" />
+                  <span>{social.label}</span>
                 </a>
               ))}
             </div>
@@ -59,14 +59,14 @@ export function Footer() {
 
           {/* Column 3: Newsletter */}
           <div className="space-y-4">
-            <p className="text-sm font-medium text-white">Stay in the loop</p>
+            <p className="font-mono font-bold uppercase tracking-[0.05em] text-sm text-[#f5f5f0]">Stay in the loop</p>
             <NewsletterForm />
           </div>
         </div>
 
         {/* Bottom row */}
-        <div className="mt-12 border-t border-gray-800 pt-6">
-          <p className="text-center text-xs text-gray-400">
+        <div className="mt-12 border-t border-[#222222] pt-6">
+          <p className="text-center font-mono text-[11px] uppercase tracking-[0.05em] text-[#888888]">
             &copy; 2026 Glitch Studios. All rights reserved.
           </p>
         </div>

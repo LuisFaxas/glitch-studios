@@ -4,8 +4,6 @@ import { useState } from "react"
 import { z } from "zod/v4"
 import { toast } from "sonner"
 import { subscribeNewsletter } from "@/actions/newsletter"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 
 const emailSchema = z.email("Please enter a valid email address")
 
@@ -41,17 +39,21 @@ export function NewsletterForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-2">
-      <Input
+      <input
         name="email"
         type="email"
         placeholder="Enter your email"
         required
         disabled={isLoading}
-        className="flex-1"
+        className="flex-1 h-10 bg-[#111111] border border-[#333333] rounded-none px-3 text-sm text-[#f5f5f0] font-sans placeholder:text-[#555555] focus:border-[#f5f5f0] focus:outline-none transition-colors disabled:opacity-50"
       />
-      <Button type="submit" size="default" disabled={isLoading}>
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="bg-[#f5f5f0] text-[#000000] border border-[#f5f5f0] rounded-none px-6 h-10 font-mono font-bold text-sm uppercase tracking-[0.05em] hover:bg-[#000000] hover:text-[#f5f5f0] transition-colors disabled:opacity-50"
+      >
         {isLoading ? "..." : "Join the List"}
-      </Button>
+      </button>
     </form>
   )
 }
