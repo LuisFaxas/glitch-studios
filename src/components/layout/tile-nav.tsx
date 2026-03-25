@@ -18,6 +18,7 @@ import { WidgetStudioStatus } from "@/components/tiles/widget-studio-status"
 import { WidgetSocial } from "@/components/tiles/widget-social"
 import { signOut, useSession } from "@/lib/auth-client"
 import type { ReactNode } from "react"
+import { CartIcon } from "@/components/cart/cart-icon"
 
 interface TileNavProps {
   /** Server-rendered WidgetLatestPost slot (async server component) */
@@ -63,6 +64,11 @@ export function TileNav({ latestPostSlot }: TileNavProps) {
           })}
         </div>
       </nav>
+
+      {/* Cart */}
+      <div className="mt-2 flex items-center justify-center border border-[#222222] bg-[#111111] text-[#f5f5f0] py-2">
+        <CartIcon />
+      </div>
 
       {/* Separator */}
       <div className="border-t border-[#222222] my-4" />

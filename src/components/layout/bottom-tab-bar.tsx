@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { Music, Wrench, Image, FileText, LayoutGrid } from "lucide-react"
 import clsx from "clsx"
 import { MobileNavOverlay } from "@/components/layout/mobile-nav-overlay"
+import { CartIcon } from "@/components/cart/cart-icon"
 
 const tabItems = [
   { label: "Beats", href: "/beats", icon: Music },
@@ -72,7 +73,7 @@ export function BottomTabBar() {
         </button>
 
         {/* Right two tabs */}
-        {tabItems.slice(2).map((item, idx) => {
+        {tabItems.slice(2).map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/")
           return (
@@ -82,7 +83,7 @@ export function BottomTabBar() {
               aria-label={item.label}
               className={clsx(
                 "flex flex-1 items-center justify-center",
-                idx < tabItems.slice(2).length - 1 && "border-r border-[#222222]",
+                "border-r border-[#222222]",
                 "rounded-none transition-colors duration-200",
                 "outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-[-2px]",
                 "min-h-[48px]",
@@ -95,6 +96,11 @@ export function BottomTabBar() {
             </Link>
           )
         })}
+
+        {/* Cart icon */}
+        <div className="flex flex-1 items-center justify-center bg-[#111111] text-[#f5f5f0] min-h-[48px]">
+          <CartIcon />
+        </div>
       </nav>
 
       {/* Mobile nav overlay */}

@@ -18,6 +18,7 @@ import {
   DrawerClose,
 } from "@/components/ui/drawer"
 import { DEFAULT_LICENSE_TIERS, type BeatSummary } from "@/types/beats"
+import { useCart } from "@/components/cart/cart-provider"
 
 interface LicenseModalProps {
   beat: BeatSummary
@@ -50,6 +51,8 @@ function LicenseTierTable({
   beat: BeatSummary
   onClose: () => void
 }) {
+  const { addItem } = useCart()
+
   const activeTiers = DEFAULT_LICENSE_TIERS.filter((tierDef) =>
     beat.pricing.some((p) => p.tier === tierDef.tier && p.isActive)
   )
@@ -58,15 +61,15 @@ function LicenseTierTable({
     tierDef: (typeof DEFAULT_LICENSE_TIERS)[number],
     price: string
   ) {
-    // Cart provider will be created in Plan 06
-    // For now just show the toast confirmation
-    try {
-      // Try to use cart context if available (Plan 06)
-      // useCart is not available yet, so this is a future integration point
-    } catch {
-      // Cart not available yet — expected before Plan 06
-    }
-
+    addItem({
+      beatId: beat.id,
+      beatTitle: beat.title,
+      beatSlug: beat.slug,
+      coverArtUrl: beat.coverArtUrl,
+      licenseTier: tierDef.tier,
+      licenseTierDisplay: tierDef.displayName,
+      price: Number(price),
+    })
     toast(`Added "${beat.title}" (${tierDef.displayName}) to cart`)
     onClose()
   }

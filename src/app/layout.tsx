@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { Toaster } from "@/components/ui/sonner"
 import { AudioPlayerProvider } from "@/components/player/audio-player-provider"
 import { CartProvider } from "@/components/cart/cart-provider"
+import { CartDrawer } from "@/components/cart/cart-drawer"
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -41,6 +42,7 @@ export default function RootLayout({
         <AudioPlayerProvider>
           <CartProvider>
             <TooltipProvider>{children}</TooltipProvider>
+            <CartDrawer />
             <Toaster />
           </CartProvider>
         </AudioPlayerProvider>
