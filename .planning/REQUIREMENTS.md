@@ -15,7 +15,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **BEAT-04**: Tiered licensing system (MP3 Lease, WAV Lease, Stems, Unlimited, Exclusive)
 - [ ] **BEAT-05**: Auto-generated PDF license agreement per tier on purchase
 - [x] **BEAT-06**: Watermarked audio previews on all beats
-- [ ] **BEAT-07**: Shopping cart supporting multiple beats with persistent state
+- [x] **BEAT-07**: Shopping cart supporting multiple beats with persistent state
 - [ ] **BEAT-08**: Stripe + PayPal checkout for beat purchases
 - [ ] **BEAT-09**: Instant digital delivery via signed download URLs after purchase
 - [x] **BEAT-10**: Beat bundles/collections with discounted pricing
@@ -126,7 +126,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BEAT-04 | Phase 2 | Complete |
 | BEAT-05 | Phase 2 | Pending |
 | BEAT-06 | Phase 2 | Complete |
-| BEAT-07 | Phase 2 | Pending |
+| BEAT-07 | Phase 2 | Complete |
 | BEAT-08 | Phase 2 | Pending |
 | BEAT-09 | Phase 2 | Pending |
 | BEAT-10 | Phase 2 | Complete |
