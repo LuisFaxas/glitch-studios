@@ -13,11 +13,11 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **BEAT-02**: Beat catalog with genre, BPM, key, and mood filtering
 - [x] **BEAT-03**: Beat search across title, tags, and genre
 - [x] **BEAT-04**: Tiered licensing system (MP3 Lease, WAV Lease, Stems, Unlimited, Exclusive)
-- [ ] **BEAT-05**: Auto-generated PDF license agreement per tier on purchase
+- [x] **BEAT-05**: Auto-generated PDF license agreement per tier on purchase
 - [x] **BEAT-06**: Watermarked audio previews on all beats
 - [x] **BEAT-07**: Shopping cart supporting multiple beats with persistent state
-- [ ] **BEAT-08**: Stripe + PayPal checkout for beat purchases
-- [ ] **BEAT-09**: Instant digital delivery via signed download URLs after purchase
+- [x] **BEAT-08**: Stripe + PayPal checkout for beat purchases
+- [x] **BEAT-09**: Instant digital delivery via signed download URLs after purchase
 - [x] **BEAT-10**: Beat bundles/collections with discounted pricing
 - [x] **BEAT-11**: Co-producer split tracking with percentage assignments per beat
 
@@ -66,7 +66,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Email
 
-- [ ] **MAIL-01**: Purchase receipt emails with download links on beat sale
+- [x] **MAIL-01**: Purchase receipt emails with download links on beat sale
 - [ ] **MAIL-02**: Booking confirmation emails with session details
 - [ ] **MAIL-03**: Contact form submission notification to admin
 - [ ] **MAIL-04**: Newsletter broadcast emails from admin dashboard
@@ -124,11 +124,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BEAT-02 | Phase 2 | Complete |
 | BEAT-03 | Phase 2 | Complete |
 | BEAT-04 | Phase 2 | Complete |
-| BEAT-05 | Phase 2 | Pending |
+| BEAT-05 | Phase 2 | Complete |
 | BEAT-06 | Phase 2 | Complete |
 | BEAT-07 | Phase 2 | Complete |
-| BEAT-08 | Phase 2 | Pending |
-| BEAT-09 | Phase 2 | Pending |
+| BEAT-08 | Phase 2 | Complete |
+| BEAT-09 | Phase 2 | Complete |
 | BEAT-10 | Phase 2 | Complete |
 | BEAT-11 | Phase 2 | Complete |
 | BOOK-01 | Phase 1 | Complete |
@@ -159,7 +159,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMN-07 | Phase 4 | Pending |
 | ADMN-08 | Phase 4 | Pending |
 | ADMN-09 | Phase 4 | Pending |
-| MAIL-01 | Phase 2 | Pending |
+| MAIL-01 | Phase 2 | Complete |
 | MAIL-02 | Phase 3 | Pending |
 | MAIL-03 | Phase 4 | Pending |
 | MAIL-04 | Phase 4 | Pending |
