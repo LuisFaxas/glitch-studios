@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useCallback, useRef } from "react"
+import { useEffect, useCallback, useRef, type ReactNode } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
 import {
@@ -24,18 +24,20 @@ import { signOut, useSession } from "@/lib/auth-client"
 interface MobileNavOverlayProps {
   isOpen: boolean
   onClose: () => void
+  /** Server-rendered WidgetLatestPost slot (async server component) */
+  latestPostSlot?: ReactNode
 }
 
 const navItems = [
   { label: "Beats", href: "/beats", icon: Music, size: "medium" as const },
   { label: "Services", href: "/services", icon: Wrench, size: "medium" as const },
   { label: "Portfolio", href: "/portfolio", icon: Image, size: "wide" as const },
-  { label: "About", href: "/artists", icon: User, size: "small" as const },
+  { label: "Artists", href: "/artists", icon: User, size: "small" as const },
   { label: "Blog", href: "/blog", icon: FileText, size: "small" as const },
   { label: "Contact", href: "/contact", icon: Mail, size: "wide" as const },
 ] as const
 
-export function MobileNavOverlay({ isOpen, onClose }: MobileNavOverlayProps) {
+export function MobileNavOverlay({ isOpen, onClose, latestPostSlot }: MobileNavOverlayProps) {
   const pathname = usePathname()
   const router = useRouter()
   const { data: session } = useSession()
@@ -60,6 +62,32 @@ export function MobileNavOverlay({ isOpen, onClose }: MobileNavOverlayProps) {
       }
     }
   }, [isOpen, handleKeyDown])
+
+  // Focus trap: trap Tab/Shift+Tab within overlay
+  useEffect(() => {
+    if (!isOpen || !overlayRef.current) return
+    const overlay = overlayRef.current
+    const focusable = overlay.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+    if (focusable.length === 0) return
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+    first.focus()
+
+    function handleTab(e: KeyboardEvent) {
+      if (e.key !== "Tab") return
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+    overlay.addEventListener("keydown", handleTab)
+    return () => overlay.removeEventListener("keydown", handleTab)
+  }, [isOpen])
 
   // Close on route change
   useEffect(() => {
@@ -88,9 +116,9 @@ export function MobileNavOverlay({ isOpen, onClose }: MobileNavOverlayProps) {
             if (e.target === overlayRef.current) onClose()
           }}
         >
-          {/* Glitch entrance overlay (visible briefly on open) */}
+          {/* Glitch entrance overlay (visible briefly on open) — z-[1] so content renders on top */}
           <motion.div
-            className="pointer-events-none absolute inset-0 animate-glitch-hover"
+            className="pointer-events-none absolute inset-0 z-[1] animate-glitch-hover"
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
             transition={{ duration: 0.2, delay: 0.2 }}
@@ -98,7 +126,7 @@ export function MobileNavOverlay({ isOpen, onClose }: MobileNavOverlayProps) {
           />
 
           {/* Close button */}
-          <div className="flex justify-end p-4">
+          <div className="relative z-[2] flex justify-end p-4">
             <button
               type="button"
               onClick={onClose}
@@ -109,8 +137,8 @@ export function MobileNavOverlay({ isOpen, onClose }: MobileNavOverlayProps) {
             </button>
           </div>
 
-          {/* Content area */}
-          <div className="flex-1 p-4">
+          {/* Content area — z-[2] to sit above glitch entrance overlay */}
+          <div className="relative z-[2] flex-1 p-4">
             {/* Logo tile */}
             <div className="grid grid-cols-2 gap-1 mb-1">
               <LogoTile />
@@ -131,6 +159,7 @@ export function MobileNavOverlay({ isOpen, onClose }: MobileNavOverlayProps) {
                       icon={<item.icon className="h-5 w-5" />}
                       isActive={isActive}
                       onClick={() => handleNavClick(item.href)}
+                      layout="horizontal"
                     />
                   )
                 })}
@@ -144,6 +173,7 @@ export function MobileNavOverlay({ isOpen, onClose }: MobileNavOverlayProps) {
             <div className="grid grid-cols-2 gap-1">
               <WidgetNowPlaying />
               <WidgetStudioStatus />
+              {latestPostSlot}
               <WidgetSocial />
             </div>
 
@@ -163,6 +193,7 @@ export function MobileNavOverlay({ isOpen, onClose }: MobileNavOverlayProps) {
                     router.push("/")
                     router.refresh()
                   }}
+                  layout="horizontal"
                 />
               ) : (
                 <Tile
@@ -170,6 +201,7 @@ export function MobileNavOverlay({ isOpen, onClose }: MobileNavOverlayProps) {
                   label="Sign In"
                   icon={<LogIn className="h-5 w-5" />}
                   onClick={() => handleNavClick("/login")}
+                  layout="horizontal"
                 />
               )}
             </div>

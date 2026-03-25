@@ -18,6 +18,7 @@ const tabItems = [
 export function BottomTabBar() {
   const pathname = usePathname()
   const [overlayOpen, setOverlayOpen] = useState(false)
+  const isHome = pathname === "/"
 
   return (
     <>
@@ -62,7 +63,9 @@ export function BottomTabBar() {
             "rounded-none transition-colors duration-200",
             "outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-[-2px]",
             "min-h-[48px]",
-            "bg-[#111111] text-[#f5f5f0] active:bg-[#0a0a0a]",
+            isHome
+              ? "bg-[#f5f5f0] text-[#000000]"
+              : "bg-[#111111] text-[#f5f5f0] active:bg-[#0a0a0a]",
           )}
         >
           <LayoutGrid className="h-6 w-6" aria-hidden="true" />
