@@ -2,7 +2,9 @@
 
 import Image from "next/image"
 import { Play, Pause, Music } from "lucide-react"
+import { AnimatePresence } from "motion/react"
 import { useAudioPlayer } from "@/components/player/audio-player-provider"
+import { BeatDetailPanel } from "@/components/beats/beat-detail-panel"
 import { Badge } from "@/components/ui/badge"
 import type { BeatSummary } from "@/types/beats"
 
@@ -134,12 +136,10 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
         </button>
       </div>
 
-      {/* Expanded detail panel - placeholder for Plan 05 */}
-      {isExpanded && (
-        <div className="bg-[#0a0a0a] px-4 py-6 text-center font-mono text-[11px] uppercase tracking-[0.05em] text-[#555]">
-          Detail panel — Plan 05
-        </div>
-      )}
+      {/* Expanded detail panel */}
+      <AnimatePresence>
+        {isExpanded && <BeatDetailPanel beat={beat} />}
+      </AnimatePresence>
     </div>
   )
 }
