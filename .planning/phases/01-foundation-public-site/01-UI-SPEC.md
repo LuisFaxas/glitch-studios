@@ -56,13 +56,13 @@ Exceptions:
 | Role | Font | Size | Weight | Line Height | Tracking |
 |------|------|------|--------|-------------|----------|
 | Body | Inter | 16px | 400 (regular) | 1.5 | 0 |
-| Label / Caption | Inter | 14px | 500 (medium) | 1.4 | 0.01em |
+| Label / Caption | Inter | 14px | 400 (regular) | 1.4 | 0.01em |
 | Heading (h2-h3) | JetBrains Mono | 24px | 700 (bold) | 1.2 | -0.02em |
 | Display (h1 / hero) | JetBrains Mono | 48px mobile / 64px desktop | 700 (bold) | 1.1 | -0.03em |
 
 **Constraints:**
 - Maximum 2 font families site-wide: JetBrains Mono (display/heading) + Inter (body/UI)
-- Maximum 3 weights loaded: Inter 400 + 500, JetBrains Mono 700
+- Maximum 2 weights loaded: Inter 400, JetBrains Mono 700
 - All headings use `text-transform: uppercase` for the tech/cyberpunk feel
 - Monospace numerals on pricing elements (`font-variant-numeric: tabular-nums`)
 
@@ -117,7 +117,7 @@ This is a flat black-and-white design. There is NO traditional accent color. The
 ### Navigation — Mobile (D-11)
 - Fixed bottom tab bar, 64px height
 - 4 items: Beats, Services, Portfolio, About (D-12)
-- Icon + small label (12px Inter medium) below each icon
+- Icon + small label (12px Inter regular) below each icon
 - Active state: off-white icon + label, inactive: gray-400
 - Background: gray-900 with top border gray-800
 - Safe area padding for notched devices (`env(safe-area-inset-bottom)`)
@@ -155,7 +155,7 @@ This is a flat black-and-white design. There is NO traditional accent color. The
 ### Footer
 - Background: gray-900 (`#111111`), top border gray-800
 - Content: GLITCH logo (small, no animation), nav links, social icons (Lucide), newsletter signup form, copyright
-- Newsletter form: inline email input + "Subscribe" button
+- Newsletter form: inline email input + "Join the List" button
 - Max-width container matching card panels (1280px)
 
 ---
@@ -172,7 +172,7 @@ This is a flat black-and-white design. There is NO traditional accent color. The
 | Testimonials section heading | What They Say |
 | Contact page heading | Get in Touch |
 | Contact form CTA | Send Message |
-| Newsletter CTA | Subscribe |
+| Newsletter CTA | Join the List |
 | Newsletter placeholder | Enter your email |
 | Blog empty state heading | No posts yet |
 | Blog empty state body | Check back soon for news, updates, and behind-the-scenes content. |
