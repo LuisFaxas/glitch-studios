@@ -55,7 +55,7 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 01.1-01-PLAN.md -- Install @tailwindcss/typography, add sign-out UI to nav, fix contact form preselect
+- [x] 01.1-01-PLAN.md -- Install @tailwindcss/typography, add sign-out UI to nav, fix contact form preselect
 - [x] 01.1-02-PLAN.md -- Migrate database client from postgres-js to Neon HTTP serverless driver
 
 **INSERTED**: yes
