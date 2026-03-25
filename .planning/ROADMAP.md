@@ -133,7 +133,18 @@ Plans:
   3. Buyer receives a purchase receipt email and can instantly download purchased files (including auto-generated license PDF) via signed URLs
   4. Logged-in client can view purchase history and re-download past purchases from their dashboard
   5. Admin can create, edit, and delete beats with metadata, files, pricing, license tiers, co-producer splits, and bundle pricing from the admin area
-**Plans**: TBD
+**Plans:** 8 plans
+
+Plans:
+- [ ] 02-01-PLAN.md -- Install dependencies, extend schema with beat store tables, create shared types, Stripe client, shadcn components
+- [ ] 02-02-PLAN.md -- Persistent audio player: AudioPlayerProvider context, PlayerBar with WaveSurfer.js waveform, real WidgetNowPlaying
+- [ ] 02-03-PLAN.md -- Beat catalog page with list layout, tile-styled filter bar, debounced search, server actions for data fetching
+- [ ] 02-04-PLAN.md -- Admin beat management: CRUD form, drag-drop R2 file upload, co-producer splits, beat list table
+- [ ] 02-05-PLAN.md -- Beat detail panel with MIDI piano-roll visualization, license tier comparison modal with add-to-cart
+- [ ] 02-06-PLAN.md -- Shopping cart: localStorage-backed context, slide-out drawer, nav cart icon, wire license modal to cart
+- [ ] 02-07-PLAN.md -- Checkout flow: Stripe Embedded Checkout, webhook handler, PDF license generation, receipt email, order confirmation
+- [ ] 02-08-PLAN.md -- Client dashboard with purchase history and re-download functionality
+
 **UI hint**: yes
 
 ### Phase 3: Booking System
@@ -171,6 +182,6 @@ Phases execute in numeric order: 1 -> 1.1 -> 1.2 -> 1.3 -> 1.4 -> 2 -> 3 -> 4
 | 1.2 Design Language Overhaul | 0/3 | Planning | - |
 | 1.3 Supabase DB Driver Fix | 0/TBD | Not started | - |
 | 1.4 Visual Polish & Sidebar Overhaul | 0/3 | Planning | - |
-| 2. Beat Store | 0/TBD | Not started | - |
+| 2. Beat Store | 0/8 | Planned | - |
 | 3. Booking System | 0/TBD | Not started | - |
 | 4. Admin Dashboard + Email | 0/TBD | Not started | - |
