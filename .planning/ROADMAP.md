@@ -136,7 +136,7 @@ Plans:
 **Plans:** 8 plans
 
 Plans:
-- [ ] 02-01-PLAN.md -- Install dependencies, extend schema with beat store tables, create shared types, Stripe client, shadcn components
+- [x] 02-01-PLAN.md -- Install dependencies, extend schema with beat store tables, create shared types, Stripe client, shadcn components
 - [ ] 02-02-PLAN.md -- Persistent audio player: AudioPlayerProvider context, PlayerBar with WaveSurfer.js waveform, real WidgetNowPlaying
 - [ ] 02-03-PLAN.md -- Beat catalog page with list layout, tile-styled filter bar, debounced search, server actions for data fetching
 - [ ] 02-04-PLAN.md -- Admin beat management: CRUD form, drag-drop R2 file upload, co-producer splits, beat list table

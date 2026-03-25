@@ -10,16 +10,16 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Beat Store
 
 - [ ] **BEAT-01**: Persistent audio player with waveform visualization that survives page navigation
-- [ ] **BEAT-02**: Beat catalog with genre, BPM, key, and mood filtering
+- [x] **BEAT-02**: Beat catalog with genre, BPM, key, and mood filtering
 - [ ] **BEAT-03**: Beat search across title, tags, and genre
-- [ ] **BEAT-04**: Tiered licensing system (MP3 Lease, WAV Lease, Stems, Unlimited, Exclusive)
+- [x] **BEAT-04**: Tiered licensing system (MP3 Lease, WAV Lease, Stems, Unlimited, Exclusive)
 - [ ] **BEAT-05**: Auto-generated PDF license agreement per tier on purchase
 - [ ] **BEAT-06**: Watermarked audio previews on all beats
 - [ ] **BEAT-07**: Shopping cart supporting multiple beats with persistent state
 - [ ] **BEAT-08**: Stripe + PayPal checkout for beat purchases
 - [ ] **BEAT-09**: Instant digital delivery via signed download URLs after purchase
-- [ ] **BEAT-10**: Beat bundles/collections with discounted pricing
-- [ ] **BEAT-11**: Co-producer split tracking with percentage assignments per beat
+- [x] **BEAT-10**: Beat bundles/collections with discounted pricing
+- [x] **BEAT-11**: Co-producer split tracking with percentage assignments per beat
 
 ### Booking
 
@@ -121,16 +121,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | BEAT-01 | Phase 2 | Pending |
-| BEAT-02 | Phase 2 | Pending |
+| BEAT-02 | Phase 2 | Complete |
 | BEAT-03 | Phase 2 | Pending |
-| BEAT-04 | Phase 2 | Pending |
+| BEAT-04 | Phase 2 | Complete |
 | BEAT-05 | Phase 2 | Pending |
 | BEAT-06 | Phase 2 | Pending |
 | BEAT-07 | Phase 2 | Pending |
 | BEAT-08 | Phase 2 | Pending |
 | BEAT-09 | Phase 2 | Pending |
-| BEAT-10 | Phase 2 | Pending |
-| BEAT-11 | Phase 2 | Pending |
+| BEAT-10 | Phase 2 | Complete |
+| BEAT-11 | Phase 2 | Complete |
 | BOOK-01 | Phase 1 | Complete |
 | BOOK-02 | Phase 3 | Pending |
 | BOOK-03 | Phase 3 | Pending |
