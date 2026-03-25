@@ -94,6 +94,7 @@ Recent decisions affecting current work:
 ### Roadmap Evolution
 
 - Phase 1.2 inserted after Phase 1.1: Design Language Overhaul (INSERTED) — Transform site into Cyberpunk Metro tile grid with glitch animations. Design spec at .planning/DESIGN-LANGUAGE.md. Official GLITCH logo at Untitled-2.png (horizontal scan-line distortion wordmark).
+- Phase 1.3 inserted after Phase 1.2: Supabase DB Driver Fix (URGENT) — Site broken because db.ts uses @neondatabase/serverless but DATABASE_URL points to Supabase pooler. Must switch to postgres-js or Supabase client.
 
 ### Pending Todos
 
