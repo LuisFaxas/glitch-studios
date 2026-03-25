@@ -10,6 +10,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react"
+import { PlayerBar } from "@/components/player/player-bar"
 
 export interface PlayerBeat {
   id: string
@@ -154,6 +155,7 @@ export function AudioPlayerProvider({ children }: { children: ReactNode }) {
   return (
     <AudioPlayerContext.Provider value={value}>
       {children}
+      <PlayerBar />
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <audio ref={audioRef} preload="metadata" />
     </AudioPlayerContext.Provider>
