@@ -1,5 +1,5 @@
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { SideNav } from "@/components/layout/side-nav"
+import { TileNav } from "@/components/layout/tile-nav"
+import { WidgetLatestPost } from "@/components/tiles/widget-latest-post"
 import { BottomTabBar } from "@/components/layout/bottom-tab-bar"
 import { Footer } from "@/components/layout/footer"
 
@@ -9,13 +9,13 @@ export default function PublicLayout({
   children: React.ReactNode
 }) {
   return (
-    <SidebarProvider>
-      <SideNav />
+    <div className="flex min-h-screen">
+      <TileNav latestPostSlot={<WidgetLatestPost />} />
       <main className="flex-1 min-h-screen pb-16 md:pb-0">
         {children}
         <Footer />
       </main>
       <BottomTabBar />
-    </SidebarProvider>
+    </div>
   )
 }
