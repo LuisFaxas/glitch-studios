@@ -80,6 +80,10 @@ Recent decisions affecting current work:
 - [Phase 01]: Used force-dynamic on sitemap.ts for runtime DB queries
 - [Phase 01.1]: Neon HTTP driver migration already complete from Phase 01 -- plan 02 was verification-only
 
+### Roadmap Evolution
+
+- Phase 1.2 inserted after Phase 1.1: Design Language Overhaul (INSERTED) — Transform site into Cyberpunk Metro tile grid with glitch animations. Design spec at .planning/DESIGN-LANGUAGE.md. Official GLITCH logo at Untitled-2.png (horizontal scan-line distortion wordmark).
+
 ### Pending Todos
 
 None yet.

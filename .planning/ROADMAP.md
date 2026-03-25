@@ -13,7 +13,8 @@ Glitch Studios ships in four phases, moving from a public-facing site with the c
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation + Public Site** - Project scaffold, cyberpunk identity, auth, and all public-facing pages
-- [ ] **Phase 1.1: Foundation Bug Fixes** - INSERTED — Fix blog typography, sign-out UI, contact preselect, Neon driver
+- [x] **Phase 1.1: Foundation Bug Fixes** - INSERTED — Fix blog typography, sign-out UI, contact preselect, Neon driver
+- [ ] **Phase 1.2: Design Language Overhaul** - INSERTED — Transform site into Cyberpunk Metro tile grid with glitch animations
 - [ ] **Phase 2: Beat Store** - Beat catalog, persistent player, licensing, cart, checkout, and digital delivery
 - [ ] **Phase 3: Booking System** - Calendar booking, time slot selection, deposit payments, and booking management
 - [ ] **Phase 4: Admin Dashboard + Email** - Unified admin management, email campaigns, newsletter, media library, and site settings
@@ -60,6 +61,27 @@ Plans:
 
 **INSERTED**: yes
 
+### Phase 1.2: Design Language Overhaul
+**Goal**: Transform the site from generic dark theme into Cyberpunk Metro — dark brutalist tile grid navigation, glitch hover animations, sidebar widget dashboard, and flat tile-based components across all pages
+**Depends on**: Phase 1.1
+**Requirements**: INFR-03, INFR-04, INFR-05, INFR-06
+**Design Spec**: .planning/DESIGN-LANGUAGE.md
+**Logo**: Untitled-2.png (official GLITCH wordmark with horizontal scan-line distortion)
+**Success Criteria** (what must be TRUE):
+  1. Sidebar is a Metro tile dashboard (mixed sizes), not a link list
+  2. All tiles trigger glitch distortion (clip-path jitter + scan line) on hover
+  3. Current page tile inverts (white bg/black text)
+  4. 3+ widgets below nav tiles (Now Playing, Studio Status, Latest Post, Social)
+  5. All content cards use flat tile language (sharp corners, 2-4px gaps)
+  6. Services page uses tile grid instead of tabs
+  7. Page transitions have 200ms glitch effect
+  8. Mobile bottom tab uses icon-only tiles
+  9. Zero accent colors — monochrome only
+  10. Respects prefers-reduced-motion
+**Plans**: TBD
+**INSERTED**: yes
+**UI hint**: yes
+
 ### Phase 2: Beat Store
 **Goal**: Clients can browse beats, preview audio with a persistent player, select license tiers, add to cart, checkout with Stripe or PayPal, and instantly download purchased files
 **Depends on**: Phase 1
@@ -99,12 +121,13 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 1.1 -> 2 -> 3 -> 4
+Phases execute in numeric order: 1 -> 1.1 -> 1.2 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation + Public Site | 6/6 | Done |  |
-| 1.1 Foundation Bug Fixes | 0/2 | Not started | - |
+| 1.1 Foundation Bug Fixes | 2/2 | Done | 2026-03-25 |
+| 1.2 Design Language Overhaul | 0/TBD | Not started | - |
 | 2. Beat Store | 0/TBD | Not started | - |
 | 3. Booking System | 0/TBD | Not started | - |
 | 4. Admin Dashboard + Email | 0/TBD | Not started | - |
