@@ -1,7 +1,9 @@
 export const dynamic = "force-dynamic"
 
 import { getPublishedBeats, getBeatFilterOptions } from "@/actions/beats"
+import { getPublishedBundles } from "@/actions/bundles"
 import { BeatCatalog } from "@/components/beats/beat-catalog"
+import { BundleSection } from "@/components/beats/bundle-section"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -24,9 +26,10 @@ export default async function BeatsPage({
     search: params.q || undefined,
   }
 
-  const [beats, filterOptions] = await Promise.all([
+  const [beats, filterOptions, bundles] = await Promise.all([
     getPublishedBeats(filters),
     getBeatFilterOptions(),
+    getPublishedBundles(),
   ])
 
   const hasActiveFilters = Object.values(filters).some(
@@ -39,6 +42,7 @@ export default async function BeatsPage({
         <h1 className="mb-6 font-mono text-[40px] font-bold uppercase leading-[1.1] tracking-[0.05em] text-[#f5f5f0]">
           BEATS
         </h1>
+        {bundles.length > 0 && <BundleSection bundles={bundles} />}
         <BeatCatalog
           beats={beats}
           filterOptions={filterOptions}
