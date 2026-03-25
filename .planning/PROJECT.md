@@ -12,7 +12,7 @@ Clients can discover Glitch Studios' work and book services or buy beats in one 
 
 ### Validated
 
-- [x] Public-facing website with cyberpunk/glitch aesthetic — Validated in Phase 1 + 1.1: Foundation + Bug Fixes
+- [x] Public-facing website with cyberpunk/glitch aesthetic — Validated in Phase 1 + 1.1 + 1.2: Cyberpunk Metro tile grid with glitch animations
 - [x] Service pages for studio sessions, mixing/mastering, video production, SFX, graphic design — Validated in Phase 1
 - [x] Video portfolio with embedded playback — Validated in Phase 1
 - [x] Artist/producer profile pages — Validated in Phase 1
@@ -62,7 +62,7 @@ Clients can discover Glitch Studios' work and book services or buy beats in one 
 | Next.js + Tailwind + Embla | User's preferred stack, strong Vercel integration | -- Pending |
 | Stripe + PayPal dual payment | Maximum buyer coverage | -- Pending |
 | Calendar-based booking | Direct scheduling vs. inquiry forms — faster for clients | -- Pending |
-| Flat black & white cyberpunk aesthetic | Brand identity — sleek, futuristic, minimal | -- Pending |
+| Flat black & white cyberpunk aesthetic | Brand identity — sleek, futuristic, minimal | Validated Phase 1.2 — Metro tile grid, glitch animations, monochrome |
 | Admin + client auth | Clients need account access for bookings/downloads | -- Pending |
 
 ## Evolution
@@ -83,4 +83,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-25 after Phase 1.1 completion*
+*Last updated: 2026-03-25 after Phase 1.2 completion*
