@@ -1,22 +1,43 @@
-import Link from "next/link"
-import { GlitchLogo } from "@/components/layout/glitch-logo"
-import { Button } from "@/components/ui/button"
+export const dynamic = "force-dynamic"
 
-export default function HomePage() {
+import { db } from "@/lib/db"
+import { services, testimonials, portfolioItems } from "@/db/schema"
+import { eq, asc } from "drizzle-orm"
+import { HeroSection } from "@/components/home/hero-section"
+import { ServicesOverview } from "@/components/home/services-overview"
+import { FeaturedCarousel } from "@/components/home/featured-carousel"
+import { VideoPortfolioCarousel } from "@/components/home/video-portfolio-carousel"
+import { TestimonialsCarousel } from "@/components/home/testimonials-carousel"
+
+export default async function HomePage() {
+  const [servicesList, testimonialsList, portfolioList] = await Promise.all([
+    db.select().from(services).where(eq(services.isActive, true)).orderBy(asc(services.sortOrder)),
+    db.select().from(testimonials).where(eq(testimonials.isActive, true)).orderBy(asc(testimonials.sortOrder)),
+    db.select().from(portfolioItems).where(eq(portfolioItems.isActive, true)).orderBy(asc(portfolioItems.sortOrder)),
+  ])
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Glitch Studios",
+    description:
+      "Music and video production studio offering studio sessions, mixing & mastering, video production, SFX design, and graphic design.",
+    url: "https://glitchstudios.com",
+    logo: "https://glitchstudios.com/logo.png",
+    sameAs: [],
+  }
+
   return (
-    <div className="flex min-h-[90vh] flex-col items-center justify-center gap-8 px-4">
-      <GlitchLogo size="lg" />
-      <p className="text-lg text-gray-400 md:text-xl">
-        Music. Video. Vision.
-      </p>
-      <div className="flex gap-4">
-        <Button variant="outline" size="lg" render={<Link href="/services" />}>
-          Book a Session
-        </Button>
-        <Button variant="outline" size="lg" render={<Link href="/beats" />}>
-          Browse Beats
-        </Button>
-      </div>
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <HeroSection />
+      <ServicesOverview services={servicesList} />
+      <FeaturedCarousel />
+      <VideoPortfolioCarousel portfolioItems={portfolioList} />
+      <TestimonialsCarousel testimonials={testimonialsList} />
+    </>
   )
 }
