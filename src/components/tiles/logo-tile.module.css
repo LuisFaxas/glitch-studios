@@ -1,0 +1,131 @@
+.glitchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.35));
+  transition: filter 0.3s;
+}
+
+.glitchWrapper:hover {
+  filter: drop-shadow(0 0 28px rgba(255, 255, 255, 0.55));
+}
+
+.glitchText {
+  position: relative;
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
+  font-weight: 900;
+  font-size: 52px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f5f5f0;
+  line-height: 1;
+  user-select: none;
+}
+
+/* Two pseudo-element layers that create the scan-line distortion */
+.glitchText::before,
+.glitchText::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.glitchText::before {
+  color: #f5f5f0;
+  animation: glitch-logo-1 3s infinite steps(2);
+}
+
+.glitchText::after {
+  color: #f5f5f0;
+  animation: glitch-logo-2 3s infinite steps(2) reverse;
+}
+
+@keyframes glitch-logo-1 {
+  0%, 85% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+  86% {
+    clip-path: inset(20% 0 50% 0);
+    transform: translate(-4px, 0);
+  }
+  88% {
+    clip-path: inset(60% 0 10% 0);
+    transform: translate(5px, 0);
+  }
+  90% {
+    clip-path: inset(35% 0 40% 0);
+    transform: translate(-3px, 0);
+  }
+  92% {
+    clip-path: inset(70% 0 5% 0);
+    transform: translate(4px, 0);
+  }
+  94% {
+    clip-path: inset(10% 0 65% 0);
+    transform: translate(-2px, 0);
+  }
+  96% {
+    clip-path: inset(45% 0 30% 0);
+    transform: translate(3px, 0);
+  }
+  98% {
+    clip-path: inset(80% 0 2% 0);
+    transform: translate(-5px, 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+}
+
+@keyframes glitch-logo-2 {
+  0%, 85% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+  87% {
+    clip-path: inset(55% 0 20% 0);
+    transform: translate(4px, 0);
+  }
+  89% {
+    clip-path: inset(15% 0 60% 0);
+    transform: translate(-5px, 0);
+  }
+  91% {
+    clip-path: inset(40% 0 35% 0);
+    transform: translate(3px, 0);
+  }
+  93% {
+    clip-path: inset(75% 0 8% 0);
+    transform: translate(-4px, 0);
+  }
+  95% {
+    clip-path: inset(25% 0 55% 0);
+    transform: translate(5px, 0);
+  }
+  97% {
+    clip-path: inset(50% 0 25% 0);
+    transform: translate(-3px, 0);
+  }
+  99% {
+    clip-path: inset(5% 0 70% 0);
+    transform: translate(4px, 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitchText::before,
+  .glitchText::after {
+    animation: none;
+  }
+}
