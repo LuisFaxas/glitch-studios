@@ -26,13 +26,13 @@ interface ServiceGridProps {
 
 function ServiceDetailPanel({ service }: { service: Service }) {
   return (
-    <div className="border border-[#222222] bg-[#111111] p-6 md:p-8 rounded-none">
+    <div className="border border-[#222222] bg-[#111111] p-6 md:p-8 rounded-none min-h-[300px]">
       <h2 className="font-mono font-bold text-[28px] uppercase tracking-[0.05em] text-[#f5f5f0] mb-4">
         {service.name}
       </h2>
 
       <p className="font-sans text-[15px] leading-relaxed text-[#f5f5f0] mb-6 max-w-2xl">
-        {service.description}
+        {service.description || service.shortDescription}
       </p>
 
       <p
@@ -168,7 +168,7 @@ export function ServiceGrid({ services }: ServiceGridProps) {
         {services.map((service) => {
           const isExpanded = service.slug === expandedSlug
           return (
-            <div key={service.slug}>
+            <div key={service.slug} className="border border-[#222222] overflow-hidden">
               <button
                 type="button"
                 onClick={() => handleTileClick(service.slug)}
