@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/lib/db"
-import { beats, beatPricing, beatProducers } from "@/db/schema"
+import { beats, beatPricing, beatProducers, licenseTierDefs } from "@/db/schema"
 import { eq, ilike, and, gte, lte, inArray, or, sql } from "drizzle-orm"
 import { getPublicUrl } from "@/lib/r2"
 import type { BeatSummary } from "@/types/beats"
@@ -106,4 +106,8 @@ export async function getBeatFilterOptions(): Promise<{
   const moods = [...new Set(allBeats.flatMap((b) => b.moods ?? []))].sort()
 
   return { genres, keys, moods }
+}
+
+export async function getLicenseTierDefs() {
+  return db.select().from(licenseTierDefs).orderBy(licenseTierDefs.sortOrder)
 }

@@ -61,6 +61,58 @@ export const LICENSE_TIER_DISPLAY: Record<LicenseTier, string> = {
   exclusive: "Exclusive",
 }
 
+export const DEFAULT_LICENSE_TIERS = [
+  {
+    tier: "mp3_lease" as const,
+    displayName: "MP3 Lease",
+    usageRights: ["Up to 5,000 streams", "1 music video", "Non-exclusive"],
+    deliverables: ["MP3 file (tagged)"],
+  },
+  {
+    tier: "wav_lease" as const,
+    displayName: "WAV Lease",
+    usageRights: ["Up to 10,000 streams", "1 music video", "Non-exclusive"],
+    deliverables: ["WAV file", "MP3 file"],
+  },
+  {
+    tier: "stems" as const,
+    displayName: "Stems",
+    usageRights: [
+      "Up to 25,000 streams",
+      "2 music videos",
+      "Non-exclusive",
+    ],
+    deliverables: ["WAV file", "MP3 file", "Track stems (ZIP)"],
+  },
+  {
+    tier: "unlimited" as const,
+    displayName: "Unlimited",
+    usageRights: [
+      "Unlimited streams",
+      "Unlimited music videos",
+      "Non-exclusive",
+      "Radio broadcasting",
+    ],
+    deliverables: ["WAV file", "MP3 file", "Track stems (ZIP)"],
+  },
+  {
+    tier: "exclusive" as const,
+    displayName: "Exclusive",
+    usageRights: [
+      "Full ownership transfer",
+      "Unlimited usage",
+      "Beat removed from store",
+    ],
+    deliverables: [
+      "WAV file",
+      "MP3 file",
+      "Track stems (ZIP)",
+      "MIDI files",
+      "Project file (upon request)",
+    ],
+  },
+]
+
 export interface OrderWithItems extends Order {
   items: (OrderItem & {
     beat: Pick<Beat, "id" | "title" | "slug" | "coverArtKey">
