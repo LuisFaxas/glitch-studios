@@ -34,8 +34,7 @@ Declared values (multiples of 4, inherited from DESIGN-LANGUAGE.md):
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| tile-gap | 2px | Between tiles in grids (beat list rows, filter chips) |
-| xs | 4px | Icon gaps, badge internal padding |
+| xs | 4px | Icon gaps, badge internal padding, tile grid gap |
 | sm | 8px | Compact element spacing, tag gaps |
 | md | 16px | Tile internal padding (`--pad-tile`), card padding, form field spacing |
 | lg | 24px | Page content margin (`--pad-page`), section internal padding |
@@ -43,33 +42,43 @@ Declared values (multiples of 4, inherited from DESIGN-LANGUAGE.md):
 | 2xl | 48px | Section breaks (`--gap-section`) |
 | 3xl | 64px | Page-level vertical padding |
 
-Exceptions:
-- Bottom player bar height: 72px (4.5rem, already defined as `--spacing-player`)
-- Touch targets on mobile play buttons: 44px minimum
+Layout dimension constants (not spacing tokens):
+- Player bar height: 72px (4.5rem, `--spacing-player` from design language)
 - Cart drawer width: 384px (24rem) on desktop, 100vw on mobile
+
+Accessibility constants:
+- Touch target minimum: 44px (applies to mobile play buttons, filter chips, cart icon)
+
+Border tokens (not spacing):
+- Tile grid border: 2px (CSS `border-width` between tiles, not a `gap` value)
 
 ---
 
 ## Typography
 
+4 declared sizes, 2 weights:
+
 | Role | Size | Weight | Line Height | Font |
 |------|------|--------|-------------|------|
+| Badge / Metadata | 11px | 400 | 1.3 | Inter |
 | Body | 15px | 400 | 1.5 | Inter |
-| Label / Metadata | 13px | 400 | 1.4 | Inter |
-| Widget sublabel | 11px | 400 | 1.3 | Inter |
-| Tile label (nav) | 18px | 700 | 1.2 | JetBrains Mono, uppercase |
 | Section heading | 28px | 700 | 1.2 | JetBrains Mono, uppercase |
 | Page title | 40px | 700 | 1.1 | JetBrains Mono, uppercase |
 
-Source: `DESIGN-LANGUAGE.md` section 5.
+Source: `DESIGN-LANGUAGE.md` section 5, consolidated from 6 to 4 sizes.
 
-Phase 2 additions:
+Phase 2 component role mappings (using only the 4 sizes above):
 - Beat title in list row: 15px, JetBrains Mono, 700, normal case (not uppercase -- titles are content, not UI labels)
 - BPM/Key badge text: 11px, JetBrains Mono, 400, uppercase
-- Price display: 18px, JetBrains Mono, 700, normal case
+- Genre/mood tag text: 11px, Inter, 400, normal case
+- Price display: 15px, JetBrains Mono, 700, normal case
 - License tier name in modal: 15px, JetBrains Mono, 700, uppercase
-- Cart item title: 13px, JetBrains Mono, 700, normal case
-- Cart total: 18px, JetBrains Mono, 700, normal case
+- Cart item title: 11px, JetBrains Mono, 700, normal case
+- Cart total: 15px, JetBrains Mono, 700, normal case
+- Filter chip label: 11px, JetBrains Mono, 400, uppercase
+- MIDI track labels: 11px, JetBrains Mono, 400, uppercase
+- Player bar track title: 15px, JetBrains Mono, 700, normal case
+- Player bar artist: 11px, Inter, 400, normal case
 
 ---
 
@@ -90,9 +99,9 @@ Accent reserved for: Nothing. This project is strictly monochrome. Hierarchy com
 Inverted elements in this phase:
 - Active filter chip (selected genre/mood/key)
 - "Add to Cart" CTA button
-- "Checkout" button in cart drawer
+- "Go to Checkout" button in cart drawer
 - Playing indicator on current beat row
-- License tier "Select" button (primary CTA in modal)
+- License tier "Select Tier" button (primary CTA in modal)
 
 Source: `DESIGN-LANGUAGE.md` section 2, `.dark` CSS vars in `globals.css`.
 
@@ -111,9 +120,9 @@ Source: `DESIGN-LANGUAGE.md` section 2, `.dark` CSS vars in `globals.css`.
 | `SearchInput` | `src/components/beats/search-input.tsx` | Flat monochrome search field. 1px `#333` border, white border on focus. Debounced, wired to `nuqs`. |
 | `PlayerBar` | `src/components/player/player-bar.tsx` | Fixed bottom bar: WaveSurfer.js waveform, play/pause/skip, track info, progress, volume, license CTA. |
 | `PlayerProvider` | `src/components/player/player-provider.tsx` | React context at root layout. Manages audio state, current track, queue. |
-| `LicenseModal` | `src/components/beats/license-modal.tsx` | shadcn Dialog with comparison table of tiers. Each row: tier name, included files, usage rights, price, "Select" button. |
-| `CartDrawer` | `src/components/cart/cart-drawer.tsx` | shadcn Sheet (right side). Beat list with tier selected, individual/total pricing, "Checkout" button. |
-| `CartIcon` | `src/components/cart/cart-icon.tsx` | Nav icon with item count badge. Monochrome badge (white text on `#333` bg). |
+| `LicenseModal` | `src/components/beats/license-modal.tsx` | shadcn Dialog with comparison table of tiers. Each row: tier name, included files, usage rights, price, "Select Tier" button. |
+| `CartDrawer` | `src/components/cart/cart-drawer.tsx` | shadcn Sheet (right side). Beat list with tier selected, individual/total pricing, "Go to Checkout" button. |
+| `CartIcon` | `src/components/cart/cart-icon.tsx` | Nav icon with item count badge. Monochrome badge (white text on `#333` bg). Must include `aria-label="Shopping cart, {N} items"`. |
 | `CheckoutPage` | `src/app/(public)/checkout/page.tsx` | Stripe Embedded Checkout integration. Order summary + Stripe payment element. |
 | `PurchaseHistoryList` | `src/components/dashboard/purchase-history.tsx` | Client dashboard table: date, beat title, tier, price, download link. |
 | `AdminBeatForm` | `src/components/admin/beat-form.tsx` | Beat CRUD form: metadata fields, drag-drop upload zones (Uploadthing), co-producer split inputs. |
@@ -144,6 +153,10 @@ Source: `DESIGN-LANGUAGE.md` section 2, `.dark` CSS vars in `globals.css`.
 
 ## Interaction Contracts
 
+### Primary Focal Point
+
+The `/beats` page primary focal point is the beat list itself. On page load, the first visible `BeatListRow` draws the eye via the cover art thumbnail and the inverted "License Beat" button at the right edge. The filter bar sits above as secondary navigation; it does not compete for attention.
+
 ### Beat List Row
 
 - **Default:** `#111` bg, 1px `#222` bottom border, content at 15px
@@ -156,27 +169,28 @@ Source: `DESIGN-LANGUAGE.md` section 2, `.dark` CSS vars in `globals.css`.
 
 ### Filter Bar
 
-- **Default chip:** `#111` bg, 1px `#222` border, 13px JetBrains Mono uppercase label
+- **Default chip:** `#111` bg, 1px `#222` border, 11px JetBrains Mono uppercase label
 - **Selected chip:** Inverted -- `#f5f5f0` bg, `#000` text
 - **Interaction:** Click toggles on/off. Multiple genres/moods can be active. BPM range uses dual-thumb slider.
-- **Clear all:** "Clear" text button at right end, appears when any filter is active
+- **Clear all:** "Clear filters" text button at right end, appears when any filter is active
 - **Mobile:** Horizontal scroll with overflow hidden, scroll hint gradient at right edge
 
 ### Player Bar (Bottom)
 
-- **Layout:** Fixed bottom, 72px height, `#111` bg, 1px `#222` top border
-- **Content:** Album art (48x48), track title + artist, WaveSurfer.js waveform (fills remaining width), play/pause button, volume slider, "License" CTA button (inverted tile style)
+- **Layout:** Fixed bottom, 72px height (layout constant), `#111` bg, 1px `#222` top border
+- **Content:** Album art (48x48), track title + artist, WaveSurfer.js waveform (fills remaining width), play/pause button, volume slider, "License Beat" CTA button (inverted tile style)
 - **Waveform:** White (`#f5f5f0`) bars on transparent bg, played portion at full opacity, unplayed at 30% opacity
 - **Mobile:** Stacks above bottom tab bar. Simplified: cover art, title (truncated), play/pause, progress bar. Tap to expand to full controls.
 - **Minimize:** Click minimize icon to hide bar, audio continues, sidebar widget remains as display.
 - **Appear/dismiss:** Slide up 200ms when first beat played, slide down 200ms on minimize.
+- **Icon-only buttons:** Play/pause, skip, volume, minimize each require `aria-label` (e.g. `aria-label="Play"`, `aria-label="Skip forward"`, `aria-label="Mute"`, `aria-label="Minimize player"`).
 
 ### License Modal
 
-- **Trigger:** "License" button on beat detail panel or player bar
+- **Trigger:** "License Beat" button on beat detail panel or player bar
 - **Layout:** Full-width comparison table inside shadcn Dialog (max-width 640px). Dark bg `#111`, 1px `#222` border.
 - **Columns:** Tier name | Included files | Usage rights | Price | Select button
-- **Select button:** Inverted tile (`#f5f5f0` bg, `#000` text). On click: adds to cart, toast confirmation, modal closes.
+- **Select button:** Inverted tile (`#f5f5f0` bg, `#000` text), label "Select Tier". On click: adds to cart, toast confirmation, modal closes.
 - **Exclusive tier:** If already sold, show "SOLD" label (muted, `#555`), button disabled.
 - **Mobile:** Renders as shadcn Drawer (bottom sheet) instead of centered Dialog.
 
@@ -184,8 +198,8 @@ Source: `DESIGN-LANGUAGE.md` section 2, `.dark` CSS vars in `globals.css`.
 
 - **Trigger:** Cart icon in nav/bottom tab bar
 - **Layout:** shadcn Sheet from right, 384px wide on desktop, full-width on mobile
-- **Items:** Each item: cover art (40x40), beat title, license tier badge, price, remove button (X icon, `#dc2626` on hover)
-- **Footer:** Subtotal, "Checkout" button (inverted tile, full width)
+- **Items:** Each item: cover art (40x40), beat title, license tier badge, price, remove button (X icon, `#dc2626` on hover). Remove button requires `aria-label="Remove [beat title] from cart"`.
+- **Footer:** Subtotal, "Go to Checkout" button (inverted tile, full width)
 - **Empty:** Empty state illustration (none -- text only, monochrome), heading + body + CTA
 - **Remove animation:** Item fades out (150ms) and list collapses
 
@@ -206,6 +220,15 @@ Source: `DESIGN-LANGUAGE.md` section 2, `.dark` CSS vars in `globals.css`.
 - **Save:** Inverted tile button "Save Beat". Loading state: glitch animation on button text.
 - **Delete:** `#dc2626` text button at bottom. Triggers confirmation dialog.
 
+### Accessibility: Icon-Only Buttons
+
+All icon-only interactive elements must include an `aria-label` attribute. This applies to:
+- Play/pause/skip/volume/minimize in PlayerBar
+- Cart icon in navigation (`CartIcon`)
+- Remove (X) button on cart items
+- Filter clear button (if icon-only variant)
+- Any future icon-only controls added in this phase
+
 ---
 
 ## Copywriting Contract
@@ -213,14 +236,16 @@ Source: `DESIGN-LANGUAGE.md` section 2, `.dark` CSS vars in `globals.css`.
 | Element | Copy |
 |---------|------|
 | Page title | BEATS |
-| Primary CTA (beat row) | License |
-| Primary CTA (player bar) | License This Beat |
-| Primary CTA (license modal) | Select |
-| Primary CTA (cart) | Checkout |
+| Primary CTA (beat row) | License Beat |
+| Primary CTA (player bar) | License Beat |
+| Primary CTA (license modal) | Select Tier |
+| Primary CTA (cart) | Go to Checkout |
 | Add to cart toast | Added "[beat title]" ([tier]) to cart |
 | Remove from cart toast | Removed "[beat title]" from cart |
-| Empty catalog heading | No beats found |
-| Empty catalog body | Try adjusting your filters or check back soon for new releases. |
+| Empty catalog heading (no filters active) | Catalog coming soon |
+| Empty catalog body (no filters active) | New beats are on the way. Check back soon for fresh releases. |
+| Empty catalog heading (filters active) | No matches for those filters |
+| Empty catalog body (filters active) | Try adjusting your filters or clearing them to see all available beats. |
 | Empty cart heading | Your cart is empty |
 | Empty cart body | Browse beats and add your favorites to get started. |
 | Error state (load failure) | Couldn't load beats. Check your connection and try again. |
