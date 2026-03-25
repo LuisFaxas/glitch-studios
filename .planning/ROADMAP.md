@@ -12,7 +12,7 @@ Glitch Studios ships in four phases, moving from a public-facing site with the c
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation + Public Site** - Project scaffold, cyberpunk identity, auth, and all public-facing pages
+- [x] **Phase 1: Foundation + Public Site** - Project scaffold, cyberpunk identity, auth, and all public-facing pages
 - [x] **Phase 1.1: Foundation Bug Fixes** - INSERTED — Fix blog typography, sign-out UI, contact preselect, Neon driver
 - [ ] **Phase 1.2: Design Language Overhaul** - INSERTED — Transform site into Cyberpunk Metro tile grid with glitch animations
 - [ ] **Phase 2: Beat Store** - Beat catalog, persistent player, licensing, cart, checkout, and digital delivery
@@ -53,7 +53,7 @@ Plans:
   2. Authenticated user can sign out via a button in the side nav
   3. Clicking "Book Now" on a service page preselects that service in the contact form dropdown
   4. Database client uses Neon HTTP driver compatible with Vercel serverless
-**Plans:** 2 plans
+**Plans:** 2/2 plans executed
 
 Plans:
 - [x] 01.1-01-PLAN.md -- Install @tailwindcss/typography, add sign-out UI to nav, fix contact form preselect
@@ -78,7 +78,13 @@ Plans:
   8. Mobile bottom tab uses icon-only tiles
   9. Zero accent colors — monochrome only
   10. Respects prefers-reduced-motion
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01.2-01-PLAN.md -- CSS animation foundation: glitch-hover, scan-line keyframes, spacing tokens, and base Tile component (2 tasks)
+- [ ] 01.2-02-PLAN.md -- Desktop sidebar: LogoTile, TileNav, 4 widgets (Now Playing, Studio Status, Latest Post, Social), app layout integration (3 tasks, depends on 01.2-01)
+- [ ] 01.2-03-PLAN.md -- Mobile nav, services master-detail/accordion, card restyling, page transitions, final design verification (checkpoint, depends on 01.2-02)
+
 **INSERTED**: yes
 **UI hint**: yes
 
@@ -125,9 +131,9 @@ Phases execute in numeric order: 1 -> 1.1 -> 1.2 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation + Public Site | 6/6 | Done |  |
+| 1. Foundation + Public Site | 6/6 | Done | 2026-03-25 |
 | 1.1 Foundation Bug Fixes | 2/2 | Done | 2026-03-25 |
-| 1.2 Design Language Overhaul | 0/TBD | Not started | - |
+| 1.2 Design Language Overhaul | 0/3 | Planning | - |
 | 2. Beat Store | 0/TBD | Not started | - |
 | 3. Booking System | 0/TBD | Not started | - |
 | 4. Admin Dashboard + Email | 0/TBD | Not started | - |
