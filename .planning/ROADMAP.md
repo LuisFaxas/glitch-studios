@@ -83,7 +83,7 @@ Plans:
 Plans:
 - [x] 01.2-01-PLAN.md -- CSS animation foundation: glitch-hover, scan-line keyframes, spacing tokens, and base Tile component (2 tasks)
 - [x] 01.2-02-PLAN.md -- Desktop sidebar: LogoTile, TileNav, 4 widgets (Now Playing, Studio Status, Latest Post, Social), app layout integration (3 tasks, depends on 01.2-01)
-- [ ] 01.2-03-PLAN.md -- Mobile nav, services master-detail/accordion, card restyling, page transitions, final design verification (checkpoint, depends on 01.2-02)
+- [x] 01.2-03-PLAN.md -- Mobile nav, services master-detail/accordion, card restyling, page transitions, final design verification (checkpoint, depends on 01.2-02)
 
 **INSERTED**: yes
 **UI hint**: yes
