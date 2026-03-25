@@ -47,7 +47,7 @@ interface BeatWithPricingAndProducers {
   wavFileKey: string | null
   stemsZipKey: string | null
   midiFileKey: string | null
-  status: "draft" | "published" | "sold_exclusive"
+  status: "draft" | "published" | "sold_exclusive" | null
   pricing: { tier: string; price: string; isActive: boolean | null }[]
   producers: { name: string; splitPercent: number }[]
 }
@@ -75,7 +75,7 @@ export function BeatForm({ beat, mode }: BeatFormProps) {
   )
   const [description, setDescription] = useState(beat?.description ?? "")
   const [status, setStatus] = useState<"draft" | "published">(
-    beat?.status === "sold_exclusive" ? "published" : (beat?.status ?? "draft")
+    beat?.status === "sold_exclusive" || beat?.status === null ? "published" : (beat?.status ?? "draft")
   )
 
   // File keys
