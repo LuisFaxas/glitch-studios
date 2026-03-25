@@ -52,7 +52,12 @@ Plans:
   2. Authenticated user can sign out via a button in the side nav
   3. Clicking "Book Now" on a service page preselects that service in the contact form dropdown
   4. Database client uses Neon HTTP driver compatible with Vercel serverless
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 01.1-01-PLAN.md -- Install @tailwindcss/typography, add sign-out UI to nav, fix contact form preselect
+- [ ] 01.1-02-PLAN.md -- Migrate database client from postgres-js to Neon HTTP serverless driver
+
 **INSERTED**: yes
 
 ### Phase 2: Beat Store
@@ -99,7 +104,7 @@ Phases execute in numeric order: 1 -> 1.1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation + Public Site | 6/6 | Done |  |
-| 1.1 Foundation Bug Fixes | 0/TBD | Not started | - |
+| 1.1 Foundation Bug Fixes | 0/2 | Not started | - |
 | 2. Beat Store | 0/TBD | Not started | - |
 | 3. Booking System | 0/TBD | Not started | - |
 | 4. Admin Dashboard + Email | 0/TBD | Not started | - |
