@@ -1,8 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Music, Wrench, Play, Users } from "lucide-react"
+import { usePathname, useRouter } from "next/navigation"
+import { Music, Wrench, Play, Users, LogIn, LogOut } from "lucide-react"
+import { signOut, useSession } from "@/lib/auth-client"
 
 const navItems = [
   { label: "Beats", href: "/beats", icon: Music },
@@ -13,6 +14,8 @@ const navItems = [
 
 export function BottomTabBar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const { data: session } = useSession()
 
   return (
     <nav
@@ -38,6 +41,28 @@ export function BottomTabBar() {
           </Link>
         )
       })}
+      {session?.user ? (
+        <button
+          onClick={async () => {
+            await signOut()
+            router.push("/")
+            router.refresh()
+          }}
+          className="flex flex-1 flex-col items-center justify-center gap-1 py-2 transition-colors text-gray-400"
+          aria-label="Sign Out"
+        >
+          <LogOut className="size-5" />
+          <span className="text-xs leading-none">Sign Out</span>
+        </button>
+      ) : (
+        <Link
+          href="/login"
+          className="flex flex-1 flex-col items-center justify-center gap-1 py-2 transition-colors text-gray-400"
+        >
+          <LogIn className="size-5" />
+          <span className="text-xs leading-none">Sign In</span>
+        </Link>
+      )}
     </nav>
   )
 }

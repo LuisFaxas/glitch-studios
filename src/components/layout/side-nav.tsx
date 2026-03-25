@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Music, Wrench, Play, Users, LogIn } from "lucide-react"
+import { usePathname, useRouter } from "next/navigation"
+import { Music, Wrench, Play, Users, LogIn, LogOut } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -16,7 +16,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { GlitchLogo } from "@/components/layout/glitch-logo"
-import { useSession } from "@/lib/auth-client"
+import { signOut, useSession } from "@/lib/auth-client"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 const navItems = [
@@ -28,6 +28,7 @@ const navItems = [
 
 export function SideNav() {
   const pathname = usePathname()
+  const router = useRouter()
   const { data: session } = useSession()
 
   return (
@@ -75,17 +76,31 @@ export function SideNav() {
 
       <SidebarFooter className="p-4">
         {session?.user ? (
-          <div className="flex items-center gap-3 text-sm">
-            <Avatar className="size-8">
-              <AvatarFallback className="bg-gray-800 text-white text-xs">
-                {session.user.name
-                  ? session.user.name.charAt(0).toUpperCase()
-                  : "U"}
-              </AvatarFallback>
-            </Avatar>
-            <span className="truncate text-white group-data-[collapsible=icon]:hidden">
-              {session.user.name || session.user.email}
-            </span>
+          <div className="space-y-2">
+            <div className="flex items-center gap-3 text-sm">
+              <Avatar className="size-8">
+                <AvatarFallback className="bg-gray-800 text-white text-xs">
+                  {session.user.name
+                    ? session.user.name.charAt(0).toUpperCase()
+                    : "U"}
+                </AvatarFallback>
+              </Avatar>
+              <span className="truncate text-white group-data-[collapsible=icon]:hidden">
+                {session.user.name || session.user.email}
+              </span>
+            </div>
+            <SidebarMenuButton
+              tooltip="Sign Out"
+              className="text-gray-400 hover:text-white"
+              onClick={async () => {
+                await signOut()
+                router.push("/")
+                router.refresh()
+              }}
+            >
+              <LogOut className="size-5" />
+              <span>Sign Out</span>
+            </SidebarMenuButton>
           </div>
         ) : (
           <SidebarMenuButton
