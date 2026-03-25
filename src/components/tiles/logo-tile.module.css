@@ -1,7 +1,7 @@
 .glitchWrapper {
   position: relative;
   width: 100%;
-  height: 210px;
+  aspect-ratio: 1906 / 421;
   filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.35));
   transition: filter 0.3s;
 }

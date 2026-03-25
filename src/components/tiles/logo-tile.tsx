@@ -7,7 +7,7 @@ export function LogoTile() {
   return (
     <Link
       href="/"
-      className="group w-full flex items-center justify-center py-8 rounded-none bg-transparent mb-1"
+      className="group w-full flex items-center justify-center py-3 rounded-none bg-transparent mb-1"
       aria-label="Glitch Studios — Home"
     >
       <div className={styles.glitchWrapper}>
