@@ -39,7 +39,7 @@ Clients can discover Glitch Studios' work and book services or buy beats in one 
 
 ## Context
 
-- **Tech stack:** Next.js, Tailwind CSS, Embla Carousel
+- **Tech stack:** Next.js, Tailwind CSS, Embla Carousel, Framer Motion
 - **Deployment:** Vercel
 - **Local dev:** Caddy reverse proxy reserved for this project
 - **Payments:** Stripe + PayPal dual checkout
@@ -48,7 +48,8 @@ Clients can discover Glitch Studios' work and book services or buy beats in one 
 
 ## Constraints
 
-- **Tech stack**: Next.js + Tailwind + Embla — already decided
+- **Tech stack**: Next.js + Tailwind + Embla + Framer Motion — already decided
+- **Architecture**: Mobile-first design with desktop optimization
 - **Deployment**: Vercel — hosting platform locked in
 - **Local dev**: Caddy — must be configured and reserved for this project
 - **Operability**: Admin dashboard must be simple enough for non-technical daily use
