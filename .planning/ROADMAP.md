@@ -16,6 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1.1: Foundation Bug Fixes** - INSERTED — Fix blog typography, sign-out UI, contact preselect, Neon driver
 - [ ] **Phase 1.2: Design Language Overhaul** - INSERTED — Transform site into Cyberpunk Metro tile grid with glitch animations
 - [ ] **Phase 1.3: Supabase DB Driver Fix** - INSERTED — Switch from Neon HTTP driver to Supabase-compatible Postgres driver
+- [ ] **Phase 1.4: Visual Polish & Sidebar Overhaul** - INSERTED — Fix all visual defects from 2026-03-25 audit: sidebar layout, glitch hover, home page, footer, forms, routes
 - [ ] **Phase 2: Beat Store** - Beat catalog, persistent player, licensing, cart, checkout, and digital delivery
 - [ ] **Phase 3: Booking System** - Calendar booking, time slot selection, deposit payments, and booking management
 - [ ] **Phase 4: Admin Dashboard + Email** - Unified admin management, email campaigns, newsletter, media library, and site settings
@@ -101,6 +102,27 @@ Plans:
 
 **INSERTED**: yes
 
+### Phase 1.4: Visual Polish & Sidebar Overhaul
+**Goal**: Fix every visual defect from the 2026-03-25 audit — sidebar layout overhaul, visible glitch hover effects, home page visibility, route fixes, and design consistency across footer/forms/cards
+**Depends on**: Phase 1.3
+**Requirements**: INFR-03, INFR-04, INFR-05
+**Audit**: .planning/VISUAL-AUDIT-2026-03-25.md
+**Success Criteria** (what must be TRUE):
+  1. Logo tile visible with warm glow; sidebar tiles use horizontal icon+label layout with tight padding; all sidebar content fits 900px viewport or has scroll hint; collapsible compact mode exists
+  2. Hovering any tile triggers VISIBLE glitch distortion on tile content (not invisible overlay)
+  3. Home page hero is readable (logo + CTAs visible); empty DB sections show fallback or hide; /beats has Coming Soon page; About tile fixed
+  4. Mobile nav overlay renders visible nav tiles, widgets, and logo
+  5. Footer, contact form, services accordion, and blog cards all follow Cyberpunk Metro design language (monochrome hex palette, sharp corners, mono headings)
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01.4-01-PLAN.md -- Sidebar overhaul: logo fix + glow, horizontal tiles, padding, glitch hover, compact mode, scroll, mobile overlay, social widget
+- [ ] 01.4-02-PLAN.md -- Home page + routes: hero visibility, empty section fallbacks, beats placeholder, about→artists, services detail + mobile accordion
+- [ ] 01.4-03-PLAN.md -- Design consistency: footer restyle, contact form, blog cards, typography, filter pills, 404 button, page padding
+
+**INSERTED**: yes
+**UI hint**: yes
+
 ### Phase 2: Beat Store
 **Goal**: Clients can browse beats, preview audio with a persistent player, select license tiers, add to cart, checkout with Stripe or PayPal, and instantly download purchased files
 **Depends on**: Phase 1
@@ -140,7 +162,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 1.1 -> 1.2 -> 1.3 -> 2 -> 3 -> 4
+Phases execute in numeric order: 1 -> 1.1 -> 1.2 -> 1.3 -> 1.4 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -148,6 +170,7 @@ Phases execute in numeric order: 1 -> 1.1 -> 1.2 -> 1.3 -> 2 -> 3 -> 4
 | 1.1 Foundation Bug Fixes | 2/2 | Done | 2026-03-25 |
 | 1.2 Design Language Overhaul | 0/3 | Planning | - |
 | 1.3 Supabase DB Driver Fix | 0/TBD | Not started | - |
+| 1.4 Visual Polish & Sidebar Overhaul | 0/3 | Planning | - |
 | 2. Beat Store | 0/TBD | Not started | - |
 | 3. Booking System | 0/TBD | Not started | - |
 | 4. Admin Dashboard + Email | 0/TBD | Not started | - |
