@@ -44,6 +44,7 @@ Clients can discover Glitch Studios' work and book services or buy beats in one 
 - **Local dev:** Caddy reverse proxy reserved for this project
 - **Payments:** Stripe + PayPal dual checkout
 - **Visual direction:** Cyberpunk/futuristic but flat, minimal, and sleek. Black & white base with glitch-style texture. NOT neon-glow. Inspired by Graphite.com (dark elegance, clean type), The Verge (bold editorial layout), Resend (minimal developer aesthetic), Feastables (high contrast, bold type). Dramatic typography hierarchy, high contrast, subtle glitch effects as character.
+- **Design reference:** Owner's personal portfolio at faxas.net/design — glassmorphic panels, frosted typography effects, constellation animations, flip card interactions, hover animations, living component library approach. Pull coolest elements from there.
 - **Owner:** Trap Snyder (Josh) — music producer, content creator, streamer. Wants fast results, easy to operate.
 
 ## Constraints
