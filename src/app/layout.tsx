@@ -4,6 +4,7 @@ import { JetBrains_Mono, Inter } from "next/font/google"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Toaster } from "@/components/ui/sonner"
 import { AudioPlayerProvider } from "@/components/player/audio-player-provider"
+import { CartProvider } from "@/components/cart/cart-provider"
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -38,8 +39,10 @@ export default function RootLayout({
     >
       <body className="bg-black text-white font-sans antialiased">
         <AudioPlayerProvider>
-          <TooltipProvider>{children}</TooltipProvider>
-          <Toaster />
+          <CartProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+            <Toaster />
+          </CartProvider>
         </AudioPlayerProvider>
       </body>
     </html>
