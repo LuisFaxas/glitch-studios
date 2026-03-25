@@ -108,7 +108,7 @@ export function Tile({
         <span
           className={clsx(
             "font-mono font-bold uppercase tracking-[0.05em]",
-            size === "wide" ? "text-xl" : size === "small" ? "text-sm" : "text-lg",
+            size === "wide" ? "text-2xl" : size === "small" ? "text-sm" : "text-xl",
             size === "large" && "text-center w-full",
           )}
         >
