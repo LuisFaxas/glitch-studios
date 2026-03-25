@@ -140,7 +140,7 @@ Plans:
 - [x] 02-02-PLAN.md -- Persistent audio player: AudioPlayerProvider context, PlayerBar with WaveSurfer.js waveform, real WidgetNowPlaying
 - [x] 02-03-PLAN.md -- Beat catalog page with list layout, tile-styled filter bar, debounced search, server actions for data fetching
 - [x] 02-04-PLAN.md -- Admin beat management: CRUD form, drag-drop R2 file upload, co-producer splits, beat list table
-- [ ] 02-05-PLAN.md -- Beat detail panel with MIDI piano-roll visualization, license tier comparison modal with add-to-cart
+- [x] 02-05-PLAN.md -- Beat detail panel with MIDI piano-roll visualization, license tier comparison modal with add-to-cart
 - [ ] 02-06-PLAN.md -- Shopping cart: localStorage-backed context, slide-out drawer, nav cart icon, wire license modal to cart
 - [ ] 02-07-PLAN.md -- Checkout flow: Stripe Embedded Checkout, webhook handler, PDF license generation, receipt email, order confirmation
 - [ ] 02-08-PLAN.md -- Client dashboard with purchase history and re-download functionality
