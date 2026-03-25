@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
+import clsx from "clsx"
 import type { BlogCategory } from "@/types"
 
 interface CategoryFilterProps {
@@ -27,14 +28,15 @@ export function CategoryFilter({
   }
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2">
+    <div className="flex gap-1 overflow-x-auto pb-2">
       <button
         onClick={() => handleCategoryClick(null)}
-        className={`px-4 py-2 rounded-full text-sm font-mono border whitespace-nowrap transition-colors ${
+        className={clsx(
+          "px-4 py-2 rounded-none text-sm font-mono border whitespace-nowrap transition-colors duration-200",
           !activeCategory
-            ? "bg-gray-800 text-white border-gray-600"
-            : "bg-transparent text-gray-400 border-gray-800 hover:text-white"
-        }`}
+            ? "bg-[#f5f5f0] text-[#000000] border-[#f5f5f0]"
+            : "bg-[#111111] text-[#888888] border-[#222222] hover:text-[#f5f5f0] hover:border-[#444444]",
+        )}
       >
         All
       </button>
@@ -42,11 +44,12 @@ export function CategoryFilter({
         <button
           key={category.id}
           onClick={() => handleCategoryClick(category.slug)}
-          className={`px-4 py-2 rounded-full text-sm font-mono border whitespace-nowrap transition-colors ${
+          className={clsx(
+            "px-4 py-2 rounded-none text-sm font-mono border whitespace-nowrap transition-colors duration-200",
             activeCategory === category.slug
-              ? "bg-gray-800 text-white border-gray-600"
-              : "bg-transparent text-gray-400 border-gray-800 hover:text-white"
-          }`}
+              ? "bg-[#f5f5f0] text-[#000000] border-[#f5f5f0]"
+              : "bg-[#111111] text-[#888888] border-[#222222] hover:text-[#f5f5f0] hover:border-[#444444]",
+          )}
         >
           {category.name}
         </button>

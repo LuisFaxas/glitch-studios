@@ -25,7 +25,7 @@ export default async function PortfolioPage() {
         <h1 className="font-mono font-bold text-4xl uppercase mb-4 text-white">
           Portfolio coming soon
         </h1>
-        <p className="text-gray-400 text-lg">
+        <p className="text-[#888888] text-lg">
           We are curating our best work. Check back shortly.
         </p>
       </div>

@@ -66,7 +66,7 @@ async function BlogContent({
         <h1 className="font-mono font-bold text-4xl uppercase mb-4 text-white">
           No posts yet
         </h1>
-        <p className="text-gray-400 text-lg">
+        <p className="text-[#888888] text-lg">
           Check back soon for news, updates, and behind-the-scenes content.
         </p>
       </div>
@@ -81,7 +81,7 @@ async function BlogContent({
       <Suspense fallback={null}>
         <CategoryFilter categories={categories} activeCategory={categorySlug} />
       </Suspense>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 mt-8">
         {postsWithCategory.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
@@ -93,10 +93,10 @@ async function BlogContent({
             <a
               key={p}
               href={`/blog?page=${p}${categorySlug ? `&category=${categorySlug}` : ""}`}
-              className={`px-4 py-2 rounded font-mono text-sm ${
+              className={`px-4 py-2 rounded-none font-mono text-sm ${
                 p === page
-                  ? "bg-gray-800 text-white border border-gray-600"
-                  : "text-gray-400 hover:text-white hover:bg-gray-800/50"
+                  ? "bg-[#f5f5f0] text-[#000000] border border-[#f5f5f0]"
+                  : "text-[#888888] hover:text-[#f5f5f0] hover:bg-[#222222]"
               }`}
             >
               {p}

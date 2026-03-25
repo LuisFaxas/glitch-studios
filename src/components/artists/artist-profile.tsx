@@ -70,7 +70,7 @@ export function ArtistProfile({ member }: { member: TeamMember }) {
     <div className="max-w-6xl mx-auto px-4 py-12 md:py-16">
       <Link
         href="/artists"
-        className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8"
+        className="inline-flex items-center gap-2 text-[#888888] hover:text-[#f5f5f0] transition-colors mb-8"
       >
         <ArrowLeft className="w-4 h-4" />
         <span className="text-sm font-mono">Back to Team</span>
@@ -80,7 +80,7 @@ export function ArtistProfile({ member }: { member: TeamMember }) {
       <div className="flex flex-col md:flex-row gap-8 md:gap-12">
         {/* Photo */}
         <div className="flex-shrink-0">
-          <div className="relative w-full md:w-96 aspect-square rounded-lg overflow-hidden bg-gray-800">
+          <div className="relative w-full md:w-96 aspect-square rounded-none overflow-hidden bg-[#111111]">
             {member.photoUrl ? (
               <img
                 src={member.photoUrl}
@@ -88,8 +88,8 @@ export function ArtistProfile({ member }: { member: TeamMember }) {
                 className="absolute inset-0 w-full h-full object-cover"
               />
             ) : (
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
-                <span className="font-mono font-bold text-6xl text-gray-600">
+              <div className="absolute inset-0 flex items-center justify-center bg-[#111111]">
+                <span className="font-mono font-bold text-6xl text-[#555555]">
                   {getInitials(member.name)}
                 </span>
               </div>
@@ -103,7 +103,7 @@ export function ArtistProfile({ member }: { member: TeamMember }) {
             <h1 className="text-4xl md:text-5xl font-mono font-bold uppercase text-white">
               {member.name}
             </h1>
-            <p className="text-xl text-gray-400 mt-2">{member.role}</p>
+            <p className="text-xl text-[#888888] mt-2">{member.role}</p>
           </div>
 
           <p className="text-white leading-relaxed text-lg">{member.bio}</p>
@@ -117,7 +117,7 @@ export function ArtistProfile({ member }: { member: TeamMember }) {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition-colors p-2"
+                  className="text-[#888888] hover:text-[#f5f5f0] transition-colors p-2"
                   aria-label={link.platform}
                 >
                   <SocialIcon platform={link.platform} />
@@ -128,14 +128,14 @@ export function ArtistProfile({ member }: { member: TeamMember }) {
 
           {/* Featured Track */}
           {member.featuredTrackUrl && (
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
+            <div className="bg-[#111111] border border-[#222222] rounded-none p-4">
               <div className="flex items-center gap-3">
-                <Music className="w-5 h-5 text-gray-400" />
+                <Music className="w-5 h-5 text-[#888888]" />
                 <span className="font-mono font-bold text-sm uppercase text-white">
                   Featured Track
                 </span>
               </div>
-              <p className="text-gray-400 text-sm mt-2 break-all">
+              <p className="text-[#888888] text-sm mt-2 break-all">
                 {member.featuredTrackUrl}
               </p>
             </div>
@@ -153,14 +153,14 @@ export function ArtistProfile({ member }: { member: TeamMember }) {
             {credits.map((credit, i) => (
               <div
                 key={i}
-                className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4 py-4 border-b border-gray-800 last:border-b-0"
+                className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4 py-4 border-b border-[#222222] last:border-b-0"
               >
                 <span className="font-mono font-bold text-white">
                   {credit.title}
                 </span>
-                <span className="text-gray-400 text-sm">{credit.artist}</span>
-                <span className="text-gray-600 text-sm">{credit.year}</span>
-                <span className="text-gray-400 text-sm italic md:ml-auto">
+                <span className="text-[#888888] text-sm">{credit.artist}</span>
+                <span className="text-[#555555] text-sm">{credit.year}</span>
+                <span className="text-[#888888] text-sm italic md:ml-auto">
                   {credit.role}
                 </span>
               </div>

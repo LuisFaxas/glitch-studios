@@ -21,7 +21,7 @@ function Section({
 }) {
   if (!content) return null
   return (
-    <div className="py-8 border-b border-gray-800 last:border-b-0">
+    <div className="py-8 border-b border-[#222222] last:border-b-0">
       <h2 className="font-mono font-bold text-2xl uppercase tracking-tight mb-4 text-white">
         {title}
       </h2>
@@ -37,7 +37,7 @@ export function CaseStudyContent({ item }: { item: PortfolioItem }) {
   return (
     <div>
       {/* Hero media area */}
-      <div className="relative aspect-video max-h-[70vh] w-full bg-gray-900">
+      <div className="relative aspect-video max-h-[70vh] w-full bg-[#111111]">
         {playing && videoId ? (
           <iframe
             src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
@@ -61,7 +61,7 @@ export function CaseStudyContent({ item }: { item: PortfolioItem }) {
                 className="absolute inset-0 w-full h-full object-cover"
               />
             ) : (
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900" />
+              <div className="absolute inset-0 bg-[#111111]" />
             )}
 
             {videoId && (
@@ -70,7 +70,7 @@ export function CaseStudyContent({ item }: { item: PortfolioItem }) {
                 className="absolute inset-0 flex items-center justify-center"
                 aria-label={`Play ${item.title}`}
               >
-                <div className="w-20 h-20 rounded-full bg-black/60 hover:bg-black/80 border border-white/20 flex items-center justify-center transition-colors">
+                <div className="w-20 h-20 rounded-none bg-[#000000]/60 hover:bg-[#000000]/80 border border-[#222222] flex items-center justify-center transition-colors">
                   <Play className="w-8 h-8 text-white ml-1" fill="white" />
                 </div>
               </button>
@@ -83,7 +83,7 @@ export function CaseStudyContent({ item }: { item: PortfolioItem }) {
       <div className="max-w-4xl mx-auto px-4 py-12 md:py-16">
         <Link
           href="/portfolio"
-          className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-[#888888] hover:text-[#f5f5f0] transition-colors mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           <span className="text-sm font-mono">Back to Portfolio</span>
@@ -94,13 +94,13 @@ export function CaseStudyContent({ item }: { item: PortfolioItem }) {
         </h1>
 
         {item.category && (
-          <span className="inline-block bg-gray-800 text-gray-400 text-xs px-2 py-1 rounded-full mb-8">
+          <span className="inline-block bg-[#222222] text-[#888888] text-[11px] font-sans px-2 py-1 rounded-none mb-8">
             {item.category}
           </span>
         )}
 
         {item.description && (
-          <p className="text-gray-400 text-lg mb-8">{item.description}</p>
+          <p className="text-[#888888] text-lg mb-8">{item.description}</p>
         )}
 
         <div className="space-y-0">

@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { VideoCard } from "@/components/portfolio/video-card"
+import clsx from "clsx"
 import type { PortfolioItem } from "@/types"
 
 export function PortfolioCarousel({ items }: { items: PortfolioItem[] }) {
@@ -67,16 +68,17 @@ export function PortfolioCarousel({ items }: { items: PortfolioItem[] }) {
   return (
     <div className="space-y-6">
       {/* Category filter tabs */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveFilter(cat)}
-            className={`px-4 py-2 text-sm font-mono rounded-full border transition-colors ${
+            className={clsx(
+              "px-4 py-2 text-sm font-mono rounded-none border transition-colors duration-200",
               activeFilter === cat
-                ? "bg-white text-black border-white"
-                : "bg-transparent text-gray-400 border-gray-800 hover:text-white hover:border-gray-600"
-            }`}
+                ? "bg-[#f5f5f0] text-[#000000] border-[#f5f5f0]"
+                : "bg-[#111111] text-[#888888] border-[#222222] hover:text-[#f5f5f0] hover:border-[#444444]",
+            )}
           >
             {cat}
           </button>
@@ -86,7 +88,7 @@ export function PortfolioCarousel({ items }: { items: PortfolioItem[] }) {
       {/* Carousel */}
       <div className="relative">
         <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-6">
+          <div className="flex gap-1">
             {filteredItems.map((item) => (
               <div
                 key={item.id}
@@ -104,18 +106,18 @@ export function PortfolioCarousel({ items }: { items: PortfolioItem[] }) {
             <button
               onClick={scrollPrev}
               disabled={!canScrollPrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-800/80 hover:bg-gray-700 disabled:opacity-30 rounded-full p-2 transition-colors z-10"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-[#111111]/80 hover:bg-[#222222] disabled:opacity-30 rounded-none border border-[#222222] p-2 transition-colors z-10"
               aria-label="Previous slide"
             >
-              <ChevronLeft className="w-5 h-5 text-white" />
+              <ChevronLeft className="w-5 h-5 text-[#f5f5f0]" />
             </button>
             <button
               onClick={scrollNext}
               disabled={!canScrollNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-800/80 hover:bg-gray-700 disabled:opacity-30 rounded-full p-2 transition-colors z-10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#111111]/80 hover:bg-[#222222] disabled:opacity-30 rounded-none border border-[#222222] p-2 transition-colors z-10"
               aria-label="Next slide"
             >
-              <ChevronRight className="w-5 h-5 text-white" />
+              <ChevronRight className="w-5 h-5 text-[#f5f5f0]" />
             </button>
           </>
         )}
@@ -128,9 +130,10 @@ export function PortfolioCarousel({ items }: { items: PortfolioItem[] }) {
             <button
               key={index}
               onClick={() => scrollTo(index)}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                index === selectedIndex ? "bg-white" : "bg-gray-600"
-              }`}
+              className={clsx(
+                "w-2 h-2 rounded-none transition-colors",
+                index === selectedIndex ? "bg-[#f5f5f0]" : "bg-[#555555]",
+              )}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}

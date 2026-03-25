@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import Link from "next/link"
 import { Play } from "lucide-react"
+import clsx from "clsx"
 import type { PortfolioItem } from "@/types"
 
 function extractYouTubeId(url: string): string | null {
@@ -14,6 +15,7 @@ function extractYouTubeId(url: string): string | null {
 
 export function VideoCard({ item }: { item: PortfolioItem }) {
   const [playing, setPlaying] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
   const videoId = item.videoUrl ? extractYouTubeId(item.videoUrl) : null
   const isCaseStudy = item.type === "case_study"
 
@@ -21,10 +23,26 @@ export function VideoCard({ item }: { item: PortfolioItem }) {
     ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
     : item.thumbnailUrl || null
 
+  const handleMouseEnter = useCallback(() => setIsHovered(true), [])
+  const handleMouseLeave = useCallback(() => setIsHovered(false), [])
+
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
+    <div
+      className="bg-[#111111] border border-[#222222] rounded-none overflow-hidden transition-colors duration-200 hover:border-[#444444]"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Glitch hover animation overlay */}
+      {isHovered && (
+        <span
+          className="pointer-events-none absolute inset-0 z-10 animate-glitch-hover"
+          style={{ animationDuration: "100ms" }}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Media area */}
-      <div className="relative aspect-video bg-gray-800">
+      <div className="relative aspect-video bg-[#111111]">
         {playing && videoId ? (
           <iframe
             src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
@@ -42,15 +60,15 @@ export function VideoCard({ item }: { item: PortfolioItem }) {
                 className="absolute inset-0 w-full h-full object-cover"
               />
             ) : (
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900" />
+              <div className="absolute inset-0 bg-[#111111]" />
             )}
 
             {isCaseStudy ? (
               <Link
                 href={`/portfolio/${item.slug}`}
-                className="absolute inset-0 flex items-center justify-center bg-black/40 hover:bg-black/60 transition-colors"
+                className="absolute inset-0 flex items-center justify-center bg-[#000000]/40 hover:bg-[#000000]/60 transition-colors"
               >
-                <span className="font-mono font-bold text-sm uppercase tracking-wider text-white bg-gray-800/80 border border-white/20 px-4 py-2 rounded-full">
+                <span className="font-mono font-bold text-sm uppercase tracking-[0.05em] text-[#f5f5f0] bg-[#111111]/80 border border-[#222222] px-4 py-2 rounded-none">
                   View Case Study
                 </span>
               </Link>
@@ -60,8 +78,8 @@ export function VideoCard({ item }: { item: PortfolioItem }) {
                 className="absolute inset-0 flex items-center justify-center group/play"
                 aria-label={`Play ${item.title}`}
               >
-                <div className="w-[60px] h-[60px] rounded-full bg-black/60 hover:bg-black/80 border border-white/20 flex items-center justify-center transition-colors">
-                  <Play className="w-6 h-6 text-white ml-1" fill="white" />
+                <div className="w-[60px] h-[60px] rounded-none bg-[#000000]/60 hover:bg-[#000000]/80 border border-[#222222] flex items-center justify-center transition-colors">
+                  <Play className="w-6 h-6 text-[#f5f5f0] ml-1" fill="#f5f5f0" />
                 </div>
               </button>
             ) : null}
@@ -72,17 +90,17 @@ export function VideoCard({ item }: { item: PortfolioItem }) {
       {/* Info area */}
       <div className="p-4 space-y-2">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-mono font-bold text-lg text-white">
+          <h3 className="font-mono font-bold text-lg text-[#f5f5f0]">
             {item.title}
           </h3>
         </div>
         {item.category && (
-          <span className="inline-block bg-gray-800 text-gray-400 text-xs px-2 py-1 rounded-full">
+          <span className="inline-block bg-[#222222] text-[#888888] text-[11px] font-sans px-2 py-1 rounded-none">
             {item.category}
           </span>
         )}
         {item.description && (
-          <p className="text-gray-400 text-sm line-clamp-2">
+          <p className="text-[#888888] text-[13px] font-sans line-clamp-2">
             {item.description}
           </p>
         )}

@@ -26,14 +26,14 @@ export function PostContent({ post }: PostContentProps) {
     <article className="max-w-4xl mx-auto px-4 py-16 md:py-24">
       <Link
         href="/blog"
-        className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8"
+        className="inline-flex items-center gap-2 text-[#888888] hover:text-[#f5f5f0] transition-colors mb-8"
       >
         <ArrowLeft className="size-4" />
         <span className="font-mono text-sm">Back to Blog</span>
       </Link>
 
       {post.coverImageUrl && (
-        <div className="aspect-video relative rounded-lg overflow-hidden mb-8">
+        <div className="aspect-video relative rounded-none overflow-hidden mb-8">
           <Image
             src={post.coverImageUrl}
             alt={post.title}
@@ -49,10 +49,10 @@ export function PostContent({ post }: PostContentProps) {
         {post.title}
       </h1>
 
-      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400 mb-12">
+      <div className="flex flex-wrap items-center gap-4 text-sm text-[#888888] mb-12">
         {formattedDate && <time>{formattedDate}</time>}
         {post.category && (
-          <span className="bg-gray-800 text-gray-400 px-2 py-1 rounded-full text-xs">
+          <span className="bg-[#222222] text-[#888888] px-2 py-1 rounded-none text-[11px] font-sans">
             {post.category.name}
           </span>
         )}
@@ -62,16 +62,16 @@ export function PostContent({ post }: PostContentProps) {
       <div
         className="prose prose-invert max-w-none
           prose-headings:font-mono prose-headings:font-bold prose-headings:uppercase prose-headings:text-white prose-headings:tracking-tight
-          prose-p:text-gray-300 prose-p:leading-relaxed
-          prose-a:text-white prose-a:underline prose-a:decoration-gray-600 prose-a:underline-offset-4 hover:prose-a:decoration-white
-          prose-strong:text-white
-          prose-ul:text-gray-300 prose-ol:text-gray-300
-          prose-li:marker:text-gray-600
-          prose-blockquote:border-gray-800 prose-blockquote:text-gray-400
-          prose-code:bg-gray-800 prose-code:text-gray-300 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
-          prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-700 prose-pre:rounded-lg
-          prose-img:rounded-lg
-          prose-hr:border-gray-800"
+          prose-p:text-[#f5f5f0]/80 prose-p:leading-relaxed
+          prose-a:text-[#f5f5f0] prose-a:underline prose-a:decoration-[#555555] prose-a:underline-offset-4 hover:prose-a:decoration-[#f5f5f0]
+          prose-strong:text-[#f5f5f0]
+          prose-ul:text-[#f5f5f0]/80 prose-ol:text-[#f5f5f0]/80
+          prose-li:marker:text-[#555555]
+          prose-blockquote:border-[#222222] prose-blockquote:text-[#888888]
+          prose-code:bg-[#222222] prose-code:text-[#f5f5f0]/80 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-none prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
+          prose-pre:bg-[#111111] prose-pre:border prose-pre:border-[#222222] prose-pre:rounded-none
+          prose-img:rounded-none
+          prose-hr:border-[#222222]"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
     </article>

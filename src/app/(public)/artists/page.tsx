@@ -26,7 +26,7 @@ export default async function ArtistsPage() {
         <h1 className="font-mono font-bold text-4xl uppercase mb-4 text-white">
           Team coming soon
         </h1>
-        <p className="text-gray-400 text-lg">
+        <p className="text-[#888888] text-lg">
           We are assembling our roster. Check back shortly.
         </p>
       </div>
@@ -38,7 +38,7 @@ export default async function ArtistsPage() {
       <h1 className="font-mono font-bold text-4xl md:text-5xl uppercase tracking-tight mb-12 text-white">
         Our Team
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
         {members.map((member, i) => (
           <ScrollSection key={member.id} delay={i * 0.1}>
             <ArtistCard member={member} />
