@@ -29,7 +29,16 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Visitor can submit the contact form and sign up for the newsletter
   4. User can register an account, log in, log out, and stay logged in across browser refresh
   5. Site is deployed on Vercel with Caddy configured for local dev, and SEO fundamentals (metadata, Open Graph, sitemap) are in place
-**Plans**: TBD
+**Plans:** 6 plans
+
+Plans:
+- [ ] 01-01-PLAN.md -- Scaffold Next.js project, install dependencies, Tailwind v4 design system, Drizzle schema, seed data, Caddy config
+- [ ] 01-02-PLAN.md -- Better Auth with admin/client roles, login/register pages, GLITCH logo, side nav, bottom tab bar, footer, public layout
+- [ ] 01-03-PLAN.md -- Homepage (hero, services overview, beat carousel, portfolio carousel, testimonials) with scroll animations, tabbed services page
+- [ ] 01-04-PLAN.md -- Portfolio carousel with lazy YouTube embeds, case study pages, artist grid and profile pages
+- [ ] 01-05-PLAN.md -- Blog index with pagination and categories, blog post pages, contact form with server action
+- [ ] 01-06-PLAN.md -- SEO (sitemap, robots.txt, structured data), custom 404, Vercel config, final verification checkpoint
+
 **UI hint**: yes
 
 ### Phase 2: Beat Store
@@ -75,7 +84,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation + Public Site | 0/TBD | Not started | - |
+| 1. Foundation + Public Site | 0/6 | Planning complete | - |
 | 2. Beat Store | 0/TBD | Not started | - |
 | 3. Booking System | 0/TBD | Not started | - |
 | 4. Admin Dashboard + Email | 0/TBD | Not started | - |
