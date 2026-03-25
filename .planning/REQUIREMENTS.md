@@ -9,12 +9,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Beat Store
 
-- [ ] **BEAT-01**: Persistent audio player with waveform visualization that survives page navigation
+- [x] **BEAT-01**: Persistent audio player with waveform visualization that survives page navigation
 - [x] **BEAT-02**: Beat catalog with genre, BPM, key, and mood filtering
 - [ ] **BEAT-03**: Beat search across title, tags, and genre
 - [x] **BEAT-04**: Tiered licensing system (MP3 Lease, WAV Lease, Stems, Unlimited, Exclusive)
 - [ ] **BEAT-05**: Auto-generated PDF license agreement per tier on purchase
-- [ ] **BEAT-06**: Watermarked audio previews on all beats
+- [x] **BEAT-06**: Watermarked audio previews on all beats
 - [ ] **BEAT-07**: Shopping cart supporting multiple beats with persistent state
 - [ ] **BEAT-08**: Stripe + PayPal checkout for beat purchases
 - [ ] **BEAT-09**: Instant digital delivery via signed download URLs after purchase
@@ -120,12 +120,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BEAT-01 | Phase 2 | Pending |
+| BEAT-01 | Phase 2 | Complete |
 | BEAT-02 | Phase 2 | Complete |
 | BEAT-03 | Phase 2 | Pending |
 | BEAT-04 | Phase 2 | Complete |
 | BEAT-05 | Phase 2 | Pending |
-| BEAT-06 | Phase 2 | Pending |
+| BEAT-06 | Phase 2 | Complete |
 | BEAT-07 | Phase 2 | Pending |
 | BEAT-08 | Phase 2 | Pending |
 | BEAT-09 | Phase 2 | Pending |
