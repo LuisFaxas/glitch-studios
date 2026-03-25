@@ -3,6 +3,7 @@ import { Metadata } from "next"
 import { JetBrains_Mono, Inter } from "next/font/google"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Toaster } from "@/components/ui/sonner"
+import { AudioPlayerProvider } from "@/components/player/audio-player-provider"
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -36,10 +37,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-black text-white font-sans antialiased">
-        <TooltipProvider>{children}</TooltipProvider>
-        <Toaster />
-        {/* Phase 2: AudioPlayerBar will mount here */}
-        <div id="audio-player-root" />
+        <AudioPlayerProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+          <Toaster />
+        </AudioPlayerProvider>
       </body>
     </html>
   )
