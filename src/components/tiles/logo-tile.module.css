@@ -19,13 +19,20 @@
   background: url("/logo-white.png") center / contain no-repeat;
 }
 
-/* Two overlay layers that create the scan-line distortion */
-.glitchLayer1 {
-  animation: glitch-logo-1 3s infinite steps(2);
+/* Glitch only on hover and click — idle state is clean */
+.glitchLayer1,
+.glitchLayer2 {
+  animation: none;
 }
 
-.glitchLayer2 {
-  animation: glitch-logo-2 3s infinite steps(2) reverse;
+.glitchWrapper:hover .glitchLayer1,
+.glitchWrapper:active .glitchLayer1 {
+  animation: glitch-logo-1 0.3s steps(2);
+}
+
+.glitchWrapper:hover .glitchLayer2,
+.glitchWrapper:active .glitchLayer2 {
+  animation: glitch-logo-2 0.3s steps(2) reverse;
 }
 
 @keyframes glitch-logo-1 {
