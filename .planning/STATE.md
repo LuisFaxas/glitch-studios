@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Executing Phase 01.3
-stopped_at: Completed 01.2-03-PLAN.md
-last_updated: "2026-03-25T13:12:48.611Z"
+status: Ready to execute
+stopped_at: Completed 01.4-02-PLAN.md
+last_updated: "2026-03-25T16:00:29.030Z"
 progress:
-  total_phases: 7
-  completed_phases: 3
-  total_plans: 12
-  completed_plans: 11
+  total_phases: 8
+  completed_phases: 4
+  total_plans: 15
+  completed_plans: 13
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-25)
 
 **Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience.
-**Current focus:** Phase 01.3 — supabase-db-driver-fix
+**Current focus:** Phase 01.4 — visual-polish
 
 ## Current Position
 
-Phase: 01.3 (supabase-db-driver-fix) — EXECUTING
-Plan: 1 of 1
+Phase: 01.4 (visual-polish) — EXECUTING
+Plan: 2 of 3
 
 ## Performance Metrics
 
@@ -57,6 +57,7 @@ Plan: 1 of 1
 | Phase 01.2 P01 | 2min | 2 tasks | 2 files |
 | Phase 01.2 P02 | 3min | 3 tasks | 8 files |
 | Phase 01.2 P03 | 7min | 3 tasks | 17 files |
+| Phase 01.4 P02 | 2min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -90,6 +91,8 @@ Recent decisions affecting current work:
 - [Phase 01.2]: LayoutGrid icon as center menu trigger replacing auth-focused bottom tab
 - [Phase 01.2]: ServiceGrid master-detail/accordion replaces ServiceTabs for services page
 - [Phase 01.2]: All Tailwind gray-* classes replaced with explicit monochrome hex values
+- [Phase 01.4]: Promise.allSettled for resilient home page DB queries -- hero renders even if DB is down
+- [Phase 01.4]: Scanline repeating-linear-gradient on hero bg for texture without asset dependency
 
 ### Roadmap Evolution
 
@@ -109,6 +112,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T12:36:50.058Z
-Stopped at: Completed 01.2-03-PLAN.md
+Last session: 2026-03-25T16:00:29.023Z
+Stopped at: Completed 01.4-02-PLAN.md
 Resume file: None
