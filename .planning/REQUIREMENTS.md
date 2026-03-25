@@ -23,34 +23,34 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Booking
 
-- [ ] **BOOK-01**: Service pages with clear pricing for studio sessions, mixing/mastering, video production, SFX, graphic design
+- [x] **BOOK-01**: Service pages with clear pricing for studio sessions, mixing/mastering, video production, SFX, graphic design
 - [ ] **BOOK-02**: Calendar-based booking with available time slot selection
 - [ ] **BOOK-03**: Service type selection during booking flow
 - [ ] **BOOK-04**: Deposit/prepayment collection at booking via Stripe/PayPal
-- [ ] **BOOK-05**: Contact form with name, email, service interest, and message routing to admin inbox
-- [ ] **BOOK-06**: Testimonials section with admin-managed client quotes
+- [x] **BOOK-05**: Contact form with name, email, service interest, and message routing to admin inbox
+- [x] **BOOK-06**: Testimonials section with admin-managed client quotes
 
 ### Portfolio
 
-- [ ] **PORT-01**: Video portfolio grid with embedded playback, categorized by type
-- [ ] **PORT-02**: Audio portfolio/credits section for finished work and placements
-- [ ] **PORT-03**: Artist/producer profile pages with bio, photo, role, credits, social links
-- [ ] **PORT-04**: Video showreel hero on homepage (auto-playing muted, 30-60s)
-- [ ] **PORT-05**: Case study pages with client, challenge, approach, result, and media embeds
+- [x] **PORT-01**: Video portfolio grid with embedded playback, categorized by type
+- [x] **PORT-02**: Audio portfolio/credits section for finished work and placements
+- [x] **PORT-03**: Artist/producer profile pages with bio, photo, role, credits, social links
+- [x] **PORT-04**: Video showreel hero on homepage (auto-playing muted, 30-60s)
+- [x] **PORT-05**: Case study pages with client, challenge, approach, result, and media embeds
 
 ### Content
 
-- [ ] **CONT-01**: Blog/news section with rich-text posts, pagination, and categories
-- [ ] **CONT-02**: Newsletter signup form with email capture
-- [ ] **CONT-03**: SEO fundamentals — metadata, Open Graph, structured data, sitemap
+- [x] **CONT-01**: Blog/news section with rich-text posts, pagination, and categories
+- [x] **CONT-02**: Newsletter signup form with email capture
+- [x] **CONT-03**: SEO fundamentals — metadata, Open Graph, structured data, sitemap
 
 ### Auth
 
-- [ ] **AUTH-01**: Client account registration and login
-- [ ] **AUTH-02**: Admin account with role-based access (admin vs client)
+- [x] **AUTH-01**: Client account registration and login
+- [x] **AUTH-02**: Admin account with role-based access (admin vs client)
 - [ ] **AUTH-03**: Client dashboard showing purchase history and re-download links
 - [ ] **AUTH-04**: Client dashboard showing upcoming and past bookings
-- [ ] **AUTH-05**: Session persistence across browser refresh
+- [x] **AUTH-05**: Session persistence across browser refresh
 
 ### Admin
 
@@ -74,12 +74,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Infrastructure
 
-- [ ] **INFR-01**: Caddy dev server configuration reserved for this project
-- [ ] **INFR-02**: Vercel deployment with production configuration
-- [ ] **INFR-03**: Mobile-first responsive design across all pages with desktop optimization
-- [ ] **INFR-04**: Cyberpunk/glitch visual identity — flat black & white, futuristic, sleek, dramatic typography
-- [ ] **INFR-05**: Framer Motion page transitions and UI animations throughout
-- [ ] **INFR-06**: Embla Carousel components for mobile-friendly content browsing (beats, portfolio, testimonials)
+- [x] **INFR-01**: Caddy dev server configuration reserved for this project
+- [x] **INFR-02**: Vercel deployment with production configuration
+- [x] **INFR-03**: Mobile-first responsive design across all pages with desktop optimization
+- [x] **INFR-04**: Cyberpunk/glitch visual identity — flat black & white, futuristic, sleek, dramatic typography
+- [x] **INFR-05**: Framer Motion page transitions and UI animations throughout
+- [x] **INFR-06**: Embla Carousel components for mobile-friendly content browsing (beats, portfolio, testimonials)
 
 ## v2 Requirements
 
@@ -131,25 +131,25 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BEAT-09 | Phase 2 | Pending |
 | BEAT-10 | Phase 2 | Pending |
 | BEAT-11 | Phase 2 | Pending |
-| BOOK-01 | Phase 1 | Pending |
+| BOOK-01 | Phase 1 | Complete |
 | BOOK-02 | Phase 3 | Pending |
 | BOOK-03 | Phase 3 | Pending |
 | BOOK-04 | Phase 3 | Pending |
-| BOOK-05 | Phase 1 | Pending |
-| BOOK-06 | Phase 1 | Pending |
-| PORT-01 | Phase 1 | Pending |
-| PORT-02 | Phase 1 | Pending |
-| PORT-03 | Phase 1 | Pending |
-| PORT-04 | Phase 1 | Pending |
-| PORT-05 | Phase 1 | Pending |
-| CONT-01 | Phase 1 | Pending |
-| CONT-02 | Phase 1 | Pending |
-| CONT-03 | Phase 1 | Pending |
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
+| BOOK-05 | Phase 1 | Complete |
+| BOOK-06 | Phase 1 | Complete |
+| PORT-01 | Phase 1 | Complete |
+| PORT-02 | Phase 1 | Complete |
+| PORT-03 | Phase 1 | Complete |
+| PORT-04 | Phase 1 | Complete |
+| PORT-05 | Phase 1 | Complete |
+| CONT-01 | Phase 1 | Complete |
+| CONT-02 | Phase 1 | Complete |
+| CONT-03 | Phase 1 | Complete |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 2 | Pending |
 | AUTH-04 | Phase 3 | Pending |
-| AUTH-05 | Phase 1 | Pending |
+| AUTH-05 | Phase 1 | Complete |
 | ADMN-01 | Phase 2 | Pending |
 | ADMN-02 | Phase 3 | Pending |
 | ADMN-03 | Phase 4 | Pending |
@@ -164,12 +164,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MAIL-03 | Phase 4 | Pending |
 | MAIL-04 | Phase 4 | Pending |
 | MAIL-05 | Phase 4 | Pending |
-| INFR-01 | Phase 1 | Pending |
-| INFR-02 | Phase 1 | Pending |
-| INFR-03 | Phase 1 | Pending |
-| INFR-04 | Phase 1 | Pending |
-| INFR-05 | Phase 1 | Pending |
-| INFR-06 | Phase 1 | Pending |
+| INFR-01 | Phase 1 | Complete |
+| INFR-02 | Phase 1 | Complete |
+| INFR-03 | Phase 1 | Complete |
+| INFR-04 | Phase 1 | Complete |
+| INFR-05 | Phase 1 | Complete |
+| INFR-06 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 50 total

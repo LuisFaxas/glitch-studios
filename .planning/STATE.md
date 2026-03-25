@@ -2,16 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-stopped_at: Phase 1 plans verified
-last_updated: "2026-03-25T07:50:14.062Z"
-last_activity: 2026-03-25 -- Roadmap created
+status: Phase complete — ready for verification
+stopped_at: Completed 01-06-PLAN.md Task 1, checkpoint pending
+last_updated: "2026-03-25T09:21:40.204Z"
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 6
-  completed_plans: 0
-  percent: 0
+  completed_plans: 5
 ---
 
 # Project State
@@ -21,16 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-25)
 
 **Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience.
-**Current focus:** Phase 1: Foundation + Public Site
+**Current focus:** Phase 01 — foundation-public-site
 
 ## Current Position
 
-Phase: 1 of 4 (Foundation + Public Site)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-03-25 -- Roadmap created
-
-Progress: [░░░░░░░░░░] 0%
+Phase: 01 (foundation-public-site) — EXECUTING
+Plan: 6 of 6
 
 ## Performance Metrics
 
@@ -52,6 +46,12 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 01 P01 | 29min | 2 tasks | 32 files |
+| Phase 01 P02 | 15min | 2 tasks | 19 files |
+| Phase 01 P03 | 6min | 2 tasks | 9 files |
+| Phase 01 P05 | 10min | 2 tasks | 8 files |
+| Phase 01 P04 | 13min | 2 tasks | 10 files |
+| Phase 01 P06 | 3min | 1 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -63,6 +63,19 @@ Recent decisions affecting current work:
 - [Roadmap]: Coarse 4-phase structure -- Foundation, Beat Store, Booking, Admin+Email
 - [Roadmap]: Beat store before booking (establishes payment infra, primary revenue)
 - [Roadmap]: Admin CRUD for beats/bookings ships with their respective phases; remaining admin surfaces in Phase 4
+- [Phase 01]: Used sonner instead of deprecated toast in shadcn/ui v4
+- [Phase 01]: Dark mode CSS vars use hex values matching UI-SPEC palette rather than oklch defaults
+- [Phase 01]: Globals.css moved to src/styles/ for cleaner separation from app/ route files
+- [Phase 01]: Used base-ui render prop pattern instead of Radix asChild for shadcn/ui polymorphic components
+- [Phase 01]: Better Auth server/client split pattern: auth.ts for server, auth-client.ts for React hooks
+- [Phase 01]: Database client fallback to dummy URL at build time for static generation
+- [Phase 01]: Used force-dynamic on DB-querying pages to avoid static generation with dummy DATABASE_URL
+- [Phase 01]: Hero video placeholder (bg-black div) until R2 showreel URL is available
+- [Phase 01]: Used native HTML select for contact form service dropdown (simpler than base-ui Select)
+- [Phase 01]: generateStaticParams wrapped in try/catch for build-time DB safety
+- [Phase 01]: Used force-dynamic for all DB-querying pages to avoid build-time DB dependency
+- [Phase 01]: Replaced Lucide brand icons with generic equivalents since v1.6+ removed brand icons
+- [Phase 01]: Used force-dynamic on sitemap.ts for runtime DB queries
 
 ### Pending Todos
 
@@ -76,6 +89,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T07:50:14.056Z
-Stopped at: Phase 1 plans verified
-Resume file: .planning/phases/01-foundation-public-site/01-01-PLAN.md
+Last session: 2026-03-25T09:21:40.198Z
+Stopped at: Completed 01-06-PLAN.md Task 1, checkpoint pending
+Resume file: None
