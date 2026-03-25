@@ -54,7 +54,7 @@ export function TileNav({ latestPostSlot }: TileNavProps) {
                 key={item.href}
                 size={item.size}
                 label={item.label}
-                icon={<item.icon className="h-7 w-7" />}
+                icon={<item.icon className="h-9 w-9" />}
                 isActive={isActive}
                 href={item.href}
                 layout="horizontal"
