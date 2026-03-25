@@ -13,6 +13,7 @@ Glitch Studios ships in four phases, moving from a public-facing site with the c
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation + Public Site** - Project scaffold, cyberpunk identity, auth, and all public-facing pages
+- [ ] **Phase 1.1: Foundation Bug Fixes** - INSERTED — Fix blog typography, sign-out UI, contact preselect, Neon driver
 - [ ] **Phase 2: Beat Store** - Beat catalog, persistent player, licensing, cart, checkout, and digital delivery
 - [ ] **Phase 3: Booking System** - Calendar booking, time slot selection, deposit payments, and booking management
 - [ ] **Phase 4: Admin Dashboard + Email** - Unified admin management, email campaigns, newsletter, media library, and site settings
@@ -29,7 +30,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Visitor can submit the contact form and sign up for the newsletter
   4. User can register an account, log in, log out, and stay logged in across browser refresh
   5. Site is deployed on Vercel with Caddy configured for local dev, and SEO fundamentals (metadata, Open Graph, sitemap) are in place
-**Plans:** 5/6 plans executed
+**Plans:** 6/6 plans executed
 
 Plans:
 - [x] 01-01-PLAN.md -- Scaffold Next.js project, install dependencies, Tailwind v4 design system, Drizzle schema, seed data, Caddy config
@@ -37,9 +38,22 @@ Plans:
 - [x] 01-03-PLAN.md -- Homepage (hero, services overview, beat carousel, portfolio carousel, testimonials) with scroll animations, tabbed services page
 - [x] 01-04-PLAN.md -- Portfolio carousel with lazy YouTube embeds, case study pages, artist grid and profile pages
 - [x] 01-05-PLAN.md -- Blog index with pagination and categories, blog post pages, contact form with server action
-- [ ] 01-06-PLAN.md -- SEO (sitemap, robots.txt, structured data), custom 404, Vercel config, final verification checkpoint
+- [x] 01-06-PLAN.md -- SEO (sitemap, robots.txt, structured data), custom 404, Vercel config, final verification checkpoint
 
 **UI hint**: yes
+
+### Phase 1.1: Foundation Bug Fixes
+**Goal**: Fix functional bugs and production risks identified in v1.0 milestone audit — blog typography, sign-out UI, contact form preselect, and Neon serverless driver
+**Depends on**: Phase 1
+**Requirements**: CONT-01, AUTH-01, AUTH-05, BOOK-05, INFR-02
+**Gap Closure**: Closes gaps from v1.0-MILESTONE-AUDIT.md
+**Success Criteria** (what must be TRUE):
+  1. Blog post bodies render with proper typography (headings, lists, paragraphs styled)
+  2. Authenticated user can sign out via a button in the side nav
+  3. Clicking "Book Now" on a service page preselects that service in the contact form dropdown
+  4. Database client uses Neon HTTP driver compatible with Vercel serverless
+**Plans**: TBD
+**INSERTED**: yes
 
 ### Phase 2: Beat Store
 **Goal**: Clients can browse beats, preview audio with a persistent player, select license tiers, add to cart, checkout with Stripe or PayPal, and instantly download purchased files
@@ -80,11 +94,12 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4
+Phases execute in numeric order: 1 -> 1.1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation + Public Site | 5/6 | In Progress|  |
+| 1. Foundation + Public Site | 6/6 | Done |  |
+| 1.1 Foundation Bug Fixes | 0/TBD | Not started | - |
 | 2. Beat Store | 0/TBD | Not started | - |
 | 3. Booking System | 0/TBD | Not started | - |
 | 4. Admin Dashboard + Email | 0/TBD | Not started | - |
