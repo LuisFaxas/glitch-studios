@@ -28,14 +28,14 @@ export function VideoCard({ item }: { item: PortfolioItem }) {
 
   return (
     <div
-      className="bg-[#111111] border border-[#222222] rounded-none overflow-hidden transition-colors duration-200 hover:border-[#444444]"
+      className="relative bg-[#111111] border border-[#222222] rounded-none overflow-hidden transition-colors duration-200 hover:border-[#444444]"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {/* Glitch hover animation overlay */}
       {isHovered && (
-        <span
-          className="pointer-events-none absolute inset-0 z-10 animate-glitch-hover"
+        <div
+          className="pointer-events-none absolute inset-0 z-10 bg-[#f5f5f0]/5 animate-glitch-hover motion-reduce:hidden"
           style={{ animationDuration: "100ms" }}
           aria-hidden="true"
         />

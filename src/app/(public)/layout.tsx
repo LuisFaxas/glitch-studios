@@ -11,7 +11,7 @@ export default function PublicLayout({
   return (
     <div className="flex min-h-screen">
       <TileNav latestPostSlot={<WidgetLatestPost />} />
-      <main className="flex-1 min-h-screen pb-16 md:pb-0">
+      <main className="page-content flex-1 min-h-screen pb-16 md:pb-0">
         {children}
         <Footer />
       </main>

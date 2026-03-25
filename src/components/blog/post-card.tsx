@@ -39,8 +39,8 @@ export function PostCard({ post }: PostCardProps) {
       >
         {/* Glitch hover animation overlay */}
         {isHovered && (
-          <span
-            className="pointer-events-none absolute inset-0 z-10 animate-glitch-hover"
+          <div
+            className="pointer-events-none absolute inset-0 z-10 bg-[#f5f5f0]/5 animate-glitch-hover motion-reduce:hidden"
             style={{ animationDuration: "100ms" }}
             aria-hidden="true"
           />
@@ -56,7 +56,14 @@ export function PostCard({ post }: PostCardProps) {
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
-            <div className="w-full h-full bg-[#111111]" />
+            <div
+              className="w-full h-full bg-[#0a0a0a] flex items-center justify-center"
+              style={{
+                backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.03) 3px, rgba(255,255,255,0.03) 4px)"
+              }}
+            >
+              <span className="font-mono text-[#333333] text-xs uppercase tracking-[0.1em]">No Image</span>
+            </div>
           )}
         </div>
         <div className="p-4">

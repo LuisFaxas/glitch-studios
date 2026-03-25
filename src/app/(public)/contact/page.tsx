@@ -29,11 +29,11 @@ export default async function ContactPage() {
       <h1 className="font-mono font-bold text-4xl md:text-5xl uppercase tracking-tight mb-4 text-white">
         Get in Touch
       </h1>
-      <p className="text-gray-400 text-lg mb-12">
+      <p className="text-[#888888] text-lg mb-12">
         Have a project in mind? Let us know what you are working on and we will
         get back to you within 24 hours.
       </p>
-      <div className="bg-gray-900 border border-gray-800 rounded-lg p-8 md:p-12">
+      <div className="bg-[#111111] border border-[#222222] rounded-none p-8 md:p-12">
         <Suspense fallback={null}>
           <ContactForm services={servicesList} />
         </Suspense>

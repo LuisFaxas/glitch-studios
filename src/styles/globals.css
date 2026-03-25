@@ -228,6 +228,34 @@
 }
 
 /* ============================================================
+   Sidebar Scrollbar
+   ============================================================ */
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 0;
+}
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #333 transparent;
+}
+
+/* ============================================================
+   Page Content Padding Consistency (N1)
+   ============================================================ */
+
+.page-content {
+  padding-left: var(--pad-page);
+  padding-right: var(--pad-page);
+}
+
+/* ============================================================
    Reduced Motion Support
    ============================================================ */
 

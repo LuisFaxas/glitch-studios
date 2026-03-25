@@ -4,8 +4,6 @@ import { useState, useRef } from "react"
 import { useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 import { submitContactForm } from "@/actions/contact"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader2 } from "lucide-react"
 
@@ -58,17 +56,17 @@ export function ContactForm({ services }: ContactFormProps) {
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="name" className="text-gray-300">
+        <Label htmlFor="name" className="text-[#888888] font-mono text-xs uppercase tracking-[0.05em]">
           Your Name
         </Label>
-        <Input
+        <input
           id="name"
           name="name"
           type="text"
           required
           disabled={isLoading}
           placeholder="John Doe"
-          className="bg-gray-800 border-gray-800 focus:border-white text-white"
+          className="w-full h-10 bg-[#0a0a0a] border border-[#333333] rounded-none px-3 text-sm text-[#f5f5f0] font-sans placeholder:text-[#555555] focus:border-[#f5f5f0] focus:outline-none transition-colors disabled:opacity-50"
         />
         {errors.name && (
           <p className="text-destructive text-sm">{errors.name}</p>
@@ -76,17 +74,17 @@ export function ContactForm({ services }: ContactFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="email" className="text-gray-300">
+        <Label htmlFor="email" className="text-[#888888] font-mono text-xs uppercase tracking-[0.05em]">
           Email Address
         </Label>
-        <Input
+        <input
           id="email"
           name="email"
           type="email"
           required
           disabled={isLoading}
           placeholder="you@example.com"
-          className="bg-gray-800 border-gray-800 focus:border-white text-white"
+          className="w-full h-10 bg-[#0a0a0a] border border-[#333333] rounded-none px-3 text-sm text-[#f5f5f0] font-sans placeholder:text-[#555555] focus:border-[#f5f5f0] focus:outline-none transition-colors disabled:opacity-50"
         />
         {errors.email && (
           <p className="text-destructive text-sm">{errors.email}</p>
@@ -94,7 +92,7 @@ export function ContactForm({ services }: ContactFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="serviceInterest" className="text-gray-300">
+        <Label htmlFor="serviceInterest" className="text-[#888888] font-mono text-xs uppercase tracking-[0.05em]">
           What are you interested in?
         </Label>
         <select
@@ -102,7 +100,7 @@ export function ContactForm({ services }: ContactFormProps) {
           name="serviceInterest"
           disabled={isLoading}
           defaultValue={preselectedService}
-          className="w-full h-8 rounded-lg border border-gray-800 bg-gray-800 px-2.5 py-1 text-sm text-white transition-colors outline-none focus:border-white focus:ring-3 focus:ring-white/10 disabled:opacity-50"
+          className="w-full h-10 rounded-none border border-[#333333] bg-[#0a0a0a] px-3 text-sm text-[#f5f5f0] transition-colors outline-none focus:border-[#f5f5f0] disabled:opacity-50"
         >
           <option value="">Select a service (optional)</option>
           {services.map((service) => (
@@ -118,7 +116,7 @@ export function ContactForm({ services }: ContactFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="message" className="text-gray-300">
+        <Label htmlFor="message" className="text-[#888888] font-mono text-xs uppercase tracking-[0.05em]">
           Your Message
         </Label>
         <textarea
@@ -127,7 +125,7 @@ export function ContactForm({ services }: ContactFormProps) {
           required
           disabled={isLoading}
           placeholder="Tell us about your project..."
-          className="w-full bg-gray-800 border border-gray-800 focus:border-white text-white rounded-lg p-3 min-h-[150px] resize-y text-sm transition-colors outline-none focus:ring-3 focus:ring-white/10 disabled:opacity-50 placeholder:text-gray-600"
+          className="w-full bg-[#0a0a0a] border border-[#333333] rounded-none p-3 min-h-[150px] resize-y text-sm text-[#f5f5f0] transition-colors outline-none focus:border-[#f5f5f0] focus:ring-0 disabled:opacity-50 placeholder:text-[#555555]"
         />
         {errors.message && (
           <p className="text-destructive text-sm">{errors.message}</p>
@@ -135,10 +133,10 @@ export function ContactForm({ services }: ContactFormProps) {
       </div>
 
       <div className="flex justify-end">
-        <Button
+        <button
           type="submit"
           disabled={isLoading}
-          className="w-full md:w-auto bg-gray-800 text-white border border-gray-600 hover:bg-gray-700 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] px-8"
+          className="w-full md:w-auto bg-[#f5f5f0] text-[#000000] border border-[#f5f5f0] rounded-none px-8 py-3 font-mono font-bold text-sm uppercase tracking-[0.05em] hover:bg-[#000000] hover:text-[#f5f5f0] transition-colors disabled:opacity-50 inline-flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>
@@ -148,7 +146,7 @@ export function ContactForm({ services }: ContactFormProps) {
           ) : (
             "Send Message"
           )}
-        </Button>
+        </button>
       </div>
     </form>
   )
