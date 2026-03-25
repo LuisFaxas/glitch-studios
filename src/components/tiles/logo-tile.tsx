@@ -1,100 +1,20 @@
 "use client"
 
-import { useState, useCallback } from "react"
-import { motion } from "motion/react"
-import clsx from "clsx"
+import Link from "next/link"
 
-interface LogoTileProps {
-  /** When true, render as a small square (no col-span-2/row-span-2). */
-  compact?: boolean
-}
-
-export function LogoTile({ compact = false }: LogoTileProps) {
-  const [entranceDone, setEntranceDone] = useState(false)
-  const [glitchActive, setGlitchActive] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
-
-  const handleEntranceComplete = useCallback(() => {
-    setEntranceDone(true)
-    // Trigger single post-entrance glitch ("power-on" lock-in effect)
-    setGlitchActive(true)
-    const timer = setTimeout(() => setGlitchActive(false), 200)
-    return () => clearTimeout(timer)
-  }, [])
-
-  const handleMouseEnter = useCallback(() => {
-    if (entranceDone) setIsHovered(true)
-  }, [entranceDone])
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false)
-  }, [])
-
-  const showGlitch = glitchActive || isHovered
-
+export function LogoTile() {
   return (
-    <motion.div
-      role="img"
-      aria-label="Glitch Studios"
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{
-        duration: 0.6,
-        ease: [0.215, 0.61, 0.355, 1],
-      }}
-      onAnimationComplete={handleEntranceComplete}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className={clsx(
-        // Grid sizing: 2x2 large tile unless compact
-        compact ? "aspect-square" : "col-span-2 row-span-2 aspect-square",
-        // Layout
-        "relative overflow-hidden",
-        // Padding & border
-        "p-4 border border-solid rounded-none",
-        // Background
-        "bg-[#111111]",
-        // Explicit minimum height fallback
-        !compact && "min-h-[120px]",
-        // Border states
-        isHovered ? "border-[#444444]" : "border-[#222222]",
-        // Two-layer warm white glow
-        "shadow-[0_0_25px_rgba(255,250,240,0.25),0_0_50px_rgba(255,250,240,0.08)]",
-      )}
+    <Link
+      href="/"
+      className="w-full flex items-center justify-center py-7 px-4 border border-[#333333] rounded-none bg-[#0a0a0a] shadow-[0_0_30px_rgba(255,250,240,0.3),0_0_60px_rgba(255,250,240,0.1)] mb-1 transition-colors duration-200 hover:border-[#555555]"
+      aria-label="Glitch Studios — Home"
     >
-      {/* Glitch hover animation overlay — duplicates logo content */}
-      {showGlitch && (
-        <div
-          className="pointer-events-none absolute inset-0 overflow-hidden animate-glitch-hover motion-reduce:hidden"
-          aria-hidden="true"
-        >
-          <div
-            className="absolute inset-0 bg-center bg-contain bg-no-repeat"
-            style={{
-              backgroundImage: "url(/Untitled-2.png)",
-              filter: "invert(1)",
-            }}
-          />
-        </div>
-      )}
-
-      {/* Scan line on hover */}
-      {isHovered && (
-        <span
-          className="pointer-events-none absolute left-0 h-px w-full animate-scan-line bg-[rgba(255,255,255,0.1)] motion-reduce:hidden"
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Logo image — inverted for white-on-dark visibility */}
-      <div
-        className="absolute inset-0 bg-center bg-contain bg-no-repeat"
-        style={{
-          backgroundImage: "url(/Untitled-2.png)",
-          filter: "invert(1)",
-        }}
-        aria-hidden="true"
-      />
-    </motion.div>
+      <span
+        className="font-mono font-bold text-[36px] uppercase tracking-[0.1em] text-[#f5f5f0] leading-none select-none"
+        style={{ textShadow: "0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2)" }}
+      >
+        GLITCH
+      </span>
+    </Link>
   )
 }

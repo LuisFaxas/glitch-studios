@@ -23,7 +23,7 @@ export interface TileProps {
 }
 
 const sizeClasses: Record<TileSize, string> = {
-  small: "col-span-1 row-span-1 aspect-square",
+  small: "col-span-1 row-span-1",
   medium: "col-span-2 row-span-1",
   wide: "col-span-2 row-span-1",
   large: "col-span-2 row-span-2",
@@ -43,7 +43,6 @@ export function Tile({
   compact = false,
 }: TileProps) {
   const [isHovered, setIsHovered] = useState(false)
-  const [isFocused, setIsFocused] = useState(false)
 
   const handleMouseEnter = useCallback(() => {
     if (!isActive) setIsHovered(true)
@@ -51,14 +50,6 @@ export function Tile({
 
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false)
-  }, [])
-
-  const handleFocus = useCallback(() => {
-    if (!isActive) setIsFocused(true)
-  }, [isActive])
-
-  const handleBlur = useCallback(() => {
-    setIsFocused(false)
   }, [])
 
   // Large tiles always use vertical layout regardless of prop
@@ -75,8 +66,8 @@ export function Tile({
     // Layout
     "relative overflow-hidden",
     contentLayoutClasses,
-    // Padding & border
-    compact ? "p-2" : "p-4",
+    // Padding — wide tiles get extra vertical padding for thickness
+    compact ? "p-2" : size === "wide" ? "px-4 py-5" : "p-4",
     "border border-solid",
     // Sharp corners (0px border-radius)
     "rounded-none",
@@ -103,39 +94,8 @@ export function Tile({
     className,
   )
 
-  const showGlitch = (isHovered || isFocused) && !isActive
-
   const content = (
     <>
-      {/* Glitch hover animation overlay — duplicates visible content */}
-      {showGlitch && (
-        <div
-          className="pointer-events-none absolute inset-0 overflow-hidden animate-glitch-hover motion-reduce:hidden"
-          aria-hidden="true"
-        >
-          <div className={clsx(contentLayoutClasses, compact ? "p-2" : "p-4")}>
-            {icon && (
-              <span className="flex-shrink-0 [&>svg]:h-5 [&>svg]:w-5">
-                {icon}
-              </span>
-            )}
-            {label && !compact && (
-              <span className="font-mono text-lg font-bold uppercase tracking-[0.05em]">
-                {label}
-              </span>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Scan line pseudo-element */}
-      {showGlitch && (
-        <span
-          className="pointer-events-none absolute left-0 h-px w-full animate-scan-line bg-[rgba(255,255,255,0.1)] motion-reduce:hidden"
-          aria-hidden="true"
-        />
-      )}
-
       {/* Icon */}
       {icon && (
         <span className="flex-shrink-0 [&>svg]:h-5 [&>svg]:w-5" aria-hidden="true">
@@ -147,7 +107,8 @@ export function Tile({
       {label && !compact && (
         <span
           className={clsx(
-            "font-mono text-lg font-bold uppercase tracking-[0.05em]",
+            "font-mono font-bold uppercase tracking-[0.05em]",
+            size === "wide" ? "text-xl" : size === "small" ? "text-sm" : "text-lg",
             size === "large" && "text-center w-full",
           )}
         >
@@ -171,8 +132,6 @@ export function Tile({
     className: baseClasses,
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
-    onFocus: handleFocus,
-    onBlur: handleBlur,
     ...(isActive && { "aria-current": "page" as const }),
   }
 
