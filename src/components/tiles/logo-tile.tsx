@@ -13,7 +13,7 @@ export function LogoTile() {
       <img
         src="/logo-white.png"
         alt="GLITCH"
-        className="h-16 w-auto object-contain select-none drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] group-hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.6)] transition-[filter] duration-300"
+        className="h-28 w-auto object-contain select-none drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] group-hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.6)] transition-[filter] duration-300"
         draggable={false}
       />
     </Link>
