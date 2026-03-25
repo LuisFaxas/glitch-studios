@@ -10,10 +10,10 @@ export function LogoTile() {
       className="group w-full flex items-center justify-center py-8 rounded-none bg-transparent mb-1"
       aria-label="Glitch Studios — Home"
     >
-      <div className={styles.glitchWrapper} aria-hidden="true">
-        <span className={styles.glitchText} data-text="GLITCH">
-          GLITCH
-        </span>
+      <div className={styles.glitchWrapper}>
+        <div className={styles.glitchImg} />
+        <div className={styles.glitchLayer1} aria-hidden="true" />
+        <div className={styles.glitchLayer2} aria-hidden="true" />
       </div>
     </Link>
   )
