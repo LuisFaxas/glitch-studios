@@ -106,7 +106,7 @@ export function ContactForm({ services }: ContactFormProps) {
         >
           <option value="">Select a service (optional)</option>
           {services.map((service) => (
-            <option key={service.slug} value={service.name}>
+            <option key={service.slug} value={service.slug}>
               {service.name}
             </option>
           ))}
