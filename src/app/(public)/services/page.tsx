@@ -1,7 +1,7 @@
 import { db } from "@/lib/db"
 import { services } from "@/db/schema"
 import { eq, asc } from "drizzle-orm"
-import { ServiceTabs } from "@/components/services/service-tabs"
+import { ServiceGrid } from "@/components/services/service-grid"
 import type { Metadata } from "next"
 
 export const dynamic = "force-dynamic"
@@ -26,11 +26,11 @@ export default async function ServicesPage() {
     .orderBy(asc(services.sortOrder))
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-16 md:py-24">
-      <h1 className="font-mono font-bold text-4xl md:text-5xl uppercase tracking-tight mb-12 text-white">
-        Our Services
+    <div className="px-6 py-12 md:py-16">
+      <h1 className="font-mono font-bold text-[40px] md:text-5xl uppercase tracking-[0.05em] mb-8 text-[#f5f5f0]">
+        Services
       </h1>
-      <ServiceTabs services={servicesList} />
+      <ServiceGrid services={servicesList} />
     </div>
   )
 }
