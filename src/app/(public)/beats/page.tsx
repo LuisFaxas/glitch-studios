@@ -1,33 +1,50 @@
-import { Music } from "lucide-react"
-import Link from "next/link"
+export const dynamic = "force-dynamic"
+
+import { getPublishedBeats, getBeatFilterOptions } from "@/actions/beats"
+import { BeatCatalog } from "@/components/beats/beat-catalog"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Beats",
-  description: "Beat catalog coming soon to Glitch Studios.",
+  description: "Browse and license beats from Glitch Studios.",
 }
 
-export default function BeatsPage() {
+export default async function BeatsPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>
+}) {
+  const params = await searchParams
+  const filters = {
+    genre: params.genre || undefined,
+    bpmMin: params.bpmMin ? Number(params.bpmMin) : undefined,
+    bpmMax: params.bpmMax ? Number(params.bpmMax) : undefined,
+    key: params.key || undefined,
+    mood: params.mood || undefined,
+    search: params.q || undefined,
+  }
+
+  const [beats, filterOptions] = await Promise.all([
+    getPublishedBeats(filters),
+    getBeatFilterOptions(),
+  ])
+
+  const hasActiveFilters = Object.values(filters).some(
+    (v) => v !== undefined
+  )
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
-      <div className="w-20 h-20 flex items-center justify-center border border-[#222222] bg-[#111111] rounded-none mb-8">
-        <Music className="w-10 h-10 text-[#555555]" />
+    <div className="flex flex-col gap-8">
+      <div>
+        <h1 className="mb-6 font-mono text-[40px] font-bold uppercase leading-[1.1] tracking-[0.05em] text-[#f5f5f0]">
+          BEATS
+        </h1>
+        <BeatCatalog
+          beats={beats}
+          filterOptions={filterOptions}
+          hasActiveFilters={hasActiveFilters}
+        />
       </div>
-      <h1 className="font-mono font-bold text-4xl md:text-5xl uppercase tracking-tight text-[#f5f5f0] mb-4">
-        Beat Store
-      </h1>
-      <p className="font-mono text-lg uppercase tracking-[0.05em] text-[#888888] mb-2">
-        Coming Soon
-      </p>
-      <p className="font-sans text-[15px] text-[#888888] max-w-md mb-8">
-        Browse beats, preview audio, select licenses, and purchase — all in one place. The beat store is currently under construction.
-      </p>
-      <Link
-        href="/services"
-        className="border border-[#f5f5f0] bg-[#f5f5f0] text-[#000000] font-mono font-bold text-sm uppercase tracking-[0.05em] px-8 py-3 rounded-none hover:bg-[#000000] hover:text-[#f5f5f0] transition-colors duration-200"
-      >
-        View Services
-      </Link>
     </div>
   )
 }
