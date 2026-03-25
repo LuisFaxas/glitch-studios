@@ -1,6 +1,4 @@
 import Link from "next/link"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { ScrollSection } from "@/components/home/scroll-section"
 
 type Service = {
@@ -16,38 +14,39 @@ interface ServicesOverviewProps {
 }
 
 export function ServicesOverview({ services }: ServicesOverviewProps) {
+  if (services.length === 0) return null
+
   return (
     <ScrollSection className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-white mb-12">
+        <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-[#f5f5f0] mb-12">
           What We Do
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (
-            <Card
+            <div
               key={service.id}
-              className="bg-gray-900 border-gray-800 rounded-lg p-6 hover:border-gray-600 hover:shadow-[0_0_15px_rgba(255,255,255,0.08)] transition-all duration-150"
+              className="bg-[#111111] border border-[#222222] rounded-none p-6 hover:border-[#444444] hover:bg-[#1a1a1a] transition-colors duration-200"
             >
-              <CardContent className="flex flex-col gap-4 p-0">
-                <h3 className="font-mono font-bold text-xl text-white">
+              <div className="flex flex-col gap-4">
+                <h3 className="font-mono font-bold text-xl text-[#f5f5f0]">
                   {service.name}
                 </h3>
-                <p className="text-gray-400 leading-relaxed">
+                <p className="text-[#888888] leading-relaxed">
                   {service.shortDescription}
                 </p>
-                <p className="font-mono font-bold text-white">
+                <p className="font-mono font-bold text-[#f5f5f0]">
                   {service.priceLabel}
                 </p>
-                <Button
-                  variant="outline"
-                  className="w-fit mt-2"
-                  render={<Link href={`/services#${service.slug}`} />}
+                <Link
+                  href={`/services#${service.slug}`}
+                  className="border border-[#f5f5f0] bg-transparent text-[#f5f5f0] px-6 py-2 rounded-none font-mono text-sm uppercase tracking-[0.05em] hover:bg-[#f5f5f0] hover:text-[#000000] transition-colors duration-200 inline-flex items-center w-fit mt-2"
                 >
                   Learn More
-                </Button>
-              </CardContent>
-            </Card>
+                </Link>
+              </div>
+            </div>
           ))}
         </div>
       </div>

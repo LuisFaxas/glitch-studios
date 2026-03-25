@@ -3,7 +3,6 @@
 import { useCallback } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { ChevronLeft, ChevronRight, Play } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { ScrollSection } from "@/components/home/scroll-section"
 
 type PortfolioItem = {
@@ -37,14 +36,14 @@ export function VideoPortfolioCarousel({ portfolioItems }: VideoPortfolioCarouse
     return (
       <ScrollSection className="py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-white mb-8">
+          <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-[#f5f5f0] mb-8">
             Our Work
           </h2>
-          <div className="bg-gray-900 border border-gray-800 rounded-lg p-12 text-center">
-            <h3 className="font-mono font-bold text-xl text-white mb-2">
+          <div className="bg-[#111111] border border-[#222222] rounded-none p-12 text-center">
+            <h3 className="font-mono font-bold text-xl text-[#f5f5f0] mb-2">
               Portfolio coming soon
             </h3>
-            <p className="text-gray-400">
+            <p className="text-[#888888]">
               We are curating our best work. Check back shortly.
             </p>
           </div>
@@ -57,26 +56,24 @@ export function VideoPortfolioCarousel({ portfolioItems }: VideoPortfolioCarouse
     <ScrollSection className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-white">
+          <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-[#f5f5f0]">
             Our Work
           </h2>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="icon"
+            <button
               onClick={scrollPrev}
               aria-label="Previous project"
+              className="w-10 h-10 flex items-center justify-center border border-[#222222] bg-[#111111] text-[#f5f5f0] rounded-none hover:border-[#444444] hover:bg-[#1a1a1a] transition-colors cursor-pointer"
             >
               <ChevronLeft className="size-5" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
+            </button>
+            <button
               onClick={scrollNext}
               aria-label="Next project"
+              className="w-10 h-10 flex items-center justify-center border border-[#222222] bg-[#111111] text-[#f5f5f0] rounded-none hover:border-[#444444] hover:bg-[#1a1a1a] transition-colors cursor-pointer"
             >
               <ChevronRight className="size-5" />
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -94,10 +91,10 @@ export function VideoPortfolioCarousel({ portfolioItems }: VideoPortfolioCarouse
               return (
                 <div
                   key={item.id}
-                  className="flex-shrink-0 w-[320px] bg-gray-900 border border-gray-800 rounded-lg overflow-hidden"
+                  className="flex-shrink-0 w-[320px] bg-[#111111] border border-[#222222] rounded-none overflow-hidden"
                 >
                   {/* Thumbnail */}
-                  <div className="relative aspect-video bg-gray-800">
+                  <div className="relative aspect-video bg-[#0a0a0a]">
                     {thumbnailSrc ? (
                       <img
                         src={thumbnailSrc}
@@ -106,7 +103,7 @@ export function VideoPortfolioCarousel({ portfolioItems }: VideoPortfolioCarouse
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <Play className="size-10 text-gray-600" />
+                        <Play className="size-10 text-[#333333]" />
                       </div>
                     )}
                   </div>
@@ -114,17 +111,17 @@ export function VideoPortfolioCarousel({ portfolioItems }: VideoPortfolioCarouse
                   {/* Info */}
                   <div className="p-4 flex flex-col gap-2">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-mono font-bold text-white text-sm truncate">
+                      <h3 className="font-mono font-bold text-[#f5f5f0] text-sm truncate">
                         {item.title}
                       </h3>
                       {item.category && (
-                        <span className="text-xs bg-gray-800 text-gray-400 px-2 py-0.5 rounded-full shrink-0">
+                        <span className="text-xs bg-[#1a1a1a] text-[#888888] px-2 py-0.5 rounded-none shrink-0">
                           {item.category}
                         </span>
                       )}
                     </div>
                     {item.description && (
-                      <p className="text-gray-400 text-sm line-clamp-2">
+                      <p className="text-[#888888] text-sm line-clamp-2">
                         {item.description}
                       </p>
                     )}

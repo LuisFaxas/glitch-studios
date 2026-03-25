@@ -3,13 +3,19 @@
 import { motion } from "motion/react"
 import Link from "next/link"
 import { GlitchLogo } from "@/components/layout/glitch-logo"
-import { Button } from "@/components/ui/button"
 
 export function HeroSection() {
   return (
     <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Video background placeholder */}
-      <div className="absolute inset-0 bg-black" data-video-placeholder="true">
+      {/* Video background placeholder with scanline texture */}
+      <div
+        className="absolute inset-0 bg-[#0a0a0a]"
+        data-video-placeholder="true"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 4px)",
+        }}
+      >
         {/* Replace with R2-hosted showreel URL */}
         {/* <video
           autoPlay
@@ -21,8 +27,8 @@ export function HeroSection() {
         /> */}
       </div>
 
-      {/* Dark overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/80" />
+      {/* Light bottom-only scrim for future video readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#000000]/30" />
 
       {/* Content overlay */}
       <motion.div
@@ -33,23 +39,23 @@ export function HeroSection() {
       >
         <GlitchLogo size="lg" />
 
-        <p className="font-mono text-2xl md:text-4xl text-white tracking-tight">
+        <p className="font-mono text-2xl md:text-4xl text-[#f5f5f0] tracking-tight">
           Music. Video. Vision.
         </p>
 
         <div className="flex gap-4">
-          <Button
-            className="bg-gray-800 text-white border border-gray-600 px-8 py-3 hover:bg-gray-700 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-200"
-            render={<Link href="/services" />}
+          <Link
+            href="/services"
+            className="bg-[#f5f5f0] text-[#000000] border border-[#f5f5f0] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#000000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200"
           >
             Book a Session
-          </Button>
-          <Button
-            className="bg-gray-800 text-white border border-gray-600 px-8 py-3 hover:bg-gray-700 hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-200"
-            render={<Link href="/beats" />}
+          </Link>
+          <Link
+            href="/beats"
+            className="bg-[#111111] text-[#f5f5f0] border border-[#222222] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#1a1a1a] hover:border-[#444444] transition-colors duration-200"
           >
             Browse Beats
-          </Button>
+          </Link>
         </div>
       </motion.div>
     </section>

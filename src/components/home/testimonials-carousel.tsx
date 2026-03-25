@@ -4,7 +4,6 @@ import { useCallback } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import Autoplay from "embla-carousel-autoplay"
 import { ChevronLeft, ChevronRight, Star } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { ScrollSection } from "@/components/home/scroll-section"
 
 type Testimonial = {
@@ -36,26 +35,24 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
     <ScrollSection className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-white">
+          <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-[#f5f5f0]">
             What They Say
           </h2>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="icon"
+            <button
               onClick={scrollPrev}
               aria-label="Previous testimonial"
+              className="w-10 h-10 flex items-center justify-center border border-[#222222] bg-[#111111] text-[#f5f5f0] rounded-none hover:border-[#444444] hover:bg-[#1a1a1a] transition-colors cursor-pointer"
             >
               <ChevronLeft className="size-5" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
+            </button>
+            <button
               onClick={scrollNext}
               aria-label="Next testimonial"
+              className="w-10 h-10 flex items-center justify-center border border-[#222222] bg-[#111111] text-[#f5f5f0] rounded-none hover:border-[#444444] hover:bg-[#1a1a1a] transition-colors cursor-pointer"
             >
               <ChevronRight className="size-5" />
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -64,10 +61,10 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
             {testimonials.map((testimonial) => (
               <div
                 key={testimonial.id}
-                className="flex-shrink-0 w-[350px] md:w-[400px] bg-gray-900 border border-gray-800 rounded-lg p-8 relative"
+                className="flex-shrink-0 w-[350px] md:w-[400px] bg-[#111111] border border-[#222222] rounded-none p-8 relative"
               >
                 {/* Decorative quotation mark */}
-                <span className="absolute top-4 left-4 text-6xl text-gray-800 font-serif leading-none select-none" aria-hidden="true">
+                <span className="absolute top-4 left-4 text-6xl text-[#222222] font-serif leading-none select-none" aria-hidden="true">
                   &ldquo;
                 </span>
 
@@ -81,7 +78,7 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
                           className={`size-4 ${
                             i < testimonial.rating!
                               ? "fill-white text-white"
-                              : "text-gray-600"
+                              : "text-[#333333]"
                           }`}
                         />
                       ))}
@@ -89,7 +86,7 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
                   )}
 
                   {/* Quote */}
-                  <p className="text-white italic leading-relaxed">
+                  <p className="text-[#f5f5f0] italic leading-relaxed">
                     {testimonial.quote}
                   </p>
 
@@ -103,11 +100,11 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
                       />
                     )}
                     <div>
-                      <p className="font-bold text-white text-sm">
+                      <p className="font-bold text-[#f5f5f0] text-sm">
                         {testimonial.clientName}
                       </p>
                       {testimonial.clientTitle && (
-                        <p className="text-gray-400 text-sm">
+                        <p className="text-[#888888] text-sm">
                           {testimonial.clientTitle}
                         </p>
                       )}

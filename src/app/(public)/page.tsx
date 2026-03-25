@@ -10,11 +10,15 @@ import { VideoPortfolioCarousel } from "@/components/home/video-portfolio-carous
 import { TestimonialsCarousel } from "@/components/home/testimonials-carousel"
 
 export default async function HomePage() {
-  const [servicesList, testimonialsList, portfolioList] = await Promise.all([
+  const [servicesResult, testimonialsResult, portfolioResult] = await Promise.allSettled([
     db.select().from(services).where(eq(services.isActive, true)).orderBy(asc(services.sortOrder)),
     db.select().from(testimonials).where(eq(testimonials.isActive, true)).orderBy(asc(testimonials.sortOrder)),
     db.select().from(portfolioItems).where(eq(portfolioItems.isActive, true)).orderBy(asc(portfolioItems.sortOrder)),
   ])
+
+  const servicesList = servicesResult.status === "fulfilled" ? servicesResult.value : []
+  const testimonialsList = testimonialsResult.status === "fulfilled" ? testimonialsResult.value : []
+  const portfolioList = portfolioResult.status === "fulfilled" ? portfolioResult.value : []
 
   const organizationSchema = {
     "@context": "https://schema.org",

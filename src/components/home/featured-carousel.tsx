@@ -3,7 +3,6 @@
 import { useCallback } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { ChevronLeft, ChevronRight, Music } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { ScrollSection } from "@/components/home/scroll-section"
 
 export function FeaturedCarousel() {
@@ -22,26 +21,27 @@ export function FeaturedCarousel() {
     <ScrollSection className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-white">
-            Featured Beats
-          </h2>
+          <div>
+            <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-[#f5f5f0]">
+              Featured Beats
+            </h2>
+            <p className="text-[#888888] font-sans text-sm mt-1">Coming soon in the beat store</p>
+          </div>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="icon"
+            <button
               onClick={scrollPrev}
               aria-label="Previous beat"
+              className="w-10 h-10 flex items-center justify-center border border-[#222222] bg-[#111111] text-[#f5f5f0] rounded-none hover:border-[#444444] hover:bg-[#1a1a1a] transition-colors cursor-pointer"
             >
               <ChevronLeft className="size-5" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
+            </button>
+            <button
               onClick={scrollNext}
               aria-label="Next beat"
+              className="w-10 h-10 flex items-center justify-center border border-[#222222] bg-[#111111] text-[#f5f5f0] rounded-none hover:border-[#444444] hover:bg-[#1a1a1a] transition-colors cursor-pointer"
             >
               <ChevronRight className="size-5" />
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -50,13 +50,13 @@ export function FeaturedCarousel() {
             {placeholderBeats.map((beat) => (
               <div
                 key={beat.id}
-                className="flex-shrink-0 w-[280px] bg-gray-900 border border-gray-800 rounded-lg p-4 flex flex-col items-center justify-center gap-4 min-h-[200px]"
+                className="flex-shrink-0 w-[280px] bg-[#111111] border border-[#222222] rounded-none p-4 flex flex-col items-center justify-center gap-4 min-h-[200px]"
               >
-                <Music className="size-10 text-gray-600" />
-                <p className="font-mono font-bold text-white text-sm">
+                <Music className="size-10 text-[#333333]" />
+                <p className="font-mono font-bold text-[#f5f5f0] text-sm">
                   {beat.title}
                 </p>
-                <p className="text-gray-400 text-sm">Coming Soon</p>
+                <p className="text-[#888888] text-sm">Coming Soon</p>
               </div>
             ))}
           </div>
