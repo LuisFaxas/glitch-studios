@@ -48,7 +48,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **AUTH-01**: Client account registration and login
 - [x] **AUTH-02**: Admin account with role-based access (admin vs client)
-- [ ] **AUTH-03**: Client dashboard showing purchase history and re-download links
+- [x] **AUTH-03**: Client dashboard showing purchase history and re-download links
 - [ ] **AUTH-04**: Client dashboard showing upcoming and past bookings
 - [x] **AUTH-05**: Session persistence across browser refresh
 
@@ -147,7 +147,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONT-03 | Phase 1 | Complete |
 | AUTH-01 | Phase 1.1 | Complete |
 | AUTH-02 | Phase 1 | Complete |
-| AUTH-03 | Phase 2 | Pending |
+| AUTH-03 | Phase 2 | Complete |
 | AUTH-04 | Phase 3 | Pending |
 | AUTH-05 | Phase 1.1 | Complete |
 | ADMN-01 | Phase 2 | Complete |
