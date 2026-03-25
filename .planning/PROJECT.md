@@ -19,15 +19,15 @@ Clients can discover Glitch Studios' work and book services or buy beats in one 
 - [x] Blog/news section — Validated in Phase 1.1 (typography fix)
 - [x] Caddy dev server configuration for local development — Validated in Phase 1
 - [x] Vercel deployment — Validated in Phase 1.1 (Neon HTTP driver)
+- [x] Beat catalog with audio previews and e-commerce checkout — Validated in Phase 2: Beat Store
+- [x] Stripe + PayPal payment processing — Validated in Phase 2: Beat Store (PayPal via Stripe Dashboard)
+- [x] Client accounts — view bookings, downloads, purchase history — Validated in Phase 2: Beat Store (purchase history + re-download)
+- [x] Email system — transactional (booking confirmations, receipts), newsletters, contact inbox from admin dash — Partially validated in Phase 2: Beat Store (purchase receipt email via Resend)
 
 ### Active
 
 - [ ] Calendar-based booking system for all services
-- [ ] Beat catalog with audio previews and e-commerce checkout
-- [ ] Admin dashboard — manage content, bookings, clients, site settings, pricing, team bios
-- [ ] Client accounts — view bookings, downloads, purchase history
-- [ ] Email system — transactional (booking confirmations, receipts), newsletters, contact inbox from admin dash
-- [ ] Stripe + PayPal payment processing
+- [ ] Admin dashboard — manage content, bookings, clients, site settings, pricing, team bios (partially delivered in Phase 2: beat/bundle CRUD)
 
 ### Out of Scope
 
@@ -60,7 +60,7 @@ Clients can discover Glitch Studios' work and book services or buy beats in one 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Next.js + Tailwind + Embla | User's preferred stack, strong Vercel integration | -- Pending |
-| Stripe + PayPal dual payment | Maximum buyer coverage | -- Pending |
+| Stripe + PayPal dual payment | Maximum buyer coverage | Validated Phase 2 — Stripe Embedded Checkout, PayPal via Stripe Dashboard |
 | Calendar-based booking | Direct scheduling vs. inquiry forms — faster for clients | -- Pending |
 | Flat black & white cyberpunk aesthetic | Brand identity — sleek, futuristic, minimal | Validated Phase 1.2 — Metro tile grid, glitch animations, monochrome |
 | Admin + client auth | Clients need account access for bookings/downloads | -- Pending |
@@ -83,4 +83,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-25 after Phase 1.2 completion*
+*Last updated: 2026-03-25 after Phase 2 completion*
