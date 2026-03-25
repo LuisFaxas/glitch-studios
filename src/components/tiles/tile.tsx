@@ -16,6 +16,10 @@ export interface TileProps {
   onClick?: () => void
   children?: ReactNode
   className?: string
+  /** Opt-in horizontal layout for nav tiles. Default is vertical (flex-col). */
+  layout?: "horizontal" | "vertical"
+  /** When true, hide label/sublabel and reduce padding (icon-only mode). */
+  compact?: boolean
 }
 
 const sizeClasses: Record<TileSize, string> = {
@@ -35,8 +39,11 @@ export function Tile({
   onClick,
   children,
   className,
+  layout = "vertical",
+  compact = false,
 }: TileProps) {
   const [isHovered, setIsHovered] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
 
   const handleMouseEnter = useCallback(() => {
     if (!isActive) setIsHovered(true)
@@ -46,23 +53,41 @@ export function Tile({
     setIsHovered(false)
   }, [])
 
+  const handleFocus = useCallback(() => {
+    if (!isActive) setIsFocused(true)
+  }, [isActive])
+
+  const handleBlur = useCallback(() => {
+    setIsFocused(false)
+  }, [])
+
+  // Large tiles always use vertical layout regardless of prop
+  const effectiveLayout = size === "large" ? "vertical" : layout
+
+  const contentLayoutClasses =
+    effectiveLayout === "horizontal"
+      ? "flex flex-row items-center gap-3"
+      : "flex flex-col items-start justify-start gap-2"
+
   const baseClasses = clsx(
     // Grid sizing
     sizeClasses[size],
     // Layout
-    "relative flex flex-col items-start justify-start gap-2 overflow-hidden",
+    "relative overflow-hidden",
+    contentLayoutClasses,
     // Padding & border
-    "p-4 border border-solid",
+    compact ? "p-2" : "p-4",
+    "border border-solid",
     // Sharp corners (0px border-radius)
     "rounded-none",
     // Transition
     "transition-colors duration-200",
     // Focus
     "outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2",
-    // Active state: inverted white bg, black text, glow
+    // Active state: inverted white bg, black text, stronger glow
     isActive && [
       "bg-[#f5f5f0] border-[#f5f5f0] text-[#000000]",
-      "shadow-[0_0_20px_rgba(255,255,255,0.08)]",
+      "shadow-[0_0_20px_rgba(255,255,255,0.12)]",
     ],
     // Default state: dark bg, subtle border
     !isActive && [
@@ -78,20 +103,35 @@ export function Tile({
     className,
   )
 
+  const showGlitch = (isHovered || isFocused) && !isActive
+
   const content = (
     <>
-      {/* Glitch hover animation overlay */}
-      {isHovered && !isActive && (
-        <span
-          className="pointer-events-none absolute inset-0 animate-glitch-hover"
+      {/* Glitch hover animation overlay — duplicates visible content */}
+      {showGlitch && (
+        <div
+          className="pointer-events-none absolute inset-0 overflow-hidden animate-glitch-hover motion-reduce:hidden"
           aria-hidden="true"
-        />
+        >
+          <div className={clsx(contentLayoutClasses, compact ? "p-2" : "p-4")}>
+            {icon && (
+              <span className="flex-shrink-0 [&>svg]:h-5 [&>svg]:w-5">
+                {icon}
+              </span>
+            )}
+            {label && !compact && (
+              <span className="font-mono text-lg font-bold uppercase tracking-[0.05em]">
+                {label}
+              </span>
+            )}
+          </div>
+        </div>
       )}
 
       {/* Scan line pseudo-element */}
-      {isHovered && !isActive && (
+      {showGlitch && (
         <span
-          className="pointer-events-none absolute left-0 h-px w-full animate-scan-line bg-[rgba(255,255,255,0.1)]"
+          className="pointer-events-none absolute left-0 h-px w-full animate-scan-line bg-[rgba(255,255,255,0.1)] motion-reduce:hidden"
           aria-hidden="true"
         />
       )}
@@ -104,7 +144,7 @@ export function Tile({
       )}
 
       {/* Label */}
-      {label && (
+      {label && !compact && (
         <span
           className={clsx(
             "font-mono text-lg font-bold uppercase tracking-[0.05em]",
@@ -116,7 +156,7 @@ export function Tile({
       )}
 
       {/* Sublabel */}
-      {sublabel && (
+      {sublabel && !compact && (
         <span className="font-sans text-[13px] font-normal text-[#888888]">
           {sublabel}
         </span>
@@ -131,6 +171,8 @@ export function Tile({
     className: baseClasses,
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
+    onFocus: handleFocus,
+    onBlur: handleBlur,
     ...(isActive && { "aria-current": "page" as const }),
   }
 
