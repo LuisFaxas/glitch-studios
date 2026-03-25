@@ -75,7 +75,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Infrastructure
 
 - [x] **INFR-01**: Caddy dev server configuration reserved for this project
-- [ ] **INFR-02**: Vercel deployment with production configuration
+- [x] **INFR-02**: Vercel deployment with production configuration
 - [x] **INFR-03**: Mobile-first responsive design across all pages with desktop optimization
 - [x] **INFR-04**: Cyberpunk/glitch visual identity — flat black & white, futuristic, sleek, dramatic typography
 - [x] **INFR-05**: Framer Motion page transitions and UI animations throughout
@@ -165,7 +165,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MAIL-04 | Phase 4 | Pending |
 | MAIL-05 | Phase 4 | Pending |
 | INFR-01 | Phase 1 | Complete |
-| INFR-02 | Phase 1.1 | Pending |
+| INFR-02 | Phase 1.1 | Complete |
 | INFR-03 | Phase 1 | Complete |
 | INFR-04 | Phase 1 | Complete |
 | INFR-05 | Phase 1 | Complete |
