@@ -12,23 +12,22 @@ Clients can discover Glitch Studios' work and book services or buy beats in one 
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Public-facing website with cyberpunk/glitch aesthetic — Validated in Phase 1 + 1.1: Foundation + Bug Fixes
+- [x] Service pages for studio sessions, mixing/mastering, video production, SFX, graphic design — Validated in Phase 1
+- [x] Video portfolio with embedded playback — Validated in Phase 1
+- [x] Artist/producer profile pages — Validated in Phase 1
+- [x] Blog/news section — Validated in Phase 1.1 (typography fix)
+- [x] Caddy dev server configuration for local development — Validated in Phase 1
+- [x] Vercel deployment — Validated in Phase 1.1 (Neon HTTP driver)
 
 ### Active
 
-- [ ] Public-facing website with cyberpunk/glitch aesthetic (flat black & white, minimal, futuristic, sleek)
-- [ ] Service pages for studio sessions, mixing/mastering, video production, SFX, graphic design
 - [ ] Calendar-based booking system for all services
 - [ ] Beat catalog with audio previews and e-commerce checkout
-- [ ] Video portfolio with embedded playback
-- [ ] Artist/producer profile pages
-- [ ] Blog/news section
 - [ ] Admin dashboard — manage content, bookings, clients, site settings, pricing, team bios
 - [ ] Client accounts — view bookings, downloads, purchase history
 - [ ] Email system — transactional (booking confirmations, receipts), newsletters, contact inbox from admin dash
 - [ ] Stripe + PayPal payment processing
-- [ ] Caddy dev server configuration for local development
-- [ ] Vercel deployment
 
 ### Out of Scope
 
@@ -84,4 +83,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-25 after initialization*
+*Last updated: 2026-03-25 after Phase 1.1 completion*
