@@ -11,7 +11,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **BEAT-01**: Persistent audio player with waveform visualization that survives page navigation
 - [x] **BEAT-02**: Beat catalog with genre, BPM, key, and mood filtering
-- [ ] **BEAT-03**: Beat search across title, tags, and genre
+- [x] **BEAT-03**: Beat search across title, tags, and genre
 - [x] **BEAT-04**: Tiered licensing system (MP3 Lease, WAV Lease, Stems, Unlimited, Exclusive)
 - [ ] **BEAT-05**: Auto-generated PDF license agreement per tier on purchase
 - [x] **BEAT-06**: Watermarked audio previews on all beats
@@ -122,7 +122,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | BEAT-01 | Phase 2 | Complete |
 | BEAT-02 | Phase 2 | Complete |
-| BEAT-03 | Phase 2 | Pending |
+| BEAT-03 | Phase 2 | Complete |
 | BEAT-04 | Phase 2 | Complete |
 | BEAT-05 | Phase 2 | Pending |
 | BEAT-06 | Phase 2 | Complete |
