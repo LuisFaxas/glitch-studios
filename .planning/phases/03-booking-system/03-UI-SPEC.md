@@ -59,17 +59,18 @@ Source: `DESIGN-LANGUAGE.md` section 8, `globals.css` lines 155-174
 | Heading | JetBrains Mono | 28px | 700 | 1.2 |
 | Display (page title) | JetBrains Mono | 40px | 700 | 1.1 |
 
-Additional sizes used in this phase:
+Phase-specific element mapping (4 sizes only: 13px, 15px, 28px, 40px):
 
 | Element | Font | Size | Weight | Style |
 |---------|------|------|--------|-------|
 | Calendar day number | JetBrains Mono | 15px | 700 | Normal |
-| Calendar weekday header | JetBrains Mono | 11px | 700 | Uppercase, letter-spacing 0.05em |
+| Calendar weekday header | JetBrains Mono | 13px | 700 | Uppercase, letter-spacing 0.05em |
 | Time slot label | JetBrains Mono | 15px | 400 | Normal |
 | Booking summary key | JetBrains Mono | 13px | 700 | Uppercase |
 | Booking summary value | Inter | 15px | 400 | Normal |
-| Price display | JetBrains Mono | 22px | 700 | Normal |
-| Step indicator | JetBrains Mono | 11px | 700 | Uppercase, letter-spacing 0.05em |
+| Price display | JetBrains Mono | 28px | 700 | Normal |
+| Step indicator | JetBrains Mono | 13px | 700 | Uppercase, letter-spacing 0.05em |
+| Calendar month/year heading | JetBrains Mono | 28px | 700 | Normal |
 
 Source: `DESIGN-LANGUAGE.md` section 5
 
@@ -116,7 +117,7 @@ Source: `DESIGN-LANGUAGE.md` sections 3 and 7, `globals.css` dark mode vars
 
 | Component | Type | Description |
 |-----------|------|-------------|
-| `BookingCalendar` | Client | Month grid of day tiles, prev/next month nav, weekday headers |
+| `BookingCalendar` | Client | Month grid of day tiles, prev/next month nav with `aria-label="Previous month"` / `aria-label="Next month"`, weekday headers |
 | `CalendarDayTile` | Client | Individual day tile extending base `Tile` visual language |
 | `TimeSlotList` | Client | Vertical list of available time slot tiles for selected day |
 | `TimeSlotTile` | Client | Individual slot tile (time range + availability) |
@@ -170,6 +171,10 @@ Source: `DESIGN-LANGUAGE.md` sections 3 and 7, `globals.css` dark mode vars
 
 ## Interaction Patterns
 
+### Focal Point
+
+The **service tile grid** (Step 1: Select Service) is the primary visual anchor on the `/book` page. It occupies 60% of the viewport width on desktop, initiates the booking flow, and is the first interactive surface the user encounters. All other steps flow from this selection. On mobile it is full-width and immediately visible below the step indicator.
+
 ### Booking Flow (5 Steps)
 
 **Step 1: Select Service**
@@ -184,7 +189,7 @@ Source: `DESIGN-LANGUAGE.md` sections 3 and 7, `globals.css` dark mode vars
 - Unavailable days: `#0a0a0a` bg, `#555555` text, no hover effect, no pointer cursor
 - Selected day: inverted (`#f5f5f0` bg, `#000000` text)
 - Today: 2px `#f5f5f0` bottom border
-- Month navigation: left/right arrow tiles flanking month/year heading
+- Month navigation: left/right arrow tiles flanking month/year heading, each with accessible labels (`aria-label="Previous month"` and `aria-label="Next month"`)
 - Tile grid gap: 4px between day tiles
 
 **Step 3: Select Time Slot**
@@ -215,13 +220,13 @@ Source: `DESIGN-LANGUAGE.md` sections 3 and 7, `globals.css` dark mode vars
 - Completed steps: `#f5f5f0` text
 - Current step: `#f5f5f0` text, 2px bottom border
 - Future steps: `#555555` text
-- All caps, JetBrains Mono 11px, letter-spacing 0.05em
+- All caps, JetBrains Mono 13px 700, letter-spacing 0.05em
 
 ### Calendar Navigation
 
-- Previous month: left arrow tile (glitch hover)
-- Next month: right arrow tile (glitch hover)
-- Month/year: JetBrains Mono 22px bold, centered
+- Previous month: left arrow tile (glitch hover), `aria-label="Previous month"`
+- Next month: right arrow tile (glitch hover), `aria-label="Next month"`
+- Month/year: JetBrains Mono 28px bold, centered
 - Past months: navigable but all days greyed out
 - Max future: 3 months ahead (configurable)
 
@@ -275,6 +280,8 @@ Mobile:
 | (full width)              |
 +---------------------------+
 ```
+
+Focal point: The left content area (60% width) containing the service tile grid at Step 1 is the primary visual anchor. It is the largest interactive surface and the entry point for the entire booking flow.
 
 ### `/dashboard` (Client Dashboard - Bookings Tab)
 
