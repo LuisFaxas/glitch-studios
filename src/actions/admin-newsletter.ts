@@ -155,18 +155,20 @@ export async function sendNewsletter(data: {
     const batch = subscribers.slice(i, i + BATCH_SIZE)
 
     try {
-      const emails = batch.map((subscriber) => {
-        const unsubscribeUrl = generateUnsubscribeUrl(subscriber.email)
-        return {
-          from: "Glitch Studios <newsletter@glitchstudios.com>",
-          to: subscriber.email,
-          subject: data.subject,
-          react: NewsletterBroadcastEmail({
-            body: data.body,
-            unsubscribeUrl,
-          }),
-        }
-      })
+      const emails = await Promise.all(
+        batch.map(async (subscriber) => {
+          const unsubscribeUrl = await generateUnsubscribeUrl(subscriber.email)
+          return {
+            from: "Glitch Studios <newsletter@glitchstudios.com>",
+            to: subscriber.email,
+            subject: data.subject,
+            react: NewsletterBroadcastEmail({
+              body: data.body,
+              unsubscribeUrl,
+            }),
+          }
+        })
+      )
 
       await resend.batch.send(emails)
       sentCount += batch.length

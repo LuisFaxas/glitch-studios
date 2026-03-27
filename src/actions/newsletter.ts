@@ -41,7 +41,7 @@ function generateHmacToken(email: string): string {
 /**
  * Generate a full unsubscribe URL for a subscriber.
  */
-export function generateUnsubscribeUrl(email: string): string {
+export async function generateUnsubscribeUrl(email: string): Promise<string> {
   const token = generateHmacToken(email)
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://glitchstudios.com"
