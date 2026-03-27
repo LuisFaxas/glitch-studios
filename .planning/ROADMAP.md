@@ -181,9 +181,9 @@ Plans:
 Plans:
 - [x] 04-01-PLAN.md -- Schema extension, RBAC system with compatibility pass, AdminShell layout, dashboard overview
 - [x] 04-02-PLAN.md -- Tiptap rich text editor, Media Library with R2 direct upload, MediaPickerDialog
-- [ ] 04-03-PLAN.md -- Blog post CRUD with correct field names (content/coverImageUrl/excerpt), categories, tags, scheduled cron
-- [ ] 04-04-PLAN.md -- Service page CRUD with soft-delete safety, team member and testimonial management
-- [ ] 04-05-PLAN.md -- Client management (registered + guests), site settings, Roles & Permissions page
+- [x] 04-03-PLAN.md -- Blog post CRUD with correct field names (content/coverImageUrl/excerpt), categories, tags, scheduled cron
+- [x] 04-04-PLAN.md -- Service page CRUD with soft-delete safety, team member and testimonial management
+- [x] 04-05-PLAN.md -- Client management (registered + guests), site settings, Roles & Permissions page
 - [x] 04-06-PLAN.md -- Contact inbox with explicit read/unread, email reply with replyTo, admin notification (MAIL-03)
 - [ ] 04-07-PLAN.md -- Newsletter with unsubscribe flow, subscriber auto-tagging, broadcast failure tracking (MAIL-04)
 - [ ] 04-08-PLAN.md -- Homepage customization with public component refactors and consistent section taxonomy
