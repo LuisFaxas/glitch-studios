@@ -4,6 +4,7 @@ import { admin } from "better-auth/plugins"
 import { createAccessControl } from "better-auth/plugins/access"
 import { adminAc, defaultStatements } from "better-auth/plugins/admin/access"
 import { db } from "./db"
+import * as schema from "@/db/schema"
 
 const ac = createAccessControl(defaultStatements)
 const ownerAc = ac.newRole({
@@ -17,6 +18,7 @@ const ownerAc = ac.newRole({
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
+    schema,
   }),
   emailAndPassword: {
     enabled: true,
