@@ -18,6 +18,7 @@ type Service = {
   ctaText: string | null
   sortOrder: number | null
   isActive: boolean | null
+  isBookable?: boolean
 }
 
 interface ServiceGridProps {
@@ -59,12 +60,22 @@ function ServiceDetailPanel({ service }: { service: Service }) {
         </ul>
       )}
 
-      <Link
-        href={`/contact?service=${service.slug}`}
-        className="inline-flex items-center justify-center border border-[#f5f5f0] bg-[#f5f5f0] text-[#000000] font-mono font-bold text-sm uppercase tracking-[0.05em] px-8 py-3 rounded-none transition-colors duration-200 hover:bg-[#000000] hover:text-[#f5f5f0] outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2"
-      >
-        {service.ctaText || "Book a Session"}
-      </Link>
+      <div className="flex flex-wrap gap-3">
+        {service.isBookable && (
+          <Link
+            href={`/book?service=${service.slug}`}
+            className="inline-flex items-center justify-center bg-[#f5f5f0] text-[#000000] font-mono font-bold text-[13px] uppercase tracking-[0.05em] px-8 py-3 rounded-none transition-colors duration-200 hover:bg-[#e5e5e0] outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2"
+          >
+            Book Now
+          </Link>
+        )}
+        <Link
+          href={`/contact?service=${service.slug}`}
+          className="inline-flex items-center justify-center border border-[#f5f5f0] bg-transparent text-[#f5f5f0] font-mono font-bold text-[13px] uppercase tracking-[0.05em] px-8 py-3 rounded-none transition-colors duration-200 hover:bg-[#f5f5f0] hover:text-[#000000] outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2"
+        >
+          {service.isBookable ? "Contact Us" : (service.ctaText || "Book a Session")}
+        </Link>
+      </div>
     </div>
   )
 }

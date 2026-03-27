@@ -1,5 +1,5 @@
 import { db } from "@/lib/db"
-import { services } from "@/db/schema"
+import { services, serviceBookingConfig } from "@/db/schema"
 import { eq, asc } from "drizzle-orm"
 import { ServiceGrid } from "@/components/services/service-grid"
 import type { Metadata } from "next"
@@ -25,12 +25,24 @@ export default async function ServicesPage() {
     .where(eq(services.isActive, true))
     .orderBy(asc(services.sortOrder))
 
+  // Get bookable service IDs
+  const bookableConfigs = await db
+    .select({ serviceId: serviceBookingConfig.serviceId })
+    .from(serviceBookingConfig)
+
+  const bookableServiceIds = new Set(bookableConfigs.map((c) => c.serviceId))
+
+  const servicesWithBookable = servicesList.map((s) => ({
+    ...s,
+    isBookable: bookableServiceIds.has(s.id),
+  }))
+
   return (
     <div className="px-6 py-12 md:py-16">
       <h1 className="font-mono font-bold text-[40px] md:text-5xl uppercase tracking-[0.05em] mb-8 text-[#f5f5f0]">
         Services
       </h1>
-      <ServiceGrid services={servicesList} />
+      <ServiceGrid services={servicesWithBookable} />
     </div>
   )
 }

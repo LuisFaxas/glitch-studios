@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation"
 import {
   Music,
   Wrench,
+  Calendar,
   Image,
   User,
   FileText,
@@ -28,6 +29,7 @@ interface TileNavProps {
 const navItems = [
   { label: "Beats", href: "/beats", icon: Music, size: "wide" as const },
   { label: "Services", href: "/services", icon: Wrench, size: "wide" as const },
+  { label: "Book Session", href: "/book", icon: Calendar, size: "wide" as const },
   { label: "Portfolio", href: "/portfolio", icon: Image, size: "wide" as const },
   { label: "Artists", href: "/artists", icon: User, size: "medium" as const },
   { label: "Blog", href: "/blog", icon: FileText, size: "small" as const },

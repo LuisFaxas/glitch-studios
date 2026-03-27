@@ -6,6 +6,8 @@ import {
   orderItems,
   beats,
   bookings,
+  services,
+  rooms,
   serviceBookingConfig,
 } from "@/db/schema"
 import { eq } from "drizzle-orm"
@@ -13,6 +15,8 @@ import { generateLicensePdf } from "@/lib/pdf-license"
 import { getUploadUrl, getDownloadUrl } from "@/lib/r2"
 import { Resend } from "resend"
 import { PurchaseReceiptEmail } from "@/lib/email/purchase-receipt"
+import { BookingConfirmationEmail } from "@/lib/email/booking-confirmation"
+import { sendSms } from "@/lib/sms"
 import { DEFAULT_LICENSE_TIERS } from "@/types/beats"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -86,7 +90,75 @@ export async function POST(request: Request) {
           .where(eq(bookings.seriesId, existing.seriesId))
       }
 
-      // Email sending deferred to Plan 06
+      // Send confirmation email + SMS
+      if (process.env.RESEND_API_KEY) {
+        const [bookingDetails] = await db
+          .select({
+            guestName: bookings.guestName,
+            guestEmail: bookings.guestEmail,
+            guestPhone: bookings.guestPhone,
+            date: bookings.date,
+            startTime: bookings.startTime,
+            endTime: bookings.endTime,
+            depositAmount: bookings.depositAmount,
+            totalPrice: bookings.totalPrice,
+            serviceName: services.name,
+            roomName: rooms.name,
+            prepInstructions: serviceBookingConfig.prepInstructions,
+          })
+          .from(bookings)
+          .innerJoin(services, eq(bookings.serviceId, services.id))
+          .innerJoin(rooms, eq(bookings.roomId, rooms.id))
+          .leftJoin(
+            serviceBookingConfig,
+            eq(serviceBookingConfig.serviceId, bookings.serviceId)
+          )
+          .where(eq(bookings.id, bookingId))
+          .limit(1)
+
+        if (bookingDetails) {
+          const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://glitchstudios.com"
+          const icsUrl = `${siteUrl}/api/bookings/ics?bookingId=${bookingId}`
+          const address = process.env.STUDIO_ADDRESS || "Glitch Studios"
+
+          await resend.emails.send({
+            from: "Glitch Studios <bookings@glitchstudios.com>",
+            to: bookingDetails.guestEmail,
+            subject: `Booking Confirmed: ${bookingDetails.serviceName} at Glitch Studios`,
+            react: BookingConfirmationEmail({
+              clientName: bookingDetails.guestName,
+              serviceName: bookingDetails.serviceName,
+              roomName: bookingDetails.roomName,
+              date: bookingDetails.date,
+              time: `${bookingDetails.startTime} - ${bookingDetails.endTime}`,
+              depositAmount: bookingDetails.depositAmount,
+              totalPrice: bookingDetails.totalPrice,
+              address,
+              prepInstructions: bookingDetails.prepInstructions,
+              icsUrl,
+            }),
+          })
+
+          // Send SMS confirmation
+          if (bookingDetails.guestPhone) {
+            await sendSms(
+              bookingDetails.guestPhone,
+              `Glitch Studios: Your ${bookingDetails.serviceName} session is confirmed for ${bookingDetails.date} at ${bookingDetails.startTime}. See you there!`
+            )
+          }
+
+          // Notify admin
+          if (process.env.ADMIN_EMAIL) {
+            await resend.emails.send({
+              from: "Glitch Studios <bookings@glitchstudios.com>",
+              to: process.env.ADMIN_EMAIL,
+              subject: `New Booking: ${bookingDetails.serviceName} on ${bookingDetails.date}`,
+              text: `New booking from ${bookingDetails.guestName} (${bookingDetails.guestEmail})\nService: ${bookingDetails.serviceName}\nDate: ${bookingDetails.date}\nTime: ${bookingDetails.startTime} - ${bookingDetails.endTime}\nRoom: ${bookingDetails.roomName}`,
+            })
+          }
+        }
+      }
+
       return new Response("Booking confirmed", { status: 200 })
     }
 
