@@ -18,6 +18,7 @@ import { PurchaseReceiptEmail } from "@/lib/email/purchase-receipt"
 import { BookingConfirmationEmail } from "@/lib/email/booking-confirmation"
 import { sendSms } from "@/lib/sms"
 import { DEFAULT_LICENSE_TIERS } from "@/types/beats"
+import { tagSubscriberOnEvent } from "@/actions/admin-newsletter"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -159,6 +160,15 @@ export async function POST(request: Request) {
         }
       }
 
+      // Auto-tag subscriber as studio client
+      try {
+        if (existing.guestEmail) {
+          await tagSubscriberOnEvent(existing.guestEmail, "studio_client")
+        }
+      } catch {
+        // Tagging failure should not break webhook processing
+      }
+
       return new Response("Booking confirmed", { status: 200 })
     }
 
@@ -259,6 +269,15 @@ export async function POST(request: Request) {
           total: Number(order.totalAmount),
         }),
       })
+    }
+
+    // Auto-tag subscriber as beat buyer
+    try {
+      if (customerEmail) {
+        await tagSubscriberOnEvent(customerEmail, "beat_buyer")
+      }
+    } catch {
+      // Tagging failure should not break webhook processing
     }
   }
 
