@@ -155,14 +155,14 @@ Plans:
   1. Visitor can select a service type, pick an available time slot on the calendar, and complete a booking with deposit payment via Stripe or PayPal
   2. Client receives a booking confirmation email with session details and can view upcoming and past bookings in their dashboard
   3. Admin can view, confirm, cancel, and reschedule bookings from the admin area
-**Plans:** 6 plans
+**Plans:** 4/6 plans executed
 
 Plans:
 - [x] 03-01-PLAN.md -- Schema extension (9 booking tables), shared types, business logic library (availability, slots, deposit, policy, recurring, ICS, SMS)
 - [x] 03-02-PLAN.md -- Admin config: room CRUD, weekly availability editor, per-service booking config, session package management
 - [x] 03-03-PLAN.md -- Public booking flow Steps 1-3: service selector tiles, month calendar grid, time slot list, slots API, step indicator
 - [ ] 03-04-PLAN.md -- Public booking flow Steps 4-5: booking form, recurring selector, Stripe deposit payment, webhook extension, confirmation page
-- [ ] 03-05-PLAN.md -- Admin booking management: weekly calendar view, list view with filters, confirm/cancel/reschedule APIs
+- [x] 03-05-PLAN.md -- Admin booking management: weekly calendar view, list view with filters, confirm/cancel/reschedule APIs
 - [ ] 03-06-PLAN.md -- Client dashboard bookings tab, confirmation + reminder email templates, 24hr cron, nav tile, service CTAs
 
 **UI hint**: yes
@@ -192,5 +192,5 @@ Phases execute in numeric order: 1 -> 1.1 -> 1.2 -> 1.3 -> 1.4 -> 2 -> 3 -> 4
 | 1.3 Supabase DB Driver Fix | 0/TBD | Not started | - |
 | 1.4 Visual Polish & Sidebar Overhaul | 0/3 | Planning | - |
 | 2. Beat Store | 0/8 | Planned | - |
-| 3. Booking System | 0/6 | Planned | - |
+| 3. Booking System | 4/6 | In Progress|  |
 | 4. Admin Dashboard + Email | 0/TBD | Not started | - |
