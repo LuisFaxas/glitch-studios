@@ -5,7 +5,11 @@ import useEmblaCarousel from "embla-carousel-react"
 import { ChevronLeft, ChevronRight, Music } from "lucide-react"
 import { ScrollSection } from "@/components/home/scroll-section"
 
-export function FeaturedCarousel() {
+interface FeaturedCarouselProps {
+  beatIds?: string[]
+}
+
+export function FeaturedCarousel({ beatIds }: FeaturedCarouselProps = {}) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" })
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
