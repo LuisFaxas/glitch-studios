@@ -68,9 +68,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **MAIL-01**: Purchase receipt emails with download links on beat sale
 - [x] **MAIL-02**: Booking confirmation emails with session details
-- [ ] **MAIL-03**: Contact form submission notification to admin
+- [x] **MAIL-03**: Contact form submission notification to admin
 - [ ] **MAIL-04**: Newsletter broadcast emails from admin dashboard
-- [ ] **MAIL-05**: Contact inbox — view and reply to messages from admin dash
+- [x] **MAIL-05**: Contact inbox — view and reply to messages from admin dash
 
 ### Infrastructure
 
@@ -161,9 +161,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMN-09 | Phase 4 | Complete |
 | MAIL-01 | Phase 2 | Complete |
 | MAIL-02 | Phase 3 | Complete |
-| MAIL-03 | Phase 4 | Pending |
+| MAIL-03 | Phase 4 | Complete |
 | MAIL-04 | Phase 4 | Pending |
-| MAIL-05 | Phase 4 | Pending |
+| MAIL-05 | Phase 4 | Complete |
 | INFR-01 | Phase 1 | Complete |
 | INFR-02 | Phase 1.1 | Complete |
 | INFR-03 | Phase 1 | Complete |
