@@ -49,7 +49,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **AUTH-01**: Client account registration and login
 - [x] **AUTH-02**: Admin account with role-based access (admin vs client)
 - [x] **AUTH-03**: Client dashboard showing purchase history and re-download links
-- [ ] **AUTH-04**: Client dashboard showing upcoming and past bookings
+- [x] **AUTH-04**: Client dashboard showing upcoming and past bookings
 - [x] **AUTH-05**: Session persistence across browser refresh
 
 ### Admin
@@ -67,7 +67,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Email
 
 - [x] **MAIL-01**: Purchase receipt emails with download links on beat sale
-- [ ] **MAIL-02**: Booking confirmation emails with session details
+- [x] **MAIL-02**: Booking confirmation emails with session details
 - [ ] **MAIL-03**: Contact form submission notification to admin
 - [ ] **MAIL-04**: Newsletter broadcast emails from admin dashboard
 - [ ] **MAIL-05**: Contact inbox — view and reply to messages from admin dash
@@ -148,7 +148,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-01 | Phase 1.1 | Complete |
 | AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 2 | Complete |
-| AUTH-04 | Phase 3 | Pending |
+| AUTH-04 | Phase 3 | Complete |
 | AUTH-05 | Phase 1.1 | Complete |
 | ADMN-01 | Phase 2 | Complete |
 | ADMN-02 | Phase 3 | Complete |
@@ -160,7 +160,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMN-08 | Phase 4 | Pending |
 | ADMN-09 | Phase 4 | Pending |
 | MAIL-01 | Phase 2 | Complete |
-| MAIL-02 | Phase 3 | Pending |
+| MAIL-02 | Phase 3 | Complete |
 | MAIL-03 | Phase 4 | Pending |
 | MAIL-04 | Phase 4 | Pending |
 | MAIL-05 | Phase 4 | Pending |

@@ -163,7 +163,7 @@ Plans:
 - [x] 03-03-PLAN.md -- Public booking flow Steps 1-3: service selector tiles, month calendar grid, time slot list, slots API, step indicator
 - [x] 03-04-PLAN.md -- Public booking flow Steps 4-5: booking form, recurring selector, Stripe deposit payment, webhook extension, confirmation page
 - [x] 03-05-PLAN.md -- Admin booking management: weekly calendar view, list view with filters, confirm/cancel/reschedule APIs
-- [ ] 03-06-PLAN.md -- Client dashboard bookings tab, confirmation + reminder email templates, 24hr cron, nav tile, service CTAs
+- [x] 03-06-PLAN.md -- Client dashboard bookings tab, confirmation + reminder email templates, 24hr cron, nav tile, service CTAs
 
 **UI hint**: yes
 
