@@ -50,7 +50,7 @@ function getNavSections(unreadCount: number): NavSection[] {
       title: "Content",
       items: [
         { label: "Blog Posts", href: "/admin/blog", icon: FileText, permission: "manage_content" },
-        { label: "Services", href: "/admin/services-list", icon: Briefcase, permission: "manage_content" },
+        { label: "Services", href: "/admin/services", icon: Briefcase, permission: "manage_content" },
         { label: "Team", href: "/admin/team", icon: Users, permission: "manage_content" },
         { label: "Testimonials", href: "/admin/testimonials", icon: Quote, permission: "manage_content" },
       ],
