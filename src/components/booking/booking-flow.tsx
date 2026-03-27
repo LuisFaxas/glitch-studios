@@ -2,22 +2,43 @@
 
 import { useState, useCallback, useMemo, useEffect } from "react"
 import { AnimatePresence, motion } from "motion/react"
-import type { ServiceBookingInfo, TimeSlot } from "@/types/booking"
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout,
+} from "@stripe/react-stripe-js"
+import { toast } from "sonner"
+import type {
+  ServiceBookingInfo,
+  TimeSlot,
+  BookingFormData,
+  PackageInfo,
+} from "@/types/booking"
 import { calculateDeposit } from "@/lib/booking/deposit"
+import { useSession } from "@/lib/auth-client"
+import { getStripe } from "@/lib/stripe-client"
 import { BookingFlowStepper } from "./booking-flow-stepper"
 import { ServiceSelector } from "./service-selector"
 import { BookingSummary } from "./booking-summary"
 import { BookingCalendar } from "./booking-calendar"
 import { TimeSlotList } from "./time-slot-list"
+import { BookingForm } from "./booking-form"
+import { RecurringBookingSelector } from "./recurring-booking-selector"
 
 interface BookingFlowProps {
   services: ServiceBookingInfo[]
   initialServiceSlug?: string
+  packages?: PackageInfo[]
 }
 
-export function BookingFlow({ services, initialServiceSlug }: BookingFlowProps) {
+export function BookingFlow({
+  services,
+  initialServiceSlug,
+  packages = [],
+}: BookingFlowProps) {
   const [step, setStep] = useState(1)
-  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null)
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(
+    null
+  )
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null)
   const [availableDates, setAvailableDates] = useState<Map<string, boolean>>(
@@ -27,11 +48,31 @@ export function BookingFlow({ services, initialServiceSlug }: BookingFlowProps) 
   const [slotsLoading, setSlotsLoading] = useState(false)
   const [datesLoading, setDatesLoading] = useState(false)
   const [currentMonth, setCurrentMonth] = useState(new Date())
-  const [slideDirection, setSlideDirection] = useState(1) // 1 = forward, -1 = back
+  const [slideDirection, setSlideDirection] = useState(1)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [bookingId, setBookingId] = useState<string | null>(null)
+
+  // Recurring state
+  const [isRecurring, setIsRecurring] = useState(false)
+  const [recurringWeeks, setRecurringWeeks] = useState<number | undefined>()
+  const [selectedPackageId, setSelectedPackageId] = useState<
+    string | undefined
+  >()
+
+  const { data: session } = useSession()
+  const isLoggedIn = !!session?.user
+  const userName = session?.user?.name ?? undefined
+  const userEmail = session?.user?.email ?? undefined
 
   const selectedService = useMemo(
     () => services.find((s) => s.serviceId === selectedServiceId) ?? null,
     [services, selectedServiceId]
+  )
+
+  const servicePackages = useMemo(
+    () => packages.filter((p) => p.serviceId === selectedServiceId),
+    [packages, selectedServiceId]
   )
 
   // Pre-select service from slug
@@ -48,28 +89,35 @@ export function BookingFlow({ services, initialServiceSlug }: BookingFlowProps) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const depositAmount = useMemo(() => {
+  const totalPrice = useMemo(() => {
     if (!selectedService || !selectedService.priceLabel) return null
-    // Parse price from label like "$100/hr" or "$500"
-    const priceMatch = selectedService.priceLabel.match(/\$?([\d,]+(?:\.\d{2})?)/)
+    const priceMatch = selectedService.priceLabel.match(
+      /\$?([\d,]+(?:\.\d{2})?)/
+    )
     if (!priceMatch) return null
-    const totalPrice = parseFloat(priceMatch[1].replace(",", ""))
-    if (isNaN(totalPrice)) return null
+    const price = parseFloat(priceMatch[1].replace(",", ""))
+    if (isNaN(price)) return null
+    return price
+  }, [selectedService])
+
+  const depositAmount = useMemo(() => {
+    if (!selectedService || totalPrice === null) return null
     const result = calculateDeposit(
       selectedService.depositType,
       selectedService.depositValue,
       totalPrice
     )
     return result.depositAmountCents
-  }, [selectedService])
+  }, [selectedService, totalPrice])
 
   const completedSteps = useMemo(() => {
     const completed: number[] = []
     if (selectedServiceId) completed.push(1)
     if (selectedDate) completed.push(2)
     if (selectedSlot) completed.push(3)
+    if (clientSecret) completed.push(4)
     return completed
-  }, [selectedServiceId, selectedDate, selectedSlot])
+  }, [selectedServiceId, selectedDate, selectedSlot, clientSecret])
 
   const fetchAvailableDates = useCallback(
     async (serviceId: string, month: Date) => {
@@ -81,11 +129,10 @@ export function BookingFlow({ services, initialServiceSlug }: BookingFlowProps) 
         )
         if (res.ok) {
           const data = await res.json()
-          // API returns { dates: Record<string, boolean> }
           setAvailableDates(new Map(Object.entries(data.dates ?? {})))
         }
       } catch {
-        // Silently fail — dates remain empty
+        // Silently fail
       } finally {
         setDatesLoading(false)
       }
@@ -160,6 +207,94 @@ export function BookingFlow({ services, initialServiceSlug }: BookingFlowProps) 
     setStep((prev) => Math.max(1, prev - 1))
   }, [])
 
+  const handleRecurringChange = useCallback(
+    (recurring: boolean, weeks?: number, packageId?: string) => {
+      setIsRecurring(recurring)
+      setRecurringWeeks(weeks)
+      setSelectedPackageId(packageId)
+    },
+    []
+  )
+
+  const handleFormSubmit = useCallback(
+    async (
+      formData: Pick<
+        BookingFormData,
+        "guestName" | "guestEmail" | "guestPhone" | "notes" | "createAccount"
+      >
+    ) => {
+      if (
+        !selectedServiceId ||
+        !selectedDate ||
+        !selectedSlot
+      ) {
+        return
+      }
+
+      setIsSubmitting(true)
+
+      try {
+        const payload: BookingFormData = {
+          serviceId: selectedServiceId,
+          date: selectedDate,
+          startTime: selectedSlot.startTime,
+          endTime: selectedSlot.endTime,
+          roomId: selectedSlot.roomId,
+          ...formData,
+          isRecurring,
+          recurringWeeks: isRecurring ? recurringWeeks : undefined,
+          packageId: isRecurring ? selectedPackageId : undefined,
+        }
+
+        const res = await fetch("/api/bookings/create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        })
+
+        if (res.status === 409) {
+          const data = await res.json()
+          toast.error(
+            data.error ??
+              "This time slot was just booked by someone else. Please select a different time."
+          )
+          setSlideDirection(-1)
+          setStep(3)
+          // Refresh slots
+          if (selectedServiceId && selectedDate) {
+            fetchSlots(selectedServiceId, selectedDate)
+          }
+          return
+        }
+
+        if (!res.ok) {
+          const data = await res.json()
+          toast.error(data.error ?? "Failed to create booking")
+          return
+        }
+
+        const data = await res.json()
+        setClientSecret(data.clientSecret)
+        setBookingId(data.bookingId)
+        setSlideDirection(1)
+        setStep(5)
+      } catch {
+        toast.error("Something went wrong. Please try again.")
+      } finally {
+        setIsSubmitting(false)
+      }
+    },
+    [
+      selectedServiceId,
+      selectedDate,
+      selectedSlot,
+      isRecurring,
+      recurringWeeks,
+      selectedPackageId,
+      fetchSlots,
+    ]
+  )
+
   const slideVariants = {
     enter: (direction: number) => ({
       x: direction > 0 ? 40 : -40,
@@ -178,12 +313,13 @@ export function BookingFlow({ services, initialServiceSlug }: BookingFlowProps) 
     exit: { opacity: 0 },
   }
 
-  // Check reduced motion preference
   const prefersReducedMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
   const variants = prefersReducedMotion ? reducedMotionVariants : slideVariants
+
+  const stripePromise = useMemo(() => getStripe(), [])
 
   return (
     <div className="flex flex-col gap-8">
@@ -202,7 +338,7 @@ export function BookingFlow({ services, initialServiceSlug }: BookingFlowProps) 
 
         {/* Main content area (60%) */}
         <div className="flex-1 lg:w-[60%] min-h-[400px] relative">
-          {step > 1 && (
+          {step > 1 && step < 5 && (
             <button
               type="button"
               onClick={handleStepBack}
@@ -253,18 +389,51 @@ export function BookingFlow({ services, initialServiceSlug }: BookingFlowProps) 
               )}
 
               {step === 4 && (
-                <div className="bg-[#111111] border border-[#222222] p-6">
-                  <p className="font-mono text-[13px] font-bold uppercase tracking-[0.05em] text-[#888888]">
-                    Step 4 coming in Plan 04
-                  </p>
+                <div className="space-y-6">
+                  <BookingForm
+                    onSubmit={handleFormSubmit}
+                    isLoggedIn={isLoggedIn}
+                    userName={userName}
+                    userEmail={userEmail}
+                    isSubmitting={isSubmitting}
+                  />
+
+                  {servicePackages.length > 0 && totalPrice !== null && (
+                    <RecurringBookingSelector
+                      packages={servicePackages}
+                      basePrice={totalPrice}
+                      onRecurringChange={handleRecurringChange}
+                    />
+                  )}
                 </div>
               )}
 
-              {step === 5 && (
-                <div className="bg-[#111111] border border-[#222222] p-6">
-                  <p className="font-mono text-[13px] font-bold uppercase tracking-[0.05em] text-[#888888]">
-                    Step 5 coming in Plan 04
-                  </p>
+              {step === 5 && clientSecret && (
+                <div className="space-y-6">
+                  <h2 className="font-mono text-[28px] font-bold uppercase tracking-[0.02em] text-[#f5f5f0]">
+                    CONFIRM & PAY
+                  </h2>
+
+                  {depositAmount !== null && totalPrice !== null && (
+                    <div className="space-y-1">
+                      <p className="font-mono text-[28px] font-bold text-[#f5f5f0]">
+                        Deposit: ${(depositAmount / 100).toFixed(2)}
+                      </p>
+                      <p className="font-mono text-[14px] text-[#888888]">
+                        Balance due at session: $
+                        {(totalPrice - depositAmount / 100).toFixed(2)}
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="border border-[#222222]">
+                    <EmbeddedCheckoutProvider
+                      stripe={stripePromise}
+                      options={{ clientSecret }}
+                    >
+                      <EmbeddedCheckout />
+                    </EmbeddedCheckoutProvider>
+                  </div>
                 </div>
               )}
             </motion.div>

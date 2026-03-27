@@ -1,7 +1,13 @@
 import Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 import { db } from "@/lib/db"
-import { orders, orderItems, beats } from "@/db/schema"
+import {
+  orders,
+  orderItems,
+  beats,
+  bookings,
+  serviceBookingConfig,
+} from "@/db/schema"
 import { eq } from "drizzle-orm"
 import { generateLicensePdf } from "@/lib/pdf-license"
 import { getUploadUrl, getDownloadUrl } from "@/lib/r2"
@@ -30,6 +36,61 @@ export async function POST(request: Request) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session
+
+    // --- Booking deposit handling ---
+    if (session.metadata?.type === "booking_deposit") {
+      const bookingId = session.metadata.bookingId
+
+      // Check idempotency: if booking already confirmed, skip
+      const [existing] = await db
+        .select()
+        .from(bookings)
+        .where(eq(bookings.id, bookingId))
+        .limit(1)
+
+      if (!existing) {
+        return new Response("Booking not found", { status: 200 })
+      }
+
+      if (existing.status === "confirmed") {
+        return new Response("Already processed", { status: 200 })
+      }
+
+      // Determine new status from autoConfirm config
+      const [config] = await db
+        .select()
+        .from(serviceBookingConfig)
+        .where(eq(serviceBookingConfig.serviceId, existing.serviceId))
+        .limit(1)
+
+      const newStatus = config?.autoConfirm ? "confirmed" : "pending"
+
+      await db
+        .update(bookings)
+        .set({
+          status: newStatus,
+          stripePaymentIntentId: session.payment_intent as string,
+          updatedAt: new Date(),
+        })
+        .where(eq(bookings.id, bookingId))
+
+      // If recurring series, update all bookings in the series
+      if (existing.seriesId) {
+        await db
+          .update(bookings)
+          .set({
+            status: newStatus,
+            stripePaymentIntentId: session.payment_intent as string,
+            updatedAt: new Date(),
+          })
+          .where(eq(bookings.seriesId, existing.seriesId))
+      }
+
+      // Email sending deferred to Plan 06
+      return new Response("Booking confirmed", { status: 200 })
+    }
+
+    // --- Beat purchase handling ---
     const customerEmail = session.customer_details?.email ?? ""
     const customerName = session.customer_details?.name ?? "Customer"
     const cartItems = JSON.parse(session.metadata?.items ?? "[]")
