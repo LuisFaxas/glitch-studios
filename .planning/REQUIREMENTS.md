@@ -61,7 +61,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **ADMN-05**: Site settings — edit pricing, availability, about page, contact info
 - [x] **ADMN-06**: Email campaign management — compose and send newsletters to subscriber list
 - [x] **ADMN-07**: Media library — upload, organize, and manage all images, audio, and video from admin
-- [ ] **ADMN-08**: Homepage customization — reorder sections, edit hero content, feature beats/videos from admin
+- [x] **ADMN-08**: Homepage customization — reorder sections, edit hero content, feature beats/videos from admin
 - [x] **ADMN-09**: Role-based admin access — owner, editor, and manager roles with granular permissions
 
 ### Email
@@ -157,7 +157,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMN-05 | Phase 4 | Pending |
 | ADMN-06 | Phase 4 | Complete |
 | ADMN-07 | Phase 4 | Complete |
-| ADMN-08 | Phase 4 | Pending |
+| ADMN-08 | Phase 4 | Complete |
 | ADMN-09 | Phase 4 | Complete |
 | MAIL-01 | Phase 2 | Complete |
 | MAIL-02 | Phase 3 | Complete |
