@@ -5,6 +5,7 @@ status: draft
 shadcn_initialized: true
 preset: base-nova
 created: 2026-03-26
+updated: 2026-03-27
 ---
 
 # Phase 4 -- UI Design Contract
@@ -22,8 +23,9 @@ created: 2026-03-26
 | Component library | base-ui (via shadcn base-nova) |
 | Icon library | Lucide React |
 | Fonts | JetBrains Mono (headings, labels, nav), Inter (body) |
+| Rich text editor | Tiptap (headless ProseMirror-based) |
 
-Source: `components.json`, `DESIGN-LANGUAGE.md`
+Source: `components.json`, `DESIGN-LANGUAGE.md`, CONTEXT.md D-04
 
 ---
 
@@ -45,6 +47,7 @@ Exceptions:
 - Admin sidebar nav items: 44px minimum height for touch targets
 - Media library thumbnail tiles: 120px minimum dimension
 - Rich text editor toolbar: 40px fixed height
+- Permission grid cells: 48px minimum width for checkbox columns
 
 Source: `DESIGN-LANGUAGE.md` section 8, `globals.css` custom properties
 
@@ -64,6 +67,7 @@ Phase-specific element mapping (4 sizes only: 13px, 15px, 28px, 40px):
 | Element | Font | Size | Weight | Style |
 |---------|------|------|--------|-------|
 | Admin sidebar nav label | JetBrains Mono | 13px | 700 | Uppercase, letter-spacing 0.05em |
+| Admin sidebar section header | JetBrains Mono | 13px | 700 | Uppercase, letter-spacing 0.05em, color #555 |
 | Table header cell | JetBrains Mono | 13px | 700 | Uppercase, letter-spacing 0.05em |
 | Table body cell | Inter | 15px | 400 | Normal |
 | Dashboard stat value | JetBrains Mono | 28px | 700 | Normal |
@@ -71,9 +75,11 @@ Phase-specific element mapping (4 sizes only: 13px, 15px, 28px, 40px):
 | Media library filename | Inter | 13px | 400 | Normal, truncate with ellipsis |
 | Newsletter subject line | Inter | 15px | 400 | Normal |
 | Email compose body | Inter | 15px | 400 | Normal |
-| WYSIWYG toolbar label | JetBrains Mono | 13px | 700 | Uppercase |
+| Tiptap toolbar label | JetBrains Mono | 13px | 700 | Uppercase |
 | Settings section heading | JetBrains Mono | 28px | 700 | Uppercase |
 | Role badge | JetBrains Mono | 13px | 700 | Uppercase, letter-spacing 0.05em |
+| Blog tag chip | JetBrains Mono | 13px | 400 | Normal |
+| Scheduled date label | Inter | 13px | 400 | Normal, color #888 |
 
 Source: `DESIGN-LANGUAGE.md` section 5, Phase 3 UI-SPEC precedent
 
@@ -95,6 +101,7 @@ Source: `DESIGN-LANGUAGE.md` section 5, Phase 3 UI-SPEC precedent
 | Admin nav tile bg | `#111111` | Default sidebar nav tile |
 | Admin nav tile active bg | `#f5f5f0` | Current page tile (inverted) |
 | Admin nav tile active text | `#000000` | Text on active tile |
+| Admin nav section header | `#555555` | Section group label (Overview, Content, etc.) |
 | Table row default bg | `#000000` | Even rows |
 | Table row alt bg | `#0a0a0a` | Odd rows (subtle stripe) |
 | Table row hover bg | `#111111` | Hover state |
@@ -102,9 +109,11 @@ Source: `DESIGN-LANGUAGE.md` section 5, Phase 3 UI-SPEC precedent
 | Dashboard stat tile border | `#222222` | 1px border |
 | Media tile bg | `#111111` | Media library thumbnail container |
 | Media tile selected border | `#f5f5f0` | 2px border on selected media items |
-| Unread message indicator | `#f5f5f0` | Dot indicator for unread contact submissions |
+| Unread message indicator | `#f5f5f0` | Dot indicator and left border for unread contact submissions |
 | Draft badge bg | `#222222` | Draft status |
 | Draft badge text | `#888888` | Draft status text |
+| Scheduled badge bg | `#222222` | Scheduled status |
+| Scheduled badge text | `#aaaaaa` | Scheduled status text |
 | Published badge bg | `#222222` | Published status |
 | Published badge text | `#f5f5f0` | Published status text |
 | Role owner bg | `#222222` | Owner role badge |
@@ -113,8 +122,15 @@ Source: `DESIGN-LANGUAGE.md` section 5, Phase 3 UI-SPEC precedent
 | Role editor text | `#888888` | Editor role text |
 | Role manager bg | `#222222` | Manager role badge |
 | Role manager text | `#555555` | Manager role text |
+| Custom role bg | `#222222` | Custom role badge (Intern, Freelancer, etc.) |
+| Custom role text | `#666666` | Custom role text |
+| Tag chip bg | `#1a1a1a` | Blog tag chip background |
+| Tag chip border | `#333333` | Blog tag chip border |
+| Tag chip text | `#888888` | Blog tag chip text |
+| Tiptap toolbar bg | `#111111` | Editor toolbar background |
+| Tiptap toolbar active | `#f5f5f0` | Active formatting button |
 
-Accent reserved for: active admin nav tile (inversion), primary "Save" / "Publish" / "Send" CTA buttons, selected media items border, selected table row highlight, unread message dot indicator.
+Accent reserved for: active admin nav tile (inversion), primary "Save" / "Publish" / "Send" / "Schedule" CTA buttons, selected media items border, selected table row highlight, unread message dot indicator, Tiptap active formatting button.
 
 Source: `DESIGN-LANGUAGE.md` sections 3 and 7, `globals.css` dark mode vars, existing admin patterns in `src/app/admin/`
 
@@ -127,13 +143,16 @@ Source: `DESIGN-LANGUAGE.md` sections 3 and 7, `globals.css` dark mode vars, exi
 | Component | Type | Description |
 |-----------|------|-------------|
 | `AdminShell` | Server | Unified admin layout with sidebar nav, breadcrumb, and content area |
-| `AdminSidebar` | Client | Vertical tile nav for admin sections with role-based visibility |
+| `AdminSidebar` | Client | Vertical tile nav for admin sections with role-based visibility and section groups |
 | `AdminDashboard` | Server | Overview page with stat tiles and recent activity feed |
 | `StatTile` | Client | Flat tile displaying label + value + optional trend arrow |
-| `ContentEditor` | Client | WYSIWYG rich text editor for blog posts and service descriptions |
-| `BlogPostForm` | Client | CRUD form: title, slug, category, featured image, body, status |
-| `BlogPostTable` | Client | Table listing all posts with status badge, date, actions |
-| `ServicePageForm` | Client | CRUD form: name, description, pricing, hero image, booking config link |
+| `TiptapEditor` | Client | Headless ProseMirror rich text editor for blog posts, service descriptions, and newsletter body |
+| `TiptapToolbar` | Client | Toolbar with formatting buttons: bold, italic, heading, list, link, image (from media library), code block |
+| `BlogPostForm` | Client | CRUD form: title, slug, category, tags, featured image, body, status, scheduled date |
+| `BlogPostTable` | Client | Table listing all posts with status badge (draft/scheduled/published), date, actions |
+| `BlogCategoryManager` | Client | CRUD list for blog categories (add, rename, delete with reassign) |
+| `BlogTagManager` | Client | CRUD list for freeform tags (add, rename, merge, delete) |
+| `ServicePageForm` | Client | CRUD form: name, description, pricing, hero image, display order, booking config link |
 | `TeamMemberForm` | Client | CRUD form: name, role, bio, photo, social links, display order |
 | `TestimonialForm` | Client | CRUD form: quote, client name, service type, rating, photo |
 | `ClientListTable` | Client | Table of all clients with search, purchase count, booking count |
@@ -142,43 +161,48 @@ Source: `DESIGN-LANGUAGE.md` sections 3 and 7, `globals.css` dark mode vars, exi
 | `MediaUploadZone` | Client | Drag-and-drop upload area (reuses R2 pattern from Phase 2) |
 | `MediaTile` | Client | Thumbnail tile with filename, type icon, size, date, select checkbox |
 | `MediaDetailSheet` | Client | Sheet showing full preview, metadata, usage references, delete action |
+| `MediaPickerDialog` | Client | Dialog for selecting media from library when editing blog/service/team content |
 | `SiteSettingsForm` | Client | Form sections: studio info, contact info, social links, SEO defaults |
 | `HomepageEditor` | Client | Section reorder (drag), hero editor, featured beats/videos selector |
-| `HomepageSectionTile` | Client | Draggable tile representing a homepage section with up/down arrows |
+| `HomepageSectionTile` | Client | Draggable tile representing a homepage section with up/down arrows and visibility toggle |
 | `ContactInbox` | Client | List of contact form submissions with read/unread state |
 | `ContactMessageSheet` | Client | Full message view with reply textarea and send action |
-| `NewsletterComposer` | Client | Email compose form: subject, body (rich text), subscriber list selector |
-| `NewsletterListTable` | Client | Table of past broadcasts with sent date, open count, recipient count |
-| `SubscriberListTable` | Client | Table of newsletter subscribers with email, subscribed date, status |
-| `RolePermissionGrid` | Client | Matrix of roles (owner/editor/manager) vs permissions (checkboxes) |
-| `AdminContactNotificationEmail` | Server | React Email template for contact form notification to admin |
-| `NewsletterBroadcastEmail` | Server | React Email template for newsletter broadcasts |
+| `NewsletterComposer` | Client | Email compose form: subject, body (Tiptap reuse), segment selector, preview, send |
+| `NewsletterPreviewDialog` | Client | Dialog rendering the newsletter as it will appear in email (React Email preview) |
+| `NewsletterListTable` | Client | Table of past broadcasts with sent date, recipient count, segment used |
+| `SubscriberListTable` | Client | Table of newsletter subscribers with email, subscribed date, status, auto-tags |
+| `RolePermissionGrid` | Client | Dynamic matrix: custom role columns (owner always first) vs permission rows, cells toggled on/off |
+| `RoleCreateDialog` | Client | Dialog to create a new custom role with name and initial permission selection |
+| `AdminMemberTable` | Client | Table of admin team members with name, email, role assignment, actions |
+| `AdminContactNotificationEmail` | Server | React Email template for contact form notification to admin (MAIL-03) |
+| `NewsletterBroadcastEmail` | Server | React Email template for newsletter broadcasts (MAIL-04) |
 
 ### Existing Components to Reuse
 
 | Component | From | Usage in Phase 4 |
 |-----------|------|-------------------|
 | `Table` | `src/components/ui/table.tsx` | Blog posts, clients, subscribers, newsletters, media |
-| `Dialog` | `src/components/ui/dialog.tsx` | Delete confirmations, publish confirmations |
+| `Dialog` | `src/components/ui/dialog.tsx` | Delete confirmations, publish confirmations, media picker, role create, newsletter preview |
 | `Sheet` | `src/components/ui/sheet.tsx` | Client detail, media detail, contact message view |
-| `Tabs` | `src/components/ui/tabs.tsx` | Admin dashboard sections, settings tabs |
-| `Badge` | `src/components/ui/badge.tsx` | Status indicators (draft/published, role badges) |
+| `Tabs` | `src/components/ui/tabs.tsx` | Admin dashboard sections, settings tabs, newsletter tabs |
+| `Badge` | `src/components/ui/badge.tsx` | Status indicators (draft/scheduled/published, role badges, subscriber tags) |
 | `Input` | `src/components/ui/input.tsx` | All form text fields |
 | `Label` | `src/components/ui/label.tsx` | Form field labels |
-| `Textarea` | `src/components/ui/textarea.tsx` | Blog body fallback, message replies, descriptions |
-| `Select` | `src/components/ui/select.tsx` | Category dropdowns, role assignment |
-| `Switch` | `src/components/ui/switch.tsx` | Toggle publish status, feature toggles |
+| `Textarea` | `src/components/ui/textarea.tsx` | Message replies, descriptions |
+| `Select` | `src/components/ui/select.tsx` | Category dropdowns, role assignment, segment selection |
+| `Switch` | `src/components/ui/switch.tsx` | Toggle publish status, homepage section visibility |
 | `Skeleton` | `src/components/ui/skeleton.tsx` | Loading states for all tables and grids |
-| `Sonner` | `src/components/ui/sonner.tsx` | Toast for save/delete/send actions |
+| `Sonner` | `src/components/ui/sonner.tsx` | Toast for save/delete/send/schedule actions |
 | `ScrollArea` | `src/components/ui/scroll-area.tsx` | Admin sidebar scroll, media grid overflow |
 | `Separator` | `src/components/ui/separator.tsx` | Form section dividers |
 | `DropdownMenu` | `src/components/ui/dropdown-menu.tsx` | Row action menus (edit, delete, duplicate) |
 | `Accordion` | `src/components/ui/accordion.tsx` | Settings sections, permission groups |
 | `Tooltip` | `src/components/ui/tooltip.tsx` | Icon button labels in media library, toolbar hints |
-| `Popover` | `src/components/ui/popover.tsx` | Color picker for homepage editor, date filter |
+| `Popover` | `src/components/ui/popover.tsx` | Date picker for scheduled publish, filter controls |
+| `Calendar` | `src/components/ui/calendar.tsx` | Scheduled publish date selection |
 | `Progress` | `src/components/ui/progress.tsx` | Upload progress bars |
 | `Card` | `src/components/ui/card.tsx` | Dashboard stat tiles wrapper |
-| `AlertDialog` from shadcn | New install | Destructive action confirmations |
+| `RadioGroup` | `src/components/ui/radio-group.tsx` | Newsletter segment selection |
 | `AdminBeatTable` | `src/components/admin/beats/beat-table.tsx` | Pattern reference for new tables |
 | `AdminBookingList` | `src/components/admin/admin-booking-list.tsx` | Pattern reference for filter + search + table |
 
@@ -186,10 +210,10 @@ Source: `DESIGN-LANGUAGE.md` sections 3 and 7, `globals.css` dark mode vars, exi
 
 | Component | Reason |
 |-----------|--------|
-| `alert-dialog` | Destructive confirmation dialogs (delete post, remove client, unsend newsletter) |
+| `alert-dialog` | Destructive confirmation dialogs (delete post, remove member, send newsletter) |
 | `command` | Admin Cmd+K command palette for quick navigation between sections |
 | `breadcrumb` | Admin page hierarchy navigation |
-| `checkbox` | Bulk select in media library, permission grid, subscriber selection |
+| `checkbox` | Bulk select in media library, permission grid cells, subscriber selection |
 | `pagination` | Table pagination for clients, posts, media, newsletters |
 
 ---
@@ -198,11 +222,11 @@ Source: `DESIGN-LANGUAGE.md` sections 3 and 7, `globals.css` dark mode vars, exi
 
 ### Focal Point
 
-The **admin sidebar navigation** is the primary visual anchor for all Phase 4 pages. It occupies a fixed 240px left column on desktop, rendering as a vertical tile grid matching the public sidebar visual language (monochrome, flat, glitch hover). The sidebar groups admin sections into logical clusters and provides the persistent navigation frame for all CRUD operations. On mobile it collapses into a sheet triggered by a hamburger tile.
+The **admin sidebar navigation** is the primary visual anchor for all Phase 4 pages. It occupies a fixed 240px left column on desktop, rendering as a vertical tile grid matching the public sidebar visual language (monochrome, flat, glitch hover). The sidebar groups admin sections into labeled clusters and provides the persistent navigation frame for all CRUD operations. On mobile it collapses into a sheet triggered by a hamburger tile.
 
 ### Admin Sidebar Navigation
 
-Tile-based vertical nav with the following sections:
+Tile-based vertical nav grouped into labeled sections. Section headers render as uppercase 13px JetBrains Mono text in `#555555`, not as tiles.
 
 | Section | Tiles | Icon |
 |---------|-------|------|
@@ -216,6 +240,10 @@ Tile-based vertical nav with the following sections:
 
 Active section tile inverts (`#f5f5f0` bg, `#000000` text). All tiles get glitch hover. Commerce section links to existing admin pages from Phases 2-3.
 
+Contact Inbox tile shows an unread count badge (off-white dot with count) when unread messages exist (D-13).
+
+Tiles hidden for roles without corresponding permission (D-21). For example, a role without "manage settings" permission does not see the Settings section.
+
 ### Admin Dashboard Overview
 
 Four stat tiles in a 2x2 grid (desktop) / stacked (mobile):
@@ -224,7 +252,7 @@ Four stat tiles in a 2x2 grid (desktop) / stacked (mobile):
 |------|------------|--------|
 | Total Revenue (30d) | orders table | "$X,XXX" |
 | Bookings This Week | bookings table | "XX" |
-| Pending Messages | contactSubmissions table | "XX" |
+| Pending Messages | contactSubmissions table (unread count) | "XX" |
 | Newsletter Subscribers | newsletterSubscribers table | "X,XXX" |
 
 Below stats: recent activity feed (last 10 actions across all entities).
@@ -234,7 +262,7 @@ Below stats: recent activity feed (last 10 actions across all entities).
 All content management pages follow a consistent pattern:
 
 1. **List view**: Table with columns, search input, status filter tabs, "New [Entity]" CTA button
-2. **Create/Edit**: Full-page form with fields, save/publish actions
+2. **Create/Edit**: Full-page form with fields, save/publish/schedule actions
 3. **Delete**: AlertDialog confirmation with entity name
 
 Table header pattern (established in Phase 2-3):
@@ -242,13 +270,36 @@ Table header pattern (established in Phase 2-3):
 +--------------------------------------------------+
 | BLOG POSTS                        [+ New Post]   |
 +--------------------------------------------------+
-| [All] [Draft] [Published]                         |
+| [All] [Draft] [Scheduled] [Published]             |
 | [Search...]                                       |
 +--------------------------------------------------+
-| Title | Category | Status | Date | Actions        |
-| ...   | ...      | ...    | ...  | [Edit] [Del]  |
+| Title | Category | Tags | Status | Date | Actions |
+| ...   | ...      | ...  | ...    | ...  | [E][D] |
++--------------------------------------------------+
+| [< 1 2 3 >]                                      |
 +--------------------------------------------------+
 ```
+
+### Blog Post Publish Flow (D-05)
+
+Three-state publish flow:
+
+| Status | Behavior | Badge |
+|--------|----------|-------|
+| Draft | Not visible on public site. Default state on creation. | `#888888` text on `#222222` bg |
+| Scheduled | Not visible yet. Auto-publishes at scheduled date/time via Vercel Cron. | `#aaaaaa` text on `#222222` bg |
+| Published | Live on public site. | `#f5f5f0` text on `#222222` bg |
+
+Form actions per status:
+- Draft: "Save Draft" (secondary) and "Publish" (primary CTA)
+- Draft with scheduled date set: "Save Draft" (secondary) and "Schedule" (primary CTA)
+- Scheduled: "Unschedule" (secondary), "Publish Now" (primary CTA)
+- Published: "Save Changes" (primary CTA), "Unpublish" (secondary)
+
+### Blog Categories & Tags (D-06)
+
+- **Categories**: Predefined list. Admin CRUD via a settings sub-page or inline manager. Each post gets exactly one category. Categories have name and slug.
+- **Tags**: Freeform. Admin can create tags inline when editing a post (comma-separated input) or manage them from a dedicated list. Tags can be merged or deleted. Posts can have 0 or more tags.
 
 ### Media Library
 
@@ -272,25 +323,33 @@ Grid layout with two view modes:
 - Progress bar per file during upload
 - R2 presigned URL pattern (same as Phase 2 beat uploads)
 
-### Contact Inbox
+**Media Picker (in forms):**
+- "Select from Library" button opens MediaPickerDialog
+- Dialog shows the full media grid with search and type filter
+- Single-select mode for blog featured image, team photo, etc.
+- Returns selected media URL and metadata to the form field
+
+### Contact Inbox (D-13)
 
 Inbox-style list with message thread view:
 
 - Left panel: message list (sender, subject/service, date, unread dot)
 - Right panel: full message + reply form
-- Unread: `#f5f5f0` left border (4px)
-- Read: no left border
+- Unread: `#f5f5f0` left border (4px) + bold sender name
+- Read: no left border, normal weight sender name
 - Mobile: list only, tap opens message sheet
+- Reply sends email via Resend (D-13). Thread tracked on admin side only.
+- Admin reply appears below original message in the detail view.
 
-### Newsletter Composer
+### Newsletter Composer (D-15, D-16)
 
 1. Subject line input (flat, full width)
-2. Rich text body editor (shared with blog post editor)
-3. Recipient selector: "All subscribers" (default), or filter by tag/segment
-4. Preview button: opens dialog showing rendered email
-5. Send button: AlertDialog confirmation with recipient count
+2. Rich text body editor (Tiptap, shared config with blog post editor)
+3. Segment selector: radio group with "All subscribers", "Beat buyers", "Studio clients" (D-16)
+4. Preview button: opens NewsletterPreviewDialog showing rendered React Email output (D-15)
+5. Send button: AlertDialog confirmation showing segment label and subscriber count
 
-### Homepage Customization
+### Homepage Customization (D-11, D-12)
 
 Section reorder via tile list:
 
@@ -298,26 +357,31 @@ Section reorder via tile list:
 - Up/Down arrow buttons on each tile for reordering (keyboard accessible)
 - Toggle switch per section: visible/hidden
 - Edit button per section opens section-specific editor
-- Hero section: title, subtitle, CTA text, CTA link, background toggle
+- Hero section: title, subtitle, CTA text, CTA link, background media (via media picker)
 - Featured beats: multi-select from beat catalog
 - Featured videos: multi-select from portfolio items
+- All stored in DB, rendered dynamically on public homepage (D-12)
 
-### Role-Based Access
+### Role-Based Access (D-18, D-19, D-20, D-21)
 
-Three roles with descending permissions:
+**Default roles:** Owner, Editor, Manager. Admin can create additional custom roles (D-18).
 
-| Permission | Owner | Editor | Manager |
-|------------|-------|--------|---------|
-| Content CRUD | Yes | Yes | Read only |
-| Client management | Yes | Read only | No |
-| Media library | Yes | Yes | Upload only |
-| Site settings | Yes | No | No |
-| Newsletter send | Yes | Yes | No |
-| Role management | Yes | No | No |
-| Beat/Booking CRUD | Yes | Yes | Read only |
-| Contact inbox reply | Yes | Yes | Yes |
+**Permission grid** displayed as a matrix:
+- Rows: permission categories (Manage Content, Manage Media, View Clients, Send Newsletters, Manage Bookings, Manage Settings, Manage Roles, Reply to Messages)
+- Columns: each role (Owner first, then alphabetical)
+- Cells: checkboxes. Owner column is all checked and disabled (cannot be modified).
+- Custom role columns are fully configurable by the owner (D-19).
 
-Displayed as a matrix grid with role columns and permission rows using checkboxes (owner column is all checked and disabled).
+**Team member management:**
+- Table of admin accounts with name, email, role, actions
+- "Invite Member" button opens dialog: email input + role selection dropdown
+- Only roles with "Manage Roles" permission can see this section (D-20)
+
+**UI enforcement (D-21):**
+- Sidebar tiles hidden for inaccessible sections
+- Form save/publish buttons disabled if role lacks write permission
+- Destructive actions (delete) hidden if role lacks permission
+- Permission denied toast: "You do not have permission to perform this action. Contact the site owner."
 
 ---
 
@@ -362,12 +426,13 @@ Mobile:
 ```
 +--------+------------------------------------------+
 | SIDEBAR|  BLOG POSTS                [+ New Post]  |
-|        |  [All] [Draft] [Published]               |
+|        |  [All] [Draft] [Scheduled] [Published]    |
 |        |  [Search...                         ]    |
 |        |  +--------------------------------------+|
-|        |  | Title      | Cat  | Status | Actions ||
-|        |  | Post 1     | News | Draft  | [E] [D] ||
-|        |  | Post 2     | Tips | Pub'd  | [E] [D] ||
+|        |  | Title   | Cat  | Tags | Status | Act ||
+|        |  | Post 1  | News | 2    | Draft  | E D ||
+|        |  | Post 2  | Tips | 0    | Sched  | E D ||
+|        |  | Post 3  | News | 3    | Pub'd  | E D ||
 |        |  +--------------------------------------+|
 |        |  [< 1 2 3 >]                            |
 +--------+------------------------------------------+
@@ -382,14 +447,36 @@ Mobile:
 |        |  Title: [________________________]       |
 |        |  Slug:  [________________________]       |
 |        |  Category: [Select...      v]            |
-|        |  Featured Image: [Upload / Select Media] |
+|        |  Tags: [tag1, tag2, type to add...]      |
+|        |  Featured Image: [Select from Library]   |
+|        |  Schedule: [Pick date...] (optional)     |
 |        |  ---                                      |
-|        |  [Rich Text Editor Toolbar]              |
+|        |  [B] [I] [H1] [H2] [UL] [OL] [Link] [Img]|
 |        |  [                                       ]|
-|        |  [         Editor Body                   ]|
+|        |  [         Tiptap Editor Body            ]|
 |        |  [                                       ]|
 |        |  ---                                      |
-|        |  [Save Draft]   [Publish]                |
+|        |  [Save Draft]   [Publish / Schedule]     |
++--------+------------------------------------------+
+```
+
+### `/admin/blog/categories` (Category & Tag Management)
+
+```
++--------+------------------------------------------+
+| SIDEBAR|  CATEGORIES             [+ Add Category] |
+|        |  +--------------------------------------+|
+|        |  | Name     | Slug      | Posts | Act   ||
+|        |  | News     | news      | 5     | E D   ||
+|        |  | Tips     | tips      | 3     | E D   ||
+|        |  +--------------------------------------+|
+|        |                                           |
+|        |  TAGS                        [+ Add Tag] |
+|        |  +--------------------------------------+|
+|        |  | Name     | Posts | Actions            ||
+|        |  | mixing   | 4     | [E] [Merge] [D]   ||
+|        |  | beats    | 2     | [E] [Merge] [D]   ||
+|        |  +--------------------------------------+|
 +--------+------------------------------------------+
 ```
 
@@ -442,6 +529,9 @@ Desktop:
 |        |  |   Session q..  | in booking a mixing ||
 |        |  |   Mar 24       | session for my...   ||
 |        |  |                |                      ||
+|        |  |                | --- ADMIN REPLY ---  ||
+|        |  |                | [Reply text here]    ||
+|        |  |                |                      ||
 |        |  |                | [Reply...         ]  ||
 |        |  |                | [Send Reply]         ||
 |        |  +----------------+---------------------+|
@@ -467,10 +557,42 @@ Mobile:
 +--------+------------------------------------------+
 | SIDEBAR|  NEWSLETTER               [+ Compose]   |
 |        |  TABS: [Broadcasts] [Subscribers]        |
+|        |                                           |
+|        |  Broadcasts tab:                          |
 |        |  +--------------------------------------+|
-|        |  | Subject      | Sent   | Recip | Open ||
-|        |  | March Update | Mar 20 | 847   | 312  ||
+|        |  | Subject      | Segment | Sent | Recip||
+|        |  | March Update | All     | 3/20 | 847  ||
+|        |  | Beat Drop    | Buyers  | 3/15 | 312  ||
 |        |  +--------------------------------------+|
+|        |                                           |
+|        |  Subscribers tab:                         |
+|        |  +--------------------------------------+|
+|        |  | Email      | Subscribed | Tags       ||
+|        |  | j@e.com    | Mar 10     | buyer      ||
+|        |  | k@f.com    | Mar 08     | client     ||
+|        |  +--------------------------------------+|
++--------+------------------------------------------+
+```
+
+### `/admin/newsletter/compose` (Newsletter Composer)
+
+```
++--------+------------------------------------------+
+| SIDEBAR|  COMPOSE NEWSLETTER                      |
+|        |                                           |
+|        |  Subject: [________________________]     |
+|        |                                           |
+|        |  Segment:                                 |
+|        |  (o) All subscribers (847)                |
+|        |  ( ) Beat buyers (312)                    |
+|        |  ( ) Studio clients (198)                 |
+|        |                                           |
+|        |  [B] [I] [H1] [H2] [UL] [OL] [Link] [Img]|
+|        |  [                                       ]|
+|        |  [         Tiptap Editor Body            ]|
+|        |  [                                       ]|
+|        |                                           |
+|        |  [Preview]          [Send Newsletter]    |
 +--------+------------------------------------------+
 ```
 
@@ -498,20 +620,41 @@ Mobile:
 +--------+------------------------------------------+
 ```
 
+### `/admin/settings/homepage` (Homepage Editor)
+
+```
++--------+------------------------------------------+
+| SIDEBAR|  HOMEPAGE EDITOR                         |
+|        |                                           |
+|        |  Drag to reorder. Toggle visibility.      |
+|        |  +--------------------------------------+|
+|        |  | [=] Hero          [on/off] [Edit]    ||
+|        |  | [=] Featured Beats[on/off] [Edit]    ||
+|        |  | [=] Services      [on/off] [Edit]    ||
+|        |  | [=] Testimonials  [on/off] [Edit]    ||
+|        |  | [=] Blog          [on/off] [Edit]    ||
+|        |  +--------------------------------------+|
+|        |                                           |
+|        |  [Save Order]                             |
++--------+------------------------------------------+
+```
+
 ### `/admin/roles` (Roles & Permissions)
 
 ```
 +--------+------------------------------------------+
-| SIDEBAR|  ROLES & PERMISSIONS                     |
+| SIDEBAR|  ROLES & PERMISSIONS    [+ New Role]     |
 |        |                                           |
 |        |  +--------------------------------------+|
-|        |  | Permission     | Owner | Editor | Mgr ||
-|        |  | Content CRUD   | [x]   | [x]    | [ ] ||
-|        |  | Client Mgmt    | [x]   | [r]    | [ ] ||
-|        |  | Media Library  | [x]   | [x]    | [u] ||
-|        |  | Site Settings  | [x]   | [ ]    | [ ] ||
-|        |  | Newsletter     | [x]   | [x]    | [ ] ||
-|        |  | Role Mgmt      | [x]   | [ ]    | [ ] ||
+|        |  | Permission     |Owner|Editor|Mgr|Intern|
+|        |  | Manage Content | [x] | [x]  |[ ]| [ ] ||
+|        |  | Manage Media   | [x] | [x]  |[x]| [ ] ||
+|        |  | View Clients   | [x] | [x]  |[ ]| [ ] ||
+|        |  | Send Newsletter| [x] | [x]  |[ ]| [ ] ||
+|        |  | Manage Bookings| [x] | [x]  |[x]| [ ] ||
+|        |  | Manage Settings| [x] | [ ]  |[ ]| [ ] ||
+|        |  | Manage Roles   | [x] | [ ]  |[ ]| [ ] ||
+|        |  | Reply Messages | [x] | [x]  |[x]| [x] ||
 |        |  +--------------------------------------+|
 |        |                                           |
 |        |  TEAM MEMBERS                             |
@@ -519,6 +662,7 @@ Mobile:
 |        |  | Name   | Email   | Role    | Actions ||
 |        |  | Admin  | a@g.co  | Owner   | --      ||
 |        |  | Editor | e@g.co  | Editor  | [E][D]  ||
+|        |  | Intern | i@g.co  | Intern  | [E][D]  ||
 |        |  +--------------------------------------+|
 |        |  [+ Invite Member]                       |
 +--------+------------------------------------------+
@@ -533,10 +677,17 @@ Mobile:
 | Primary CTA (blog) | "New Post" |
 | Primary CTA (save) | "Save Changes" |
 | Primary CTA (publish) | "Publish" |
+| Primary CTA (schedule) | "Schedule" |
 | Primary CTA (newsletter) | "Send Newsletter" |
 | Primary CTA (reply) | "Send Reply" |
 | Primary CTA (media) | "Upload Files" |
 | Primary CTA (invite) | "Invite Member" |
+| Primary CTA (role) | "Create Role" |
+| Primary CTA (homepage) | "Save Order" |
+| Secondary action (draft) | "Save Draft" |
+| Secondary action (unpublish) | "Unpublish" |
+| Secondary action (unschedule) | "Unschedule" |
+| Secondary action (publish now) | "Publish Now" |
 | Empty state heading (blog) | "No Posts Yet" |
 | Empty state body (blog) | "Create your first blog post to share news and updates." |
 | Empty state CTA (blog) | "New Post" |
@@ -552,20 +703,28 @@ Mobile:
 | Empty state CTA (newsletter) | "Compose" |
 | Empty state heading (subscribers) | "No Subscribers Yet" |
 | Empty state body (subscribers) | "Subscribers appear here when visitors sign up through your newsletter form." |
+| Empty state heading (categories) | "No Categories Yet" |
+| Empty state body (categories) | "Add categories to organize your blog posts." |
+| Empty state CTA (categories) | "Add Category" |
 | Error: save failed | "Changes could not be saved. Check your connection and try again." |
 | Error: upload failed | "File upload failed. Check the file size (max 50MB) and try again." |
 | Error: send failed | "Newsletter could not be sent. Check your Resend configuration and try again." |
 | Error: permission denied | "You do not have permission to perform this action. Contact the site owner." |
 | Delete blog post | "Delete Post: This will permanently remove this post and its content. This cannot be undone." |
+| Delete category | "Delete Category: All posts in this category will be uncategorized. Continue?" |
+| Merge tags | "Merge Tags: All posts tagged with the selected tags will be retagged with the target tag." |
 | Delete team member | "Remove Member: This will revoke access for this team member. They will no longer be able to sign in to the admin area." |
 | Delete media item | "Delete File: This file may be in use on your site. Removing it will break any pages referencing it. Continue?" |
+| Delete role | "Delete Role: Members assigned this role will lose all permissions. Reassign them first." |
 | Unpublish blog post | "Unpublish: This post will be saved as a draft and removed from the public site." |
-| Send newsletter confirmation | "Send Newsletter: This will send to {count} subscribers. This cannot be unsent." |
+| Send newsletter confirmation | "Send Newsletter: This will send to {count} {segment} subscribers. This cannot be unsent." |
 | Reply sent | "Reply sent to {email}." |
 | Post published | "Post published successfully." |
+| Post scheduled | "Post scheduled for {date}." |
 | Changes saved | "Changes saved." |
 | File uploaded | "{count} file(s) uploaded successfully." |
 | Member invited | "Invitation sent to {email}." |
+| Role created | "Role '{name}' created." |
 
 ---
 
@@ -580,6 +739,8 @@ Mobile:
 | Inbox message list | 5 skeleton rows with sender line + subject line |
 | Message detail | Full-width skeleton with 3 text block placeholders |
 | Settings form | 3 skeleton sections with label + input placeholders |
+| Permission grid | Matrix skeleton with 8 rows x 4 columns of checkbox placeholders |
+| Newsletter preview | Full dialog skeleton with subject line + body block |
 
 All skeletons use the existing `Skeleton` component (`#222222` bg with pulse animation).
 
@@ -599,6 +760,8 @@ Mobile-specific adaptations:
 - Inbox splits into list-only view (tap opens sheet)
 - Homepage section reorder uses up/down buttons only (no drag on mobile)
 - Settings form renders full-width single column
+- Permission grid scrolls horizontally on mobile (sticky first column for permission names)
+- Newsletter segment selector stacks vertically
 
 ---
 
@@ -617,6 +780,7 @@ All animations inherit from the existing glitch system in `globals.css`:
 | Upload progress | Linear `width` transition on progress bar | Continuous | Same |
 | Toast notification | Sonner default slide-in | 200ms | Same |
 | Homepage section reorder | CSS `transform: translateY` | 200ms | Instant swap |
+| Newsletter preview open | Framer Motion `scale` from 0.95 + `opacity` | 200ms | `opacity` only |
 
 Source: `DESIGN-LANGUAGE.md` section 6, `globals.css` keyframes
 
@@ -631,9 +795,11 @@ Source: `DESIGN-LANGUAGE.md` section 6, `globals.css` keyframes
 | Title | text input | Yes | Min 3 chars, max 200 | "Post title" |
 | Slug | text input | Yes | Auto-generated from title, URL-safe | "post-slug" |
 | Category | native select | Yes | Must select one | "Select category" |
-| Featured Image | media picker (opens media library) | No | Image type only | -- |
-| Body | rich text editor | Yes | Min 50 chars | "Start writing..." |
-| Status | switch toggle | No | Draft (default) or Published | -- |
+| Tags | comma-separated input | No | Each tag max 50 chars, auto-trim | "Add tags..." |
+| Featured Image | media picker (opens MediaPickerDialog) | No | Image type only | -- |
+| Scheduled Date | date picker (Calendar in Popover) | No | Must be future date if set | "Pick a date..." |
+| Body | Tiptap rich text editor | Yes | Min 50 chars | "Start writing..." |
+| Status | derived | -- | Draft (default), Scheduled (if date set), Published | -- |
 
 ### Service Page Form
 
@@ -642,7 +808,7 @@ Source: `DESIGN-LANGUAGE.md` section 6, `globals.css` keyframes
 | Name | text input | Yes | Min 2 chars | "Service name" |
 | Slug | text input | Yes | Auto-generated, URL-safe | "service-slug" |
 | Short Description | text input | Yes | Max 160 chars | "Brief description for cards" |
-| Full Description | rich text editor | Yes | Min 100 chars | "Detailed service description..." |
+| Full Description | Tiptap rich text editor | Yes | Min 100 chars | "Detailed service description..." |
 | Base Price | number input | Yes | Min 0 | "0.00" |
 | Duration | native select | No | -- | "Select duration" |
 | Hero Image | media picker | No | Image type only | -- |
@@ -676,8 +842,8 @@ Source: `DESIGN-LANGUAGE.md` section 6, `globals.css` keyframes
 | Field | Type | Required | Validation | Placeholder |
 |-------|------|----------|------------|-------------|
 | Subject | text input | Yes | Min 5 chars, max 150 | "Newsletter subject line" |
-| Body | rich text editor | Yes | Min 50 chars | "Start composing..." |
-| Recipients | radio group | Yes | "All subscribers" or "Segment" | Default: All |
+| Body | Tiptap rich text editor | Yes | Min 50 chars | "Start composing..." |
+| Segment | radio group | Yes | One of: All / Beat buyers / Studio clients | Default: All |
 
 ### Site Settings Form
 
@@ -694,7 +860,51 @@ Source: `DESIGN-LANGUAGE.md` section 6, `globals.css` keyframes
 | SoundCloud URL | text input | No | URL format | "https://soundcloud.com/..." |
 | X/Twitter URL | text input | No | URL format | "https://x.com/..." |
 
+### Role Create Form (in Dialog)
+
+| Field | Type | Required | Validation | Placeholder |
+|-------|------|----------|------------|-------------|
+| Role Name | text input | Yes | Min 2 chars, max 30, unique | "e.g. Intern, Freelancer" |
+
+### Invite Member Form (in Dialog)
+
+| Field | Type | Required | Validation | Placeholder |
+|-------|------|----------|------------|-------------|
+| Email | text input | Yes | Valid email | "team@glitchstudios.com" |
+| Role | native select | Yes | From existing roles | "Select role" |
+
 All inputs: flat, no border-radius, 1px `#333333` border, `#f5f5f0` text, `#000000` bg. Focus: border `#f5f5f0`, `box-shadow: 0 0 0 1px rgba(245,245,240,0.2)`. Native HTML select for dropdowns (consistent with Phase 2-3 admin pattern).
+
+---
+
+## Tiptap Editor Configuration
+
+Shared editor config used by BlogPostForm, ServicePageForm, and NewsletterComposer.
+
+### Toolbar Buttons
+
+| Button | Extension | Icon |
+|--------|-----------|------|
+| Bold | StarterKit (Bold) | Bold |
+| Italic | StarterKit (Italic) | Italic |
+| Heading 2 | StarterKit (Heading level 2) | Heading2 |
+| Heading 3 | StarterKit (Heading level 3) | Heading3 |
+| Bullet List | StarterKit (BulletList) | List |
+| Ordered List | StarterKit (OrderedList) | ListOrdered |
+| Link | @tiptap/extension-link | Link |
+| Image | @tiptap/extension-image (inserts from media library) | ImagePlus |
+| Code Block | StarterKit (CodeBlock) | Code |
+| Blockquote | StarterKit (Blockquote) | Quote |
+
+### Styling
+
+- Toolbar: `#111111` bg, 40px height, 1px `#222222` bottom border
+- Active button: `#f5f5f0` bg, `#000000` icon
+- Inactive button: transparent bg, `#888888` icon
+- Button size: 32px square, 4px gap between buttons
+- Editor body: `#000000` bg, `#f5f5f0` text, 15px Inter, line-height 1.5
+- Editor min-height: 300px
+- Editor focus: 1px `#333333` border becomes `#f5f5f0`
 
 ---
 
