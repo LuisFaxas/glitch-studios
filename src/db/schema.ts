@@ -244,3 +244,149 @@ export const licenseTierDefs = pgTable("license_tier_defs", {
   deliverables: text("deliverables").array(),
   sortOrder: integer("sort_order").default(0),
 })
+
+// === Booking System (Phase 3) ===
+
+export const bookingStatusEnum = pgEnum("booking_status", [
+  "pending",
+  "confirmed",
+  "cancelled",
+  "completed",
+  "no_show",
+])
+
+export const depositTypeEnum = pgEnum("deposit_type", [
+  "percentage",
+  "flat",
+])
+
+export const refundPolicyEnum = pgEnum("refund_policy", [
+  "full",
+  "partial",
+  "none",
+])
+
+export const rooms = pgTable("rooms", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description"),
+  features: text("features").array(),
+  photos: text("photos").array(),
+  hourlyRateOverride: numeric("hourly_rate_override", {
+    precision: 10,
+    scale: 2,
+  }),
+  bufferMinutes: integer("buffer_minutes").default(15),
+  isActive: boolean("is_active").default(true),
+  sortOrder: integer("sort_order").default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+export const serviceBookingConfig = pgTable("service_booking_config", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  serviceId: uuid("service_id")
+    .references(() => services.id, { onDelete: "cascade" })
+    .notNull()
+    .unique(),
+  durationMinutes: integer("duration_minutes").notNull(),
+  depositType: depositTypeEnum("deposit_type").default("percentage"),
+  depositValue: numeric("deposit_value", { precision: 10, scale: 2 }).notNull(),
+  autoConfirm: boolean("auto_confirm").default(true),
+  cancellationWindowHours: integer("cancellation_window_hours").default(48),
+  refundPolicy: refundPolicyEnum("refund_policy").default("full"),
+  maxAdvanceBookingDays: integer("max_advance_booking_days").default(90),
+  prepInstructions: text("prep_instructions"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+export const weeklyAvailability = pgTable("weekly_availability", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  roomId: uuid("room_id")
+    .references(() => rooms.id, { onDelete: "cascade" })
+    .notNull(),
+  dayOfWeek: integer("day_of_week").notNull(),
+  startTime: text("start_time").notNull(),
+  endTime: text("end_time").notNull(),
+  isActive: boolean("is_active").default(true),
+})
+
+export const availabilityOverrides = pgTable("availability_overrides", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  roomId: uuid("room_id")
+    .references(() => rooms.id, { onDelete: "cascade" })
+    .notNull(),
+  date: text("date").notNull(),
+  isClosed: boolean("is_closed").default(false),
+  startTime: text("start_time"),
+  endTime: text("end_time"),
+  reason: text("reason"),
+})
+
+export const sessionPackages = pgTable("session_packages", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  serviceId: uuid("service_id")
+    .references(() => services.id, { onDelete: "cascade" })
+    .notNull(),
+  name: text("name").notNull(),
+  sessionCount: integer("session_count").notNull(),
+  discountPercent: integer("discount_percent").notNull(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+export const bookingSeries = pgTable("booking_series", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id"),
+  guestEmail: text("guest_email"),
+  serviceId: uuid("service_id")
+    .references(() => services.id)
+    .notNull(),
+  roomId: uuid("room_id")
+    .references(() => rooms.id)
+    .notNull(),
+  packageId: uuid("package_id"),
+  totalSessions: integer("total_sessions").notNull(),
+  dayOfWeek: integer("day_of_week").notNull(),
+  startTime: text("start_time").notNull(),
+  stripeSessionId: text("stripe_session_id"),
+  totalPaid: numeric("total_paid", { precision: 10, scale: 2 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+export const bookings = pgTable("bookings", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  seriesId: uuid("series_id").references(() => bookingSeries.id, {
+    onDelete: "set null",
+  }),
+  serviceId: uuid("service_id")
+    .references(() => services.id)
+    .notNull(),
+  roomId: uuid("room_id")
+    .references(() => rooms.id)
+    .notNull(),
+  userId: text("user_id"),
+  guestName: text("guest_name").notNull(),
+  guestEmail: text("guest_email").notNull(),
+  guestPhone: text("guest_phone").notNull(),
+  notes: text("notes"),
+  date: text("date").notNull(),
+  startTime: text("start_time").notNull(),
+  endTime: text("end_time").notNull(),
+  status: bookingStatusEnum("status").default("pending"),
+  depositAmount: numeric("deposit_amount", {
+    precision: 10,
+    scale: 2,
+  }).notNull(),
+  totalPrice: numeric("total_price", { precision: 10, scale: 2 }).notNull(),
+  stripeSessionId: text("stripe_session_id"),
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  cancelledAt: timestamp("cancelled_at"),
+  cancelledBy: text("cancelled_by"),
+  cancellationReason: text("cancellation_reason"),
+  reminderSent: boolean("reminder_sent").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
