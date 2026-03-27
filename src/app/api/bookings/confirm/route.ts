@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   if (!session) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
   }
-  if (session.user.role !== "admin") {
+  if (session.user.role === "user") {
     return NextResponse.json({ error: "Not authorized" }, { status: 403 })
   }
 

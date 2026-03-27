@@ -1,19 +1,10 @@
 "use server"
 
-import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { sessionPackages, services, serviceBookingConfig } from "@/db/schema"
-import { eq, isNotNull } from "drizzle-orm"
-import { headers } from "next/headers"
+import { eq } from "drizzle-orm"
+import { requireAdmin } from "@/lib/permissions"
 import { revalidatePath } from "next/cache"
-
-async function requireAdmin() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session || session.user.role !== "admin") {
-    throw new Error("Unauthorized: admin access required")
-  }
-  return session
-}
 
 export async function getPackages() {
   const result = await db

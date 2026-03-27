@@ -1,11 +1,10 @@
 "use server"
 
-import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { beats, beatPricing, beatProducers } from "@/db/schema"
 import { getUploadUrl } from "@/lib/r2"
 import { eq } from "drizzle-orm"
-import { headers } from "next/headers"
+import { requireAdmin } from "@/lib/permissions"
 import type { LicenseTier } from "@/types/beats"
 
 interface BeatFormData {
@@ -32,14 +31,6 @@ function slugify(text: string): string {
     .replace(/[^a-z0-9-]/g, "")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "")
-}
-
-async function requireAdmin() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session || session.user.role !== "admin") {
-    throw new Error("Unauthorized: admin access required")
-  }
-  return session
 }
 
 export async function getPresignedUploadUrl(

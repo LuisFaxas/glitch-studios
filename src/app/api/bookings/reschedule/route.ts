@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   const { bookingId, newDate, newStartTime, newEndTime, newRoomId, isAdmin } = parsed.data
 
   // If claiming admin, verify role
-  if (isAdmin && session.user.role !== "admin") {
+  if (isAdmin && session.user.role === "user") {
     return NextResponse.json({ error: "Not authorized as admin" }, { status: 403 })
   }
 

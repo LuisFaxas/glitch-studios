@@ -1,10 +1,9 @@
 "use server"
 
-import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { bundles, bundleBeats, beats, beatPricing } from "@/db/schema"
 import { eq } from "drizzle-orm"
-import { headers } from "next/headers"
+import { requireAdmin } from "@/lib/permissions"
 
 interface BundleFormData {
   title: string
@@ -22,14 +21,6 @@ function slugify(text: string): string {
     .replace(/[^a-z0-9-]/g, "")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "")
-}
-
-async function requireAdmin() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  if (!session || session.user.role !== "admin") {
-    throw new Error("Unauthorized: admin access required")
-  }
-  return session
 }
 
 export async function createBundle(data: BundleFormData) {
