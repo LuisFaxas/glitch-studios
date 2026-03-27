@@ -285,3 +285,113 @@ export async function getCategories() {
 
   return result
 }
+
+export async function createCategory(name: string) {
+  await requirePermission("manage_content")
+  const catSlug = slugify(name)
+  const [created] = await db
+    .insert(blogCategories)
+    .values({ name, slug: catSlug })
+    .returning()
+  revalidatePath("/admin/blog/categories")
+  return created
+}
+
+export async function updateCategory(id: string, name: string) {
+  await requirePermission("manage_content")
+  const catSlug = slugify(name)
+  await db
+    .update(blogCategories)
+    .set({ name, slug: catSlug })
+    .where(eq(blogCategories.id, id))
+  revalidatePath("/admin/blog/categories")
+}
+
+export async function deleteCategory(id: string) {
+  await requirePermission("manage_content")
+  // Set posts in this category to uncategorized
+  await db
+    .update(blogPosts)
+    .set({ categoryId: null, updatedAt: new Date() })
+    .where(eq(blogPosts.categoryId, id))
+  await db.delete(blogCategories).where(eq(blogCategories.id, id))
+  revalidatePath("/admin/blog/categories")
+}
+
+export async function getTags() {
+  const result = await db
+    .select({
+      id: blogTags.id,
+      name: blogTags.name,
+      slug: blogTags.slug,
+      postCount: sql<number>`count(${blogPostTags.id})::int`,
+    })
+    .from(blogTags)
+    .leftJoin(blogPostTags, eq(blogPostTags.tagId, blogTags.id))
+    .groupBy(blogTags.id, blogTags.name, blogTags.slug)
+    .orderBy(blogTags.name)
+
+  return result
+}
+
+export async function createTag(name: string) {
+  await requirePermission("manage_content")
+  const tagSlug = slugify(name)
+  const [created] = await db
+    .insert(blogTags)
+    .values({ name, slug: tagSlug })
+    .returning()
+  revalidatePath("/admin/blog/categories")
+  return created
+}
+
+export async function updateTag(id: string, name: string) {
+  await requirePermission("manage_content")
+  const tagSlug = slugify(name)
+  await db
+    .update(blogTags)
+    .set({ name, slug: tagSlug })
+    .where(eq(blogTags.id, id))
+  revalidatePath("/admin/blog/categories")
+}
+
+export async function mergeTags(
+  sourceTagIds: string[],
+  targetTagId: string
+) {
+  await requirePermission("manage_content")
+
+  for (const sourceId of sourceTagIds) {
+    // Get all post associations for this source tag
+    const sourcePosts = await db
+      .select({ postId: blogPostTags.postId })
+      .from(blogPostTags)
+      .where(eq(blogPostTags.tagId, sourceId))
+
+    for (const { postId } of sourcePosts) {
+      // Check if target tag already associated with this post
+      const existing = await db.query.blogPostTags.findFirst({
+        where: and(
+          eq(blogPostTags.postId, postId),
+          eq(blogPostTags.tagId, targetTagId)
+        ),
+      })
+      if (!existing) {
+        await db
+          .insert(blogPostTags)
+          .values({ postId, tagId: targetTagId })
+      }
+    }
+
+    // Delete source tag (cascade deletes its blogPostTags)
+    await db.delete(blogTags).where(eq(blogTags.id, sourceId))
+  }
+
+  revalidatePath("/admin/blog/categories")
+}
+
+export async function deleteTag(id: string) {
+  await requirePermission("manage_content")
+  await db.delete(blogTags).where(eq(blogTags.id, id))
+  revalidatePath("/admin/blog/categories")
+}
