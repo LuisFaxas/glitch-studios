@@ -176,7 +176,17 @@ Plans:
   2. Admin can view the client list with purchase and booking history, edit site settings (pricing, availability, about page, contact info), and customize the homepage (reorder sections, edit hero, feature beats/videos)
   3. Admin can view contact form submissions, reply to messages, compose and send newsletter broadcasts, and manage subscriber lists -- all from the dashboard
   4. Role-based access (owner, editor, manager) restricts admin actions to appropriate permission levels
-**Plans**: TBD
+**Plans**: 8 plans
+
+Plans:
+- [ ] 04-01-PLAN.md -- Schema extension, RBAC system, AdminShell layout, dashboard overview, Roles & Permissions page
+- [ ] 04-02-PLAN.md -- Tiptap rich text editor, Media Library with R2 upload, MediaPickerDialog
+- [ ] 04-03-PLAN.md -- Blog post CRUD with Tiptap, categories, tags, draft/schedule/publish, scheduled cron
+- [ ] 04-04-PLAN.md -- Service page, team member, and testimonial CRUD management
+- [ ] 04-05-PLAN.md -- Client management list with detail sheet, site settings form
+- [ ] 04-06-PLAN.md -- Contact inbox with read/unread, email reply, admin notification email (MAIL-03)
+- [ ] 04-07-PLAN.md -- Newsletter composer, broadcast sending, subscriber management (MAIL-04)
+- [ ] 04-08-PLAN.md -- Homepage customization with drag-and-drop section reorder
 **UI hint**: yes
 
 ## Progress
@@ -193,4 +203,4 @@ Phases execute in numeric order: 1 -> 1.1 -> 1.2 -> 1.3 -> 1.4 -> 2 -> 3 -> 4
 | 1.4 Visual Polish & Sidebar Overhaul | 0/3 | Planning | - |
 | 2. Beat Store | 0/8 | Planned | - |
 | 3. Booking System | 4/6 | In Progress|  |
-| 4. Admin Dashboard + Email | 0/TBD | Not started | - |
+| 4. Admin Dashboard + Email | 0/8 | Planned | - |
