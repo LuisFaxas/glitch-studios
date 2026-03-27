@@ -185,7 +185,7 @@ Plans:
 - [x] 04-04-PLAN.md -- Service page CRUD with soft-delete safety, team member and testimonial management
 - [x] 04-05-PLAN.md -- Client management (registered + guests), site settings, Roles & Permissions page
 - [x] 04-06-PLAN.md -- Contact inbox with explicit read/unread, email reply with replyTo, admin notification (MAIL-03)
-- [ ] 04-07-PLAN.md -- Newsletter with unsubscribe flow, subscriber auto-tagging, broadcast failure tracking (MAIL-04)
+- [x] 04-07-PLAN.md -- Newsletter with unsubscribe flow, subscriber auto-tagging, broadcast failure tracking (MAIL-04)
 - [ ] 04-08-PLAN.md -- Homepage customization with public component refactors and consistent section taxonomy
 **UI hint**: yes
 

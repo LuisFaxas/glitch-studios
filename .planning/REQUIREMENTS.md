@@ -59,7 +59,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **ADMN-03**: Content management — CRUD for blog posts, service pages, team bios, testimonials
 - [ ] **ADMN-04**: Client management — view client list, purchase history, booking history
 - [ ] **ADMN-05**: Site settings — edit pricing, availability, about page, contact info
-- [ ] **ADMN-06**: Email campaign management — compose and send newsletters to subscriber list
+- [x] **ADMN-06**: Email campaign management — compose and send newsletters to subscriber list
 - [x] **ADMN-07**: Media library — upload, organize, and manage all images, audio, and video from admin
 - [ ] **ADMN-08**: Homepage customization — reorder sections, edit hero content, feature beats/videos from admin
 - [x] **ADMN-09**: Role-based admin access — owner, editor, and manager roles with granular permissions
@@ -69,7 +69,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **MAIL-01**: Purchase receipt emails with download links on beat sale
 - [x] **MAIL-02**: Booking confirmation emails with session details
 - [x] **MAIL-03**: Contact form submission notification to admin
-- [ ] **MAIL-04**: Newsletter broadcast emails from admin dashboard
+- [x] **MAIL-04**: Newsletter broadcast emails from admin dashboard
 - [x] **MAIL-05**: Contact inbox — view and reply to messages from admin dash
 
 ### Infrastructure
@@ -155,14 +155,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMN-03 | Phase 4 | Complete |
 | ADMN-04 | Phase 4 | Pending |
 | ADMN-05 | Phase 4 | Pending |
-| ADMN-06 | Phase 4 | Pending |
+| ADMN-06 | Phase 4 | Complete |
 | ADMN-07 | Phase 4 | Complete |
 | ADMN-08 | Phase 4 | Pending |
 | ADMN-09 | Phase 4 | Complete |
 | MAIL-01 | Phase 2 | Complete |
 | MAIL-02 | Phase 3 | Complete |
 | MAIL-03 | Phase 4 | Complete |
-| MAIL-04 | Phase 4 | Pending |
+| MAIL-04 | Phase 4 | Complete |
 | MAIL-05 | Phase 4 | Complete |
 | INFR-01 | Phase 1 | Complete |
 | INFR-02 | Phase 1.1 | Complete |
