@@ -180,7 +180,7 @@ Plans:
 
 Plans:
 - [x] 04-01-PLAN.md -- Schema extension, RBAC system with compatibility pass, AdminShell layout, dashboard overview
-- [ ] 04-02-PLAN.md -- Tiptap rich text editor, Media Library with R2 direct upload, MediaPickerDialog
+- [x] 04-02-PLAN.md -- Tiptap rich text editor, Media Library with R2 direct upload, MediaPickerDialog
 - [ ] 04-03-PLAN.md -- Blog post CRUD with correct field names (content/coverImageUrl/excerpt), categories, tags, scheduled cron
 - [ ] 04-04-PLAN.md -- Service page CRUD with soft-delete safety, team member and testimonial management
 - [ ] 04-05-PLAN.md -- Client management (registered + guests), site settings, Roles & Permissions page
