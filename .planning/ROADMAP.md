@@ -158,7 +158,7 @@ Plans:
 **Plans:** 6 plans
 
 Plans:
-- [ ] 03-01-PLAN.md -- Schema extension (9 booking tables), shared types, business logic library (availability, slots, deposit, policy, recurring, ICS, SMS)
+- [x] 03-01-PLAN.md -- Schema extension (9 booking tables), shared types, business logic library (availability, slots, deposit, policy, recurring, ICS, SMS)
 - [ ] 03-02-PLAN.md -- Admin config: room CRUD, weekly availability editor, per-service booking config, session package management
 - [ ] 03-03-PLAN.md -- Public booking flow Steps 1-3: service selector tiles, month calendar grid, time slot list, slots API, step indicator
 - [ ] 03-04-PLAN.md -- Public booking flow Steps 4-5: booking form, recurring selector, Stripe deposit payment, webhook extension, confirmation page

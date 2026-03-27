@@ -24,9 +24,9 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Booking
 
 - [x] **BOOK-01**: Service pages with clear pricing for studio sessions, mixing/mastering, video production, SFX, graphic design
-- [ ] **BOOK-02**: Calendar-based booking with available time slot selection
-- [ ] **BOOK-03**: Service type selection during booking flow
-- [ ] **BOOK-04**: Deposit/prepayment collection at booking via Stripe/PayPal
+- [x] **BOOK-02**: Calendar-based booking with available time slot selection
+- [x] **BOOK-03**: Service type selection during booking flow
+- [x] **BOOK-04**: Deposit/prepayment collection at booking via Stripe/PayPal
 - [x] **BOOK-05**: Contact form with name, email, service interest, and message routing to admin inbox
 - [x] **BOOK-06**: Testimonials section with admin-managed client quotes
 
@@ -132,9 +132,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BEAT-10 | Phase 2 | Complete |
 | BEAT-11 | Phase 2 | Complete |
 | BOOK-01 | Phase 1 | Complete |
-| BOOK-02 | Phase 3 | Pending |
-| BOOK-03 | Phase 3 | Pending |
-| BOOK-04 | Phase 3 | Pending |
+| BOOK-02 | Phase 3 | Complete |
+| BOOK-03 | Phase 3 | Complete |
+| BOOK-04 | Phase 3 | Complete |
 | BOOK-05 | Phase 1.1 | Complete |
 | BOOK-06 | Phase 1 | Complete |
 | PORT-01 | Phase 1 | Complete |
