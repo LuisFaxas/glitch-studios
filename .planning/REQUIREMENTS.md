@@ -55,7 +55,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Admin
 
 - [x] **ADMN-01**: Beat management — CRUD for beats with metadata, files, pricing, licensing tiers
-- [ ] **ADMN-02**: Booking management — view, confirm, cancel, reschedule bookings
+- [x] **ADMN-02**: Booking management — view, confirm, cancel, reschedule bookings
 - [ ] **ADMN-03**: Content management — CRUD for blog posts, service pages, team bios, testimonials
 - [ ] **ADMN-04**: Client management — view client list, purchase history, booking history
 - [ ] **ADMN-05**: Site settings — edit pricing, availability, about page, contact info
@@ -151,7 +151,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-04 | Phase 3 | Pending |
 | AUTH-05 | Phase 1.1 | Complete |
 | ADMN-01 | Phase 2 | Complete |
-| ADMN-02 | Phase 3 | Pending |
+| ADMN-02 | Phase 3 | Complete |
 | ADMN-03 | Phase 4 | Pending |
 | ADMN-04 | Phase 4 | Pending |
 | ADMN-05 | Phase 4 | Pending |
