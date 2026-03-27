@@ -8,6 +8,7 @@ import {
   numeric,
   pgEnum,
 } from "drizzle-orm/pg-core"
+import { relations } from "drizzle-orm"
 
 // Enums
 export const serviceTypeEnum = pgEnum("service_type", [
@@ -19,7 +20,11 @@ export const serviceTypeEnum = pgEnum("service_type", [
   "graphic_design",
 ])
 
-export const postStatusEnum = pgEnum("post_status", ["draft", "published"])
+export const postStatusEnum = pgEnum("post_status", [
+  "draft",
+  "scheduled",
+  "published",
+])
 
 // Services table (BOOK-01)
 export const services = pgTable("services", {
@@ -96,6 +101,7 @@ export const blogPosts = pgTable("blog_posts", {
   authorId: text("author_id"),
   status: postStatusEnum("status").default("draft"),
   publishedAt: timestamp("published_at"),
+  scheduledAt: timestamp("scheduled_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
@@ -108,6 +114,7 @@ export const testimonials = pgTable("testimonials", {
   quote: text("quote").notNull(),
   avatarUrl: text("avatar_url"),
   rating: integer("rating"),
+  serviceType: text("service_type"),
   isActive: boolean("is_active").default(true),
   sortOrder: integer("sort_order").default(0),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -129,6 +136,7 @@ export const newsletterSubscribers = pgTable("newsletter_subscribers", {
   id: uuid("id").defaultRandom().primaryKey(),
   email: text("email").notNull().unique(),
   isActive: boolean("is_active").default(true),
+  tags: text("tags").array(),
   subscribedAt: timestamp("subscribed_at").defaultNow().notNull(),
 })
 
@@ -390,3 +398,151 @@ export const bookings = pgTable("bookings", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
+
+// === Admin Dashboard & Email (Phase 4) ===
+
+// Blog tags (D-06)
+export const blogTags = pgTable("blog_tags", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+export const blogPostTags = pgTable("blog_post_tags", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  postId: uuid("post_id")
+    .notNull()
+    .references(() => blogPosts.id, { onDelete: "cascade" }),
+  tagId: uuid("tag_id")
+    .notNull()
+    .references(() => blogTags.id, { onDelete: "cascade" }),
+})
+
+// Media library (D-09, D-10)
+export const mediaAssets = pgTable("media_assets", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  filename: text("filename").notNull(),
+  key: text("key").notNull().unique(),
+  url: text("url").notNull(),
+  mimeType: text("mime_type").notNull(),
+  size: integer("size").notNull(),
+  width: integer("width"),
+  height: integer("height"),
+  duration: integer("duration"),
+  alt: text("alt"),
+  uploadedBy: text("uploaded_by"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+// Homepage sections (D-11, D-12)
+export const homepageSections = pgTable("homepage_sections", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  sectionType: text("section_type").notNull(),
+  sortOrder: integer("sort_order").notNull().default(0),
+  isVisible: boolean("is_visible").default(true),
+  config: text("config"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+// Contact replies (D-13, MAIL-05)
+export const contactReplies = pgTable("contact_replies", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  submissionId: uuid("submission_id")
+    .notNull()
+    .references(() => contactSubmissions.id, { onDelete: "cascade" }),
+  body: text("body").notNull(),
+  sentAt: timestamp("sent_at").defaultNow().notNull(),
+  sentBy: text("sent_by").notNull(),
+})
+
+// Newsletter broadcasts (D-15, D-17)
+export const newsletterBroadcasts = pgTable("newsletter_broadcasts", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  subject: text("subject").notNull(),
+  body: text("body").notNull(),
+  segment: text("segment").notNull().default("all"),
+  recipientCount: integer("recipient_count").notNull().default(0),
+  status: text("status").default("sent"),
+  errorMessage: text("error_message"),
+  sentAt: timestamp("sent_at"),
+  sentBy: text("sent_by").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+// Site settings (ADMN-05)
+export const siteSettings = pgTable("site_settings", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  key: text("key").notNull().unique(),
+  value: text("value"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+// RBAC (D-18, D-19, D-20)
+export const adminRoles = pgTable("admin_roles", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull().unique(),
+  isDefault: boolean("is_default").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+export const adminRolePermissions = pgTable("admin_role_permissions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  roleId: uuid("role_id")
+    .notNull()
+    .references(() => adminRoles.id, { onDelete: "cascade" }),
+  permission: text("permission").notNull(),
+})
+
+// === Drizzle Relations (Phase 4) ===
+
+export const adminRolesRelations = relations(adminRoles, ({ many }) => ({
+  permissions: many(adminRolePermissions),
+}))
+
+export const adminRolePermissionsRelations = relations(
+  adminRolePermissions,
+  ({ one }) => ({
+    role: one(adminRoles, {
+      fields: [adminRolePermissions.roleId],
+      references: [adminRoles.id],
+    }),
+  })
+)
+
+export const blogPostsRelations = relations(blogPosts, ({ many }) => ({
+  postTags: many(blogPostTags),
+}))
+
+export const blogTagsRelations = relations(blogTags, ({ many }) => ({
+  postTags: many(blogPostTags),
+}))
+
+export const blogPostTagsRelations = relations(blogPostTags, ({ one }) => ({
+  post: one(blogPosts, {
+    fields: [blogPostTags.postId],
+    references: [blogPosts.id],
+  }),
+  tag: one(blogTags, {
+    fields: [blogPostTags.tagId],
+    references: [blogTags.id],
+  }),
+}))
+
+export const contactSubmissionsRelations = relations(
+  contactSubmissions,
+  ({ many }) => ({
+    replies: many(contactReplies),
+  })
+)
+
+export const contactRepliesRelations = relations(
+  contactReplies,
+  ({ one }) => ({
+    submission: one(contactSubmissions, {
+      fields: [contactReplies.submissionId],
+      references: [contactSubmissions.id],
+    }),
+  })
+)
