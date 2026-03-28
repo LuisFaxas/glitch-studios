@@ -28,7 +28,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **BOOK-03**: Service type selection during booking flow
 - [x] **BOOK-04**: Deposit/prepayment collection at booking via Stripe/PayPal
 - [x] **BOOK-05**: Contact form with name, email, service interest, and message routing to admin inbox
-- [x] **BOOK-06**: Testimonials section with admin-managed client quotes
+- [x] **BOOK-06 (v1)**: Testimonials section with admin-managed client quotes
 
 ### Portfolio
 
@@ -42,7 +42,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **CONT-01**: Blog/news section with rich-text posts, pagination, and categories
 - [x] **CONT-02**: Newsletter signup form with email capture
-- [x] **CONT-03**: SEO fundamentals — metadata, Open Graph, structured data, sitemap
+- [x] **CONT-03**: SEO fundamentals -- metadata, Open Graph, structured data, sitemap
 
 ### Auth
 
@@ -54,15 +54,15 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Admin
 
-- [x] **ADMN-01**: Beat management — CRUD for beats with metadata, files, pricing, licensing tiers
-- [x] **ADMN-02**: Booking management — view, confirm, cancel, reschedule bookings
-- [x] **ADMN-03**: Content management — CRUD for blog posts, service pages, team bios, testimonials
-- [ ] **ADMN-04**: Client management — view client list, purchase history, booking history
-- [ ] **ADMN-05**: Site settings — edit pricing, availability, about page, contact info
-- [x] **ADMN-06**: Email campaign management — compose and send newsletters to subscriber list
-- [x] **ADMN-07**: Media library — upload, organize, and manage all images, audio, and video from admin
-- [x] **ADMN-08**: Homepage customization — reorder sections, edit hero content, feature beats/videos from admin
-- [x] **ADMN-09**: Role-based admin access — owner, editor, and manager roles with granular permissions
+- [x] **ADMN-01**: Beat management -- CRUD for beats with metadata, files, pricing, licensing tiers
+- [x] **ADMN-02**: Booking management -- view, confirm, cancel, reschedule bookings
+- [x] **ADMN-03**: Content management -- CRUD for blog posts, service pages, team bios, testimonials
+- [ ] **ADMN-04**: Client management -- view client list, purchase history, booking history
+- [ ] **ADMN-05**: Site settings -- edit pricing, availability, about page, contact info
+- [x] **ADMN-06**: Email campaign management -- compose and send newsletters to subscriber list
+- [x] **ADMN-07**: Media library -- upload, organize, and manage all images, audio, and video from admin
+- [x] **ADMN-08**: Homepage customization -- reorder sections, edit hero content, feature beats/videos from admin
+- [x] **ADMN-09**: Role-based admin access -- owner, editor, and manager roles with granular permissions
 
 ### Email
 
@@ -70,25 +70,25 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **MAIL-02**: Booking confirmation emails with session details
 - [x] **MAIL-03**: Contact form submission notification to admin
 - [x] **MAIL-04**: Newsletter broadcast emails from admin dashboard
-- [x] **MAIL-05**: Contact inbox — view and reply to messages from admin dash
+- [x] **MAIL-05**: Contact inbox -- view and reply to messages from admin dash
 
 ### Infrastructure
 
 - [x] **INFR-01**: Caddy dev server configuration reserved for this project
 - [x] **INFR-02**: Vercel deployment with production configuration
 - [x] **INFR-03**: Mobile-first responsive design across all pages with desktop optimization
-- [x] **INFR-04**: Cyberpunk/glitch visual identity — flat black & white, futuristic, sleek, dramatic typography
+- [x] **INFR-04**: Cyberpunk/glitch visual identity -- flat black & white, futuristic, sleek, dramatic typography
 - [x] **INFR-05**: Framer Motion page transitions and UI animations throughout
 - [x] **INFR-06**: Embla Carousel components for mobile-friendly content browsing (beats, portfolio, testimonials)
 
-## v2.0 Requirements — Quality Overhaul
+## v2.0 Requirements -- Quality Overhaul
 
-Sequential page-by-page quality overhaul. No new backend features — purely UX/UI polish. Playwright-verified.
+Sequential page-by-page quality overhaul. No new backend features -- purely UX/UI polish. Playwright-verified.
 
 ### Admin Dashboard
 
 - [ ] **ADMIN-01**: Admin sidebar scrolls independently from main content area
-- [ ] **ADMIN-02**: Dashboard layout feels polished — stat tiles, activity feed, and navigation are visually cohesive
+- [ ] **ADMIN-02**: Dashboard layout feels polished -- stat tiles, activity feed, and navigation are visually cohesive
 
 ### Homepage
 
@@ -104,20 +104,20 @@ Sequential page-by-page quality overhaul. No new backend features — purely UX/
 
 ### Auth & Navigation
 
-- [ ] **NAV-01**: Login redirects users based on role — admin to /admin, regular users to /dashboard
+- [ ] **NAV-01**: Login redirects users based on role -- admin to /admin, regular users to /dashboard
 - [ ] **NAV-02**: Client account access (sign up, login, dashboard) is discoverable in main navigation, not buried
 - [ ] **NAV-03**: Sign-up flow is clearly separated from admin login with appropriate sizing and placement
 
 ### Services & Booking
 
-- [ ] **BOOK-06**: Booking flow shows all available services and provides enough detail at each step
+- [ ] **BOOK-06 (v2)**: Booking flow shows all available services and provides enough detail at each step
 - [ ] **BOOK-07**: Date, time, and payment steps are clearly separated with contextual information
 - [ ] **BOOK-08**: Service pages display comprehensive information (pricing, details, what's included)
 
 ### Blog
 
 - [ ] **BLOG-01**: Blog cards are visually consistent in size and layout across all posts
-- [ ] **BLOG-02**: Blog page has engagement hooks — featured post, category navigation, reading time
+- [ ] **BLOG-02**: Blog page has engagement hooks -- featured post, category navigation, reading time
 - [ ] **BLOG-03**: Blog supports smooth scrolling or pagination that feels intentional
 
 ### Portfolio
@@ -128,7 +128,7 @@ Sequential page-by-page quality overhaul. No new backend features — purely UX/
 ### Artists/Team
 
 - [ ] **TEAM-01**: Artists page shows both internal team and collaborating artists with clear sections
-- [ ] **TEAM-02**: Artist cards have rich content — role, specialties, social links, bio
+- [ ] **TEAM-02**: Artist cards have rich content -- role, specialties, social links, bio
 - [ ] **TEAM-03**: Artists page has carousel or browsing mechanism similar to portfolio
 
 ### Contact
@@ -157,7 +157,7 @@ Deferred beyond v2.0. Tracked but not in current roadmap.
 - **ADVN-01**: Progressive Web App (PWA) capabilities
 - **ADVN-02**: Advanced search with similar beats recommendations
 - **ADVN-03**: Client file sharing/review portal for mix feedback
-- ~~**ADVN-04**: Multi-admin roles with granular permissions~~ — Delivered in v1 as ADMN-09
+- ~~**ADVN-04**: Multi-admin roles with granular permissions~~ -- Delivered in v1 as ADMN-09
 - **ADVN-05**: Newsletter segmentation by client type (beat buyers vs studio clients)
 
 ## Out of Scope
@@ -180,6 +180,8 @@ Explicitly excluded. Documented to prevent scope creep.
 
 Which phases cover which requirements. Updated during roadmap creation.
 
+### v1 Traceability
+
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | BEAT-01 | Phase 2 | Complete |
@@ -198,7 +200,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BOOK-03 | Phase 3 | Complete |
 | BOOK-04 | Phase 3 | Complete |
 | BOOK-05 | Phase 1.1 | Complete |
-| BOOK-06 | Phase 1 | Complete |
+| BOOK-06 (v1) | Phase 1 | Complete |
 | PORT-01 | Phase 1 | Complete |
 | PORT-02 | Phase 1 | Complete |
 | PORT-03 | Phase 1 | Complete |
@@ -238,11 +240,44 @@ Which phases cover which requirements. Updated during roadmap creation.
 - Mapped to phases: 50
 - Unmapped: 0
 
+### v2.0 Traceability
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| ADMIN-01 | Phase 5 | Pending |
+| ADMIN-02 | Phase 5 | Pending |
+| HOME-01 | Phase 6 | Pending |
+| HOME-02 | Phase 6 | Pending |
+| HOME-03 | Phase 6 | Pending |
+| BEATS-01 | Phase 7 | Pending |
+| BEATS-02 | Phase 7 | Pending |
+| BEATS-03 | Phase 7 | Pending |
+| NAV-01 | Phase 8 | Pending |
+| NAV-02 | Phase 8 | Pending |
+| NAV-03 | Phase 8 | Pending |
+| BOOK-06 (v2) | Phase 9 | Pending |
+| BOOK-07 | Phase 9 | Pending |
+| BOOK-08 | Phase 9 | Pending |
+| BLOG-01 | Phase 10 | Pending |
+| BLOG-02 | Phase 10 | Pending |
+| BLOG-03 | Phase 10 | Pending |
+| PORT-06 | Phase 11 | Pending |
+| PORT-07 | Phase 11 | Pending |
+| TEAM-01 | Phase 12 | Pending |
+| TEAM-02 | Phase 12 | Pending |
+| TEAM-03 | Phase 12 | Pending |
+| CONTACT-01 | Phase 13 | Pending |
+| CONTACT-02 | Phase 13 | Pending |
+| CONTACT-03 | Phase 13 | Pending |
+| POLISH-01 | Phase 14 | Pending |
+| POLISH-02 | Phase 14 | Pending |
+| POLISH-03 | Phase 14 | Pending |
+
 **v2.0 Coverage:**
 - v2.0 requirements: 25 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 25
+- Mapped to phases: 25
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-25*
-*Last updated: 2026-03-28 — v2.0 Quality Overhaul requirements added (25 requirements across 10 categories)*
+*Last updated: 2026-03-28 -- v2.0 roadmap created, all 25 requirements mapped to Phases 5-14*
