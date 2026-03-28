@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react"
 import type { PackageInfo } from "@/types/booking"
-import { calculatePackagePrice } from "@/lib/booking/recurring"
+import { calculatePackagePrice } from "@/lib/booking/pricing"
 
 interface RecurringBookingSelectorProps {
   packages: PackageInfo[]

@@ -1,0 +1,16 @@
+{
+  "name": "glitch-studios",
+  "category": "personal",
+  "type": "js-ts",
+  "github": { "enabled": true },
+  "pm2": { "enabled": true, "port": 3004 },
+  "caddy": { "enabled": true },
+  "gsd": { "enabled": true },
+  "praxis": { "enabled": false },
+  "playwright": { "enabled": false },
+  "vercel": { "enabled": false },
+  "sharedFolder": { "enabled": true },
+  "codeServer": { "enabled": false },
+  "claudeMd": { "enabled": true },
+  "changeTracking": "atomic-commits"
+}

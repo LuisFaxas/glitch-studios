@@ -184,3 +184,11 @@ Do not make direct repo edits outside a GSD workflow unless the user explicitly 
 > Profile not yet configured. Run `/gsd:profile-user` to generate your developer profile.
 > This section is managed by `generate-claude-profile` -- do not edit manually.
 <!-- GSD:profile-end -->
+
+
+## CodeBox Resource Constraints
+- CodeBox has 8 cores and 19GB RAM shared across ALL projects and sessions
+- NEVER run `next build` or heavy builds in parallel agents — each takes ~2GB RAM and 300% CPU
+- Prefer `next lint` or `tsc --noEmit` for verification over full production builds
+- If you must build, run ONE build at a time, never concurrent
+- Do not auto-load screenshots into context — reference by path only
