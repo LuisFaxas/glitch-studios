@@ -44,11 +44,13 @@ export default function LoginPage() {
 
     setIsLoading(true)
     try {
-      const { error } = await signIn.email({ email, password })
+      const { error, data } = await signIn.email({ email, password })
       if (error) {
+        console.error("Sign-in error:", error)
         toast.error("Invalid email or password. Please try again.")
       } else {
-        router.push("/")
+        console.log("Sign-in success:", data)
+        router.push("/admin")
         router.refresh()
       }
     } catch {

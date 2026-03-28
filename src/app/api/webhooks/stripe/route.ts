@@ -182,10 +182,9 @@ export async function POST(request: Request) {
       .insert(orders)
       .values({
         stripeSessionId: session.id,
-        stripePaymentIntentId: session.payment_intent as string,
         guestEmail: customerEmail,
         status: "completed",
-        totalAmount: (session.amount_total! / 100).toFixed(2),
+        totalCents: session.amount_total!,
       })
       .returning()
 
@@ -266,7 +265,7 @@ export async function POST(request: Request) {
           orderId: order.id.slice(0, 8),
           buyerName: customerName,
           items: emailItems,
-          total: Number(order.totalAmount),
+          total: order.totalCents / 100,
         }),
       })
     }

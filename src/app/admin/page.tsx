@@ -22,7 +22,7 @@ export default async function AdminDashboardPage() {
   // Stat queries
   const [revenueResult] = await db
     .select({
-      total: sql<string>`COALESCE(SUM(${orders.totalAmount}::numeric), 0)`,
+      total: sql<string>`COALESCE(SUM(${orders.totalCents}), 0)`,
     })
     .from(orders)
     .where(
@@ -32,7 +32,7 @@ export default async function AdminDashboardPage() {
       )
     )
 
-  const revenue = Math.floor(parseFloat(revenueResult?.total ?? "0"))
+  const revenue = Math.floor(parseInt(revenueResult?.total ?? "0") / 100)
   const revenueFormatted = `$${revenue.toLocaleString("en-US")}`
 
   // Bookings this week
@@ -69,7 +69,7 @@ export default async function AdminDashboardPage() {
   const recentOrders = await db
     .select({
       id: orders.id,
-      totalAmount: orders.totalAmount,
+      totalCents: orders.totalCents,
       createdAt: orders.createdAt,
     })
     .from(orders)
@@ -101,7 +101,7 @@ export default async function AdminDashboardPage() {
   const activityItems: ActivityItem[] = [
     ...recentOrders.map((o) => ({
       type: "order" as const,
-      description: `New order: $${parseFloat(o.totalAmount).toFixed(2)}`,
+      description: `New order: $${(o.totalCents / 100).toFixed(2)}`,
       date: o.createdAt,
     })),
     ...recentBookings.map((b) => ({
@@ -135,25 +135,25 @@ export default async function AdminDashboardPage() {
         <StatTile
           label="Revenue (30d)"
           value={revenueFormatted}
-          icon={DollarSign}
+          icon={<DollarSign size={16} />}
           index={0}
         />
         <StatTile
           label="Bookings This Week"
           value={bookingsThisWeek.length}
-          icon={CalendarDays}
+          icon={<CalendarDays size={16} />}
           index={1}
         />
         <StatTile
           label="Pending Messages"
           value={pendingMessagesResult?.value ?? 0}
-          icon={Inbox}
+          icon={<Inbox size={16} />}
           index={2}
         />
         <StatTile
           label="Subscribers"
           value={subscriberResult?.value ?? 0}
-          icon={Mail}
+          icon={<Mail size={16} />}
           index={3}
         />
       </div>

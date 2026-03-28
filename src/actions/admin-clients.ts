@@ -48,7 +48,7 @@ export async function getClients(filters?: {
       COALESCE(b.booking_count, 0)::int as booking_count
     FROM "user" u
     LEFT JOIN (
-      SELECT user_id, COUNT(*)::int as purchase_count, COALESCE(SUM(total_amount::numeric), 0) as total_spend
+      SELECT user_id, COUNT(*)::int as purchase_count, COALESCE(SUM(total_cents), 0) as total_spend
       FROM orders WHERE user_id IS NOT NULL GROUP BY user_id
     ) o ON o.user_id = u.id
     LEFT JOIN (
@@ -63,7 +63,7 @@ export async function getClients(filters?: {
     SELECT
       guest_email as email,
       COUNT(*)::int as purchase_count,
-      COALESCE(SUM(total_amount::numeric), 0) as total_spend,
+      COALESCE(SUM(total_cents), 0) as total_spend,
       MIN(created_at) as created_at
     FROM orders
     WHERE user_id IS NULL AND guest_email IS NOT NULL
@@ -228,7 +228,7 @@ export async function getClientDetail(
   if (isGuest) {
     // Build client from orders/bookings
     const orderRows = await db.execute(sql`
-      SELECT COUNT(*)::int as cnt, COALESCE(SUM(total_amount::numeric), 0) as total, MIN(created_at) as first
+      SELECT COUNT(*)::int as cnt, COALESCE(SUM(total_cents), 0) as total, MIN(created_at) as first
       FROM orders WHERE guest_email = ${guestEmail}
     `)
     const bookingRows = await db.execute(sql`
@@ -263,7 +263,7 @@ export async function getClientDetail(
     if (!uRow) return null
 
     const orderStats = await db.execute(sql`
-      SELECT COUNT(*)::int as cnt, COALESCE(SUM(total_amount::numeric), 0) as total
+      SELECT COUNT(*)::int as cnt, COALESCE(SUM(total_cents), 0) as total
       FROM orders WHERE user_id = ${clientId}
     `)
     const bookingStats = await db.execute(sql`
@@ -288,25 +288,25 @@ export async function getClientDetail(
   let purchaseQuery
   if (isGuest) {
     purchaseQuery = await db.execute(sql`
-      SELECT o.id, o.created_at, o.total_amount, o.status,
+      SELECT o.id, o.created_at, o.total_cents, o.status,
         STRING_AGG(b.title, ', ') as items
       FROM orders o
       LEFT JOIN order_items oi ON oi.order_id = o.id
       LEFT JOIN beats b ON b.id = oi.beat_id
       WHERE o.guest_email = ${guestEmail}
-      GROUP BY o.id, o.created_at, o.total_amount, o.status
+      GROUP BY o.id, o.created_at, o.total_cents, o.status
       ORDER BY o.created_at DESC
       LIMIT 20
     `)
   } else {
     purchaseQuery = await db.execute(sql`
-      SELECT o.id, o.created_at, o.total_amount, o.status,
+      SELECT o.id, o.created_at, o.total_cents, o.status,
         STRING_AGG(b.title, ', ') as items
       FROM orders o
       LEFT JOIN order_items oi ON oi.order_id = o.id
       LEFT JOIN beats b ON b.id = oi.beat_id
       WHERE o.user_id = ${clientId}
-      GROUP BY o.id, o.created_at, o.total_amount, o.status
+      GROUP BY o.id, o.created_at, o.total_cents, o.status
       ORDER BY o.created_at DESC
       LIMIT 20
     `)
@@ -316,7 +316,7 @@ export async function getClientDetail(
     id: r.id as string,
     date: new Date(r.created_at as string).toLocaleDateString(),
     items: (r.items as string) || "Unknown items",
-    total: `$${Number(r.total_amount).toFixed(2)}`,
+    total: `$${(Number(r.total_cents) / 100).toFixed(2)}`,
     status: r.status as string,
   }))
 

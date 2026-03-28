@@ -94,7 +94,7 @@ export function PurchaseHistory({ orders }: PurchaseHistoryProps) {
               {format(new Date(order.createdAt), "MMM d, yyyy")}
             </span>
             <span className="font-mono text-[14px] text-[#f5f5f0]">
-              ${Number(order.totalAmount).toFixed(2)}
+              ${(Number(order.totalCents) / 100).toFixed(2)}
             </span>
           </div>
           <Table>

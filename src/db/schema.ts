@@ -279,10 +279,10 @@ export const orders = pgTable("orders", {
   userId: text("user_id"),
   guestEmail: text("guest_email"),
   stripeSessionId: text("stripe_session_id").unique(),
-  stripePaymentIntentId: text("stripe_payment_intent_id"),
   status: orderStatusEnum("status").default("pending"),
-  totalAmount: numeric("total_amount", { precision: 10, scale: 2 }).notNull(),
+  totalCents: integer("total_cents").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
 
 export const orderItems = pgTable("order_items", {

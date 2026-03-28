@@ -1,17 +1,17 @@
 "use client"
 
 import { motion } from "motion/react"
-import type { LucideIcon } from "lucide-react"
+import type { ReactNode } from "react"
 
 export function StatTile({
   label,
   value,
-  icon: Icon,
+  icon,
   index = 0,
 }: {
   label: string
   value: string | number
-  icon: LucideIcon
+  icon: ReactNode
   index?: number
 }) {
   return (
@@ -22,7 +22,7 @@ export function StatTile({
       className="border border-[#222222] bg-[#111111] p-4"
     >
       <div className="mb-3 flex items-center gap-2 text-[#888888]">
-        <Icon size={16} />
+        {icon}
         <span className="font-mono text-[13px] font-bold uppercase">
           {label}
         </span>
