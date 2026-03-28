@@ -14,12 +14,13 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation + Public Site** - Project scaffold, cyberpunk identity, auth, and all public-facing pages
 - [x] **Phase 1.1: Foundation Bug Fixes** - INSERTED — Fix blog typography, sign-out UI, contact preselect, Neon driver
-- [ ] **Phase 1.2: Design Language Overhaul** - INSERTED — Transform site into Cyberpunk Metro tile grid with glitch animations
-- [ ] **Phase 1.3: Supabase DB Driver Fix** - INSERTED — Switch from Neon HTTP driver to Supabase-compatible Postgres driver
-- [ ] **Phase 1.4: Visual Polish & Sidebar Overhaul** - INSERTED — Fix all visual defects from 2026-03-25 audit: sidebar layout, glitch hover, home page, footer, forms, routes
-- [ ] **Phase 2: Beat Store** - Beat catalog, persistent player, licensing, cart, checkout, and digital delivery
-- [ ] **Phase 3: Booking System** - Calendar booking, time slot selection, deposit payments, and booking management
-- [ ] **Phase 4: Admin Dashboard + Email** - Unified admin management, email campaigns, newsletter, media library, and site settings
+- [x] **Phase 1.2: Design Language Overhaul** - INSERTED — Transform site into Cyberpunk Metro tile grid with glitch animations
+- [x] **Phase 1.3: Supabase DB Driver Fix** - INSERTED — Switch from Neon HTTP driver to Supabase-compatible Postgres driver
+- [x] **Phase 1.4: Visual Polish & Sidebar Overhaul** - INSERTED — Fix all visual defects from 2026-03-25 audit: sidebar layout, glitch hover, home page, footer, forms, routes
+- [x] **Phase 2: Beat Store** - Beat catalog, persistent player, licensing, cart, checkout, and digital delivery
+- [x] **Phase 3: Booking System** - Calendar booking, time slot selection, deposit payments, and booking management
+- [x] **Phase 4: Admin Dashboard + Email** - Unified admin management, email campaigns, newsletter, media library, and site settings
+- [ ] **Phase 4.1: Stabilization & Integration Fix** - INSERTED — Fix client-bundle crash, auth 500, configure services, verify all routes
 
 ## Phase Details
 
@@ -189,18 +190,40 @@ Plans:
 - [x] 04-08-PLAN.md -- Homepage customization with public component refactors and consistent section taxonomy
 **UI hint**: yes
 
+### Phase 04.1: Stabilization & Integration Fix (INSERTED)
+
+**Goal**: Every built feature actually works end-to-end in a browser — fix client-bundle crash, auth 500, configure missing services, and verify all routes render
+**Depends on**: Phase 4
+**Requirements**: INFR-02, INFR-03, AUTH-01, AUTH-05
+**Success Criteria** (what must be TRUE):
+  1. All public pages render in browser without hydration errors (postgres driver removed from client bundles)
+  2. Admin login works and dashboard is accessible with full CRUD functionality
+  3. All third-party services configured and functional (Resend email, R2 storage, Stripe test mode)
+  4. Beat player, cart, checkout flow work end-to-end
+  5. Booking flow works end-to-end with Stripe deposit
+  6. Every route smoke-tested in browser with no console errors
+**Plans:** 3 plans
+
+Plans:
+- [ ] 04.1-01-PLAN.md -- Install server-only, add guards to db/auth/r2/permissions, configure missing env vars (Resend, ADMIN_EMAIL, CRON_SECRET)
+- [ ] 04.1-02-PLAN.md -- Rewrite seed scripts with postgres-js driver, comprehensive data for all tables, standalone admin user seeder
+- [ ] 04.1-03-PLAN.md -- Smoke test script, run seeds, verify all routes (empty + seeded), browser verification checkpoint
+
+**INSERTED**: yes
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 1.1 -> 1.2 -> 1.3 -> 1.4 -> 2 -> 3 -> 4
+Phases execute in numeric order: 1 -> 1.1 -> 1.2 -> 1.3 -> 1.4 -> 2 -> 3 -> 4 -> 4.1
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation + Public Site | 6/6 | Done | 2026-03-25 |
 | 1.1 Foundation Bug Fixes | 2/2 | Done | 2026-03-25 |
-| 1.2 Design Language Overhaul | 0/3 | Planning | - |
-| 1.3 Supabase DB Driver Fix | 0/TBD | Not started | - |
-| 1.4 Visual Polish & Sidebar Overhaul | 0/3 | Planning | - |
-| 2. Beat Store | 0/8 | Planned | - |
-| 3. Booking System | 4/6 | In Progress|  |
-| 4. Admin Dashboard + Email | 0/8 | Planned | - |
+| 1.2 Design Language Overhaul | 3/3 | Done | 2026-03-25 |
+| 1.3 Supabase DB Driver Fix | 1/1 | Done | 2026-03-25 |
+| 1.4 Visual Polish & Sidebar Overhaul | 3/3 | Done | 2026-03-25 |
+| 2. Beat Store | 8/8 | Done | 2026-03-26 |
+| 3. Booking System | 6/6 | Done | 2026-03-26 |
+| 4. Admin Dashboard + Email | 8/8 | Done | 2026-03-27 |
+| 4.1 Stabilization & Integration Fix | 0/3 | Not started | - |
