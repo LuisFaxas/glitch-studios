@@ -8,6 +8,24 @@ A website for Glitch Studios — a music and video production studio and creativ
 
 Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience.
 
+## Current Milestone: v2.0 Quality Overhaul
+
+**Goal:** Transform every page from scaffolded placeholder to polished, industry-leading quality — sequential, one page at a time, with Playwright visual verification.
+
+**Target features:**
+- Admin dashboard UX fix (independent sidebar scroll, layout polish)
+- Homepage redesign (clear hierarchy, CTAs, compelling first impression)
+- Beats catalog overhaul (industry-standard UX, reference BeatStars/Airbit)
+- Auth & navigation flow (client vs admin clarity, discoverable dashboard)
+- Services + booking flow polish (more info, better step flow)
+- Blog page improvement (consistent cards, engagement hooks)
+- Portfolio refinements (detail view navigation)
+- Artists/Team page (define purpose, richer content, carousel)
+- Contact page expansion (WhatsApp, phone, social, location)
+- Global polish (real social media icons, footer, sign-up placement, player widget)
+
+**Process change:** Sequential phases, Playwright screenshots during development, user reviews each page before moving on.
+
 ## Requirements
 
 ### Validated
@@ -83,4 +101,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-27 after Phase 4 completion — admin dashboard, media library, blog CMS, newsletter, contact inbox, homepage customization all operational*
+*Last updated: 2026-03-28 — Milestone v2.0 started. v1.0 delivered full functional scaffold (40 plans, 9 phases). v2.0 focuses on UX quality overhaul.*
