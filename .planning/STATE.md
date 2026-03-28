@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: Milestone complete
-stopped_at: Completed 04-08-PLAN.md
-last_updated: "2026-03-27T08:27:46.031Z"
+stopped_at: Phase 04.1 context gathered
+last_updated: "2026-03-28T02:24:55.548Z"
 progress:
-  total_phases: 8
+  total_phases: 9
   completed_phases: 8
   total_plans: 37
   completed_plans: 37
@@ -162,6 +162,7 @@ Recent decisions affecting current work:
 - Phase 1.2 inserted after Phase 1.1: Design Language Overhaul (INSERTED) — Transform site into Cyberpunk Metro tile grid with glitch animations. Design spec at .planning/DESIGN-LANGUAGE.md. Official GLITCH logo at Untitled-2.png (horizontal scan-line distortion wordmark).
 - Phase 1.3 inserted after Phase 1.2: Supabase DB Driver Fix (URGENT) — Site broken because db.ts uses @neondatabase/serverless but DATABASE_URL points to Supabase pooler. Must switch to postgres-js or Supabase client.
 - Phase 1.4 inserted after Phase 1.3: Visual Polish & Sidebar Overhaul — Fix all visual defects from 2026-03-25 audit. Sidebar overhaul (horizontal tiles, padding, collapse, glitch hover), home page visibility, route fixes, design consistency sweep. Audit at .planning/VISUAL-AUDIT-2026-03-25.md.
+- Phase 4.1 inserted after Phase 4: Stabilization & Integration Fix (URGENT) — All 37 plans executed but site non-functional in browser. postgres driver leaks into client bundles via widget-latest-post.tsx and booking-flow.tsx, causing hydration crash on every public page. Admin auth returns 500. Missing env vars (Resend, R2, Twilio). Need to fix client-bundle leak, auth, configure services, seed DB, and verify all routes render.
 
 ### Pending Todos
 
@@ -175,6 +176,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-27T08:20:13.509Z
-Stopped at: Completed 04-08-PLAN.md
-Resume file: None
+Last session: 2026-03-28T02:24:55.543Z
+Stopped at: Phase 04.1 context gathered
+Resume file: .planning/phases/04.1-stabilization-integration-fix/04.1-CONTEXT.md
