@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "sonner"
-import { ALL_PERMISSIONS, type Permission } from "@/lib/permissions"
+import { ALL_PERMISSIONS, type Permission } from "@/lib/permissions-shared"
 import type { RoleWithPermissions } from "@/actions/admin-roles"
 import { updateRolePermissions, deleteRole } from "@/actions/admin-roles"
 

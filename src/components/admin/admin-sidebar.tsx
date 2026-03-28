@@ -22,7 +22,7 @@ import {
   Menu,
   X,
 } from "lucide-react"
-import type { Permission } from "@/lib/permissions"
+import type { Permission } from "@/lib/permissions-shared"
 import type { LucideIcon } from "lucide-react"
 
 interface NavItem {

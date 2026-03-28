@@ -5,26 +5,9 @@ import { auth } from "./auth"
 import { db } from "./db"
 import { adminRoles, adminRolePermissions } from "@/db/schema"
 
-export type Permission =
-  | "manage_content"
-  | "manage_media"
-  | "view_clients"
-  | "send_newsletters"
-  | "manage_bookings"
-  | "manage_settings"
-  | "manage_roles"
-  | "reply_messages"
-
-export const ALL_PERMISSIONS: Permission[] = [
-  "manage_content",
-  "manage_media",
-  "view_clients",
-  "send_newsletters",
-  "manage_bookings",
-  "manage_settings",
-  "manage_roles",
-  "reply_messages",
-]
+import { ALL_PERMISSIONS, type Permission } from "./permissions-shared"
+export type { Permission }
+export { ALL_PERMISSIONS }
 
 /**
  * Backwards-compatible admin check.

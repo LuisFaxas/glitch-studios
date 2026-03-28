@@ -43,7 +43,7 @@ export async function confirmMediaUpload(data: {
 }) {
   const session = await requirePermission("manage_media")
 
-  const url = getPublicUrl(data.key)
+  const url = getPublicUrl(data.key) ?? ""
   const [asset] = await db
     .insert(mediaAssets)
     .values({

@@ -1,5 +1,6 @@
 "use client"
 
+import { Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useCart } from "@/components/cart/cart-provider"
@@ -10,6 +11,20 @@ type OrderData = Awaited<ReturnType<typeof getOrderBySessionId>>
 type DownloadUrls = Record<string, string>
 
 export default function CheckoutSuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-[60vh] items-center justify-center">
+          <div className="h-8 w-8 animate-spin border-2 border-[#333] border-t-[#f5f5f0]" />
+        </div>
+      }
+    >
+      <CheckoutSuccessContent />
+    </Suspense>
+  )
+}
+
+function CheckoutSuccessContent() {
   const searchParams = useSearchParams()
   const sessionId = searchParams.get("session_id")
   const { clearCart } = useCart()
