@@ -81,9 +81,71 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **INFR-05**: Framer Motion page transitions and UI animations throughout
 - [x] **INFR-06**: Embla Carousel components for mobile-friendly content browsing (beats, portfolio, testimonials)
 
-## v2 Requirements
+## v2.0 Requirements — Quality Overhaul
 
-Deferred to future release. Tracked but not in current roadmap.
+Sequential page-by-page quality overhaul. No new backend features — purely UX/UI polish. Playwright-verified.
+
+### Admin Dashboard
+
+- [ ] **ADMIN-01**: Admin sidebar scrolls independently from main content area
+- [ ] **ADMIN-02**: Dashboard layout feels polished — stat tiles, activity feed, and navigation are visually cohesive
+
+### Homepage
+
+- [ ] **HOME-01**: Homepage has clear visual hierarchy with compelling above-the-fold content
+- [ ] **HOME-02**: Homepage has obvious CTAs guiding visitors to book services, browse beats, and explore portfolio
+- [ ] **HOME-03**: Homepage content sections flow logically and are not cluttered with scattered elements
+
+### Beats Catalog
+
+- [ ] **BEATS-01**: Beat catalog has industry-standard layout with prominent cover art on each beat card
+- [ ] **BEATS-02**: Search and filter controls are grouped and intuitive, not scattered across the page
+- [ ] **BEATS-03**: Mood tags are organized and visually clean, not chaotic
+
+### Auth & Navigation
+
+- [ ] **NAV-01**: Login redirects users based on role — admin to /admin, regular users to /dashboard
+- [ ] **NAV-02**: Client account access (sign up, login, dashboard) is discoverable in main navigation, not buried
+- [ ] **NAV-03**: Sign-up flow is clearly separated from admin login with appropriate sizing and placement
+
+### Services & Booking
+
+- [ ] **BOOK-06**: Booking flow shows all available services and provides enough detail at each step
+- [ ] **BOOK-07**: Date, time, and payment steps are clearly separated with contextual information
+- [ ] **BOOK-08**: Service pages display comprehensive information (pricing, details, what's included)
+
+### Blog
+
+- [ ] **BLOG-01**: Blog cards are visually consistent in size and layout across all posts
+- [ ] **BLOG-02**: Blog page has engagement hooks — featured post, category navigation, reading time
+- [ ] **BLOG-03**: Blog supports smooth scrolling or pagination that feels intentional
+
+### Portfolio
+
+- [ ] **PORT-06**: Portfolio detail view has clear navigation to browse between items
+- [ ] **PORT-07**: Existing carousel animations and filters are preserved and refined
+
+### Artists/Team
+
+- [ ] **TEAM-01**: Artists page shows both internal team and collaborating artists with clear sections
+- [ ] **TEAM-02**: Artist cards have rich content — role, specialties, social links, bio
+- [ ] **TEAM-03**: Artists page has carousel or browsing mechanism similar to portfolio
+
+### Contact
+
+- [ ] **CONTACT-01**: Contact page includes WhatsApp integration and phone number
+- [ ] **CONTACT-02**: Contact page displays studio location with map
+- [ ] **CONTACT-03**: Contact page includes social media links
+
+### Global Polish
+
+- [ ] **POLISH-01**: Social media icons use actual platform brand icons (Instagram, YouTube, SoundCloud), not generic Lucide icons
+- [ ] **POLISH-02**: Footer sign-up is properly sized and positioned, not buried or undersized
+- [ ] **POLISH-03**: Audio player widget is visually refined and clearly functional
+
+## Future Requirements
+
+Deferred beyond v2.0. Tracked but not in current roadmap.
 
 ### Analytics
 
@@ -95,7 +157,7 @@ Deferred to future release. Tracked but not in current roadmap.
 - **ADVN-01**: Progressive Web App (PWA) capabilities
 - **ADVN-02**: Advanced search with similar beats recommendations
 - **ADVN-03**: Client file sharing/review portal for mix feedback
-- ~~**ADVN-04**: Multi-admin roles with granular permissions~~ — Moved to v1 as ADMN-09
+- ~~**ADVN-04**: Multi-admin roles with granular permissions~~ — Delivered in v1 as ADMN-09
 - **ADVN-05**: Newsletter segmentation by client type (beat buyers vs studio clients)
 
 ## Out of Scope
@@ -171,11 +233,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFR-05 | Phase 1 | Complete |
 | INFR-06 | Phase 1 | Complete |
 
-**Coverage:**
+**v1 Coverage:**
 - v1 requirements: 50 total
 - Mapped to phases: 50
 - Unmapped: 0
 
+**v2.0 Coverage:**
+- v2.0 requirements: 25 total
+- Mapped to phases: 0 (pending roadmap)
+- Unmapped: 25
+
 ---
 *Requirements defined: 2026-03-25*
-*Last updated: 2026-03-25 after gap closure phase assignment*
+*Last updated: 2026-03-28 — v2.0 Quality Overhaul requirements added (25 requirements across 10 categories)*
