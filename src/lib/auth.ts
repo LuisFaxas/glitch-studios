@@ -21,6 +21,11 @@ export const auth = betterAuth({
     provider: "pg",
     schema,
   }),
+  trustedOrigins: [
+    "http://localhost:3004",
+    "http://192.168.1.122:3004",
+    "https://glitch-studios.codebox.local",
+  ],
   emailAndPassword: {
     enabled: true,
   },
