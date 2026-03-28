@@ -37,5 +37,7 @@ export async function getDownloadUrl(key: string, expiresIn = 3600) {
 }
 
 export function getPublicUrl(key: string) {
-  return `${process.env.R2_PUBLIC_URL}/${key}`
+  const base = process.env.R2_PUBLIC_URL
+  if (!base) return null
+  return `${base}/${key}`
 }

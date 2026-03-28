@@ -13,7 +13,7 @@
 import postgres from "postgres"
 import { drizzle } from "drizzle-orm/postgres-js"
 import { sql } from "drizzle-orm"
-import { hashPassword } from "better-auth/crypto/password"
+import { hashPassword } from "better-auth/crypto"
 import * as schema from "./schema"
 
 async function seedAdmin() {
@@ -46,11 +46,13 @@ async function seedAdmin() {
     )
     const actualUserId = (userResult.rows?.[0] as { id: string })?.id ?? (userResult as unknown as { id: string }[])[0]?.id ?? userId
 
-    // Insert into account table for credential provider (or update password if exists)
+    // Delete existing credential account for this user, then insert fresh
+    await db.execute(
+      sql`DELETE FROM "account" WHERE "userId" = ${actualUserId} AND "providerId" = 'credential'`
+    )
     await db.execute(
       sql`INSERT INTO "account" (id, "accountId", "providerId", "userId", password, "createdAt", "updatedAt")
-          VALUES (${crypto.randomUUID()}, ${email}, 'credential', ${actualUserId}, ${hashedPassword}, NOW(), NOW())
-          ON CONFLICT ("providerId", "accountId") DO UPDATE SET password = ${hashedPassword}, "updatedAt" = NOW()`
+          VALUES (${crypto.randomUUID()}, ${email}, 'credential', ${actualUserId}, ${hashedPassword}, NOW(), NOW())`
     )
 
     console.log(`Admin user created: ${email} (role: owner)`)
