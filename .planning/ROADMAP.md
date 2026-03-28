@@ -152,8 +152,10 @@ Plans:
   1. Admin sidebar scrolls independently when main content area is scrolled -- long sidebar menus are fully accessible without losing page position
   2. Dashboard stat tiles, activity feed, and navigation elements share a consistent visual weight and spacing -- nothing looks like a placeholder
   3. Admin can navigate between all dashboard sections without layout shift or visual jank
-**Plans**: TBD
-**UI hint**: yes
+**Plans**: 1 plan
+
+Plans:
+- [ ] 05-01-PLAN.md -- Fix viewport scroll, merge sidebar sections, polish dashboard layout
 
 ### Phase 6: Homepage
 **Goal**: First-time visitors immediately understand what Glitch Studios offers and know exactly where to go next
@@ -279,7 +281,7 @@ v2.0: 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
 | 3. Booking System | v1.0 | 6/6 | Complete | 2026-03-26 |
 | 4. Admin Dashboard + Email | v1.0 | 8/8 | Complete | 2026-03-27 |
 | 4.1 Stabilization & Integration Fix | v1.0 | 2/3 | Complete | 2026-03-28 |
-| 5. Admin Dashboard UX | v2.0 | 0/0 | Not started | - |
+| 5. Admin Dashboard UX | v2.0 | 0/1 | In progress | - |
 | 6. Homepage | v2.0 | 0/0 | Not started | - |
 | 7. Beats Catalog | v2.0 | 0/0 | Not started | - |
 | 8. Auth & Navigation | v2.0 | 0/0 | Not started | - |
