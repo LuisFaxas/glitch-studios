@@ -202,10 +202,10 @@ Plans:
   4. Beat player, cart, checkout flow work end-to-end
   5. Booking flow works end-to-end with Stripe deposit
   6. Every route smoke-tested in browser with no console errors
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 
 Plans:
-- [ ] 04.1-01-PLAN.md -- Install server-only, add guards to db/auth/r2/permissions, configure missing env vars (Resend, ADMIN_EMAIL, CRON_SECRET)
+- [x] 04.1-01-PLAN.md -- Install server-only, add guards to db/auth/r2/permissions, configure missing env vars (Resend, ADMIN_EMAIL, CRON_SECRET)
 - [ ] 04.1-02-PLAN.md -- Rewrite seed scripts with postgres-js driver, comprehensive data for all tables, standalone admin user seeder
 - [ ] 04.1-03-PLAN.md -- Smoke test script, run seeds, verify all routes (empty + seeded), browser verification checkpoint
 
