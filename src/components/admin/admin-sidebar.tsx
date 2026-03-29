@@ -53,6 +53,7 @@ function getNavSections(unreadCount: number): NavSection[] {
         { label: "Services", href: "/admin/services", icon: Briefcase, permission: "manage_content" },
         { label: "Team", href: "/admin/team", icon: Users, permission: "manage_content" },
         { label: "Testimonials", href: "/admin/testimonials", icon: Quote, permission: "manage_content" },
+        { label: "Media Library", href: "/admin/media", icon: Image, permission: "manage_media" },
       ],
     },
     {
@@ -61,18 +62,7 @@ function getNavSections(unreadCount: number): NavSection[] {
         { label: "Beats", href: "/admin/beats", icon: Music, permission: "manage_bookings" },
         { label: "Bundles", href: "/admin/bundles", icon: Package, permission: "manage_bookings" },
         { label: "Bookings", href: "/admin/bookings", icon: CalendarDays, permission: "manage_bookings" },
-      ],
-    },
-    {
-      title: "Clients",
-      items: [
         { label: "Client List", href: "/admin/clients", icon: UserCircle, permission: "view_clients" },
-      ],
-    },
-    {
-      title: "Media",
-      items: [
-        { label: "Media Library", href: "/admin/media", icon: Image, permission: "manage_media" },
       ],
     },
     {
@@ -118,7 +108,7 @@ function SidebarContent({
   const sections = getNavSections(unreadCount)
 
   return (
-    <nav className="flex flex-col gap-6 p-4">
+    <nav className="flex flex-col gap-4 p-4">
       {sections.map((section) => {
         const visibleItems = section.items.filter(
           (item) => !item.permission || permissions.includes(item.permission)

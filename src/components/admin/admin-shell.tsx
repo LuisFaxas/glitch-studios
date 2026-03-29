@@ -21,7 +21,7 @@ export async function AdminShell({ children }: { children: React.ReactNode }) {
   const unreadCount = unreadResult?.value ?? 0
 
   return (
-    <div className="flex min-h-screen bg-[#000000]">
+    <div className="flex h-screen overflow-hidden bg-[#000000]">
       <AdminSidebar
         permissions={sessionPerms.permissions}
         role={sessionPerms.role}
