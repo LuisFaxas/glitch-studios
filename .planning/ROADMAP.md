@@ -155,7 +155,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 05-01-PLAN.md -- Fix viewport scroll, merge sidebar sections, polish dashboard layout
+- [x] 05-01-PLAN.md -- Fix viewport scroll, merge sidebar sections, polish dashboard layout
 
 ### Phase 6: Homepage
 **Goal**: First-time visitors immediately understand what Glitch Studios offers and know exactly where to go next

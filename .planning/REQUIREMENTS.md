@@ -87,8 +87,8 @@ Sequential page-by-page quality overhaul. No new backend features -- purely UX/U
 
 ### Admin Dashboard
 
-- [ ] **ADMIN-01**: Admin sidebar scrolls independently from main content area
-- [ ] **ADMIN-02**: Dashboard layout feels polished -- stat tiles, activity feed, and navigation are visually cohesive
+- [x] **ADMIN-01**: Admin sidebar scrolls independently from main content area
+- [x] **ADMIN-02**: Dashboard layout feels polished -- stat tiles, activity feed, and navigation are visually cohesive
 
 ### Homepage
 
@@ -244,8 +244,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ADMIN-01 | Phase 5 | Pending |
-| ADMIN-02 | Phase 5 | Pending |
+| ADMIN-01 | Phase 5 | Complete |
+| ADMIN-02 | Phase 5 | Complete |
 | HOME-01 | Phase 6 | Pending |
 | HOME-02 | Phase 6 | Pending |
 | HOME-03 | Phase 6 | Pending |
