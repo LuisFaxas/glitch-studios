@@ -19,7 +19,7 @@ export function StatTile({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.075 }}
-      className="border border-[#222222] bg-[#111111] p-4"
+      className="border-2 border-[#333333] bg-[#111111] p-4"
     >
       <div className="mb-3 flex items-center gap-2 text-[#888888]">
         {icon}

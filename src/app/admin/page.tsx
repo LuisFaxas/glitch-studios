@@ -9,14 +9,9 @@ import {
 } from "@/db/schema"
 import { eq, sql, and, gte, lte, desc } from "drizzle-orm"
 import { DollarSign, CalendarDays, Inbox, Mail } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
 import { StatTile } from "@/components/admin/stat-tile"
-
-type ActivityItem = {
-  type: "order" | "booking" | "message"
-  description: string
-  date: Date
-}
+import { QuickActions } from "@/components/admin/quick-actions"
+import { ActivityFeed } from "@/components/admin/activity-feed"
 
 export default async function AdminDashboardPage() {
   // Stat queries
@@ -98,7 +93,13 @@ export default async function AdminDashboardPage() {
     .orderBy(desc(contactSubmissions.createdAt))
     .limit(5)
 
-  const activityItems: ActivityItem[] = [
+  type RawActivityItem = {
+    type: "order" | "booking" | "message"
+    description: string
+    date: Date
+  }
+
+  const activityItems: RawActivityItem[] = [
     ...recentOrders.map((o) => ({
       type: "order" as const,
       description: `New order: $${(o.totalCents / 100).toFixed(2)}`,
@@ -118,11 +119,10 @@ export default async function AdminDashboardPage() {
     .sort((a, b) => b.date.getTime() - a.date.getTime())
     .slice(0, 10)
 
-  const iconMap = {
-    order: DollarSign,
-    booking: CalendarDays,
-    message: Inbox,
-  }
+  const serializedItems = activityItems.map((item) => ({
+    ...item,
+    date: item.date.toISOString(),
+  }))
 
   return (
     <div>
@@ -158,33 +158,21 @@ export default async function AdminDashboardPage() {
         />
       </div>
 
-      {/* Recent activity */}
-      <h2 className="mb-4 font-mono text-[13px] font-bold uppercase tracking-[0.05em] text-[#888888]">
-        Recent Activity
-      </h2>
-      {activityItems.length === 0 ? (
-        <p className="text-[15px] text-[#555555]">No recent activity</p>
-      ) : (
-        <div className="flex flex-col gap-2">
-          {activityItems.map((item, i) => {
-            const Icon = iconMap[item.type]
-            return (
-              <div
-                key={`${item.type}-${i}`}
-                className="flex items-center gap-3 border border-[#222222] bg-[#111111] px-4 py-3"
-              >
-                <Icon size={16} className="shrink-0 text-[#888888]" />
-                <span className="flex-1 text-[15px] text-[#f5f5f0]">
-                  {item.description}
-                </span>
-                <span className="shrink-0 text-[13px] text-[#555555]">
-                  {formatDistanceToNow(item.date, { addSuffix: true })}
-                </span>
-              </div>
-            )
-          })}
+      {/* Two-column layout: Quick Actions + Activity Feed */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
+        <div>
+          <h2 className="mb-4 border-b border-[#222] pb-2 font-mono text-[13px] font-bold uppercase tracking-[0.05em] text-[#555555]">
+            Quick Actions
+          </h2>
+          <QuickActions />
         </div>
-      )}
+        <div>
+          <h2 className="mb-4 border-b border-[#222] pb-2 font-mono text-[13px] font-bold uppercase tracking-[0.05em] text-[#555555]">
+            Recent Activity
+          </h2>
+          <ActivityFeed items={serializedItems} />
+        </div>
+      </div>
     </div>
   )
 }
