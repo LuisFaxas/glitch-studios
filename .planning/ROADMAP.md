@@ -188,7 +188,7 @@ Plans:
 
 Plans:
 - [x] 06.1-01-PLAN.md -- Splash overlay, hero logo swap, scroll indicator, scroll effects, beat card spacing, footer logo
-- [ ] 06.1-02-PLAN.md -- Playwright visual verification and user approval
+- [x] 06.1-02-PLAN.md -- Playwright visual verification and user approval
 
 **INSERTED**: yes
 
