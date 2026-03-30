@@ -189,7 +189,7 @@ Plans:
 Plans:
 - [x] 06.1-01-PLAN.md -- Splash overlay, hero logo swap, scroll indicator, scroll effects, beat card spacing, footer logo
 - [x] 06.1-02-PLAN.md -- Playwright visual verification and user approval
-- [ ] 06.1-03-PLAN.md -- Scroll-aware sidebar collapse for centered logos
+- [x] 06.1-03-PLAN.md -- Scroll-aware sidebar collapse for centered logos
 
 **INSERTED**: yes
 
