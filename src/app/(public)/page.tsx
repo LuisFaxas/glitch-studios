@@ -10,6 +10,7 @@ import { VideoPortfolioCarousel } from "@/components/home/video-portfolio-carous
 import { TestimonialsCarousel } from "@/components/home/testimonials-carousel"
 import { BlogSection } from "@/components/home/blog-section"
 import { SplashOverlay } from "@/components/home/splash-overlay"
+import { HomepageScrollWatcher } from "@/components/home/homepage-scroll-watcher"
 import { getPublicHomepageSections } from "@/actions/admin-homepage"
 
 function parseConfig(config: string | null) {
@@ -108,6 +109,7 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
+      <HomepageScrollWatcher />
       <SplashOverlay>
         {useDynamicLayout ? (
           homepageSections.map((section) => {
