@@ -184,10 +184,11 @@ Plans:
   3. Animated scroll indicator arrow is visible at the bottom of the hero section
   4. Featured beat cards have visible spacing between them (not tight Metro gap)
   5. Scroll-driven Framer Motion effects add dynamism as visitors scroll through homepage sections
-**Plans**: 0/TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 06.1 to break down)
+- [ ] 06.1-01-PLAN.md -- Splash overlay, hero logo swap, scroll indicator, scroll effects, beat card spacing, footer logo
+- [ ] 06.1-02-PLAN.md -- Playwright visual verification and user approval
 
 **INSERTED**: yes
 
@@ -290,7 +291,7 @@ Plans:
 
 **Execution Order:**
 v1.0: 1 -> 1.1 -> 1.2 -> 1.3 -> 1.4 -> 2 -> 3 -> 4 -> 4.1
-v2.0: 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
+v2.0: 5 -> 6 -> 6.1 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -305,6 +306,7 @@ v2.0: 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
 | 4.1 Stabilization & Integration Fix | v1.0 | 2/3 | Complete | 2026-03-28 |
 | 5. Admin Dashboard UX | v2.0 | 0/1 | In progress | - |
 | 6. Homepage | v2.0 | 0/2 | Not started | - |
+| 6.1 Homepage Flair | v2.0 | 0/2 | Not started | - |
 | 7. Beats Catalog | v2.0 | 0/0 | Not started | - |
 | 8. Auth & Navigation | v2.0 | 0/0 | Not started | - |
 | 9. Services & Booking | v2.0 | 0/0 | Not started | - |
