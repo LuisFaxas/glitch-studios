@@ -49,12 +49,10 @@ export function HeroSection({
       {/* Light bottom-only scrim for future video readability */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#000000]/30" />
 
-      {/* Logo — centered at the exact viewport center.
-           Hero section is 90vh tall starting at y=0. Viewport center is at 50vh.
-           So within the hero, the logo needs to be at 50vh from top (not 50% of 90vh).
-           translateX compensates for the collapsed sidebar offset. */}
+      {/* Subtitle + Logo — centered at viewport center as a group.
+           Subtitle sits above the logo to use the empty vertical space on top. */}
       <div
-        className="absolute z-10 flex items-center justify-center"
+        className="absolute z-10 flex flex-col items-center justify-center"
         style={{
           top: "50vh",
           left: 0,
@@ -62,6 +60,9 @@ export function HeroSection({
           transform: `translateY(-50%) translateX(${collapsed ? "-32px" : "0px"})`,
         }}
       >
+        <p className="font-mono text-2xl md:text-4xl text-[#f5f5f0] tracking-tight mb-8">
+          {subtitle}
+        </p>
         <div className="w-[80vw] max-w-[600px]">
           <div className={styles.glitchWrapper}>
             <div className={styles.glitchImg} />
@@ -71,14 +72,11 @@ export function HeroSection({
         </div>
       </div>
 
-      {/* Subtitle + CTAs — anchored to bottom of hero section */}
+      {/* CTAs — anchored to bottom of hero section */}
       <div
         className="absolute z-10 bottom-[12vh] left-0 right-0 flex flex-col items-center gap-6 px-4 text-center"
         style={{ transform: `translateX(${collapsed ? "-32px" : "0px"})` }}
       >
-        <p className="font-mono text-2xl md:text-4xl text-[#f5f5f0] tracking-tight">
-          {subtitle}
-        </p>
 
         <div className="flex flex-col sm:flex-row gap-4">
           <Link
