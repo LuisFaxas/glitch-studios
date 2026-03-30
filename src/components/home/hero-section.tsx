@@ -45,16 +45,11 @@ export function HeroSection({
       {/* Light bottom-only scrim for future video readability */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#000000]/30" />
 
-      {/* Content overlay — centered on full viewport via fixed positioning
-           so it aligns exactly with the splash logo regardless of sidebar width */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-        className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-8 px-4 text-center pointer-events-none"
-        style={{ height: "90vh" }}
+      {/* Logo — fixed at exact viewport center, matches splash logo position exactly.
+           Uses full viewport height (not 90vh) so vertical center matches the splash overlay. */}
+      <div
+        className="fixed inset-0 z-10 flex items-center justify-center pointer-events-none"
       >
-        {/* Real logo image — same max-w as splash (600px) for seamless handoff */}
         <div className="w-[80vw] max-w-[600px] pointer-events-auto">
           <div className={styles.glitchWrapper}>
             <div className={styles.glitchImg} />
@@ -62,36 +57,44 @@ export function HeroSection({
             <div className={styles.glitchLayer2} aria-hidden="true" />
           </div>
         </div>
+      </div>
 
-        <p className="font-mono text-2xl md:text-4xl text-[#f5f5f0] tracking-tight pointer-events-auto">
-          {subtitle}
-        </p>
+      {/* Subtitle + CTAs — positioned below the centered logo */}
+      <div
+        className="fixed inset-0 z-10 flex flex-col items-center justify-end pointer-events-none px-4 text-center"
+        style={{ height: "90vh", paddingBottom: "12vh" }}
+      >
+        <div className="flex flex-col items-center gap-6 pointer-events-auto">
+          <p className="font-mono text-2xl md:text-4xl text-[#f5f5f0] tracking-tight">
+            {subtitle}
+          </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 pointer-events-auto">
-          <Link
-            href={ctaLink}
-            className="w-full sm:w-auto bg-[#f5f5f0] text-[#000] border border-[#f5f5f0] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
-          >
-            {ctaText}
-          </Link>
-          <Link
-            href="/beats"
-            className="w-full sm:w-auto bg-transparent text-[#f5f5f0] border border-[#444] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
-          >
-            Browse Beats
-          </Link>
-          <Link
-            href="/portfolio"
-            className="w-full sm:w-auto bg-transparent text-[#f5f5f0] border border-[#444] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
-          >
-            View Portfolio
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link
+              href={ctaLink}
+              className="w-full sm:w-auto bg-[#f5f5f0] text-[#000] border border-[#f5f5f0] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
+            >
+              {ctaText}
+            </Link>
+            <Link
+              href="/beats"
+              className="w-full sm:w-auto bg-transparent text-[#f5f5f0] border border-[#444] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+            >
+              Browse Beats
+            </Link>
+            <Link
+              href="/portfolio"
+              className="w-full sm:w-auto bg-transparent text-[#f5f5f0] border border-[#444] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+            >
+              View Portfolio
+            </Link>
+          </div>
+
+          <p className="font-mono text-xs text-[#555] uppercase tracking-[0.1em]">
+            Music &amp; Video Production Studio
+          </p>
         </div>
-
-        <p className="font-mono text-xs text-[#555] uppercase tracking-[0.1em] pointer-events-auto">
-          Music &amp; Video Production Studio
-        </p>
-      </motion.div>
+      </div>
 
       {/* Animated scroll indicator — also viewport-centered */}
       <motion.div
