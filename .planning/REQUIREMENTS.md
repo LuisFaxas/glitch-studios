@@ -94,7 +94,7 @@ Sequential page-by-page quality overhaul. No new backend features -- purely UX/U
 
 - [x] **HOME-01**: Homepage has clear visual hierarchy with compelling above-the-fold content
 - [x] **HOME-02**: Homepage has obvious CTAs guiding visitors to book services, browse beats, and explore portfolio
-- [ ] **HOME-03**: Homepage content sections flow logically and are not cluttered with scattered elements
+- [x] **HOME-03**: Homepage content sections flow logically and are not cluttered with scattered elements
 
 ### Beats Catalog
 
@@ -248,7 +248,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMIN-02 | Phase 5 | Complete |
 | HOME-01 | Phase 6 | Complete |
 | HOME-02 | Phase 6 | Complete |
-| HOME-03 | Phase 6 | Pending |
+| HOME-03 | Phase 6 | Complete |
 | BEATS-01 | Phase 7 | Pending |
 | BEATS-02 | Phase 7 | Pending |
 | BEATS-03 | Phase 7 | Pending |

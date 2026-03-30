@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Quality Overhaul
 status: Ready to execute
-stopped_at: Phase 06.1 context gathered
-last_updated: "2026-03-30T16:14:42.641Z"
+stopped_at: Completed 06.1-01-PLAN.md
+last_updated: "2026-03-30T18:30:46.869Z"
 progress:
   total_phases: 11
   completed_phases: 2
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 5
+  completed_plans: 4
 ---
 
 # Project State
@@ -19,11 +19,11 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-28)
 
 **Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience.
-**Current focus:** Phase 06 — homepage
+**Current focus:** Phase 06.1 — homepage-flair
 
 ## Current Position
 
-Phase: 06 (homepage) — EXECUTING
+Phase: 06.1 (homepage-flair) — EXECUTING
 Plan: 2 of 2
 
 ## Performance Metrics
@@ -48,6 +48,7 @@ Plan: 2 of 2
 | 04.1 | 2 | 6min | 3min |
 | Phase 05 P01 | 2min | 2 tasks | 6 files |
 | Phase 06 P01 | 2min | 2 tasks | 3 files |
+| Phase 06.1 P01 | 2min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,8 @@ Recent decisions affecting current work:
 - [v2.0 Roadmap]: Mobile-first verification on every phase
 - [Phase 05]: Merged sidebar from 7 to 5 sections (Clients into Commerce, Media into Content)
 - [Phase 05]: Three-tier visual hierarchy via border weight and background shade
+- [Phase 06.1]: Custom Framer Motion splash over ReactBits -- tighter integration with existing glitch CSS
+- [Phase 06.1]: ScrollSection variant prop pattern for diverse section entrance animations
 
 ### Roadmap Evolution
 
@@ -78,6 +81,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-30T16:14:42.636Z
-Stopped at: Phase 06.1 context gathered
-Resume file: .planning/phases/06.1-homepage-flair/06.1-CONTEXT.md
+Last session: 2026-03-30T18:30:46.864Z
+Stopped at: Completed 06.1-01-PLAN.md
+Resume file: None
