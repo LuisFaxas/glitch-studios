@@ -25,7 +25,10 @@ export function HeroSection({
   const indicatorOpacity = useTransform(scrollY, [0, 200], [1, 0])
 
   return (
-    <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
+    <section className="relative h-[90vh] overflow-hidden">
+      {/* Use absolute positioning to center content on the full viewport,
+          not just the content area. The collapsed sidebar (64px) offsets
+          the content area, but the hero should match the splash logo position. */}
       {/* Video background placeholder with scanline texture */}
       <div
         className="absolute inset-0 bg-[#0a0a0a]"
@@ -42,15 +45,17 @@ export function HeroSection({
       {/* Light bottom-only scrim for future video readability */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#000000]/30" />
 
-      {/* Content overlay */}
+      {/* Content overlay — centered on full viewport via fixed positioning
+           so it aligns exactly with the splash logo regardless of sidebar width */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.3 }}
-        className="relative z-10 flex flex-col items-center justify-center gap-8 px-4 text-center"
+        className="fixed inset-0 z-10 flex flex-col items-center justify-center gap-8 px-4 text-center pointer-events-none"
+        style={{ height: "90vh" }}
       >
-        {/* Real logo image with glitch hover effect */}
-        <div className="w-full max-w-[500px] md:max-w-[600px]">
+        {/* Real logo image — same max-w as splash (600px) for seamless handoff */}
+        <div className="w-[80vw] max-w-[600px] pointer-events-auto">
           <div className={styles.glitchWrapper}>
             <div className={styles.glitchImg} />
             <div className={styles.glitchLayer1} aria-hidden="true" />
@@ -58,11 +63,11 @@ export function HeroSection({
           </div>
         </div>
 
-        <p className="font-mono text-2xl md:text-4xl text-[#f5f5f0] tracking-tight">
+        <p className="font-mono text-2xl md:text-4xl text-[#f5f5f0] tracking-tight pointer-events-auto">
           {subtitle}
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 pointer-events-auto">
           <Link
             href={ctaLink}
             className="w-full sm:w-auto bg-[#f5f5f0] text-[#000] border border-[#f5f5f0] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
@@ -83,14 +88,14 @@ export function HeroSection({
           </Link>
         </div>
 
-        <p className="font-mono text-xs text-[#555] uppercase tracking-[0.1em]">
+        <p className="font-mono text-xs text-[#555] uppercase tracking-[0.1em] pointer-events-auto">
           Music &amp; Video Production Studio
         </p>
       </motion.div>
 
-      {/* Animated scroll indicator */}
+      {/* Animated scroll indicator — also viewport-centered */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-10"
         style={{ opacity: indicatorOpacity }}
         animate={shouldReduceMotion ? undefined : { y: [0, 8, 0] }}
         transition={
