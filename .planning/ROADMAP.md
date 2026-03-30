@@ -170,7 +170,7 @@ Plans:
 **UI hint**: yes
 
 Plans:
-- [ ] 06-01-PLAN.md -- Hero redesign with 3 CTAs and data layer wiring
+- [x] 06-01-PLAN.md -- Hero redesign with 3 CTAs and data layer wiring
 - [ ] 06-02-PLAN.md -- Below-fold section polish (featured beats, services, testimonials, blog)
 
 ### Phase 7: Beats Catalog
