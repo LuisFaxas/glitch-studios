@@ -171,7 +171,7 @@ Plans:
 
 Plans:
 - [x] 06-01-PLAN.md -- Hero redesign with 3 CTAs and data layer wiring
-- [ ] 06-02-PLAN.md -- Below-fold section polish (featured beats, services, testimonials, blog)
+- [x] 06-02-PLAN.md -- Below-fold section polish (featured beats, services, testimonials, blog)
 
 ### Phase 7: Beats Catalog
 **Goal**: Producers and clients can browse beats with an experience that matches industry leaders like BeatStars and Airbit
