@@ -184,11 +184,12 @@ Plans:
   3. Animated scroll indicator arrow is visible at the bottom of the hero section
   4. Featured beat cards have visible spacing between them (not tight Metro gap)
   5. Scroll-driven Framer Motion effects add dynamism as visitors scroll through homepage sections
-**Plans**: 2 plans
+**Plans**: 3 plans
 
 Plans:
 - [x] 06.1-01-PLAN.md -- Splash overlay, hero logo swap, scroll indicator, scroll effects, beat card spacing, footer logo
 - [x] 06.1-02-PLAN.md -- Playwright visual verification and user approval
+- [ ] 06.1-03-PLAN.md -- Scroll-aware sidebar collapse for centered logos
 
 **INSERTED**: yes
 
