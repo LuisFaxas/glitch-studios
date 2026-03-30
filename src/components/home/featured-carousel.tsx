@@ -27,7 +27,7 @@ export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
 
   return (
-    <ScrollSection className="py-16 md:py-24">
+    <ScrollSection variant="clip-reveal" className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
           <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-[#f5f5f0]">
@@ -59,7 +59,7 @@ export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
           </div>
         ) : (
           <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-[2px]">
+            <div className="flex gap-4">
               {beats.map((beat) => (
                 <Link
                   key={beat.id}

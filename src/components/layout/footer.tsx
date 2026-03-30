@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Camera, Video, Headphones } from "lucide-react"
-import { GlitchLogo } from "@/components/layout/glitch-logo"
+import styles from "@/components/tiles/logo-tile.module.css"
 import { NewsletterForm } from "@/components/forms/newsletter-form"
 
 const navLinks = [
@@ -24,7 +24,13 @@ export function Footer() {
         <div className="grid gap-8 md:grid-cols-3">
           {/* Column 1: Logo + Tagline */}
           <div className="space-y-4">
-            <GlitchLogo size="sm" animate={false} />
+            <div className="w-24">
+              <div className={styles.glitchWrapper}>
+                <div className={styles.glitchImg} />
+                <div className={styles.glitchLayer1} aria-hidden="true" />
+                <div className={styles.glitchLayer2} aria-hidden="true" />
+              </div>
+            </div>
             <p className="font-mono text-xs uppercase tracking-[0.05em] text-[#888888]">Music. Video. Vision.</p>
           </div>
 
