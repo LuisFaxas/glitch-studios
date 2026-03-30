@@ -89,15 +89,8 @@ export default async function HomePage() {
         backgroundMediaUrl={config.backgroundMediaUrl as string | undefined}
       />
     ),
-    featured_beats: (config) => (
-      <FeaturedCarousel
-        beats={beatsList}
-        beatIds={
-          Array.isArray(config.beatIds) && config.beatIds.length > 0
-            ? (config.beatIds as string[])
-            : undefined
-        }
-      />
+    featured_beats: () => (
+      <FeaturedCarousel beats={beatsList} />
     ),
     services: () => <ServicesOverview services={servicesList} />,
     portfolio: () => <VideoPortfolioCarousel portfolioItems={portfolioList} />,
