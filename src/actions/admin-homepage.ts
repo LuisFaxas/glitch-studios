@@ -43,6 +43,12 @@ const DEFAULT_SECTIONS = [
     isVisible: true,
     config: "{}",
   },
+  {
+    sectionType: "blog",
+    sortOrder: 5,
+    isVisible: true,
+    config: "{}",
+  },
 ]
 
 export async function getHomepageSections(): Promise<HomepageSection[]> {

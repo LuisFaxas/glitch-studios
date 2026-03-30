@@ -1,13 +1,14 @@
 export const dynamic = "force-dynamic"
 
 import { db } from "@/lib/db"
-import { services, testimonials, portfolioItems } from "@/db/schema"
-import { eq, asc } from "drizzle-orm"
+import { services, testimonials, portfolioItems, beats, blogPosts } from "@/db/schema"
+import { eq, asc, desc } from "drizzle-orm"
 import { HeroSection } from "@/components/home/hero-section"
 import { ServicesOverview } from "@/components/home/services-overview"
 import { FeaturedCarousel } from "@/components/home/featured-carousel"
 import { VideoPortfolioCarousel } from "@/components/home/video-portfolio-carousel"
 import { TestimonialsCarousel } from "@/components/home/testimonials-carousel"
+import { BlogSection } from "@/components/home/blog-section"
 import { getPublicHomepageSections } from "@/actions/admin-homepage"
 
 function parseConfig(config: string | null) {
@@ -19,7 +20,7 @@ function parseConfig(config: string | null) {
 }
 
 export default async function HomePage() {
-  const [servicesResult, testimonialsResult, portfolioResult, homepageSectionsResult] =
+  const [servicesResult, testimonialsResult, portfolioResult, homepageSectionsResult, beatsResult, blogResult] =
     await Promise.allSettled([
       db
         .select()
@@ -37,6 +38,18 @@ export default async function HomePage() {
         .where(eq(portfolioItems.isActive, true))
         .orderBy(asc(portfolioItems.sortOrder)),
       getPublicHomepageSections(),
+      db
+        .select()
+        .from(beats)
+        .where(eq(beats.status, "published"))
+        .orderBy(desc(beats.createdAt))
+        .limit(6),
+      db
+        .select()
+        .from(blogPosts)
+        .where(eq(blogPosts.status, "published"))
+        .orderBy(desc(blogPosts.publishedAt))
+        .limit(3),
     ])
 
   const servicesList =
@@ -49,6 +62,10 @@ export default async function HomePage() {
     homepageSectionsResult.status === "fulfilled"
       ? homepageSectionsResult.value
       : []
+  const beatsList =
+    beatsResult.status === "fulfilled" ? beatsResult.value : []
+  const blogList =
+    blogResult.status === "fulfilled" ? blogResult.value : []
 
   const organizationSchema = {
     "@context": "https://schema.org",
@@ -74,6 +91,7 @@ export default async function HomePage() {
     ),
     featured_beats: (config) => (
       <FeaturedCarousel
+        beats={beatsList}
         beatIds={
           Array.isArray(config.beatIds) && config.beatIds.length > 0
             ? (config.beatIds as string[])
@@ -84,6 +102,7 @@ export default async function HomePage() {
     services: () => <ServicesOverview services={servicesList} />,
     portfolio: () => <VideoPortfolioCarousel portfolioItems={portfolioList} />,
     testimonials: () => <TestimonialsCarousel testimonials={testimonialsList} />,
+    blog: () => <BlogSection posts={blogList} />,
   }
 
   // If homepage sections exist in DB, render dynamically
@@ -108,9 +127,10 @@ export default async function HomePage() {
         <>
           <HeroSection />
           <ServicesOverview services={servicesList} />
-          <FeaturedCarousel />
+          <FeaturedCarousel beats={beatsList} />
           <VideoPortfolioCarousel portfolioItems={portfolioList} />
           <TestimonialsCarousel testimonials={testimonialsList} />
+          <BlogSection posts={blogList} />
         </>
       )}
     </>
