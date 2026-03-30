@@ -57,7 +57,7 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
         </div>
 
         <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-4">
+          <div className="flex gap-[2px]">
             {testimonials.map((testimonial) => (
               <div
                 key={testimonial.id}
@@ -96,7 +96,7 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
                       <img
                         src={testimonial.avatarUrl}
                         alt={testimonial.clientName}
-                        className="size-10 rounded-full object-cover"
+                        className="size-10 rounded-none object-cover"
                       />
                     )}
                     <div>
