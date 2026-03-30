@@ -173,9 +173,27 @@ Plans:
 - [x] 06-01-PLAN.md -- Hero redesign with 3 CTAs and data layer wiring
 - [x] 06-02-PLAN.md -- Below-fold section polish (featured beats, services, testimonials, blog)
 
+### Phase 06.1: Homepage Flair (INSERTED)
+
+**Goal**: Homepage has wow factor — splash logo animation, scroll-driven Framer Motion effects, animated scroll indicator, actual Glitch logo in hero, and proper beat card spacing
+**Depends on**: Phase 6
+**Requirements**: HOME-01, HOME-03
+**Success Criteria** (what must be TRUE):
+  1. Homepage opens with a splash animation featuring the Glitch logo before transitioning to the hero section
+  2. Actual Glitch logo component renders in the hero section (not plain text)
+  3. Animated scroll indicator arrow is visible at the bottom of the hero section
+  4. Featured beat cards have visible spacing between them (not tight Metro gap)
+  5. Scroll-driven Framer Motion effects add dynamism as visitors scroll through homepage sections
+**Plans**: 0/TBD
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 06.1 to break down)
+
+**INSERTED**: yes
+
 ### Phase 7: Beats Catalog
 **Goal**: Producers and clients can browse beats with an experience that matches industry leaders like BeatStars and Airbit
-**Depends on**: Phase 6
+**Depends on**: Phase 6.1
 **Requirements**: BEATS-01, BEATS-02, BEATS-03
 **Success Criteria** (what must be TRUE):
   1. Each beat card prominently displays cover art, title, producer name, BPM, and key -- matching the visual density of BeatStars/Airbit

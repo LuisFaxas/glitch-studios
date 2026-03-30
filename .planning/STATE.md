@@ -63,6 +63,10 @@ Recent decisions affecting current work:
 - [Phase 05]: Merged sidebar from 7 to 5 sections (Clients into Commerce, Media into Content)
 - [Phase 05]: Three-tier visual hierarchy via border weight and background shade
 
+### Roadmap Evolution
+
+- Phase 06.1 inserted after Phase 6: Homepage Flair (INSERTED) — Splash logo animation, scroll-driven effects, animated scroll indicator, Glitch logo in hero, beat card spacing. From user review during Phase 6 checkpoint.
+
 ### Pending Todos
 
 None yet.
