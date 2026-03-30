@@ -166,8 +166,12 @@ Plans:
   2. Visitor can see and click obvious CTAs to book a session, browse beats, and explore the portfolio without scrolling past the fold
   3. Below-fold sections (services, featured beats, testimonials, blog) flow in a logical narrative order with no scattered or orphaned elements
   4. Homepage renders correctly on mobile (375px) with no overlapping elements or broken layout
-**Plans**: TBD
+**Plans**: 2 plans
 **UI hint**: yes
+
+Plans:
+- [ ] 06-01-PLAN.md -- Hero redesign with 3 CTAs and data layer wiring
+- [ ] 06-02-PLAN.md -- Below-fold section polish (featured beats, services, testimonials, blog)
 
 ### Phase 7: Beats Catalog
 **Goal**: Producers and clients can browse beats with an experience that matches industry leaders like BeatStars and Airbit
@@ -282,7 +286,7 @@ v2.0: 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
 | 4. Admin Dashboard + Email | v1.0 | 8/8 | Complete | 2026-03-27 |
 | 4.1 Stabilization & Integration Fix | v1.0 | 2/3 | Complete | 2026-03-28 |
 | 5. Admin Dashboard UX | v2.0 | 0/1 | In progress | - |
-| 6. Homepage | v2.0 | 0/0 | Not started | - |
+| 6. Homepage | v2.0 | 0/2 | Not started | - |
 | 7. Beats Catalog | v2.0 | 0/0 | Not started | - |
 | 8. Auth & Navigation | v2.0 | 0/0 | Not started | - |
 | 9. Services & Booking | v2.0 | 0/0 | Not started | - |
