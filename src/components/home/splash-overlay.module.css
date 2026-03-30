@@ -1,0 +1,86 @@
+/* Dramatic glitch entrance for splash screen — plays once, more intense than hover glitch */
+
+.splashGlitchLayer1 {
+  animation: splash-glitch-1 0.6s steps(3) 0.3s both;
+}
+
+.splashGlitchLayer2 {
+  animation: splash-glitch-2 0.6s steps(3) 0.3s both reverse;
+}
+
+@keyframes splash-glitch-1 {
+  0% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+  15% {
+    clip-path: inset(10% 0 60% 0);
+    transform: translate(-8px, 0);
+  }
+  30% {
+    clip-path: inset(50% 0 20% 0);
+    transform: translate(10px, 0);
+  }
+  45% {
+    clip-path: inset(25% 0 45% 0);
+    transform: translate(-6px, 0);
+  }
+  60% {
+    clip-path: inset(70% 0 5% 0);
+    transform: translate(8px, 0);
+  }
+  75% {
+    clip-path: inset(5% 0 75% 0);
+    transform: translate(-10px, 0);
+  }
+  90% {
+    clip-path: inset(40% 0 30% 0);
+    transform: translate(6px, 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+}
+
+@keyframes splash-glitch-2 {
+  0% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+  15% {
+    clip-path: inset(60% 0 15% 0);
+    transform: translate(9px, 0);
+  }
+  30% {
+    clip-path: inset(15% 0 55% 0);
+    transform: translate(-11px, 0);
+  }
+  45% {
+    clip-path: inset(45% 0 25% 0);
+    transform: translate(7px, 0);
+  }
+  60% {
+    clip-path: inset(80% 0 3% 0);
+    transform: translate(-9px, 0);
+  }
+  75% {
+    clip-path: inset(30% 0 50% 0);
+    transform: translate(11px, 0);
+  }
+  90% {
+    clip-path: inset(55% 0 20% 0);
+    transform: translate(-7px, 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splashGlitchLayer1,
+  .splashGlitchLayer2 {
+    animation: none;
+  }
+}

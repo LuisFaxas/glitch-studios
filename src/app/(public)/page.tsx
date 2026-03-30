@@ -9,6 +9,7 @@ import { FeaturedCarousel } from "@/components/home/featured-carousel"
 import { VideoPortfolioCarousel } from "@/components/home/video-portfolio-carousel"
 import { TestimonialsCarousel } from "@/components/home/testimonials-carousel"
 import { BlogSection } from "@/components/home/blog-section"
+import { SplashOverlay } from "@/components/home/splash-overlay"
 import { getPublicHomepageSections } from "@/actions/admin-homepage"
 
 function parseConfig(config: string | null) {
@@ -107,25 +108,27 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
-      {useDynamicLayout ? (
-        homepageSections.map((section) => {
-          const renderer = sectionRenderers[section.sectionType]
-          if (!renderer) return null
-          const config = parseConfig(section.config)
-          return (
-            <div key={section.id}>{renderer(config)}</div>
-          )
-        })
-      ) : (
-        <>
-          <HeroSection />
-          <ServicesOverview services={servicesList} />
-          <FeaturedCarousel beats={beatsList} />
-          <VideoPortfolioCarousel portfolioItems={portfolioList} />
-          <TestimonialsCarousel testimonials={testimonialsList} />
-          <BlogSection posts={blogList} />
-        </>
-      )}
+      <SplashOverlay>
+        {useDynamicLayout ? (
+          homepageSections.map((section) => {
+            const renderer = sectionRenderers[section.sectionType]
+            if (!renderer) return null
+            const config = parseConfig(section.config)
+            return (
+              <div key={section.id}>{renderer(config)}</div>
+            )
+          })
+        ) : (
+          <>
+            <HeroSection />
+            <ServicesOverview services={servicesList} />
+            <FeaturedCarousel beats={beatsList} />
+            <VideoPortfolioCarousel portfolioItems={portfolioList} />
+            <TestimonialsCarousel testimonials={testimonialsList} />
+            <BlogSection posts={blogList} />
+          </>
+        )}
+      </SplashOverlay>
     </>
   )
 }

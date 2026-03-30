@@ -1,8 +1,9 @@
 "use client"
 
-import { motion } from "motion/react"
+import { motion, useScroll, useTransform, useReducedMotion } from "motion/react"
 import Link from "next/link"
-import { GlitchLogo } from "@/components/layout/glitch-logo"
+import { ChevronDown } from "lucide-react"
+import styles from "@/components/tiles/logo-tile.module.css"
 
 interface HeroSectionProps {
   title?: string
@@ -19,6 +20,10 @@ export function HeroSection({
   ctaLink = "/services",
   backgroundMediaUrl,
 }: HeroSectionProps) {
+  const shouldReduceMotion = useReducedMotion()
+  const { scrollY } = useScroll()
+  const indicatorOpacity = useTransform(scrollY, [0, 200], [1, 0])
+
   return (
     <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Video background placeholder with scanline texture */}
@@ -44,7 +49,14 @@ export function HeroSection({
         transition={{ duration: 0.8, delay: 0.3 }}
         className="relative z-10 flex flex-col items-center justify-center gap-8 px-4 text-center"
       >
-        <GlitchLogo size="lg" />
+        {/* Real logo image with glitch hover effect */}
+        <div className="w-full max-w-[500px] md:max-w-[600px]">
+          <div className={styles.glitchWrapper}>
+            <div className={styles.glitchImg} />
+            <div className={styles.glitchLayer1} aria-hidden="true" />
+            <div className={styles.glitchLayer2} aria-hidden="true" />
+          </div>
+        </div>
 
         <p className="font-mono text-2xl md:text-4xl text-[#f5f5f0] tracking-tight">
           {subtitle}
@@ -74,6 +86,20 @@ export function HeroSection({
         <p className="font-mono text-xs text-[#555] uppercase tracking-[0.1em]">
           Music &amp; Video Production Studio
         </p>
+      </motion.div>
+
+      {/* Animated scroll indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        style={{ opacity: indicatorOpacity }}
+        animate={shouldReduceMotion ? undefined : { y: [0, 8, 0] }}
+        transition={
+          shouldReduceMotion
+            ? undefined
+            : { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
+        }
+      >
+        <ChevronDown className="size-8 text-[#555]" />
       </motion.div>
     </section>
   )
