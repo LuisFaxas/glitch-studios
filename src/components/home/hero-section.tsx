@@ -14,7 +14,7 @@ interface HeroSectionProps {
 
 export function HeroSection({
   title,
-  subtitle = "Music. Video. Vision.",
+  subtitle = "Music Production // Video // Creative Services",
   ctaText = "Book a Session",
   ctaLink = "/services",
   backgroundMediaUrl,
@@ -50,20 +50,30 @@ export function HeroSection({
           {subtitle}
         </p>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           <Link
             href={ctaLink}
-            className="bg-[#f5f5f0] text-[#000000] border border-[#f5f5f0] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#000000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200"
+            className="w-full sm:w-auto bg-[#f5f5f0] text-[#000] border border-[#f5f5f0] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
           >
             {ctaText}
           </Link>
           <Link
             href="/beats"
-            className="bg-[#111111] text-[#f5f5f0] border border-[#222222] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#1a1a1a] hover:border-[#444444] transition-colors duration-200"
+            className="w-full sm:w-auto bg-transparent text-[#f5f5f0] border border-[#444] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
           >
             Browse Beats
           </Link>
+          <Link
+            href="/portfolio"
+            className="w-full sm:w-auto bg-transparent text-[#f5f5f0] border border-[#444] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+          >
+            View Portfolio
+          </Link>
         </div>
+
+        <p className="font-mono text-xs text-[#555] uppercase tracking-[0.1em]">
+          Music &amp; Video Production Studio
+        </p>
       </motion.div>
     </section>
   )
