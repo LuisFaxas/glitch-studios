@@ -1,87 +1,98 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
+import { useState, useEffect, useCallback } from "react"
+import { motion, useReducedMotion } from "motion/react"
 import logoStyles from "@/components/tiles/logo-tile.module.css"
 import splashStyles from "./splash-overlay.module.css"
 
 export function SplashOverlay({ children }: { children: React.ReactNode }) {
-  const [showSplash, setShowSplash] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  // Start with splash pending — decide in useEffect (avoids SSR mismatch)
+  const [splashState, setSplashState] = useState<"pending" | "playing" | "exiting" | "done">("pending")
   const shouldReduceMotion = useReducedMotion()
 
   useEffect(() => {
-    setMounted(true)
-
-    // Skip splash entirely for reduced motion users
     if (shouldReduceMotion) {
       sessionStorage.setItem("glitch-splash-seen", "true")
+      setSplashState("done")
       return
     }
 
     const seen = sessionStorage.getItem("glitch-splash-seen")
-    if (!seen) {
-      setShowSplash(true)
+    if (seen) {
+      setSplashState("done")
+    } else {
+      setSplashState("playing")
       document.body.style.overflow = "hidden"
     }
 
-    // Cleanup: restore scroll if component unmounts during splash
     return () => {
       document.body.style.overflow = ""
     }
   }, [shouldReduceMotion])
 
-  const handleSplashComplete = () => {
+  const handleLogoAnimationComplete = useCallback(() => {
+    setTimeout(() => {
+      setSplashState("exiting")
+    }, 500)
+  }, [])
+
+  const handleExitComplete = useCallback(() => {
     sessionStorage.setItem("glitch-splash-seen", "true")
     document.body.style.overflow = ""
-    setShowSplash(false)
+    setSplashState("done")
+  }, [])
+
+  // SSR and pre-hydration: render children behind a black screen
+  // so there's no flash of content before splash plays
+  if (splashState === "pending") {
+    return (
+      <>
+        <div className="fixed inset-0 z-50 bg-black" />
+        {children}
+      </>
+    )
   }
 
-  // On server or before hydration, render children only
-  if (!mounted) return <>{children}</>
-
-  return (
-    <>
-      <AnimatePresence onExitComplete={handleSplashComplete}>
-        {showSplash && (
+  // Splash is playing or exiting
+  if (splashState === "playing" || splashState === "exiting") {
+    return (
+      <>
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black"
+          animate={{ opacity: splashState === "exiting" ? 0 : 1 }}
+          transition={{ duration: 0.5 }}
+          onAnimationComplete={() => {
+            if (splashState === "exiting") handleExitComplete()
+          }}
+        >
           <motion.div
-            key="splash"
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
+            className="w-[80vw] max-w-[600px]"
+            initial={{ opacity: 0, scale: 1.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 1.2,
+              ease: [0.215, 0.61, 0.355, 1],
+            }}
+            onAnimationComplete={handleLogoAnimationComplete}
           >
-            <motion.div
-              className="w-[80vw] max-w-[600px]"
-              initial={{ opacity: 0, scale: 1.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 1.2,
-                ease: [0.215, 0.61, 0.355, 1],
-              }}
-              onAnimationComplete={() => {
-                // Hold for 0.5s then trigger exit
-                setTimeout(() => {
-                  setShowSplash(false)
-                }, 500)
-              }}
-            >
-              <div className={logoStyles.glitchWrapper}>
-                <div className={logoStyles.glitchImg} />
-                <div
-                  className={`${logoStyles.glitchLayer1} ${splashStyles.splashGlitchLayer1}`}
-                  aria-hidden="true"
-                />
-                <div
-                  className={`${logoStyles.glitchLayer2} ${splashStyles.splashGlitchLayer2}`}
-                  aria-hidden="true"
-                />
-              </div>
-            </motion.div>
+            <div className={logoStyles.glitchWrapper}>
+              <div className={logoStyles.glitchImg} />
+              <div
+                className={`${logoStyles.glitchLayer1} ${splashStyles.splashGlitchLayer1}`}
+                aria-hidden="true"
+              />
+              <div
+                className={`${logoStyles.glitchLayer2} ${splashStyles.splashGlitchLayer2}`}
+                aria-hidden="true"
+              />
+            </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-      {children}
-    </>
-  )
+        </motion.div>
+        {children}
+      </>
+    )
+  }
+
+  // Done — just render children
+  return <>{children}</>
 }
