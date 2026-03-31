@@ -13,7 +13,7 @@ export default function PublicLayout({
     <HomepageSidebarController>
       <div className="flex min-h-screen">
         <TileNav latestPostSlot={<WidgetLatestPost />} />
-        <main className="page-content flex-1 min-h-screen pb-16 md:pb-0">
+        <main className="page-content flex-1 min-w-0 min-h-screen overflow-x-hidden pb-16 md:pb-0">
           {children}
           <Footer />
         </main>
