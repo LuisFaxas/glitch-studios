@@ -57,9 +57,26 @@ export function WidgetNowPlaying() {
   }
 
   return (
-    <Tile size="wide" className="gap-1 !p-0 overflow-hidden">
-      {/* Row 1: Cover art + track info + time + play/pause */}
-      <div className="flex items-start gap-2 w-full px-3 pt-3">
+    <Tile size="wide" className="relative gap-1 !p-0 overflow-hidden">
+      {/* Background waveform — fills entire tile */}
+      <div className="absolute inset-0 z-0">
+        <Waveform
+          peaks={currentBeat.waveformPeaks}
+          progress={progress}
+          height={200}
+          barRadius={1}
+          mirrored
+          mirrorOpacity={0.3}
+          gradient
+          gradientColors={{ from: "rgba(245,245,240,0.25)", to: "rgba(136,136,136,0.1)" }}
+          gradientWaveColors={{ from: "rgba(85,85,85,0.2)", to: "rgba(51,51,51,0.08)" }}
+          interactive
+          onSeek={handleSeek}
+        />
+      </div>
+
+      {/* Foreground content — overlays waveform */}
+      <div className="relative z-10 flex items-start gap-2 w-full px-3 pt-3">
         {/* Cover art 40x40 */}
         <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden">
           {currentBeat.coverArtUrl ? (
@@ -107,21 +124,8 @@ export function WidgetNowPlaying() {
         </div>
       </div>
 
-      {/* Row 2: Waveform - full width, interactive, mirrored */}
-      <div className="px-3 pb-3">
-        <Waveform
-          peaks={currentBeat.waveformPeaks}
-          progress={progress}
-          height={40}
-          barRadius={1}
-          mirrored
-          mirrorOpacity={0.3}
-          gradient
-          gradientColors={{ from: "#f5f5f0", to: "#888888" }}
-          interactive
-          onSeek={handleSeek}
-        />
-      </div>
+      {/* Spacer to maintain tile height for waveform background */}
+      <div className="relative z-10 px-3 pb-3" />
     </Tile>
   )
 }
