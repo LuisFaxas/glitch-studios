@@ -225,7 +225,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 07.1-01-PLAN.md -- Data layer (schema, types, peaks utility, seed) + reusable Waveform canvas component
+- [x] 07.1-01-PLAN.md -- Data layer (schema, types, peaks utility, seed) + reusable Waveform canvas component
 - [ ] 07.1-02-PLAN.md -- Beat card, list row, and sidebar widget waveform integration
 - [ ] 07.1-03-PLAN.md -- Player bar enhancements (desktop time display + mobile waveform)
 
