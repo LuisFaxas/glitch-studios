@@ -9,6 +9,13 @@ import { BeatDetailPanel } from "@/components/beats/beat-detail-panel"
 import { Badge } from "@/components/ui/badge"
 import type { BeatSummary } from "@/types/beats"
 
+function formatTime(seconds: number): string {
+  if (!seconds || !isFinite(seconds)) return "0:00"
+  const m = Math.floor(seconds / 60)
+  const s = Math.floor(seconds % 60)
+  return `${m}:${s.toString().padStart(2, "0")}`
+}
+
 interface BeatRowProps {
   beat: BeatSummary
   isExpanded: boolean
@@ -16,7 +23,7 @@ interface BeatRowProps {
 }
 
 export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
-  const { currentBeat, isPlaying, currentTime, duration, play, pause } = useAudioPlayer()
+  const { currentBeat, isPlaying, currentTime, duration, play, pause, seek } = useAudioPlayer()
   const isCurrentBeat = currentBeat?.id === beat.id
   const isActivePlaying = isCurrentBeat && isPlaying
   const progress = isCurrentBeat && duration > 0 ? currentTime / duration : 0
@@ -42,6 +49,24 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
       })
     }
   }
+
+  function handleRowSeek(p: number) {
+    if (isCurrentBeat && duration > 0) {
+      seek(p * duration)
+    } else if (beat.previewAudioUrl) {
+      // Start playback for this beat (seek on fresh load isn't reliable)
+      play({
+        id: beat.id,
+        title: beat.title,
+        artist: beat.producers[0]?.name ?? "Glitch Studios",
+        previewAudioUrl: beat.previewAudioUrl,
+        coverArtUrl: beat.coverArtUrl,
+        waveformPeaks: beat.waveformPeaks,
+      })
+    }
+  }
+
+  const durationDisplay = isCurrentBeat && duration > 0 ? formatTime(duration) : "--:--"
 
   return (
     <div>
@@ -106,16 +131,22 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
           </div>
         </div>
 
-        {/* Waveform strip - visual only, no scrubbing per D-08 */}
+        {/* Waveform strip - interactive, click to seek/play */}
         <div className="hidden min-w-0 flex-1 items-center md:flex">
           <Waveform
             peaks={beat.waveformPeaks}
             progress={progress}
             height={32}
             barRadius={1}
-            interactive={false}
+            interactive
+            onSeek={handleRowSeek}
           />
         </div>
+
+        {/* Duration display */}
+        <span className="hidden md:block shrink-0 font-mono text-[11px] text-[#888] min-w-[36px] text-right">
+          {durationDisplay}
+        </span>
 
         {/* BPM/Key badges - hidden on mobile */}
         <div className="hidden gap-2 md:flex">

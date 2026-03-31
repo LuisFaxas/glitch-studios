@@ -50,21 +50,11 @@ export function PlayerBar() {
       wavesurferRef.current = null
     }
 
-    // Create gradients for premium waveform rendering
-    const offscreen = document.createElement("canvas").getContext("2d")!
-    const progressGrad = offscreen.createLinearGradient(0, 0, 0, 48)
-    progressGrad.addColorStop(0, "#f5f5f0")
-    progressGrad.addColorStop(0.7, "#a0a09a")
-    progressGrad.addColorStop(1, "#666660")
-
-    const waveGrad = offscreen.createLinearGradient(0, 0, 0, 48)
-    waveGrad.addColorStop(0, "#555555")
-    waveGrad.addColorStop(1, "#333333")
-
     const ws = WaveSurfer.create({
       container: waveformRef.current,
-      waveColor: waveGrad,
-      progressColor: progressGrad,
+      // Use flat colors initially; gradient applied after canvas is ready
+      waveColor: "#444444",
+      progressColor: "#f5f5f0",
       height: 48,
       barWidth: 3,
       barGap: 1,
@@ -82,6 +72,27 @@ export function PlayerBar() {
           labelBackground: "#1a1a1a",
         }),
       ],
+    })
+
+    // Apply gradients from WaveSurfer's own canvas context
+    ws.on("ready", () => {
+      const wrapper = ws.getWrapper()
+      const canvas = wrapper?.querySelector("canvas")
+      if (canvas) {
+        const ctx = canvas.getContext("2d")
+        if (ctx) {
+          const pGrad = ctx.createLinearGradient(0, 0, 0, 48)
+          pGrad.addColorStop(0, "#f5f5f0")
+          pGrad.addColorStop(0.7, "#a0a09a")
+          pGrad.addColorStop(1, "#666660")
+
+          const wGrad = ctx.createLinearGradient(0, 0, 0, 48)
+          wGrad.addColorStop(0, "#555555")
+          wGrad.addColorStop(1, "#333333")
+
+          ws.setOptions({ waveColor: wGrad, progressColor: pGrad })
+        }
+      }
     })
 
     wavesurferRef.current = ws
