@@ -90,8 +90,14 @@ None yet.
 - Phase 4.1 Plan 03 (smoke test) still marked incomplete from v1 -- site may have untested routes
 - Social icons need brand SVGs or react-icons (Lucide dropped brand icons in v1.6+)
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260331-2ug | Waveform polish pass — full-bleed sidebar widget, player bar gradient fix, list row interactivity + duration | 2026-03-31 | 285e935 | [260331-2ug-waveform-polish-pass](./quick/260331-2ug-waveform-polish-pass/) |
+
 ## Session Continuity
 
-Last session: 2026-03-31T05:05:27.925Z
-Stopped at: Completed 07.1-02-PLAN.md
+Last session: 2026-03-31T06:02:57.889Z
+Stopped at: Completed quick task 260331-2ug: waveform polish pass
 Resume file: None
