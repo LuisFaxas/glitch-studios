@@ -63,7 +63,17 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
         <div className="h-full" ref={emblaRef}>
           <div className="flex h-full">
             {/* Slide 1 - Bundle Promo */}
-            <div className="h-full w-full flex-shrink-0 bg-gradient-to-r from-[#0a0a0a] to-[#151515]">
+            <div
+              className="h-full w-full flex-shrink-0"
+              style={{
+                background: `
+                  radial-gradient(ellipse at 70% 50%, rgba(0,255,65,0.08) 0%, transparent 60%),
+                  repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,255,65,0.03) 3px, rgba(0,255,65,0.03) 4px),
+                  repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(0,255,65,0.02) 8px, rgba(0,255,65,0.02) 9px),
+                  linear-gradient(to right, #0a0a0a 0%, #0a0f0a 50%, #0a0a0a 100%)
+                `,
+              }}
+            >
               <div className="flex h-full flex-col justify-center px-6 md:px-10">
                 {bundles.length > 0 ? (
                   <>
@@ -105,7 +115,17 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
             </div>
 
             {/* Slide 2 - Licensing Pitch */}
-            <div className="h-full w-full flex-shrink-0 bg-gradient-to-r from-[#0a0a0a] via-[#0d0a14] to-[#0a0a0a]">
+            <div
+              className="h-full w-full flex-shrink-0"
+              style={{
+                background: `
+                  radial-gradient(ellipse at 70% 50%, rgba(139,92,246,0.08) 0%, transparent 60%),
+                  repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(139,92,246,0.03) 3px, rgba(139,92,246,0.03) 4px),
+                  repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(139,92,246,0.02) 8px, rgba(139,92,246,0.02) 9px),
+                  linear-gradient(to right, #0a0a0a 0%, #0d0a14 50%, #0a0a0a 100%)
+                `,
+              }}
+            >
               <div className="flex h-full flex-col justify-center px-6 md:px-10">
                 <h2 className="font-mono text-[24px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-[28px]">
                   License Beats from $29
@@ -127,7 +147,17 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
             </div>
 
             {/* Slide 3 - Studio Booking CTA */}
-            <div className="h-full w-full flex-shrink-0 bg-gradient-to-r from-[#0a0a0a] via-[#140d0a] to-[#0a0a0a]">
+            <div
+              className="h-full w-full flex-shrink-0"
+              style={{
+                background: `
+                  radial-gradient(ellipse at 70% 50%, rgba(245,158,11,0.08) 0%, transparent 60%),
+                  repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(245,158,11,0.03) 3px, rgba(245,158,11,0.03) 4px),
+                  repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(245,158,11,0.02) 8px, rgba(245,158,11,0.02) 9px),
+                  linear-gradient(to right, #0a0a0a 0%, #140d0a 50%, #0a0a0a 100%)
+                `,
+              }}
+            >
               <div className="flex h-full flex-col justify-center px-6 md:px-10">
                 <h2 className="font-mono text-[24px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-[28px]">
                   Book a Session at Glitch
