@@ -205,7 +205,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 07-01-PLAN.md -- New components: beat card, card grid, view toggle, unified filter bar
+- [x] 07-01-PLAN.md -- New components: beat card, card grid, view toggle, unified filter bar
 - [ ] 07-02-PLAN.md -- Wire catalog with view toggle, redesign list rows and page layout
 - [ ] 07-03-PLAN.md -- Real beat upload, Playwright visual verification, user approval
 

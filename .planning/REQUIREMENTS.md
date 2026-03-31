@@ -98,9 +98,9 @@ Sequential page-by-page quality overhaul. No new backend features -- purely UX/U
 
 ### Beats Catalog
 
-- [ ] **BEATS-01**: Beat catalog has industry-standard layout with prominent cover art on each beat card
-- [ ] **BEATS-02**: Search and filter controls are grouped and intuitive, not scattered across the page
-- [ ] **BEATS-03**: Mood tags are organized and visually clean, not chaotic
+- [x] **BEATS-01**: Beat catalog has industry-standard layout with prominent cover art on each beat card
+- [x] **BEATS-02**: Search and filter controls are grouped and intuitive, not scattered across the page
+- [x] **BEATS-03**: Mood tags are organized and visually clean, not chaotic
 
 ### Auth & Navigation
 
@@ -249,9 +249,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HOME-01 | Phase 6 | Complete |
 | HOME-02 | Phase 6 | Complete |
 | HOME-03 | Phase 6 | Complete |
-| BEATS-01 | Phase 7 | Pending |
-| BEATS-02 | Phase 7 | Pending |
-| BEATS-03 | Phase 7 | Pending |
+| BEATS-01 | Phase 7 | Complete |
+| BEATS-02 | Phase 7 | Complete |
+| BEATS-03 | Phase 7 | Complete |
 | NAV-01 | Phase 8 | Pending |
 | NAV-02 | Phase 8 | Pending |
 | NAV-03 | Phase 8 | Pending |
