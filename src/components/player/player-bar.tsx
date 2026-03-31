@@ -11,6 +11,7 @@ import {
 } from "lucide-react"
 import WaveSurfer from "wavesurfer.js"
 import { useAudioPlayer } from "@/components/player/audio-player-provider"
+import { Waveform } from "@/components/player/waveform"
 import { Slider } from "@/components/ui/slider"
 
 function formatTime(seconds: number): string {
@@ -88,8 +89,12 @@ export function PlayerBar() {
     setIsMuted((prev) => !prev)
   }, [])
 
-  // Progress for mobile bar
-  const progress = duration > 0 ? (currentTime / duration) * 100 : 0
+  // Progress for mobile waveform (0-1)
+  const mobileProgress = duration > 0 ? currentTime / duration : 0
+
+  function handleMobileSeek(p: number) {
+    if (duration > 0) seek(p * duration)
+  }
 
   const shouldShow = currentBeat && !isMinimized
 
@@ -128,6 +133,11 @@ export function PlayerBar() {
 
             {/* WaveSurfer waveform */}
             <div ref={waveformRef} className="flex-1 min-w-0" />
+
+            {/* Time display */}
+            <span className="flex-shrink-0 min-w-[80px] text-right font-mono text-[13px] font-normal text-[#888888]">
+              {formatTime(currentTime)} / {formatTime(duration)}
+            </span>
 
             {/* Play/Pause */}
             <button
@@ -185,48 +195,60 @@ export function PlayerBar() {
           </div>
 
           {/* Mobile layout */}
-          <div className="flex md:hidden items-center h-full px-3 gap-3">
-            {/* Cover art */}
-            {currentBeat.coverArtUrl ? (
-              <img
-                src={currentBeat.coverArtUrl}
-                alt={`${currentBeat.title} cover`}
-                className="h-10 w-10 rounded-none object-cover flex-shrink-0"
-              />
-            ) : (
-              <div className="h-10 w-10 rounded-none bg-[#222222] flex-shrink-0" />
-            )}
-
-            {/* Track info */}
-            <div className="flex flex-col min-w-0 flex-1">
-              <span className="font-mono text-[13px] font-bold text-[#f5f5f0] truncate">
-                {currentBeat.title}
-              </span>
-              <span className="font-sans text-[10px] font-normal text-[#888888] truncate">
-                {currentBeat.artist}
-              </span>
-              {/* Mobile progress bar */}
-              <div className="w-full h-[2px] bg-[#333333] mt-1">
-                <div
-                  className="h-full bg-[#f5f5f0] transition-[width] duration-200"
-                  style={{ width: `${progress}%` }}
+          <div className="flex flex-col md:hidden h-full">
+            {/* Row 1: Cover art, track info + time, play/pause */}
+            <div className="flex items-center px-3 gap-3" style={{ height: "36px" }}>
+              {/* Cover art */}
+              {currentBeat.coverArtUrl ? (
+                <img
+                  src={currentBeat.coverArtUrl}
+                  alt={`${currentBeat.title} cover`}
+                  className="h-10 w-10 rounded-none object-cover flex-shrink-0"
                 />
+              ) : (
+                <div className="h-10 w-10 rounded-none bg-[#222222] flex-shrink-0" />
+              )}
+
+              {/* Track info */}
+              <div className="flex flex-col min-w-0 flex-1">
+                <div className="flex items-baseline justify-between gap-1">
+                  <span className="font-mono text-[13px] font-bold text-[#f5f5f0] truncate">
+                    {currentBeat.title}
+                  </span>
+                  <span className="font-mono text-[11px] font-normal text-[#888888] flex-shrink-0">
+                    {formatTime(currentTime)}/{formatTime(duration)}
+                  </span>
+                </div>
+                <span className="font-sans text-[10px] font-normal text-[#888888] truncate">
+                  {currentBeat.artist}
+                </span>
               </div>
+
+              {/* Play/Pause */}
+              <button
+                type="button"
+                onClick={toggle}
+                aria-label={isPlaying ? "Pause" : "Play"}
+                className="flex-shrink-0 p-2 text-[#f5f5f0] hover:text-white transition-colors"
+              >
+                {isPlaying ? (
+                  <Pause className="h-5 w-5" />
+                ) : (
+                  <Play className="h-5 w-5" />
+                )}
+              </button>
             </div>
 
-            {/* Play/Pause */}
-            <button
-              type="button"
-              onClick={toggle}
-              aria-label={isPlaying ? "Pause" : "Play"}
-              className="flex-shrink-0 p-2 text-[#f5f5f0] hover:text-white transition-colors"
-            >
-              {isPlaying ? (
-                <Pause className="h-5 w-5" />
-              ) : (
-                <Play className="h-5 w-5" />
-              )}
-            </button>
+            {/* Row 2: Waveform strip - full width with 44px touch zone */}
+            <div className="px-3 py-[10px]">
+              <Waveform
+                peaks={currentBeat.waveformPeaks}
+                progress={mobileProgress}
+                height={24}
+                interactive
+                onSeek={handleMobileSeek}
+              />
+            </div>
           </div>
         </motion.div>
       )}
