@@ -202,8 +202,12 @@ Plans:
   2. Search bar, genre filter, mood filter, BPM range, and key filter are grouped in a single cohesive filter bar -- not scattered across the page
   3. Mood tags on beat cards are organized in a clean, scannable layout (pills or chips) with no visual chaos
   4. Beats page renders correctly on mobile with no horizontal overflow or cramped controls
-**Plans**: TBD
-**UI hint**: yes
+**Plans**: 3 plans
+
+Plans:
+- [ ] 07-01-PLAN.md -- New components: beat card, card grid, view toggle, unified filter bar
+- [ ] 07-02-PLAN.md -- Wire catalog with view toggle, redesign list rows and page layout
+- [ ] 07-03-PLAN.md -- Real beat upload, Playwright visual verification, user approval
 
 ### Phase 8: Auth & Navigation
 **Goal**: Users can find their account, log in, and land in the right place based on their role -- admin or client
@@ -308,7 +312,7 @@ v2.0: 5 -> 6 -> 6.1 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
 | 5. Admin Dashboard UX | v2.0 | 0/1 | In progress | - |
 | 6. Homepage | v2.0 | 0/2 | Not started | - |
 | 6.1 Homepage Flair | v2.0 | 0/2 | Not started | - |
-| 7. Beats Catalog | v2.0 | 0/0 | Not started | - |
+| 7. Beats Catalog | v2.0 | 0/3 | Not started | - |
 | 8. Auth & Navigation | v2.0 | 0/0 | Not started | - |
 | 9. Services & Booking | v2.0 | 0/0 | Not started | - |
 | 10. Blog | v2.0 | 0/0 | Not started | - |
