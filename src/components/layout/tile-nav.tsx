@@ -90,11 +90,8 @@ export function TileNav({ latestPostSlot }: TileNavProps) {
             <ShoppingCart className="h-5 w-5" />
           </div>
 
-          {/* Spacer */}
-          <div className="flex-1" />
-
-          {/* Auth icon */}
-          <div className="mt-2 w-full">
+          {/* Auth icon — right under cart */}
+          <div className="mt-1 w-full">
             {session?.user ? (
               <button
                 type="button"
@@ -118,6 +115,9 @@ export function TileNav({ latestPostSlot }: TileNavProps) {
               </Link>
             )}
           </div>
+
+          {/* Spacer */}
+          <div className="flex-1" />
 
           {/* Expand button */}
           <button
@@ -161,6 +161,32 @@ export function TileNav({ latestPostSlot }: TileNavProps) {
             <CartIcon />
           </div>
 
+          {/* Auth — same width as cart */}
+          <div className="mt-1">
+            {session?.user ? (
+              <button
+                type="button"
+                onClick={async () => {
+                  await signOut()
+                  router.push("/")
+                  router.refresh()
+                }}
+                className="flex w-full items-center justify-center gap-2 border border-[#222222] bg-[#111111] py-2 text-[#f5f5f0] hover:bg-[#1a1a1a] transition-colors duration-200"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="font-mono text-[11px] font-bold uppercase tracking-[0.05em]">Sign Out</span>
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                className="flex w-full items-center justify-center gap-2 border border-[#222222] bg-[#111111] py-2 text-[#f5f5f0] hover:bg-[#1a1a1a] transition-colors duration-200"
+              >
+                <LogIn className="h-4 w-4" />
+                <span className="font-mono text-[11px] font-bold uppercase tracking-[0.05em]">Sign In</span>
+              </Link>
+            )}
+          </div>
+
           {/* Separator */}
           <div className="border-t border-[#222222] my-4" />
 
@@ -170,31 +196,6 @@ export function TileNav({ latestPostSlot }: TileNavProps) {
             <WidgetStudioStatus />
             {latestPostSlot}
             <WidgetSocial />
-          </div>
-
-          {/* Auth section */}
-          <div className="mt-4">
-            {session?.user ? (
-              <Tile
-                size="wide"
-                label="Sign Out"
-                icon={<LogOut className="h-5 w-5" />}
-                onClick={async () => {
-                  await signOut()
-                  router.push("/")
-                  router.refresh()
-                }}
-                layout="horizontal"
-              />
-            ) : (
-              <Tile
-                size="wide"
-                label="Sign In"
-                icon={<LogIn className="h-5 w-5" />}
-                href="/login"
-                layout="horizontal"
-              />
-            )}
           </div>
 
           {/* Scroll hint gradient */}

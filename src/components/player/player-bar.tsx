@@ -6,6 +6,7 @@ import {
   Play,
   Pause,
   Minimize2,
+  Maximize2,
   Volume2,
   VolumeX,
 } from "lucide-react"
@@ -64,9 +65,32 @@ export function PlayerBar() {
   }
 
   const shouldShow = currentBeat && !isMinimized
+  const showMinimizedBar = currentBeat && isMinimized
 
   return (
-    <AnimatePresence>
+    <>
+      {/* Minimized restore bar */}
+      <AnimatePresence>
+        {showMinimizedBar && (
+          <motion.button
+            type="button"
+            initial={{ y: 32 }}
+            animate={{ y: 0 }}
+            exit={{ y: 32 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            onClick={() => setMinimized(false)}
+            className="fixed left-0 right-0 z-40 flex items-center justify-center gap-2 h-8 bg-[#111111] border-t border-[#222222] bottom-[var(--tab-bar-height,0px)] md:bottom-0 cursor-pointer hover:bg-[#1a1a1a] transition-colors"
+          >
+            <Maximize2 className="h-3 w-3 text-[#888888]" />
+            <span className="font-mono text-[11px] text-[#888888] truncate max-w-[200px]">
+              {currentBeat.title} — {currentBeat.artist}
+            </span>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Full player bar */}
+      <AnimatePresence>
       {shouldShow && (
         <motion.div
           initial={{ y: 72 }}
@@ -237,5 +261,6 @@ export function PlayerBar() {
         </motion.div>
       )}
     </AnimatePresence>
+    </>
   )
 }
