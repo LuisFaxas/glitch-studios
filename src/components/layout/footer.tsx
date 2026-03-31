@@ -1,7 +1,12 @@
 import Link from "next/link"
-import { Camera, Video, Headphones } from "lucide-react"
 import styles from "@/components/tiles/logo-tile.module.css"
 import { NewsletterForm } from "@/components/forms/newsletter-form"
+import {
+  InstagramIcon,
+  YouTubeIcon,
+  SoundCloudIcon,
+  XIcon,
+} from "@/components/icons/social-icons"
 
 const navLinks = [
   { label: "Services", href: "/services" },
@@ -11,9 +16,10 @@ const navLinks = [
 ]
 
 const socialLinks = [
-  { label: "Instagram", href: "https://instagram.com", icon: Camera },
-  { label: "YouTube", href: "https://youtube.com", icon: Video },
-  { label: "SoundCloud", href: "https://soundcloud.com", icon: Headphones },
+  { label: "Instagram", href: "https://instagram.com/glitchstudios", icon: InstagramIcon },
+  { label: "YouTube", href: "https://youtube.com/@glitchstudios", icon: YouTubeIcon },
+  { label: "SoundCloud", href: "https://soundcloud.com/glitchstudios", icon: SoundCloudIcon },
+  { label: "X", href: "https://x.com/glitchstudios", icon: XIcon },
 ]
 
 export function Footer() {

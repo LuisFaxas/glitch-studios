@@ -1,36 +1,36 @@
 "use client"
 
-import { Camera, Video, Headphones, AtSign } from "lucide-react"
 import { Tile } from "@/components/tiles/tile"
+import {
+  InstagramIcon,
+  YouTubeIcon,
+  SoundCloudIcon,
+  XIcon,
+} from "@/components/icons/social-icons"
 
 const socialLinks = [
   {
     label: "Instagram",
-    icon: Camera,
+    icon: InstagramIcon,
     href: "https://instagram.com/glitchstudios",
   },
   {
     label: "YouTube",
-    icon: Video,
+    icon: YouTubeIcon,
     href: "https://youtube.com/@glitchstudios",
   },
   {
     label: "SoundCloud",
-    icon: Headphones,
+    icon: SoundCloudIcon,
     href: "https://soundcloud.com/glitchstudios",
   },
   {
     label: "X",
-    icon: AtSign,
+    icon: XIcon,
     href: "https://x.com/glitchstudios",
   },
 ] as const
 
-/**
- * Social Links widget -- 4 small tiles in a row (D-08).
- * Each tile has an independent glitch-hover animation.
- * Lucide v1.6+ removed brand icons, so we use generic equivalents.
- */
 export function WidgetSocial() {
   return (
     <div className="col-span-2 flex gap-1">
