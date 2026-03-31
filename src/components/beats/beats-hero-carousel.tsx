@@ -79,11 +79,11 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
         <div className="h-full" ref={emblaRef}>
           <div className="flex h-full">
             {/* Slide 1 - Bundle Promo */}
-            <div className="relative h-full w-full flex-shrink-0 overflow-hidden">
+            <div className="relative h-full w-full flex-shrink-0 overflow-hidden will-change-transform">
               <div className="absolute inset-0">
                 <FaultyTerminal
                   tint={SLIDE_TINTS[0]}
-                  pause={isMobile || selectedIndex !== 0}
+                  pause={isMobile}
                   brightness={0.4}
                   glitchAmount={0.5}
                   dpr={1}
@@ -133,11 +133,11 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
             </div>
 
             {/* Slide 2 - Licensing Pitch */}
-            <div className="relative h-full w-full flex-shrink-0 overflow-hidden">
+            <div className="relative h-full w-full flex-shrink-0 overflow-hidden will-change-transform">
               <div className="absolute inset-0">
                 <FaultyTerminal
                   tint={SLIDE_TINTS[1]}
-                  pause={isMobile || selectedIndex !== 1}
+                  pause={isMobile}
                   brightness={0.4}
                   glitchAmount={0.5}
                   dpr={1}
@@ -167,11 +167,11 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
             </div>
 
             {/* Slide 3 - Studio Booking CTA */}
-            <div className="relative h-full w-full flex-shrink-0 overflow-hidden">
+            <div className="relative h-full w-full flex-shrink-0 overflow-hidden will-change-transform">
               <div className="absolute inset-0">
                 <FaultyTerminal
                   tint={SLIDE_TINTS[2]}
-                  pause={isMobile || selectedIndex !== 2}
+                  pause={isMobile}
                   brightness={0.4}
                   glitchAmount={0.5}
                   dpr={1}
