@@ -95,9 +95,10 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260331-2ug | Waveform polish pass — full-bleed sidebar widget, player bar gradient fix, list row interactivity + duration | 2026-03-31 | 285e935 | [260331-2ug-waveform-polish-pass](./quick/260331-2ug-waveform-polish-pass/) |
+| 260331-3xw | Player bar restore button + auth button under cart | 2026-03-31 | cdcb6d6 | [260331-3xw-player-bar-restore-auth-relocation](./quick/260331-3xw-player-bar-restore-auth-relocation/) |
 
 ## Session Continuity
 
-Last session: 2026-03-31T06:02:57.889Z
-Stopped at: Completed quick task 260331-2ug: waveform polish pass
+Last session: 2026-03-31T06:50:17.721Z
+Stopped at: Completed quick task 260331-3xw: player bar restore + auth relocation
 Resume file: None
