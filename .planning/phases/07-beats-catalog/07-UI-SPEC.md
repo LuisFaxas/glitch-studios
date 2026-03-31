@@ -41,7 +41,7 @@ Declared values (must be multiples of 4):
 | 3xl | 64px | Not used in this phase |
 
 Exceptions:
-- Tile grid gap: 2-4px (per Cyberpunk Metro spec, tiles almost touch)
+- Tile grid gap: 4px (per Cyberpunk Metro spec, tiles almost touch)
 - Card grid gap in card view: 8px (slightly looser than tile grid to let cover art breathe)
 - Touch targets: minimum 44px height on all interactive elements (play buttons, filter chips, view toggle)
 
@@ -49,13 +49,15 @@ Exceptions:
 
 ## Typography
 
+4 declared sizes: 40px, 22px, 15px, 11px.
+
 | Role | Size | Weight | Line Height | Font |
 |------|------|--------|-------------|------|
 | Page title | 40px | 700 | 1.1 | JetBrains Mono, uppercase |
 | Section heading | 22px | 700 | 1.2 | JetBrains Mono, uppercase |
 | Beat title (card) | 15px | 700 | 1.3 | JetBrains Mono, normal case |
 | Beat title (list) | 15px | 700 | 1.3 | JetBrains Mono, normal case |
-| Producer name | 13px | 400 | 1.4 | Inter |
+| Producer name | 11px | 400 | 1.4 | Inter |
 | Metadata (BPM, key, genre) | 11px | 400 | 1.4 | JetBrains Mono, uppercase |
 | Price | 15px | 700 | 1.0 | JetBrains Mono |
 | Filter chip label | 11px | 400 | 1.0 | JetBrains Mono, uppercase |
@@ -87,6 +89,12 @@ Accent reserved for: There is no accent color. The design system is strictly mon
 | Selected filter | #f5f5f0 | #f5f5f0 | #000 |
 | Pressed | #0a0a0a | -- | -- (scale 0.97) |
 | Disabled | #111 | #222 | #555 at 40% opacity |
+
+---
+
+## Focal Point
+
+The primary visual anchor is the beat card grid (card view) or the first visible beat row (list view). The page title "BEATS" and filter bar are utility-level elements that frame the content -- the beats themselves are always the focal point. Cover art at 1:1 aspect ratio in card view ensures strong visual weight.
 
 ---
 
@@ -161,8 +169,9 @@ Mobile (<768px): 1-column grid, 8px gap
 - Cover art: `aspect-ratio: 1/1`, `object-fit: cover`, no border-radius
 - Fallback (no art): #222 background with centered Music icon (24px, #555)
 - Play overlay: appears on hover, 48x48px play button centered on art, white icon on `rgba(0,0,0,0.6)` backdrop
+- Play button: `aria-label="Play {beat title}"` (or "Pause {beat title}" when playing)
 - Title: 15px JetBrains Mono bold, truncate to 1 line
-- Producer: 13px Inter, #888, truncate to 1 line
+- Producer: 11px Inter, #888, truncate to 1 line
 - Metadata badges: 11px JetBrains Mono uppercase, #f5f5f0 on #222 background, #333 border, inline-flex with 4px gap
 - Mood tags: 11px Inter, #888 text, no background, comma-separated or as subtle pills
 - Price: 15px JetBrains Mono bold, right-aligned on title row, prefixed with "FROM"
@@ -195,23 +204,23 @@ Mobile: Condensed rows, hide BPM/Key badges
 - Row background: #111, hover #1a1a1a
 - Row border-bottom: 1px solid #222, hover #444
 - Active playing indicator: 2px solid #f5f5f0 left border accent bar
-- Play button: 36x36px, border 1px #333, hover invert (white bg, black icon)
+- Play button: 36x36px, border 1px #333, hover invert (white bg, black icon), `aria-label="Play {beat title}"`
 
 ### Filter Bar
 
 ```
-+--[SEARCH INPUT]--[GENRE v]--[KEY v]--[MOOD v]--[BPM 60-200 ====]--[CLEAR]--[GRID|LIST]--+
++--[SEARCH INPUT]--[GENRE v]--[KEY v]--[MOOD v]--[BPM 60-200 ====]--[CLEAR FILTERS]--[GRID|LIST]--+
 ```
 
 - Single horizontal row, flex layout, items-center
 - Search input: flex-1 with min-width 200px, leading search icon (16px), placeholder "Search beats..."
 - Genre/Key/Mood: shadcn Select components, compact trigger width (auto based on content), #111 background, #222 border
 - BPM: inline label "BPM" + dual-thumb Slider, 120px wide
-- Clear button: text-only "CLEAR" in 11px JetBrains Mono, #888 text, visible only when filters active
-- View toggle: two icon buttons (LayoutGrid + List icons from Lucide), 36x36px each, selected state inverted
+- Clear button: text-only "CLEAR FILTERS" in 11px JetBrains Mono, #888 text, visible only when filters active
+- View toggle: two icon buttons (LayoutGrid + List icons from Lucide), 36x36px each, selected state inverted, `aria-label="Card view"` and `aria-label="List view"` respectively
 - Background: #0a0a0a
 - Border: 1px solid #222
-- Padding: 12px 16px
+- Padding: 8px 16px
 - Mobile: wraps to 2 rows. Row 1: search (full width). Row 2: horizontal scroll of filter controls + view toggle.
 - Sticky: `position: sticky; top: 0; z-index: 10` so filter bar stays visible during scroll
 
@@ -230,6 +239,7 @@ Mobile: Condensed rows, hide BPM/Key badges
 |  Based on view toggle selection                      |
 |                                                      |
 |  {empty state if no beats}                           |
+|  {error state if fetch failed}                       |
 |  {loading skeletons while fetching}                  |
 +-----------------------------------------------------+
 ```
@@ -290,7 +300,7 @@ Mobile: Condensed rows, hide BPM/Key badges
 | Key dropdown placeholder | Key |
 | Mood dropdown placeholder | Mood |
 | BPM label | BPM {min}-{max} |
-| Clear filters button | CLEAR |
+| Clear filters button | CLEAR FILTERS |
 | View toggle card tooltip | Card view |
 | View toggle list tooltip | List view |
 | Price prefix (card view) | FROM |
@@ -298,6 +308,9 @@ Mobile: Condensed rows, hide BPM/Key badges
 | Empty state body (no filters) | New beats are coming soon. Check back later. |
 | Empty state body (with filters) | No beats match your filters. Try adjusting your search or clearing filters. |
 | Empty state action | Clear filters (shown only when filters active) |
+| Error state heading | COULDN'T LOAD BEATS |
+| Error state body | Something went wrong fetching the catalog. Refresh the page or try again in a moment. |
+| Error state action | Try again (triggers re-fetch) |
 | Loading state | 6 skeleton cards (card view) or 8 skeleton rows (list view) |
 | Beat count | {N} beats (shown in filter bar area, 11px mono, #888) |
 | Bundle section heading | BEAT PACKS |
