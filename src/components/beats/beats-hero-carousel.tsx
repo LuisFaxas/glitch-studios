@@ -74,7 +74,7 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
                 `,
               }}
             >
-              <div className="flex h-full flex-col justify-center px-6 md:px-10">
+              <div className="flex h-full flex-col items-center justify-center text-center px-6 md:px-10">
                 {bundles.length > 0 ? (
                   <>
                     <h2 className="font-mono text-[24px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-[28px]">
@@ -126,7 +126,7 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
                 `,
               }}
             >
-              <div className="flex h-full flex-col justify-center px-6 md:px-10">
+              <div className="flex h-full flex-col items-center justify-center text-center px-6 md:px-10">
                 <h2 className="font-mono text-[24px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-[28px]">
                   License Beats from $29
                 </h2>
@@ -158,7 +158,7 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
                 `,
               }}
             >
-              <div className="flex h-full flex-col justify-center px-6 md:px-10">
+              <div className="flex h-full flex-col items-center justify-center text-center px-6 md:px-10">
                 <h2 className="font-mono text-[24px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-[28px]">
                   Book a Session at Glitch
                 </h2>
