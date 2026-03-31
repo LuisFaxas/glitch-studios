@@ -10,6 +10,7 @@ import {
   VolumeX,
 } from "lucide-react"
 import WaveSurfer from "wavesurfer.js"
+import Hover from "wavesurfer.js/dist/plugins/hover.esm.js"
 import { useAudioPlayer } from "@/components/player/audio-player-provider"
 import { Waveform } from "@/components/player/waveform"
 import { Slider } from "@/components/ui/slider"
@@ -49,16 +50,38 @@ export function PlayerBar() {
       wavesurferRef.current = null
     }
 
+    // Create gradients for premium waveform rendering
+    const offscreen = document.createElement("canvas").getContext("2d")!
+    const progressGrad = offscreen.createLinearGradient(0, 0, 0, 48)
+    progressGrad.addColorStop(0, "#f5f5f0")
+    progressGrad.addColorStop(0.7, "#a0a09a")
+    progressGrad.addColorStop(1, "#666660")
+
+    const waveGrad = offscreen.createLinearGradient(0, 0, 0, 48)
+    waveGrad.addColorStop(0, "#555555")
+    waveGrad.addColorStop(1, "#333333")
+
     const ws = WaveSurfer.create({
       container: waveformRef.current,
-      waveColor: "#555555",
-      progressColor: "#f5f5f0",
-      height: 40,
-      barWidth: 2,
+      waveColor: waveGrad,
+      progressColor: progressGrad,
+      height: 48,
+      barWidth: 3,
       barGap: 1,
-      cursorWidth: 0,
+      barRadius: 2,
+      cursorColor: "#f5f5f0",
+      cursorWidth: 1,
       media: audioRef.current,
       interact: true,
+      plugins: [
+        Hover.create({
+          lineColor: "#f5f5f0",
+          lineWidth: 1,
+          labelColor: "#f5f5f0",
+          labelSize: 11,
+          labelBackground: "#1a1a1a",
+        }),
+      ],
     })
 
     wavesurferRef.current = ws
@@ -245,6 +268,9 @@ export function PlayerBar() {
                 peaks={currentBeat.waveformPeaks}
                 progress={mobileProgress}
                 height={24}
+                barRadius={1}
+                gradient
+                gradientColors={{ from: "#f5f5f0", to: "#a0a09a" }}
                 interactive
                 onSeek={handleMobileSeek}
               />

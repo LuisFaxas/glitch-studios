@@ -19,7 +19,7 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
   const { currentBeat, isPlaying, currentTime, duration, play, pause } = useAudioPlayer()
   const isCurrentBeat = currentBeat?.id === beat.id
   const isActivePlaying = isCurrentBeat && isPlaying
-  const progress = isActivePlaying && duration > 0 ? currentTime / duration : 0
+  const progress = isCurrentBeat && duration > 0 ? currentTime / duration : 0
 
   const lowestPrice = beat.pricing
     .filter((p) => p.isActive)
@@ -83,7 +83,7 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
         </div>
 
         {/* Title + Producer + Genre/Mood */}
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 md:flex-initial md:w-[200px] md:shrink-0">
           <span className="block truncate font-mono text-[15px] font-bold text-[#f5f5f0] group-hover:glitch-hover">
             {beat.title}
           </span>
@@ -112,6 +112,7 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
             peaks={beat.waveformPeaks}
             progress={progress}
             height={32}
+            barRadius={1}
             interactive={false}
           />
         </div>

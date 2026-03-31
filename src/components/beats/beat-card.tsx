@@ -14,7 +14,7 @@ export function BeatCard({ beat }: { beat: BeatSummary }) {
   const { currentBeat, isPlaying, currentTime, duration, play, pause, seek } = useAudioPlayer()
   const isCurrentBeat = currentBeat?.id === beat.id
   const isActivePlaying = isCurrentBeat && isPlaying
-  const progress = isActivePlaying && duration > 0 ? currentTime / duration : 0
+  const progress = isCurrentBeat && duration > 0 ? currentTime / duration : 0
 
   function handleWaveformSeek(p: number) {
     if (!beat.previewAudioUrl) return
@@ -106,6 +106,10 @@ export function BeatCard({ beat }: { beat: BeatSummary }) {
           peaks={beat.waveformPeaks}
           progress={progress}
           height={28}
+          barRadius={1}
+          gradient
+          gradientColors={{ from: "#f5f5f0", to: "#a0a09a" }}
+          gradientWaveColors={{ from: "#555555", to: "#333333" }}
           interactive
           onSeek={handleWaveformSeek}
         />

@@ -46,7 +46,10 @@ export function WidgetNowPlaying() {
         <Waveform
           peaks={null}
           progress={0}
-          height={20}
+          height={32}
+          barRadius={1}
+          mirrored
+          mirrorOpacity={0.3}
           interactive={false}
         />
       </Tile>
@@ -104,12 +107,17 @@ export function WidgetNowPlaying() {
         </div>
       </div>
 
-      {/* Row 2: Waveform - full width, interactive */}
-      <div className="px-3 pb-2">
+      {/* Row 2: Waveform - full width, interactive, mirrored */}
+      <div className="px-3 pb-3">
         <Waveform
           peaks={currentBeat.waveformPeaks}
           progress={progress}
-          height={20}
+          height={40}
+          barRadius={1}
+          mirrored
+          mirrorOpacity={0.3}
+          gradient
+          gradientColors={{ from: "#f5f5f0", to: "#888888" }}
           interactive
           onSeek={handleSeek}
         />

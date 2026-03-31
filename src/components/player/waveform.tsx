@@ -13,6 +13,12 @@ interface WaveformProps {
   interactive?: boolean // enables click/drag scrub
   onSeek?: (progress: number) => void // 0-1
   className?: string
+  barRadius?: number // default 0 (sharp bars)
+  mirrored?: boolean // default false
+  mirrorOpacity?: number // default 0.35
+  gradient?: boolean // default false
+  gradientColors?: { from: string; to: string } // played portion gradient
+  gradientWaveColors?: { from: string; to: string } // unplayed portion gradient
 }
 
 export function Waveform({
@@ -26,6 +32,12 @@ export function Waveform({
   interactive = false,
   onSeek,
   className,
+  barRadius = 0,
+  mirrored = false,
+  mirrorOpacity = 0.35,
+  gradient = false,
+  gradientColors,
+  gradientWaveColors,
 }: WaveformProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -65,23 +77,106 @@ export function Waveform({
     // If no peaks, render flat line at 30% height
     const peaksData = peaks && peaks.length > 0 ? peaks : null
 
-    for (let i = 0; i < barCount; i++) {
-      let amplitude: number
-      if (peaksData) {
-        const peakIndex = Math.floor((i / barCount) * peaksData.length)
-        amplitude = peaksData[peakIndex] ?? 0
-      } else {
-        amplitude = 0.3
+    // Create gradients if enabled
+    let progressFill: string | CanvasGradient = progressColor
+    let waveFill: string | CanvasGradient = waveColor
+
+    if (gradient) {
+      const pColors = gradientColors ?? { from: progressColor, to: "#888888" }
+      const wColors = gradientWaveColors ?? { from: waveColor, to: "#333333" }
+
+      const pGrad = ctx.createLinearGradient(0, 0, 0, displayHeight)
+      pGrad.addColorStop(0, pColors.from)
+      pGrad.addColorStop(1, pColors.to)
+      progressFill = pGrad
+
+      const wGrad = ctx.createLinearGradient(0, 0, 0, displayHeight)
+      wGrad.addColorStop(0, wColors.from)
+      wGrad.addColorStop(1, wColors.to)
+      waveFill = wGrad
+    }
+
+    if (mirrored) {
+      // Mirrored rendering: top half + reflection below
+      const centerY = displayHeight / 2
+
+      for (let i = 0; i < barCount; i++) {
+        let amplitude: number
+        if (peaksData) {
+          const peakIndex = Math.floor((i / barCount) * peaksData.length)
+          amplitude = peaksData[peakIndex] ?? 0
+        } else {
+          amplitude = 0.3
+        }
+
+        const barH = Math.max(1, amplitude * centerY)
+        const x = i * step
+        const isPlayed = x + barWidth <= progressX
+
+        // Top bar (grows upward from center)
+        ctx.globalAlpha = 1
+        ctx.fillStyle = isPlayed ? progressFill : waveFill
+        if (barRadius > 0) {
+          ctx.beginPath()
+          ctx.roundRect(x, centerY - barH, barWidth, barH, barRadius)
+          ctx.fill()
+        } else {
+          ctx.fillRect(x, centerY - barH, barWidth, barH)
+        }
+
+        // Bottom bar (reflection, grows downward from center)
+        ctx.globalAlpha = mirrorOpacity
+        if (barRadius > 0) {
+          ctx.beginPath()
+          ctx.roundRect(x, centerY, barWidth, barH, barRadius)
+          ctx.fill()
+        } else {
+          ctx.fillRect(x, centerY, barWidth, barH)
+        }
       }
 
-      const barHeight = Math.max(2, amplitude * displayHeight)
-      const x = i * step
-      const y = displayHeight - barHeight
+      ctx.globalAlpha = 1
+    } else {
+      // Standard rendering: bars grow upward from bottom
+      for (let i = 0; i < barCount; i++) {
+        let amplitude: number
+        if (peaksData) {
+          const peakIndex = Math.floor((i / barCount) * peaksData.length)
+          amplitude = peaksData[peakIndex] ?? 0
+        } else {
+          amplitude = 0.3
+        }
 
-      ctx.fillStyle = x + barWidth <= progressX ? progressColor : waveColor
-      ctx.fillRect(x, y, barWidth, barHeight)
+        const barHeight = Math.max(2, amplitude * displayHeight)
+        const x = i * step
+        const y = displayHeight - barHeight
+
+        ctx.fillStyle = x + barWidth <= progressX ? progressFill : waveFill
+
+        if (barRadius > 0) {
+          ctx.beginPath()
+          ctx.roundRect(x, y, barWidth, barHeight, barRadius)
+          ctx.fill()
+        } else {
+          ctx.fillRect(x, y, barWidth, barHeight)
+        }
+      }
     }
-  }, [peaks, progress, height, barWidth, barGap, waveColor, progressColor])
+  }, [
+    peaks,
+    progress,
+    height,
+    barWidth,
+    barGap,
+    waveColor,
+    progressColor,
+    barRadius,
+    mirrored,
+    mirrorOpacity,
+    gradient,
+    gradientColors,
+    gradientWaveColors,
+  ])
 
   // ResizeObserver for responsive canvas
   useEffect(() => {
