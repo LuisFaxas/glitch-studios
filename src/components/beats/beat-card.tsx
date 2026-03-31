@@ -4,15 +4,32 @@ import { useState } from "react"
 import Image from "next/image"
 import { Play, Pause, Music } from "lucide-react"
 import { useAudioPlayer } from "@/components/player/audio-player-provider"
+import { Waveform } from "@/components/player/waveform"
 import { LicenseModal } from "@/components/beats/license-modal"
 import { Badge } from "@/components/ui/badge"
 import type { BeatSummary } from "@/types/beats"
 
 export function BeatCard({ beat }: { beat: BeatSummary }) {
   const [licenseModalOpen, setLicenseModalOpen] = useState(false)
-  const { currentBeat, isPlaying, play, pause } = useAudioPlayer()
+  const { currentBeat, isPlaying, currentTime, duration, play, pause, seek } = useAudioPlayer()
   const isCurrentBeat = currentBeat?.id === beat.id
   const isActivePlaying = isCurrentBeat && isPlaying
+  const progress = isActivePlaying && duration > 0 ? currentTime / duration : 0
+
+  function handleWaveformSeek(p: number) {
+    if (!beat.previewAudioUrl) return
+    if (!isCurrentBeat) {
+      play({
+        id: beat.id,
+        title: beat.title,
+        artist: beat.producers[0]?.name ?? "Glitch Studios",
+        previewAudioUrl: beat.previewAudioUrl,
+        coverArtUrl: beat.coverArtUrl,
+        waveformPeaks: beat.waveformPeaks,
+      })
+    }
+    if (duration > 0) seek(p * duration)
+  }
 
   const lowestPrice = beat.pricing
     .filter((p) => p.isActive)
@@ -84,24 +101,14 @@ export function BeatCard({ beat }: { beat: BeatSummary }) {
       </div>
 
       {/* Waveform strip */}
-      <div className="flex h-[28px] w-full items-end justify-between px-4 pt-3" aria-hidden="true">
-        {Array.from({ length: 48 }).map((_, i) => {
-          const h = Math.round(Math.sin(i * 0.4) * 8 + 12 + Math.cos(i * 1.1) * 3)
-          return (
-            <div
-              key={i}
-              className={`w-[2px] shrink-0 ${
-                isActivePlaying
-                  ? "animate-pulse bg-[#f5f5f0]"
-                  : "bg-[#333]"
-              }`}
-              style={{
-                height: `${h}px`,
-                ...(isActivePlaying ? { animationDelay: `${i * 40}ms` } : {}),
-              }}
-            />
-          )
-        })}
+      <div className="px-4 pt-3">
+        <Waveform
+          peaks={beat.waveformPeaks}
+          progress={progress}
+          height={28}
+          interactive
+          onSeek={handleWaveformSeek}
+        />
       </div>
 
       {/* Info section */}

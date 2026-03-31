@@ -4,6 +4,7 @@ import Image from "next/image"
 import { Play, Pause, Music } from "lucide-react"
 import { AnimatePresence } from "motion/react"
 import { useAudioPlayer } from "@/components/player/audio-player-provider"
+import { Waveform } from "@/components/player/waveform"
 import { BeatDetailPanel } from "@/components/beats/beat-detail-panel"
 import { Badge } from "@/components/ui/badge"
 import type { BeatSummary } from "@/types/beats"
@@ -15,9 +16,10 @@ interface BeatRowProps {
 }
 
 export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
-  const { currentBeat, isPlaying, play, pause } = useAudioPlayer()
+  const { currentBeat, isPlaying, currentTime, duration, play, pause } = useAudioPlayer()
   const isCurrentBeat = currentBeat?.id === beat.id
   const isActivePlaying = isCurrentBeat && isPlaying
+  const progress = isActivePlaying && duration > 0 ? currentTime / duration : 0
 
   const lowestPrice = beat.pricing
     .filter((p) => p.isActive)
@@ -104,27 +106,14 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
           </div>
         </div>
 
-        {/* Waveform strip - stretches full width between metadata and badges */}
-        <div className="hidden h-[32px] min-w-0 flex-1 items-center md:flex" aria-hidden="true">
-          <div className="flex h-full w-full items-end justify-between px-2">
-            {Array.from({ length: 80 }).map((_, i) => {
-              const h = Math.round(Math.sin(i * 0.3) * 10 + 14 + Math.cos(i * 0.8) * 4)
-              return (
-                <div
-                  key={i}
-                  className={`w-[2px] shrink-0 ${
-                    isActivePlaying
-                      ? "animate-pulse bg-[#f5f5f0]"
-                      : "bg-[#333]"
-                  }`}
-                  style={{
-                    height: `${h}px`,
-                    ...(isActivePlaying ? { animationDelay: `${i * 30}ms` } : {}),
-                  }}
-                />
-              )
-            })}
-          </div>
+        {/* Waveform strip - visual only, no scrubbing per D-08 */}
+        <div className="hidden min-w-0 flex-1 items-center md:flex">
+          <Waveform
+            peaks={beat.waveformPeaks}
+            progress={progress}
+            height={32}
+            interactive={false}
+          />
         </div>
 
         {/* BPM/Key badges - hidden on mobile */}
