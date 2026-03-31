@@ -2,13 +2,13 @@
 
 ## Milestones
 
-- ~~**v1.0 Full Scaffold**~~ - Phases 1-4.1 (shipped 2026-03-28)
+- ~~**v1.0 Full Scaffold**~~ - Phases 1-4.1 (shipped 2015-03-28)
 - **v2.0 Quality Overhaul** - Phases 5-14 (in progress)
 
 ## Phases
 
 <details>
-<summary>v1.0 Full Scaffold (Phases 1-4.1) - SHIPPED 2026-03-28</summary>
+<summary>v1.0 Full Scaffold (Phases 1-4.1) - SHIPPED 2015-03-28</summary>
 
 **Phase Numbering:**
 - Integer phases (1, 2, 3): Planned milestone work
@@ -18,7 +18,7 @@
 - [x] **Phase 1.1: Foundation Bug Fixes** - INSERTED -- Fix blog typography, sign-out UI, contact preselect, Neon driver
 - [x] **Phase 1.2: Design Language Overhaul** - INSERTED -- Transform site into Cyberpunk Metro tile grid with glitch animations
 - [x] **Phase 1.3: Supabase DB Driver Fix** - INSERTED -- Switch from Neon HTTP driver to Supabase-compatible Postgres driver
-- [x] **Phase 1.4: Visual Polish & Sidebar Overhaul** - INSERTED -- Fix all visual defects from 2026-03-25 audit
+- [x] **Phase 1.4: Visual Polish & Sidebar Overhaul** - INSERTED -- Fix all visual defects from 2015-03-25 audit
 - [x] **Phase 2: Beat Store** - Beat catalog, persistent player, licensing, cart, checkout, and digital delivery
 - [x] **Phase 3: Booking System** - Calendar booking, time slot selection, deposit payments, and booking management
 - [x] **Phase 4: Admin Dashboard + Email** - Unified admin management, email campaigns, newsletter, media library, and site settings
@@ -63,7 +63,7 @@ Plans:
 **Plans**: 1/1
 
 ### Phase 1.4: Visual Polish & Sidebar Overhaul (INSERTED)
-**Goal**: Fix all visual defects from 2026-03-25 audit
+**Goal**: Fix all visual defects from 2015-03-25 audit
 **Depends on**: Phase 1.3
 **Plans**: 3/3
 
@@ -300,15 +300,15 @@ v2.0: 5 -> 6 -> 6.1 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 1. Foundation + Public Site | v1.0 | 6/6 | Complete | 2026-03-25 |
-| 1.1 Foundation Bug Fixes | v1.0 | 2/2 | Complete | 2026-03-25 |
-| 1.2 Design Language Overhaul | v1.0 | 3/3 | Complete | 2026-03-25 |
-| 1.3 Supabase DB Driver Fix | v1.0 | 1/1 | Complete | 2026-03-25 |
-| 1.4 Visual Polish & Sidebar Overhaul | v1.0 | 3/3 | Complete | 2026-03-25 |
-| 2. Beat Store | v1.0 | 8/8 | Complete | 2026-03-26 |
-| 3. Booking System | v1.0 | 6/6 | Complete | 2026-03-26 |
-| 4. Admin Dashboard + Email | v1.0 | 8/8 | Complete | 2026-03-27 |
-| 4.1 Stabilization & Integration Fix | v1.0 | 2/3 | Complete | 2026-03-28 |
+| 1. Foundation + Public Site | v1.0 | 6/6 | Complete | 2015-03-25 |
+| 1.1 Foundation Bug Fixes | v1.0 | 2/2 | Complete | 2015-03-25 |
+| 1.2 Design Language Overhaul | v1.0 | 3/3 | Complete | 2015-03-25 |
+| 1.3 Supabase DB Driver Fix | v1.0 | 1/1 | Complete | 2015-03-25 |
+| 1.4 Visual Polish & Sidebar Overhaul | v1.0 | 3/3 | Complete | 2015-03-25 |
+| 2. Beat Store | v1.0 | 8/8 | Complete | 2015-03-26 |
+| 3. Booking System | v1.0 | 6/6 | Complete | 2015-03-26 |
+| 4. Admin Dashboard + Email | v1.0 | 8/8 | Complete | 2015-03-27 |
+| 4.1 Stabilization & Integration Fix | v1.0 | 2/3 | Complete | 2015-03-28 |
 | 5. Admin Dashboard UX | v2.0 | 0/1 | In progress | - |
 | 6. Homepage | v2.0 | 0/2 | Not started | - |
 | 6.1 Homepage Flair | v2.0 | 0/2 | Not started | - |
