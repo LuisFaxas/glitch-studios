@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import {
   Play,
@@ -9,8 +9,6 @@ import {
   Volume2,
   VolumeX,
 } from "lucide-react"
-import WaveSurfer from "wavesurfer.js"
-import Hover from "wavesurfer.js/dist/plugins/hover.esm.js"
 import { useAudioPlayer } from "@/components/player/audio-player-provider"
 import { Waveform } from "@/components/player/waveform"
 import { Slider } from "@/components/ui/slider"
@@ -35,73 +33,8 @@ export function PlayerBar() {
     setMinimized,
   } = useAudioPlayer()
 
-  const waveformRef = useRef<HTMLDivElement | null>(null)
-  const wavesurferRef = useRef<WaveSurfer | null>(null)
   const [volume, setVolume] = useState(80)
   const [isMuted, setIsMuted] = useState(false)
-
-  // Create/destroy WaveSurfer when currentBeat changes
-  useEffect(() => {
-    if (!currentBeat || !waveformRef.current || !audioRef.current) return
-
-    // Destroy previous instance
-    if (wavesurferRef.current) {
-      wavesurferRef.current.destroy()
-      wavesurferRef.current = null
-    }
-
-    const ws = WaveSurfer.create({
-      container: waveformRef.current,
-      // Use flat colors initially; gradient applied after canvas is ready
-      waveColor: "#444444",
-      progressColor: "#f5f5f0",
-      height: 48,
-      barWidth: 3,
-      barGap: 1,
-      barRadius: 2,
-      cursorColor: "#f5f5f0",
-      cursorWidth: 1,
-      media: audioRef.current,
-      interact: true,
-      plugins: [
-        Hover.create({
-          lineColor: "#f5f5f0",
-          lineWidth: 1,
-          labelColor: "#f5f5f0",
-          labelSize: 11,
-          labelBackground: "#1a1a1a",
-        }),
-      ],
-    })
-
-    // Apply gradients from WaveSurfer's own canvas context
-    ws.on("ready", () => {
-      const wrapper = ws.getWrapper()
-      const canvas = wrapper?.querySelector("canvas")
-      if (canvas) {
-        const ctx = canvas.getContext("2d")
-        if (ctx) {
-          const pGrad = ctx.createLinearGradient(0, 0, 0, 48)
-          pGrad.addColorStop(0, "#f5f5f0")
-          pGrad.addColorStop(0.7, "#a0a09a")
-          pGrad.addColorStop(1, "#666660")
-
-          const wGrad = ctx.createLinearGradient(0, 0, 0, 48)
-          wGrad.addColorStop(0, "#555555")
-          wGrad.addColorStop(1, "#333333")
-
-          ws.setOptions({ waveColor: wGrad, progressColor: pGrad })
-        }
-      }
-    })
-
-    wavesurferRef.current = ws
-
-    return () => {
-      ws.destroy()
-      wavesurferRef.current = null
-    }
-  }, [currentBeat, audioRef])
 
   // Sync volume
   useEffect(() => {
@@ -123,10 +56,10 @@ export function PlayerBar() {
     setIsMuted((prev) => !prev)
   }, [])
 
-  // Progress for mobile waveform (0-1)
-  const mobileProgress = duration > 0 ? currentTime / duration : 0
+  // Progress for waveform (0-1)
+  const progress = duration > 0 ? currentTime / duration : 0
 
-  function handleMobileSeek(p: number) {
+  function handleSeek(p: number) {
     if (duration > 0) seek(p * duration)
   }
 
@@ -165,8 +98,22 @@ export function PlayerBar() {
               </span>
             </div>
 
-            {/* WaveSurfer waveform */}
-            <div ref={waveformRef} className="flex-1 min-w-0" />
+            {/* Waveform — uses pre-computed peaks, no CORS fetch needed */}
+            <div className="flex-1 min-w-0">
+              <Waveform
+                peaks={currentBeat.waveformPeaks}
+                progress={progress}
+                height={48}
+                barWidth={3}
+                barGap={1}
+                barRadius={2}
+                gradient
+                gradientColors={{ from: "#f5f5f0", to: "#666660" }}
+                gradientWaveColors={{ from: "#555555", to: "#333333" }}
+                interactive
+                onSeek={handleSeek}
+              />
+            </div>
 
             {/* Time display */}
             <span className="flex-shrink-0 min-w-[80px] text-right font-mono text-[13px] font-normal text-[#888888]">
@@ -277,13 +224,13 @@ export function PlayerBar() {
             <div className="px-3 py-[10px]">
               <Waveform
                 peaks={currentBeat.waveformPeaks}
-                progress={mobileProgress}
+                progress={progress}
                 height={24}
                 barRadius={1}
                 gradient
                 gradientColors={{ from: "#f5f5f0", to: "#a0a09a" }}
                 interactive
-                onSeek={handleMobileSeek}
+                onSeek={handleSeek}
               />
             </div>
           </div>
