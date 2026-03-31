@@ -21,6 +21,7 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
   const { addItem } = useCart()
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" }, [
     Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }),
@@ -41,6 +42,7 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
   }, [emblaApi, onSelect])
 
   useEffect(() => {
+    setMounted(true)
     const mq = window.matchMedia("(max-width: 768px)")
     setIsMobile(mq.matches)
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
@@ -68,6 +70,7 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
   }
 
   const slideCount = 3
+  const activeTint = SLIDE_TINTS[selectedIndex] ?? SLIDE_TINTS[0]
 
   return (
     <div>
@@ -76,23 +79,29 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
       </span>
 
       <div className="relative h-[280px] w-full overflow-hidden">
-        <div className="h-full" ref={emblaRef}>
+        {/* Single WebGL background — tint changes on slide transition */}
+        {mounted && (
+          <div className="absolute inset-0 z-0">
+            <FaultyTerminal
+              tint={activeTint}
+              pause={isMobile}
+              brightness={0.4}
+              glitchAmount={0.5}
+              dpr={1}
+              chromaticAberration={0}
+              mouseReact={!isMobile}
+              pageLoadAnimation={false}
+              curvature={0}
+            />
+          </div>
+        )}
+
+        {/* Carousel slides — transparent backgrounds, content only */}
+        <div className="relative z-10 h-full" ref={emblaRef}>
           <div className="flex h-full">
             {/* Slide 1 - Bundle Promo */}
-            <div className="relative h-full w-full flex-shrink-0 overflow-hidden will-change-transform">
-              <div className="absolute inset-0">
-                <FaultyTerminal
-                  tint={SLIDE_TINTS[0]}
-                  pause={isMobile}
-                  brightness={0.4}
-                  glitchAmount={0.5}
-                  dpr={1}
-                  chromaticAberration={0}
-                  mouseReact={!isMobile}
-                  pageLoadAnimation={false}
-                />
-              </div>
-              <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-10">
+            <div className="h-full w-full flex-shrink-0">
+              <div className="flex h-full flex-col justify-center px-6 md:px-10">
                 {bundles.length > 0 ? (
                   <>
                     <h2 className="font-mono text-[24px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-[28px]">
@@ -133,20 +142,8 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
             </div>
 
             {/* Slide 2 - Licensing Pitch */}
-            <div className="relative h-full w-full flex-shrink-0 overflow-hidden will-change-transform">
-              <div className="absolute inset-0">
-                <FaultyTerminal
-                  tint={SLIDE_TINTS[1]}
-                  pause={isMobile}
-                  brightness={0.4}
-                  glitchAmount={0.5}
-                  dpr={1}
-                  chromaticAberration={0}
-                  mouseReact={!isMobile}
-                  pageLoadAnimation={false}
-                />
-              </div>
-              <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-10">
+            <div className="h-full w-full flex-shrink-0">
+              <div className="flex h-full flex-col justify-center px-6 md:px-10">
                 <h2 className="font-mono text-[24px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-[28px]">
                   License Beats from $29
                 </h2>
@@ -167,20 +164,8 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
             </div>
 
             {/* Slide 3 - Studio Booking CTA */}
-            <div className="relative h-full w-full flex-shrink-0 overflow-hidden will-change-transform">
-              <div className="absolute inset-0">
-                <FaultyTerminal
-                  tint={SLIDE_TINTS[2]}
-                  pause={isMobile}
-                  brightness={0.4}
-                  glitchAmount={0.5}
-                  dpr={1}
-                  chromaticAberration={0}
-                  mouseReact={!isMobile}
-                  pageLoadAnimation={false}
-                />
-              </div>
-              <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-10">
+            <div className="h-full w-full flex-shrink-0">
+              <div className="flex h-full flex-col justify-center px-6 md:px-10">
                 <h2 className="font-mono text-[24px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-[28px]">
                   Book a Session at Glitch
                 </h2>
@@ -199,7 +184,7 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
         </div>
 
         {/* Dot indicators */}
-        <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2">
+        <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2">
           {Array.from({ length: slideCount }).map((_, i) => (
             <button
               key={i}

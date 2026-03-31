@@ -305,6 +305,19 @@ export default function FaultyTerminal({
     }
   }, [pause]);
 
+  // Tint handling — update uniform directly without recreating GL context
+  useEffect(() => {
+    const program = programRef.current;
+    if (!program) return;
+    const [r, g, b] = hexToRgb(tint);
+    const tintUniform = program.uniforms.uTint.value;
+    if (tintUniform && typeof tintUniform === 'object' && 'r' in tintUniform) {
+      (tintUniform as { r: number; g: number; b: number }).r = r;
+      (tintUniform as { r: number; g: number; b: number }).g = g;
+      (tintUniform as { r: number; g: number; b: number }).b = b;
+    }
+  }, [tint]);
+
   // Main setup — creates GL context once, cleaned up on unmount
   useEffect(() => {
     const ctn = containerRef.current;
@@ -423,7 +436,7 @@ export default function FaultyTerminal({
       loadAnimationStartRef.current = 0;
       timeOffsetRef.current = Math.random() * 100;
     };
-    // Stable deps only — pause is handled via ref, not here
+    // Stable deps only — pause and tint are handled via refs, not here
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     resolvedDpr,
@@ -438,7 +451,6 @@ export default function FaultyTerminal({
     chromaticAberration,
     ditherValue,
     curvature,
-    tintVec,
     mouseReact,
     mouseStrength,
     pageLoadAnimation,
