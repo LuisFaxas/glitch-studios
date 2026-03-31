@@ -37,9 +37,9 @@ export default async function BeatsPage({
   )
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <div>
-        <h1 className="mb-6 font-mono text-[40px] font-bold uppercase leading-[1.1] tracking-[0.05em] text-[#f5f5f0]">
+        <h1 className="mb-4 font-mono text-[40px] font-bold uppercase leading-[1.1] tracking-[0.05em] text-[#f5f5f0]">
           BEATS
         </h1>
         {bundles.length > 0 && <BundleSection bundles={bundles} />}
