@@ -62,7 +62,7 @@ export function Footer() {
                   className="text-[#555555] hover:text-[#f5f5f0] transition-colors"
                   aria-label={social.label}
                 >
-                  <social.icon className="size-3.5" />
+                  <social.icon className={social.label === "SoundCloud" ? "size-5" : "size-3.5"} />
                 </a>
               ))}
             </div>

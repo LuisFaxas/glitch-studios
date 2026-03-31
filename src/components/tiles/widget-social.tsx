@@ -45,7 +45,7 @@ export function WidgetSocial() {
         >
           <Tile
             size="small"
-            icon={<link.icon className="h-5 w-5" />}
+            icon={<link.icon className={link.label === "SoundCloud" ? "h-7 w-7" : "h-5 w-5"} />}
             className="col-span-1 aspect-square items-center justify-center"
           />
         </a>
