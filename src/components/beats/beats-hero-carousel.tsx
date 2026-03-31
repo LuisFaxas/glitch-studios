@@ -4,15 +4,23 @@ import { useState, useEffect, useCallback } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import Autoplay from "embla-carousel-autoplay"
 import Link from "next/link"
+import dynamic from "next/dynamic"
 import { useCart } from "@/components/cart/cart-provider"
 import { toast } from "sonner"
 import type { getPublishedBundles } from "@/actions/bundles"
 
+const FaultyTerminal = dynamic(() => import("@/components/FaultyTerminal"), {
+  ssr: false,
+})
+
 type BundleData = Awaited<ReturnType<typeof getPublishedBundles>>
+
+const SLIDE_TINTS = ["#00ff41", "#8b5cf6", "#f59e0b"] as const
 
 export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
   const { addItem } = useCart()
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" }, [
     Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }),
@@ -31,6 +39,14 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
       emblaApi.off("select", onSelect)
     }
   }, [emblaApi, onSelect])
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)")
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
 
   function handleAddBundle(bundle: BundleData[number]) {
     for (const beat of bundle.beats) {
@@ -63,8 +79,20 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
         <div className="h-full" ref={emblaRef}>
           <div className="flex h-full">
             {/* Slide 1 - Bundle Promo */}
-            <div className="h-full w-full flex-shrink-0 bg-gradient-to-r from-[#0a0a0a] to-[#151515]">
-              <div className="flex h-full flex-col justify-center px-6 md:px-10">
+            <div className="relative h-full w-full flex-shrink-0 overflow-hidden">
+              <div className="absolute inset-0">
+                <FaultyTerminal
+                  tint={SLIDE_TINTS[0]}
+                  pause={isMobile || selectedIndex !== 0}
+                  brightness={0.4}
+                  glitchAmount={0.5}
+                  dpr={1}
+                  chromaticAberration={0}
+                  mouseReact={!isMobile}
+                  pageLoadAnimation={false}
+                />
+              </div>
+              <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-10">
                 {bundles.length > 0 ? (
                   <>
                     <h2 className="font-mono text-[24px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-[28px]">
@@ -105,8 +133,20 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
             </div>
 
             {/* Slide 2 - Licensing Pitch */}
-            <div className="h-full w-full flex-shrink-0 bg-gradient-to-r from-[#0a0a0a] via-[#0d0a14] to-[#0a0a0a]">
-              <div className="flex h-full flex-col justify-center px-6 md:px-10">
+            <div className="relative h-full w-full flex-shrink-0 overflow-hidden">
+              <div className="absolute inset-0">
+                <FaultyTerminal
+                  tint={SLIDE_TINTS[1]}
+                  pause={isMobile || selectedIndex !== 1}
+                  brightness={0.4}
+                  glitchAmount={0.5}
+                  dpr={1}
+                  chromaticAberration={0}
+                  mouseReact={!isMobile}
+                  pageLoadAnimation={false}
+                />
+              </div>
+              <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-10">
                 <h2 className="font-mono text-[24px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-[28px]">
                   License Beats from $29
                 </h2>
@@ -127,8 +167,20 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
             </div>
 
             {/* Slide 3 - Studio Booking CTA */}
-            <div className="h-full w-full flex-shrink-0 bg-gradient-to-r from-[#0a0a0a] via-[#140d0a] to-[#0a0a0a]">
-              <div className="flex h-full flex-col justify-center px-6 md:px-10">
+            <div className="relative h-full w-full flex-shrink-0 overflow-hidden">
+              <div className="absolute inset-0">
+                <FaultyTerminal
+                  tint={SLIDE_TINTS[2]}
+                  pause={isMobile || selectedIndex !== 2}
+                  brightness={0.4}
+                  glitchAmount={0.5}
+                  dpr={1}
+                  chromaticAberration={0}
+                  mouseReact={!isMobile}
+                  pageLoadAnimation={false}
+                />
+              </div>
+              <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-10">
                 <h2 className="font-mono text-[24px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-[28px]">
                   Book a Session at Glitch
                 </h2>
@@ -136,7 +188,7 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
                   Recording. Mixing. Mastering. Video production.
                 </p>
                 <Link
-                  href="/booking"
+                  href="/book"
                   className="mt-4 w-fit border border-[#f5f5f0] px-6 py-2 font-mono text-[12px] uppercase tracking-[0.05em] text-[#f5f5f0] transition-colors hover:bg-[#f5f5f0] hover:text-[#000]"
                 >
                   Book Now
