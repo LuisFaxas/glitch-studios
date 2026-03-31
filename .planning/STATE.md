@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Quality Overhaul
-status: Ready to execute
-stopped_at: Completed 07.1-03-PLAN.md
-last_updated: "2026-03-31T05:04:19.385Z"
+status: Phase complete — ready for verification
+stopped_at: Completed 07.1-02-PLAN.md
+last_updated: "2026-03-31T05:05:27.931Z"
 progress:
   total_phases: 12
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 12
-  completed_plans: 10
+  completed_plans: 11
 ---
 
 # Project State
@@ -53,6 +53,7 @@ Plan: 3 of 3
 | Phase 07 P02 | 2min | 2 tasks | 4 files |
 | Phase 07.1 P01 | 5min | 2 tasks | 10 files |
 | Phase 07.1 P03 | 1min | 1 tasks | 1 files |
+| Phase 07.1 P02 | 2min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -73,6 +74,7 @@ Recent decisions affecting current work:
 - [Phase 07]: View toggle uses nuqs shallow:true; decorative CSS waveform bars instead of WaveSurfer in rows
 - [Phase 07.1]: audio-decode v3.5 default import API; inline synthetic peaks in seed to avoid server-only conflict; canvas bars bottom-aligned with devicePixelRatio
 - [Phase 07.1]: Keep WaveSurfer.js for desktop, canvas Waveform for mobile -- different rendering per viewport
+- [Phase 07.1]: Beat card waveform auto-starts playback on seek; list row visual-only per D-08; widget uses !p-0 for edge-to-edge waveform
 
 ### Roadmap Evolution
 
@@ -90,6 +92,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-31T05:04:19.377Z
-Stopped at: Completed 07.1-03-PLAN.md
+Last session: 2026-03-31T05:05:27.925Z
+Stopped at: Completed 07.1-02-PLAN.md
 Resume file: None
