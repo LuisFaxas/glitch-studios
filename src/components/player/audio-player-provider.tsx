@@ -18,6 +18,7 @@ export interface PlayerBeat {
   artist: string
   previewAudioUrl: string
   coverArtUrl: string | null
+  waveformPeaks: number[] | null
 }
 
 interface AudioPlayerContextValue {

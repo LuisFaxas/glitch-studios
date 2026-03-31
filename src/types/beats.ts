@@ -34,6 +34,7 @@ export interface BeatSummary {
   status: "draft" | "published" | "sold_exclusive"
   pricing: { tier: string; price: string; isActive: boolean | null }[]
   producers: { name: string; splitPercent: number }[]
+  waveformPeaks: number[] | null
 }
 
 export interface CartItem {

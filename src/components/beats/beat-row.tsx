@@ -36,6 +36,7 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
         artist: beat.producers[0]?.name ?? "Glitch Studios",
         previewAudioUrl: beat.previewAudioUrl,
         coverArtUrl: beat.coverArtUrl,
+        waveformPeaks: beat.waveformPeaks,
       })
     }
   }
@@ -103,32 +104,27 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
           </div>
         </div>
 
-        {/* Decorative waveform strip - desktop only, NOT tied to audio playback */}
-        <div className="hidden h-[32px] w-[120px] shrink-0 items-center lg:flex" aria-hidden="true">
-          {isActivePlaying ? (
-            <div className="flex h-full w-full items-center gap-[1px]">
-              {Array.from({ length: 40 }).map((_, i) => (
+        {/* Waveform strip - stretches full width between metadata and badges */}
+        <div className="hidden h-[32px] min-w-0 flex-1 items-center md:flex" aria-hidden="true">
+          <div className="flex h-full w-full items-end justify-between px-2">
+            {Array.from({ length: 80 }).map((_, i) => {
+              const h = Math.round(Math.sin(i * 0.3) * 10 + 14 + Math.cos(i * 0.8) * 4)
+              return (
                 <div
                   key={i}
-                  className="w-[2px] animate-pulse bg-[#f5f5f0]"
+                  className={`w-[2px] shrink-0 ${
+                    isActivePlaying
+                      ? "animate-pulse bg-[#f5f5f0]"
+                      : "bg-[#333]"
+                  }`}
                   style={{
-                    height: `${Math.sin(i * 0.7) * 12 + 16 + Math.cos(i * 1.3) * 4}px`,
-                    animationDelay: `${i * 50}ms`,
+                    height: `${h}px`,
+                    ...(isActivePlaying ? { animationDelay: `${i * 30}ms` } : {}),
                   }}
                 />
-              ))}
-            </div>
-          ) : (
-            <div className="flex h-full w-full items-center gap-[1px]">
-              {Array.from({ length: 40 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="w-[2px] bg-[#333]"
-                  style={{ height: `${Math.sin(i * 0.3) * 12 + 16}px` }}
-                />
-              ))}
-            </div>
-          )}
+              )
+            })}
+          </div>
         </div>
 
         {/* BPM/Key badges - hidden on mobile */}

@@ -33,6 +33,7 @@ export function BeatCard({ beat }: { beat: BeatSummary }) {
         artist: beat.producers[0]?.name ?? "Glitch Studios",
         previewAudioUrl: beat.previewAudioUrl,
         coverArtUrl: beat.coverArtUrl,
+        waveformPeaks: beat.waveformPeaks,
       })
     }
   }
@@ -80,6 +81,27 @@ export function BeatCard({ beat }: { beat: BeatSummary }) {
             )}
           </button>
         )}
+      </div>
+
+      {/* Waveform strip */}
+      <div className="flex h-[28px] w-full items-end justify-between px-4 pt-3" aria-hidden="true">
+        {Array.from({ length: 48 }).map((_, i) => {
+          const h = Math.round(Math.sin(i * 0.4) * 8 + 12 + Math.cos(i * 1.1) * 3)
+          return (
+            <div
+              key={i}
+              className={`w-[2px] shrink-0 ${
+                isActivePlaying
+                  ? "animate-pulse bg-[#f5f5f0]"
+                  : "bg-[#333]"
+              }`}
+              style={{
+                height: `${h}px`,
+                ...(isActivePlaying ? { animationDelay: `${i * 40}ms` } : {}),
+              }}
+            />
+          )
+        })}
       </div>
 
       {/* Info section */}

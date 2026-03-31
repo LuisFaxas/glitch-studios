@@ -69,6 +69,7 @@ export async function getPublishedBeats(
     previewAudioUrl: b.previewAudioKey
       ? getPublicUrl(b.previewAudioKey)
       : null,
+    waveformPeaks: b.waveformPeaks ?? null,
     midiFileUrl: b.midiFileKey ? getPublicUrl(b.midiFileKey) : null,
     status: b.status ?? "draft",
     pricing: pricing

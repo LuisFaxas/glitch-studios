@@ -6,6 +6,7 @@ import {
   integer,
   boolean,
   numeric,
+  jsonb,
   pgEnum,
 } from "drizzle-orm/pg-core"
 import { relations } from "drizzle-orm"
@@ -229,6 +230,7 @@ export const beats = pgTable("beats", {
   wavFileKey: text("wav_file_key"),
   stemsZipKey: text("stems_zip_key"),
   midiFileKey: text("midi_file_key"),
+  waveformPeaks: jsonb("waveform_peaks").$type<number[]>(),
   status: beatStatusEnum("status").default("draft"),
   sortOrder: integer("sort_order").default(0),
   createdAt: timestamp("created_at").defaultNow().notNull(),

@@ -16,6 +16,20 @@ import { beats, beatPricing, beatProducers } from "./schema"
  *   npx wrangler r2 object put glitch-beats/beats/covers/break-5-cover.png --file="_RESOURECES/BEATS/TRAP_SNYDER/trap_snyder_logo.png"
  */
 
+// TODO: Replace with extractPeaks() from real audio when R2 is configured
+function generateSyntheticPeaks(count: number = 256): number[] {
+  const peaks: number[] = []
+  for (let i = 0; i < count; i++) {
+    const t = i / count
+    const envelope = Math.sin(t * Math.PI) * 0.4 + 0.3
+    const noise = Math.random() * 0.5
+    const value = Math.min(1, envelope + noise * 0.5)
+    peaks.push(value)
+  }
+  const max = Math.max(...peaks)
+  return peaks.map((p) => p / max)
+}
+
 const BEAT_ID = "00000000-0000-4000-a000-000000000001"
 const PRICING_MP3_ID = "00000000-0000-4000-a000-000000000011"
 const PRICING_WAV_ID = "00000000-0000-4000-a000-000000000012"
@@ -49,8 +63,9 @@ async function main() {
           genre: "Hip-Hop",
           moods: ["Dark", "Aggressive"],
           description: "Hard-hitting trap beat with dark atmospherics and aggressive 808 patterns.",
-          coverArtKey: null, // R2 not configured -- uses Music icon fallback
-          previewAudioKey: null, // R2 not configured -- no audio preview
+          coverArtKey: "beats/covers/break-5-cover.png",
+          previewAudioKey: "beats/audio/break-5.mp3",
+          waveformPeaks: generateSyntheticPeaks(256),
           status: "published",
           sortOrder: 1,
         })
@@ -64,6 +79,9 @@ async function main() {
             genre: "Hip-Hop",
             moods: ["Dark", "Aggressive"],
             description: "Hard-hitting trap beat with dark atmospherics and aggressive 808 patterns.",
+            coverArtKey: "beats/covers/break-5-cover.png",
+            previewAudioKey: "beats/audio/break-5.mp3",
+            waveformPeaks: generateSyntheticPeaks(256),
             status: "published",
             sortOrder: 1,
             updatedAt: new Date(),
@@ -127,6 +145,7 @@ async function main() {
       console.log("  Beat ID:", BEAT_ID)
       console.log("  Pricing: mp3_lease=$29, wav_lease=$49")
       console.log("  Producer: Trap Snyder (100%)")
+      console.log("  Waveform peaks: 256 synthetic peaks generated")
       console.log("")
       console.log("NOTE: R2 not configured. Cover art and audio preview are null.")
       console.log("The beat will render with the Music icon fallback in the catalog.")
