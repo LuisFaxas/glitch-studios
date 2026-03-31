@@ -43,6 +43,7 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
   return (
     <div>
       <div
+        data-testid="beat-row"
         onClick={onToggleExpand}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -58,18 +59,18 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
       >
         {/* Playing accent bar */}
         {isActivePlaying && (
-          <div className="absolute left-0 top-0 h-full w-0.5 bg-[#f5f5f0]" />
+          <div className="absolute left-0 top-0 h-full w-[2px] bg-[#f5f5f0]" />
         )}
 
-        {/* Cover art */}
-        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-none md:h-12 md:w-12">
+        {/* Cover art - 48px mobile, 56px desktop */}
+        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-none md:h-14 md:w-14">
           {beat.coverArtUrl ? (
             <Image
               src={beat.coverArtUrl}
               alt={beat.title}
               fill
               className="object-cover"
-              sizes="48px"
+              sizes="56px"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-[#222]">
@@ -78,10 +79,13 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
           )}
         </div>
 
-        {/* Title */}
+        {/* Title + Producer + Genre/Mood */}
         <div className="min-w-0 flex-1">
           <span className="block truncate font-mono text-[15px] font-bold text-[#f5f5f0] group-hover:glitch-hover">
             {beat.title}
+          </span>
+          <span className="block truncate font-sans text-[11px] text-[#888]">
+            {beat.producers[0]?.name ?? "Glitch Studios"}
           </span>
           {/* Genre/mood tags - hidden on mobile */}
           <div className="mt-0.5 hidden gap-1.5 md:flex">
@@ -97,6 +101,34 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
               </span>
             ))}
           </div>
+        </div>
+
+        {/* Decorative waveform strip - desktop only, NOT tied to audio playback */}
+        <div className="hidden h-[32px] w-[120px] shrink-0 items-center lg:flex" aria-hidden="true">
+          {isActivePlaying ? (
+            <div className="flex h-full w-full items-center gap-[1px]">
+              {Array.from({ length: 40 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="w-[2px] animate-pulse bg-[#f5f5f0]"
+                  style={{
+                    height: `${Math.sin(i * 0.7) * 12 + 16 + Math.cos(i * 1.3) * 4}px`,
+                    animationDelay: `${i * 50}ms`,
+                  }}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex h-full w-full items-center gap-[1px]">
+              {Array.from({ length: 40 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="w-[2px] bg-[#333]"
+                  style={{ height: `${Math.sin(i * 0.3) * 12 + 16}px` }}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* BPM/Key badges - hidden on mobile */}

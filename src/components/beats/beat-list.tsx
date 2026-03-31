@@ -9,28 +9,29 @@ interface BeatListProps {
   hasActiveFilters: boolean
 }
 
-export function BeatList({ beats, hasActiveFilters }: BeatListProps) {
+export function BeatList({ beats }: BeatListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
-  if (beats.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
-        <h2 className="mb-2 font-mono text-lg font-bold uppercase tracking-[0.05em] text-[#f5f5f0]">
-          {hasActiveFilters
-            ? "No matches for those filters"
-            : "Catalog coming soon"}
-        </h2>
-        <p className="max-w-md font-sans text-[15px] text-[#888]">
-          {hasActiveFilters
-            ? "Try adjusting your filters or clearing them to see all available beats."
-            : "New beats are on the way. Check back soon for fresh releases."}
-        </p>
-      </div>
-    )
-  }
+  if (beats.length === 0) return null
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col" data-testid="beat-list">
+      {/* Column headers - desktop only */}
+      <div
+        className="hidden items-center gap-3 border-b border-[#222] px-3 py-2 md:flex md:gap-4 md:px-4"
+        data-testid="list-headers"
+      >
+        <div className="h-14 w-14 shrink-0" /> {/* Spacer for cover art column */}
+        <span className="flex-1 font-mono text-[11px] uppercase text-[#555]">Title</span>
+        <div className="hidden w-[120px] shrink-0 lg:block">
+          <span className="font-mono text-[11px] uppercase text-[#555]">Waveform</span>
+        </div>
+        <span className="hidden w-16 shrink-0 font-mono text-[11px] uppercase text-[#555] md:block">BPM</span>
+        <span className="hidden w-12 shrink-0 font-mono text-[11px] uppercase text-[#555] md:block">Key</span>
+        <span className="w-16 shrink-0 font-mono text-[11px] uppercase text-[#555]">Price</span>
+        <div className="h-9 w-9 shrink-0" /> {/* Spacer for play button column */}
+      </div>
+
       {beats.map((beat) => (
         <BeatRow
           key={beat.id}
