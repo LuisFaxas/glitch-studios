@@ -135,6 +135,7 @@ Plans:
 - [ ] **Phase 6: Homepage** - Clear hierarchy, compelling CTAs, logical content flow
 - [ ] **Phase 7: Beats Catalog** - Industry-standard layout with prominent art, intuitive filters
 - [ ] **Phase 7.1: Listening Experience & Waveform Overhaul** - INSERTED -- Real waveforms, interactive scrubbing, mini-player widget, mobile waveform
+- [ ] **Phase 7.2: Mobile Experience Overhaul** - INSERTED -- Tab bar restructure, player coexistence, responsive hero, page-by-page audit
 - [ ] **Phase 8: Auth & Navigation** - Role-based redirects, discoverable client accounts
 - [ ] **Phase 9: Services & Booking** - Comprehensive service info, clear booking step flow
 - [ ] **Phase 10: Blog** - Consistent cards, engagement hooks, smooth browsing
@@ -209,6 +210,27 @@ Plans:
 - [x] 07-01-PLAN.md -- New components: beat card, card grid, view toggle, unified filter bar
 - [ ] 07-02-PLAN.md -- Wire catalog with view toggle, redesign list rows and page layout
 - [ ] 07-03-PLAN.md -- Real beat upload, Playwright visual verification, user approval
+
+### Phase 07.2: Mobile Experience Overhaul (INSERTED)
+
+**Goal:** Mobile experience is a first-class citizen -- working navigation, responsive hero, dynamic player/tab bar coexistence, and no layout breakage on any page
+**Depends on:** Phase 7.1
+**Requirements**: D-01, D-02, D-03, D-04, D-05, D-06, D-07, D-08, D-09, D-10, D-11
+**Success Criteria** (what must be TRUE):
+  1. Tab bar renders 6 equal slots in order: Beats, Services, Portfolio, Blog, Menu, Cart -- menu trigger on the right, not center
+  2. Player bar stacks above the tab bar when audio is playing, with dynamic bottom padding on content
+  3. Hero section is 70vh on mobile (vs 90vh desktop), centered without sidebar offset, CTAs visible without scrolling
+  4. Mobile nav overlay logo tile spans full width, all nav tiles and Sign In accessible
+  5. Every public page renders correctly at 375px, 390px, and 430px with no horizontal overflow
+**Plans**: 4 plans
+
+Plans:
+- [ ] 07.2-01-PLAN.md -- Playwright mobile audit (screenshot all pages at 3 viewports)
+- [ ] 07.2-02-PLAN.md -- Tab bar restructure, dynamic padding, overlay logo fix
+- [ ] 07.2-03-PLAN.md -- Hero section mobile height and sidebar offset fix
+- [ ] 07.2-04-PLAN.md -- Post-fix audit, page-by-page fixes, user verification
+
+**INSERTED**: yes
 
 ### Phase 07.1: Listening Experience & Waveform Overhaul (INSERTED)
 
@@ -318,7 +340,7 @@ Plans:
 
 **Execution Order:**
 v1.0: 1 -> 1.1 -> 1.2 -> 1.3 -> 1.4 -> 2 -> 3 -> 4 -> 4.1
-v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
+v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 7.2 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -336,6 +358,7 @@ v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
 | 6.1 Homepage Flair | v2.0 | 0/2 | Not started | - |
 | 7. Beats Catalog | v2.0 | 0/3 | Not started | - |
 | 7.1 Listening Experience & Waveform Overhaul | v2.0 | 0/3 | Not started | - |
+| 7.2 Mobile Experience Overhaul | v2.0 | 0/4 | Not started | - |
 | 8. Auth & Navigation | v2.0 | 0/0 | Not started | - |
 | 9. Services & Booking | v2.0 | 0/0 | Not started | - |
 | 10. Blog | v2.0 | 0/0 | Not started | - |
