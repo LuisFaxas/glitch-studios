@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { useQueryState, parseAsString } from "nuqs"
 import { AnimatePresence, motion } from "motion/react"
@@ -7,6 +8,15 @@ import { FilterBar } from "@/components/beats/filter-bar"
 import { BeatCardGrid } from "@/components/beats/beat-card-grid"
 import { BeatList } from "@/components/beats/beat-list"
 import type { BeatSummary } from "@/types/beats"
+
+const STORAGE_KEY = "beats-view"
+const VALID_VIEWS = ["compact", "card", "list"] as const
+
+function validateView(v: string): "compact" | "card" | "list" {
+  if (v === "list") return "list"
+  if (v === "card") return "card"
+  return "compact"
+}
 
 interface BeatCatalogProps {
   beats: BeatSummary[]
@@ -21,10 +31,33 @@ function BeatCatalogInner({
 }: BeatCatalogProps) {
   const [view, setView] = useQueryState(
     "view",
-    parseAsString.withDefault("card").withOptions({ shallow: true })
+    parseAsString.withDefault("compact").withOptions({ shallow: true })
   )
-  // Validate: only "card" or "list" are valid values
-  const currentView = view === "list" ? "list" : "card"
+  const currentView = validateView(view)
+
+  // On mount: if no URL view param, restore from localStorage
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (!params.has("view")) {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY)
+        if (stored && VALID_VIEWS.includes(stored as (typeof VALID_VIEWS)[number])) {
+          setView(stored)
+        }
+      } catch {
+        // localStorage unavailable
+      }
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Persist view changes to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, currentView)
+    } catch {
+      // localStorage unavailable
+    }
+  }, [currentView])
 
   return (
     <>
@@ -48,17 +81,7 @@ function BeatCatalogInner({
       ) : (
         <div className="mt-4">
           <AnimatePresence mode="wait">
-            {currentView === "card" ? (
-              <motion.div
-                key="card-view"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <BeatCardGrid beats={beats} />
-              </motion.div>
-            ) : (
+            {currentView === "list" ? (
               <motion.div
                 key="list-view"
                 initial={{ opacity: 0 }}
@@ -67,6 +90,19 @@ function BeatCatalogInner({
                 transition={{ duration: 0.2 }}
               >
                 <BeatList beats={beats} hasActiveFilters={hasActiveFilters} />
+              </motion.div>
+            ) : (
+              <motion.div
+                key={currentView === "card" ? "card-view" : "compact-view"}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <BeatCardGrid
+                  beats={beats}
+                  variant={currentView === "card" ? "large" : "compact"}
+                />
               </motion.div>
             )}
           </AnimatePresence>

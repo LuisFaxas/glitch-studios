@@ -9,7 +9,7 @@ import { LicenseModal } from "@/components/beats/license-modal"
 import { Badge } from "@/components/ui/badge"
 import type { BeatSummary } from "@/types/beats"
 
-export function BeatCard({ beat }: { beat: BeatSummary }) {
+export function BeatCard({ beat, variant = "compact" }: { beat: BeatSummary; variant?: "compact" | "large" }) {
   const [licenseModalOpen, setLicenseModalOpen] = useState(false)
   const { currentBeat, isPlaying, currentTime, duration, play, pause, seek } = useAudioPlayer()
   const isCurrentBeat = currentBeat?.id === beat.id
