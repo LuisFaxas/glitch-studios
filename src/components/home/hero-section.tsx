@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react"
 import Link from "next/link"
 import { ChevronDown } from "lucide-react"
+import clsx from "clsx"
 import styles from "@/components/tiles/logo-tile.module.css"
 import { useSidebar } from "@/components/layout/sidebar-context"
 
@@ -26,13 +27,8 @@ export function HeroSection({
   const indicatorOpacity = useTransform(scrollY, [0, 200], [1, 0])
   const { collapsed } = useSidebar()
 
-  // When sidebar is collapsed (64px), shift content left by half the sidebar width
-  // so the logo is centered on the full viewport, not just the content area.
-  // This makes the hero logo align exactly with the splash logo.
-  const sidebarOffset = collapsed ? -32 : 0
-
   return (
-    <section className="relative h-[90vh] overflow-hidden">
+    <section className="relative h-[70vh] md:h-[90vh] overflow-hidden">
       {/* Video background placeholder with scanline texture */}
       <div
         className="absolute inset-0 bg-[#0a0a0a]"
@@ -49,16 +45,14 @@ export function HeroSection({
       {/* Light bottom-only scrim for future video readability */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#000000]/30" />
 
-      {/* Subtitle + Logo — centered at viewport center as a group.
-           Subtitle sits above the logo to use the empty vertical space on top. */}
+      {/* Subtitle + Logo — centered within the hero section (container-relative).
+           top-1/2 -translate-y-1/2 centers vertically within the section, not the viewport.
+           Sidebar offset gated to md+ only so mobile is unaffected. */}
       <div
-        className="absolute z-10 flex flex-col items-center justify-center"
-        style={{
-          top: "50vh",
-          left: 0,
-          right: 0,
-          transform: `translateY(-50%) translateX(${collapsed ? "-32px" : "0px"})`,
-        }}
+        className={clsx(
+          "absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 flex flex-col items-center justify-center",
+          collapsed ? "md:-translate-x-8" : ""
+        )}
       >
         <p className="font-mono text-2xl md:text-4xl text-[#f5f5f0] tracking-tight mb-8">
           {subtitle}
@@ -72,10 +66,13 @@ export function HeroSection({
         </div>
       </div>
 
-      {/* CTAs — anchored to bottom of hero section */}
+      {/* CTAs — anchored to bottom of hero section with container-relative positioning.
+           bottom-16 (mobile) / bottom-24 (desktop) instead of viewport-relative bottom-[12vh]. */}
       <div
-        className="absolute z-10 bottom-[12vh] left-0 right-0 flex flex-col items-center gap-6 px-4 text-center"
-        style={{ transform: `translateX(${collapsed ? "-32px" : "0px"})` }}
+        className={clsx(
+          "absolute z-10 inset-x-0 bottom-16 md:bottom-24 flex flex-col items-center gap-6 px-4 text-center",
+          collapsed ? "md:-translate-x-8" : ""
+        )}
       >
 
         <div className="flex flex-col sm:flex-row gap-4">
@@ -106,8 +103,11 @@ export function HeroSection({
 
       {/* Animated scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-        style={{ opacity: indicatorOpacity, marginLeft: collapsed ? -32 : 0 }}
+        className={clsx(
+          "absolute bottom-4 left-1/2 -translate-x-1/2 z-10",
+          collapsed ? "md:ml-[-32px]" : ""
+        )}
+        style={{ opacity: indicatorOpacity }}
         animate={shouldReduceMotion ? undefined : { y: [0, 8, 0] }}
         transition={
           shouldReduceMotion
