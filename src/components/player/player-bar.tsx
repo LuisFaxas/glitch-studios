@@ -12,7 +12,7 @@ import {
 } from "lucide-react"
 import { useAudioPlayer } from "@/components/player/audio-player-provider"
 import { Waveform } from "@/components/player/waveform"
-import { Slider } from "@/components/ui/slider"
+import ElasticSlider from "@/components/ui/ElasticSlider"
 
 function formatTime(seconds: number): string {
   if (!seconds || !isFinite(seconds)) return "0:00"
@@ -45,17 +45,12 @@ export function PlayerBar() {
   }, [volume, isMuted, audioRef])
 
   const handleVolumeChange = useCallback(
-    (val: number | readonly number[]) => {
-      const v = Array.isArray(val) ? val[0] : val
+    (v: number) => {
       setVolume(v)
       if (v > 0) setIsMuted(false)
     },
     [],
   )
-
-  const toggleMute = useCallback(() => {
-    setIsMuted((prev) => !prev)
-  }, [])
 
   // Progress for waveform (0-1)
   const progress = duration > 0 ? currentTime / duration : 0
@@ -159,24 +154,14 @@ export function PlayerBar() {
             </button>
 
             {/* Volume */}
-            <div className="flex items-center gap-2 flex-shrink-0 w-[120px]">
-              <button
-                type="button"
-                onClick={toggleMute}
-                aria-label={isMuted ? "Unmute" : "Mute"}
-                className="p-1 text-[#888888] hover:text-[#f5f5f0] transition-colors"
-              >
-                {isMuted || volume === 0 ? (
-                  <VolumeX className="h-4 w-4" />
-                ) : (
-                  <Volume2 className="h-4 w-4" />
-                )}
-              </button>
-              <Slider
-                value={[isMuted ? 0 : volume]}
-                min={0}
-                max={100}
-                onValueChange={handleVolumeChange}
+            <div className="flex items-center flex-shrink-0 w-[140px] text-[#888888]">
+              <ElasticSlider
+                defaultValue={volume}
+                startingValue={0}
+                maxValue={100}
+                onChange={handleVolumeChange}
+                leftIcon={<VolumeX className="h-4 w-4" />}
+                rightIcon={<Volume2 className="h-4 w-4" />}
               />
             </div>
 
