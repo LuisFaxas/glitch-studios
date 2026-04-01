@@ -15,6 +15,7 @@ export function BeatCard({ beat, variant = "compact" }: { beat: BeatSummary; var
   const isCurrentBeat = currentBeat?.id === beat.id
   const isActivePlaying = isCurrentBeat && isPlaying
   const progress = isCurrentBeat && duration > 0 ? currentTime / duration : 0
+  const isCompact = variant !== "large"
 
   function handleWaveformSeek(p: number) {
     if (!beat.previewAudioUrl) return
@@ -63,14 +64,17 @@ export function BeatCard({ beat, variant = "compact" }: { beat: BeatSummary; var
       }`}
     >
       {/* Cover art section */}
-      <div className="relative aspect-square">
+      <div className={`relative ${isCompact ? "aspect-[4/3]" : "aspect-square"}`}>
         {beat.coverArtUrl ? (
           <Image
             src={beat.coverArtUrl}
             alt={beat.title}
             fill
             className="object-cover"
-            sizes="(min-width:1024px)33vw,(min-width:768px)50vw,100vw"
+            sizes={isCompact
+              ? "(min-width:1280px)20vw,(min-width:1024px)25vw,(min-width:768px)33vw,50vw"
+              : "(min-width:1024px)33vw,(min-width:768px)50vw,100vw"
+            }
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-[#222]">
@@ -92,20 +96,20 @@ export function BeatCard({ beat, variant = "compact" }: { beat: BeatSummary; var
             className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/60 opacity-0 transition-opacity duration-150 group-hover:opacity-100"
           >
             {isActivePlaying ? (
-              <Pause className="h-12 w-12 text-white" />
+              <Pause className={isCompact ? "h-8 w-8 text-white" : "h-12 w-12 text-white"} />
             ) : (
-              <Play className="h-12 w-12 text-white" />
+              <Play className={isCompact ? "h-8 w-8 text-white" : "h-12 w-12 text-white"} />
             )}
           </button>
         )}
       </div>
 
       {/* Waveform strip */}
-      <div className="px-4 pt-3">
+      <div className={isCompact ? "px-2 pt-2" : "px-4 pt-3"}>
         <Waveform
           peaks={beat.waveformPeaks}
           progress={progress}
-          height={28}
+          height={isCompact ? 20 : 28}
           barRadius={1}
           gradient
           gradientColors={{ from: "#f5f5f0", to: "#a0a09a" }}
@@ -118,7 +122,7 @@ export function BeatCard({ beat, variant = "compact" }: { beat: BeatSummary; var
       {/* Info section */}
       <div
         data-testid="beat-card-info"
-        className="cursor-pointer p-4"
+        className={`cursor-pointer ${isCompact ? "px-2 py-2" : "p-4"}`}
         onClick={
           isSoldExclusive ? undefined : () => setLicenseModalOpen(true)
         }
@@ -137,11 +141,11 @@ export function BeatCard({ beat, variant = "compact" }: { beat: BeatSummary; var
       >
         {/* Row 1: Title + Price */}
         <div className="flex items-baseline justify-between gap-2">
-          <span className="truncate font-mono text-[15px] font-bold text-[#f5f5f0] group-hover:glitch-hover">
+          <span className={`truncate font-mono font-bold text-[#f5f5f0] group-hover:glitch-hover ${isCompact ? "text-[13px]" : "text-[15px]"}`}>
             {beat.title}
           </span>
           {lowestPrice && (
-            <span className="shrink-0 font-mono text-[15px] font-bold text-[#f5f5f0]">
+            <span className={`shrink-0 font-mono font-bold text-[#f5f5f0] ${isCompact ? "text-[13px]" : "text-[15px]"}`}>
               FROM ${Number(lowestPrice.price).toFixed(0)}
             </span>
           )}
@@ -153,7 +157,7 @@ export function BeatCard({ beat, variant = "compact" }: { beat: BeatSummary; var
         </span>
 
         {/* Row 3: Metadata badges */}
-        <div className="mt-2 flex flex-wrap gap-1">
+        <div className={`flex flex-wrap gap-1 ${isCompact ? "mt-1" : "mt-2"}`}>
           <Badge className="rounded-none border-[#333] bg-[#222] font-mono text-[11px] uppercase text-[#f5f5f0]">
             {beat.genre}
           </Badge>
@@ -165,8 +169,8 @@ export function BeatCard({ beat, variant = "compact" }: { beat: BeatSummary; var
           </Badge>
         </div>
 
-        {/* Row 4: Mood tags */}
-        {beat.moods && beat.moods.length > 0 && (
+        {/* Row 4: Mood tags (hidden in compact) */}
+        {!isCompact && beat.moods && beat.moods.length > 0 && (
           <span className="mt-1 block font-sans text-[11px] text-[#888]">
             {beat.moods.slice(0, 2).join(", ")}
           </span>
