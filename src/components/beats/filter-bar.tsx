@@ -93,7 +93,12 @@ export function FilterBar({
     setLocalSearch("")
   }
 
-  const bpmValues = [bpmMin ?? 60, bpmMax ?? 200]
+  const [localBpm, setLocalBpm] = useState([bpmMin ?? 60, bpmMax ?? 200])
+
+  // Sync from URL -> local when URL changes (e.g., clear filters)
+  useEffect(() => {
+    setLocalBpm([bpmMin ?? 60, bpmMax ?? 200])
+  }, [bpmMin, bpmMax])
 
   return (
     <div
@@ -176,18 +181,19 @@ export function FilterBar({
                 min={60}
                 max={200}
                 step={1}
-                value={bpmValues}
+                value={localBpm}
                 onValueChange={(value: number | readonly number[]) => {
                   const values = Array.isArray(value)
                     ? value
                     : [value, value]
-                  if (values[0] === 60 && values[1] === 200) {
-                    setBpmMin(null)
-                    setBpmMax(null)
-                  } else {
-                    setBpmMin(values[0])
-                    setBpmMax(values[1])
-                  }
+                  setLocalBpm(values as number[])
+                }}
+                onValueCommit={(value: number | readonly number[]) => {
+                  const values = Array.isArray(value)
+                    ? value
+                    : [value, value]
+                  setBpmMin(values[0] === 60 ? null : values[0])
+                  setBpmMax(values[1] === 200 ? null : values[1])
                 }}
               />
             </div>
