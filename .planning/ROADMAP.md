@@ -225,8 +225,8 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 07.2-01-PLAN.md -- Playwright mobile audit (screenshot all pages at 3 viewports)
-- [ ] 07.2-02-PLAN.md -- Tab bar restructure, dynamic padding, overlay logo fix
+- [x] 07.2-01-PLAN.md -- Playwright mobile audit (screenshot all pages at 3 viewports)
+- [x] 07.2-02-PLAN.md -- Tab bar restructure, dynamic padding, overlay logo fix
 - [ ] 07.2-03-PLAN.md -- Hero section mobile height and sidebar offset fix
 - [ ] 07.2-04-PLAN.md -- Post-fix audit, page-by-page fixes, user verification
 
