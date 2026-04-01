@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Music, Wrench, Image, FileText, LayoutGrid } from "lucide-react"
+import { Music, Wrench, Film, BookOpen, LayoutGrid } from "lucide-react"
 import clsx from "clsx"
 import { MobileNavOverlay } from "@/components/layout/mobile-nav-overlay"
 import { CartIcon } from "@/components/cart/cart-icon"
@@ -11,9 +11,8 @@ import { CartIcon } from "@/components/cart/cart-icon"
 const tabItems = [
   { label: "Beats", href: "/beats", icon: Music },
   { label: "Services", href: "/services", icon: Wrench },
-  // Center position is the logo/menu trigger (handled separately)
-  { label: "Portfolio", href: "/portfolio", icon: Image },
-  { label: "Blog", href: "/blog", icon: FileText },
+  { label: "Portfolio", href: "/portfolio", icon: Film },
+  { label: "Blog", href: "/blog", icon: BookOpen },
 ] as const
 
 export function BottomTabBar() {
@@ -28,8 +27,8 @@ export function BottomTabBar() {
         role="navigation"
         aria-label="Mobile navigation"
       >
-        {/* Left two tabs */}
-        {tabItems.slice(0, 2).map((item) => {
+        {/* Nav tabs: Beats, Services, Portfolio, Blog */}
+        {tabItems.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/")
           return (
@@ -53,7 +52,7 @@ export function BottomTabBar() {
           )
         })}
 
-        {/* Center: Logo/Menu trigger */}
+        {/* Menu trigger (position 5) */}
         <button
           type="button"
           onClick={() => setOverlayOpen(true)}
@@ -72,32 +71,7 @@ export function BottomTabBar() {
           <LayoutGrid className="h-6 w-6" aria-hidden="true" />
         </button>
 
-        {/* Right two tabs */}
-        {tabItems.slice(2).map((item) => {
-          const isActive =
-            pathname === item.href || pathname.startsWith(item.href + "/")
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-label={item.label}
-              className={clsx(
-                "flex flex-1 items-center justify-center",
-                "border-r border-[#222222]",
-                "rounded-none transition-colors duration-200",
-                "outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-[-2px]",
-                "min-h-[48px]",
-                isActive
-                  ? "bg-[#f5f5f0] text-[#000000]"
-                  : "bg-[#111111] text-[#f5f5f0] active:bg-[#0a0a0a]",
-              )}
-            >
-              <item.icon className="h-6 w-6" aria-hidden="true" />
-            </Link>
-          )
-        })}
-
-        {/* Cart icon */}
+        {/* Cart icon (position 6, rightmost) */}
         <div className="flex flex-1 items-center justify-center bg-[#111111] text-[#f5f5f0] min-h-[48px]">
           <CartIcon />
         </div>

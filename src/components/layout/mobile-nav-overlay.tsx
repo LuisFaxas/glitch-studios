@@ -141,7 +141,9 @@ export function MobileNavOverlay({ isOpen, onClose, latestPostSlot }: MobileNavO
           <div className="relative z-[2] flex-1 p-4">
             {/* Logo tile */}
             <div className="grid grid-cols-2 gap-1 mb-1">
-              <LogoTile />
+              <div className="col-span-2">
+                <LogoTile />
+              </div>
             </div>
 
             {/* Navigation tiles */}
