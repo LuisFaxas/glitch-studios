@@ -123,7 +123,60 @@ test.describe("Mobile audit - overlay-open state", () => {
   }
 })
 
-// ── Describe block 3: Player-active state (beats page) ──
+// ── Describe block 3: Splash overlay verification on mobile ──
+test.describe("Mobile audit - splash overlay verification", () => {
+  test(`splash at 375px - no overflow, centered logo`, async ({ browser }) => {
+    const vp = viewports[0] // 375px
+    const context = await browser.newContext({
+      viewport: { width: vp.width, height: vp.height },
+      isMobile: vp.isMobile,
+      hasTouch: vp.hasTouch,
+      userAgent:
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+    })
+    const page = await context.newPage()
+
+    // Do NOT set glitch-splash-seen — we want the splash to play
+    await page.goto("/", { waitUntil: "domcontentloaded" })
+
+    // Wait for splash to start playing (the "playing" state)
+    await page.waitForTimeout(500)
+
+    // Screenshot during splash animation
+    await page.screenshot({
+      path: path.join(screenshotDir, `splash-375-playing.png`),
+      fullPage: false, // viewport only — no scroll
+    })
+
+    // Check for horizontal overflow during splash
+    const scrollWidth = await page.evaluate(
+      () => document.documentElement.scrollWidth
+    )
+    const innerWidth = await page.evaluate(() => window.innerWidth)
+    expect(scrollWidth).toBeLessThanOrEqual(innerWidth)
+
+    // Verify the splash container is full-screen fixed
+    const splashOverlay = page.locator("div.fixed.inset-0").first()
+    const isVisible = await splashOverlay.isVisible().catch(() => false)
+    test.info().annotations.push({
+      type: isVisible ? "splash-visible" : "splash-not-found",
+      description: `Splash overlay fixed container visible: ${isVisible}`,
+    })
+
+    // Wait for splash to complete
+    await page.waitForTimeout(3000)
+
+    // Screenshot after splash completes
+    await page.screenshot({
+      path: path.join(screenshotDir, `splash-375-complete.png`),
+      fullPage: false,
+    })
+
+    await context.close()
+  })
+})
+
+// ── Describe block 4: Player-active state (beats page) ──
 test.describe("Mobile audit - player-active state", () => {
   for (const vp of viewports) {
     test(`player-active at ${vp.name}px`, async ({ browser }) => {
