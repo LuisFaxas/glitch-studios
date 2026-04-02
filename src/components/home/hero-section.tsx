@@ -65,15 +65,15 @@ export function HeroSection({
         />
       </div>
 
-      {/* Scrim for text readability over the dither */}
-      <div className="absolute inset-0 bg-[#000000]/40" />
+      {/* Scrim for text readability over the dither — pointer-events-none so mouse reaches the canvas */}
+      <div className="absolute inset-0 bg-[#000000]/40 pointer-events-none" />
 
       {/* Subtitle + Logo — centered within the hero section (container-relative).
            top-1/2 -translate-y-1/2 centers vertically within the section, not the viewport.
            Sidebar offset gated to md+ only so mobile is unaffected. */}
       <div
         className={clsx(
-          "absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 flex flex-col items-center justify-center",
+          "absolute inset-x-0 top-1/2 -translate-y-1/2 z-10 flex flex-col items-center justify-center pointer-events-none",
           collapsed ? "md:-translate-x-8" : ""
         )}
       >
@@ -93,12 +93,12 @@ export function HeroSection({
            bottom-16 (mobile) / bottom-24 (desktop) instead of viewport-relative bottom-[12vh]. */}
       <div
         className={clsx(
-          "absolute z-10 inset-x-0 bottom-16 md:bottom-24 flex flex-col items-center gap-6 px-4 text-center",
+          "absolute z-10 inset-x-0 bottom-16 md:bottom-24 flex flex-col items-center gap-6 px-4 text-center pointer-events-none",
           collapsed ? "md:-translate-x-8" : ""
         )}
       >
 
-        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 w-full max-w-[280px] sm:max-w-none sm:w-auto">
+        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 w-full max-w-[280px] sm:max-w-none sm:w-auto pointer-events-auto">
           <Link
             href={ctaLink}
             className="w-full sm:w-auto bg-[#f5f5f0] text-[#000] border border-[#f5f5f0] px-5 py-2.5 md:px-8 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-sm hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
