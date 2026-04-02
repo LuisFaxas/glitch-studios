@@ -17,9 +17,9 @@ export function ServicesOverview({ services }: ServicesOverviewProps) {
   if (services.length === 0) return null
 
   return (
-    <ScrollSection className="py-16 md:py-24">
+    <ScrollSection className="py-16 md:py-24 border-t border-[#1a1a1a]">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-[#f5f5f0] mb-12">
+        <h2 className="font-mono font-bold uppercase text-2xl md:text-4xl tracking-tight text-[#f5f5f0] mb-12">
           What We Do
         </h2>
 

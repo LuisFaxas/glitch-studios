@@ -108,19 +108,19 @@ export function HeroSection({
         <div className="grid grid-cols-2 md:flex gap-2 md:gap-4 w-full max-w-[320px] md:max-w-none md:w-auto pointer-events-auto">
           <Link
             href={ctaLink}
-            className="col-span-2 bg-[#f5f5f0] text-[#000] border border-[#f5f5f0] px-5 py-3 md:px-8 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-sm hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
+            className="col-span-2 bg-[#f5f5f0] text-[#000] border border-[#f5f5f0] px-5 py-3 md:px-10 md:py-4 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-base hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
           >
             {ctaText}
           </Link>
           <Link
             href="/beats"
-            className="bg-transparent text-[#f5f5f0] border border-[#444] px-4 py-2.5 md:px-8 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+            className="bg-transparent text-[#f5f5f0] border border-[#444] px-4 py-2.5 md:px-6 md:py-2.5 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-xs hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
           >
             Beats
           </Link>
           <Link
             href="/portfolio"
-            className="bg-transparent text-[#f5f5f0] border border-[#444] px-4 py-2.5 md:px-8 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+            className="bg-transparent text-[#f5f5f0] border border-[#444] px-4 py-2.5 md:px-6 md:py-2.5 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-xs hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
           >
             Portfolio
           </Link>

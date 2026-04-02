@@ -26,6 +26,8 @@ export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
 
+  if (beats.length === 0) return null
+
   return (
     <ScrollSection variant="clip-reveal" className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4">
@@ -33,32 +35,25 @@ export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
           <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-[#f5f5f0]">
             Featured Beats
           </h2>
-          {beats.length > 0 && (
-            <div className="flex gap-2">
-              <button
-                onClick={scrollPrev}
-                aria-label="Previous beat"
-                className="w-10 h-10 flex items-center justify-center border border-[#222] bg-[#111] text-[#f5f5f0] rounded-none hover:border-[#444] hover:bg-[#1a1a1a] transition-colors cursor-pointer"
-              >
-                <ChevronLeft className="size-5" />
-              </button>
-              <button
-                onClick={scrollNext}
-                aria-label="Next beat"
-                className="w-10 h-10 flex items-center justify-center border border-[#222] bg-[#111] text-[#f5f5f0] rounded-none hover:border-[#444] hover:bg-[#1a1a1a] transition-colors cursor-pointer"
-              >
-                <ChevronRight className="size-5" />
-              </button>
-            </div>
-          )}
+          <div className="flex gap-2">
+            <button
+              onClick={scrollPrev}
+              aria-label="Previous beat"
+              className="w-10 h-10 flex items-center justify-center border border-[#222] bg-[#111] text-[#f5f5f0] rounded-none hover:border-[#444] hover:bg-[#1a1a1a] transition-colors cursor-pointer"
+            >
+              <ChevronLeft className="size-5" />
+            </button>
+            <button
+              onClick={scrollNext}
+              aria-label="Next beat"
+              className="w-10 h-10 flex items-center justify-center border border-[#222] bg-[#111] text-[#f5f5f0] rounded-none hover:border-[#444] hover:bg-[#1a1a1a] transition-colors cursor-pointer"
+            >
+              <ChevronRight className="size-5" />
+            </button>
+          </div>
         </div>
 
-        {beats.length === 0 ? (
-          <div className="bg-[#111] border border-[#222] rounded-none p-8 flex items-center justify-center">
-            <p className="font-mono text-[#555] text-sm">No beats available yet</p>
-          </div>
-        ) : (
-          <div className="overflow-hidden" ref={emblaRef}>
+        <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex gap-4">
               {beats.map((beat) => (
                 <Link
@@ -94,7 +89,6 @@ export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
               ))}
             </div>
           </div>
-        )}
       </div>
     </ScrollSection>
   )

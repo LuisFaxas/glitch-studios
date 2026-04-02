@@ -50,9 +50,9 @@ export function NewsletterForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="bg-[#f5f5f0] text-[#000000] border border-[#f5f5f0] rounded-none px-6 h-10 font-mono font-bold text-sm uppercase tracking-[0.05em] hover:bg-[#000000] hover:text-[#f5f5f0] transition-colors disabled:opacity-50"
+        className="shrink-0 bg-[#f5f5f0] text-[#000000] border border-[#f5f5f0] rounded-none px-4 md:px-6 h-10 font-mono font-bold text-xs md:text-sm uppercase tracking-[0.05em] hover:bg-[#000000] hover:text-[#f5f5f0] transition-colors disabled:opacity-50 whitespace-nowrap"
       >
-        {isLoading ? "..." : "Join the List"}
+        {isLoading ? "..." : "Join"}
       </button>
     </form>
   )

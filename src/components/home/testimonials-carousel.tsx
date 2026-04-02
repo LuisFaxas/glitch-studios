@@ -32,13 +32,13 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
   }
 
   return (
-    <ScrollSection className="py-16 md:py-24">
+    <ScrollSection className="py-16 md:py-24 border-t border-[#1a1a1a]">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-[#f5f5f0]">
+        <div className="flex items-start justify-between gap-4 mb-8">
+          <h2 className="font-mono font-bold uppercase text-2xl md:text-4xl tracking-tight text-[#f5f5f0]">
             What They Say
           </h2>
-          <div className="flex gap-2">
+          <div className="flex gap-2 shrink-0 mt-1">
             <button
               onClick={scrollPrev}
               aria-label="Previous testimonial"
