@@ -7,11 +7,6 @@ export function ScrollArrow() {
 
   return (
     <div className="flex flex-col items-center gap-3">
-      {/* "SCROLL" text with glitch effect */}
-      <span className="relative font-mono text-xs md:text-sm font-bold uppercase tracking-[0.3em] text-[#f5f5f0]/60 select-none scroll-glitch-text">
-        Scroll
-      </span>
-
       {/* Single bold arrow */}
       <motion.div
         animate={shouldReduceMotion ? undefined : { y: [0, 10, 0] }}
@@ -26,39 +21,6 @@ export function ScrollArrow() {
         </svg>
       </motion.div>
 
-      {/* Glitch animation for the text */}
-      <style jsx>{`
-        .scroll-glitch-text {
-          animation: scroll-glitch 4s infinite;
-        }
-        @keyframes scroll-glitch {
-          0%, 92% {
-            text-shadow: none;
-            transform: translate(0);
-          }
-          93% {
-            text-shadow: -2px 0 #f5f5f0, 2px 0 #f5f5f0;
-            transform: translate(-1px, 0);
-          }
-          94% {
-            text-shadow: 2px 0 rgba(255,0,80,0.5), -2px 0 rgba(0,200,255,0.5);
-            transform: translate(2px, 0);
-          }
-          95% {
-            text-shadow: -1px 0 rgba(255,0,80,0.5), 1px 0 rgba(0,200,255,0.5);
-            transform: translate(-1px, 0);
-          }
-          96%, 100% {
-            text-shadow: none;
-            transform: translate(0);
-          }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .scroll-glitch-text {
-            animation: none;
-          }
-        }
-      `}</style>
     </div>
   )
 }
