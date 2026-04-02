@@ -20,7 +20,7 @@ interface TestimonialsCarouselProps {
 }
 
 export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, containScroll: false }, [
     Autoplay({ delay: 3000, stopOnInteraction: true }),
   ])
 
@@ -61,7 +61,7 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
             {testimonials.map((testimonial) => (
               <div
                 key={testimonial.id}
-                className="flex-shrink-0 w-[350px] md:w-[400px] bg-[#111111] border border-[#222222] rounded-none p-8 relative"
+                className="flex-shrink-0 w-[85vw] md:w-[400px] bg-[#111111] border border-[#222222] rounded-none p-8 relative"
               >
                 {/* Decorative quotation mark */}
                 <span className="absolute top-4 left-4 text-6xl text-[#222222] font-serif leading-none select-none" aria-hidden="true">

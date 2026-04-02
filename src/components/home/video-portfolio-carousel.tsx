@@ -27,7 +27,7 @@ function getYouTubeId(url: string): string | null {
 }
 
 export function VideoPortfolioCarousel({ portfolioItems }: VideoPortfolioCarouselProps) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" })
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start", containScroll: false })
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
@@ -91,7 +91,7 @@ export function VideoPortfolioCarousel({ portfolioItems }: VideoPortfolioCarouse
               return (
                 <div
                   key={item.id}
-                  className="flex-shrink-0 w-[320px] bg-[#111111] border border-[#222222] rounded-none overflow-hidden"
+                  className="flex-shrink-0 w-[80vw] md:w-[320px] bg-[#111111] border border-[#222222] rounded-none overflow-hidden"
                 >
                   {/* Thumbnail */}
                   <div className="relative aspect-video bg-[#0a0a0a]">

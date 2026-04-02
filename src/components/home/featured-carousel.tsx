@@ -21,7 +21,7 @@ interface FeaturedCarouselProps {
 }
 
 export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" })
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start", containScroll: false })
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
@@ -64,7 +64,7 @@ export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
                 <Link
                   key={beat.id}
                   href={"/beats/" + beat.slug}
-                  className="flex-shrink-0 w-[220px] bg-[#111] border border-[#222] rounded-none overflow-hidden hover:border-[#444] hover:bg-[#1a1a1a] transition-colors group"
+                  className="flex-shrink-0 w-[42vw] md:w-[220px] bg-[#111] border border-[#222] rounded-none overflow-hidden hover:border-[#444] hover:bg-[#1a1a1a] transition-colors group"
                 >
                   <div className="relative aspect-square bg-[#0a0a0a]">
                     {beat.coverArtKey ? (
