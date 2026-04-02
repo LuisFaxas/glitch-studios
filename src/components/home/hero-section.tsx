@@ -54,10 +54,10 @@ export function HeroSection({
           collapsed ? "md:-translate-x-8" : ""
         )}
       >
-        <p className="font-mono text-2xl md:text-4xl text-[#f5f5f0] tracking-tight mb-8">
+        <p className="font-mono text-sm md:text-4xl text-[#f5f5f0] tracking-tight mb-4 md:mb-8 px-4 text-center">
           {subtitle}
         </p>
-        <div className="w-[80vw] max-w-[600px]">
+        <div className="w-[60vw] max-w-[280px] md:w-[80vw] md:max-w-[600px]">
           <div className={styles.glitchWrapper}>
             <div className={styles.glitchImg} />
             <div className={styles.glitchLayer1} aria-hidden="true" />
@@ -75,28 +75,28 @@ export function HeroSection({
         )}
       >
 
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 w-full max-w-[280px] sm:max-w-none sm:w-auto">
           <Link
             href={ctaLink}
-            className="w-full sm:w-auto bg-[#f5f5f0] text-[#000] border border-[#f5f5f0] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
+            className="w-full sm:w-auto bg-[#f5f5f0] text-[#000] border border-[#f5f5f0] px-5 py-2.5 md:px-8 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-sm hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
           >
             {ctaText}
           </Link>
           <Link
             href="/beats"
-            className="w-full sm:w-auto bg-transparent text-[#f5f5f0] border border-[#444] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+            className="w-full sm:w-auto bg-transparent text-[#f5f5f0] border border-[#444] px-5 py-2.5 md:px-8 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
           >
             Browse Beats
           </Link>
           <Link
             href="/portfolio"
-            className="w-full sm:w-auto bg-transparent text-[#f5f5f0] border border-[#444] px-8 py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+            className="w-full sm:w-auto bg-transparent text-[#f5f5f0] border border-[#444] px-5 py-2.5 md:px-8 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
           >
             View Portfolio
           </Link>
         </div>
 
-        <p className="font-mono text-xs text-[#555] uppercase tracking-[0.1em]">
+        <p className="font-mono text-[10px] md:text-xs text-[#555] uppercase tracking-[0.1em]">
           Music &amp; Video Production Studio
         </p>
       </div>

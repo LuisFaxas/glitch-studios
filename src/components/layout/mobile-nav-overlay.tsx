@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useCallback, useRef, type ReactNode } from "react"
+import { useEffect, useCallback, useRef, useState, type ReactNode } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
 import {
@@ -89,10 +89,15 @@ export function MobileNavOverlay({ isOpen, onClose, latestPostSlot }: MobileNavO
     return () => overlay.removeEventListener("keydown", handleTab)
   }, [isOpen])
 
-  // Close on route change
+  // Close on route change — track previous pathname to avoid firing on mount
+  // or when onClose reference changes
+  const [prevPathname, setPrevPathname] = useState(pathname)
   useEffect(() => {
-    onClose()
-  }, [pathname, onClose])
+    if (pathname !== prevPathname) {
+      setPrevPathname(pathname)
+      onClose()
+    }
+  }, [pathname, prevPathname, onClose])
 
   const handleNavClick = (href: string) => {
     onClose()

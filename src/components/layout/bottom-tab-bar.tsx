@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation"
 import { Music, Wrench, Film, BookOpen, LayoutGrid } from "lucide-react"
 import clsx from "clsx"
 import { MobileNavOverlay } from "@/components/layout/mobile-nav-overlay"
-import { CartIcon } from "@/components/cart/cart-icon"
 
 const tabItems = [
   { label: "Beats", href: "/beats", icon: Music },
@@ -27,7 +26,7 @@ export function BottomTabBar() {
         role="navigation"
         aria-label="Mobile navigation"
       >
-        {/* Nav tabs: Beats, Services, Portfolio, Blog */}
+        {/* Nav tabs with labels */}
         {tabItems.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/")
@@ -37,7 +36,7 @@ export function BottomTabBar() {
               href={item.href}
               aria-label={item.label}
               className={clsx(
-                "flex flex-1 items-center justify-center",
+                "flex flex-1 flex-col items-center justify-center gap-0.5",
                 "border-r border-[#222222]",
                 "rounded-none transition-colors duration-200",
                 "outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-[-2px]",
@@ -47,19 +46,19 @@ export function BottomTabBar() {
                   : "bg-[#111111] text-[#f5f5f0] active:bg-[#0a0a0a]",
               )}
             >
-              <item.icon className="h-6 w-6" aria-hidden="true" />
+              <item.icon className="h-5 w-5" aria-hidden="true" />
+              <span className="font-mono text-[9px] uppercase tracking-wider">{item.label}</span>
             </Link>
           )
         })}
 
-        {/* Menu trigger (position 5) */}
+        {/* Menu trigger (rightmost) */}
         <button
           type="button"
           onClick={() => setOverlayOpen(true)}
           aria-label="Open navigation menu"
           className={clsx(
-            "flex flex-1 items-center justify-center",
-            "border-r border-[#222222]",
+            "flex flex-1 flex-col items-center justify-center gap-0.5",
             "rounded-none transition-colors duration-200",
             "outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-[-2px]",
             "min-h-[48px]",
@@ -68,13 +67,9 @@ export function BottomTabBar() {
               : "bg-[#111111] text-[#f5f5f0] active:bg-[#0a0a0a]",
           )}
         >
-          <LayoutGrid className="h-6 w-6" aria-hidden="true" />
+          <LayoutGrid className="h-5 w-5" aria-hidden="true" />
+          <span className="font-mono text-[9px] uppercase tracking-wider">Menu</span>
         </button>
-
-        {/* Cart icon (position 6, rightmost) */}
-        <div className="flex flex-1 items-center justify-center bg-[#111111] text-[#f5f5f0] min-h-[48px]">
-          <CartIcon />
-        </div>
       </nav>
 
       {/* Mobile nav overlay */}
