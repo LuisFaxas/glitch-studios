@@ -12,9 +12,8 @@ export function ScrollArrow() {
         Scroll
       </span>
 
-      {/* Large animated arrow — three stacked chevrons that pulse downward */}
+      {/* Single bold arrow */}
       <motion.div
-        className="flex flex-col items-center -space-y-3"
         animate={shouldReduceMotion ? undefined : { y: [0, 10, 0] }}
         transition={
           shouldReduceMotion
@@ -22,13 +21,7 @@ export function ScrollArrow() {
             : { duration: 2, repeat: Infinity, ease: "easeInOut" }
         }
       >
-        <svg width="40" height="40" viewBox="0 0 40 20" className="text-[#f5f5f0]/20">
-          <path d="M4 4 L20 16 L36 4" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="square" />
-        </svg>
-        <svg width="40" height="40" viewBox="0 0 40 20" className="text-[#f5f5f0]/40">
-          <path d="M4 4 L20 16 L36 4" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="square" />
-        </svg>
-        <svg width="40" height="40" viewBox="0 0 40 20" className="text-[#f5f5f0]/70">
+        <svg width="40" height="24" viewBox="0 0 40 20" className="text-[#f5f5f0]">
           <path d="M4 4 L20 16 L36 4" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="square" />
         </svg>
       </motion.div>
