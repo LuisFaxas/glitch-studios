@@ -1,11 +1,15 @@
 "use client"
 
+import { useMemo } from "react"
+import dynamic from "next/dynamic"
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react"
 import Link from "next/link"
 import { ChevronDown } from "lucide-react"
 import clsx from "clsx"
 import styles from "@/components/tiles/logo-tile.module.css"
 import { useSidebar } from "@/components/layout/sidebar-context"
+
+const Dither = dynamic(() => import("@/components/ui/dither"), { ssr: false })
 
 interface HeroSectionProps {
   title?: string
@@ -27,23 +31,42 @@ export function HeroSection({
   const indicatorOpacity = useTransform(scrollY, [0, 200], [1, 0])
   const { collapsed } = useSidebar()
 
+  // Random color on each mount — picks from a curated set of moody/cyberpunk hues
+  const randomColor = useMemo(() => {
+    const palette: [number, number, number][] = [
+      [0.4, 0.1, 0.6],   // deep purple
+      [0.1, 0.3, 0.6],   // ocean blue
+      [0.6, 0.1, 0.2],   // crimson
+      [0.1, 0.5, 0.4],   // teal
+      [0.5, 0.3, 0.1],   // amber
+      [0.2, 0.1, 0.5],   // indigo
+      [0.6, 0.05, 0.4],  // magenta
+      [0.1, 0.4, 0.2],   // forest
+      [0.5, 0.1, 0.5],   // violet
+      [0.1, 0.2, 0.5],   // navy
+    ]
+    return palette[Math.floor(Math.random() * palette.length)]
+  }, [])
+
   return (
     <section className="relative h-[70vh] md:h-[90vh] overflow-hidden">
-      {/* Video background placeholder with scanline texture */}
-      <div
-        className="absolute inset-0 bg-[#0a0a0a]"
-        data-video-placeholder="true"
-        style={{
-          backgroundImage: backgroundMediaUrl
-            ? `url(${backgroundMediaUrl})`
-            : "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 4px)",
-          backgroundSize: backgroundMediaUrl ? "cover" : undefined,
-          backgroundPosition: backgroundMediaUrl ? "center" : undefined,
-        }}
-      />
+      {/* Dithered wave background */}
+      <div className="absolute inset-0">
+        <Dither
+          waveSpeed={0.03}
+          waveFrequency={3}
+          waveAmplitude={0.3}
+          waveColor={randomColor}
+          colorNum={4}
+          pixelSize={3}
+          disableAnimation={shouldReduceMotion ?? false}
+          enableMouseInteraction={true}
+          mouseRadius={1}
+        />
+      </div>
 
-      {/* Light bottom-only scrim for future video readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#000000]/30" />
+      {/* Scrim for text readability over the dither */}
+      <div className="absolute inset-0 bg-[#000000]/40" />
 
       {/* Subtitle + Logo — centered within the hero section (container-relative).
            top-1/2 -translate-y-1/2 centers vertically within the section, not the viewport.
