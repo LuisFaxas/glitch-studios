@@ -53,7 +53,7 @@ export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
           </div>
         </div>
 
-        <div className="overflow-hidden" ref={emblaRef}>
+        <div className="overflow-hidden select-none" ref={emblaRef}>
             <div className="flex gap-4">
               {beats.map((beat) => (
                 <Link

@@ -77,7 +77,7 @@ export function VideoPortfolioCarousel({ portfolioItems }: VideoPortfolioCarouse
           </div>
         </div>
 
-        <div className="overflow-hidden" ref={emblaRef}>
+        <div className="overflow-hidden select-none" ref={emblaRef}>
           <div className="flex gap-4">
             {portfolioItems.map((item) => {
               const youtubeId =

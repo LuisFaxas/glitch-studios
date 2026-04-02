@@ -87,7 +87,7 @@ export function PortfolioCarousel({ items }: { items: PortfolioItem[] }) {
 
       {/* Carousel */}
       <div className="relative">
-        <div className="overflow-hidden" ref={emblaRef}>
+        <div className="overflow-hidden select-none" ref={emblaRef}>
           <div className="flex gap-1">
             {filteredItems.map((item) => (
               <div

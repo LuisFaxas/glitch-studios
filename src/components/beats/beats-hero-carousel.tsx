@@ -60,7 +60,7 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
       </span>
 
       <div className="relative h-[280px] w-full overflow-hidden">
-        <div className="h-full" ref={emblaRef}>
+        <div className="h-full select-none" ref={emblaRef}>
           <div className="flex h-full">
             {/* Slide 1 - Bundle Promo */}
             <div
