@@ -4,7 +4,7 @@ import { useMemo, useState, useCallback } from "react"
 import dynamic from "next/dynamic"
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react"
 import Link from "next/link"
-import { ChevronDown } from "lucide-react"
+import { ScrollArrow } from "@/components/home/scroll-arrow"
 import clsx from "clsx"
 import styles from "@/components/tiles/logo-tile.module.css"
 import { useSidebar } from "@/components/layout/sidebar-context"
@@ -130,22 +130,12 @@ export function HeroSection({
           Music &amp; Video Production Studio
         </p>
 
-        {/* Scroll indicator — sits right below the tagline */}
+        {/* Scroll indicator — big, glitchy, unmissable */}
         <motion.div
-          className="mt-6 md:mt-8 flex flex-col items-center gap-1"
+          className="mt-6 md:mt-8"
           style={{ opacity: indicatorOpacity }}
         >
-          <span className="font-mono text-[9px] text-[#444] uppercase tracking-[0.2em]">Scroll</span>
-          <motion.div
-            animate={shouldReduceMotion ? undefined : { y: [0, 6, 0] }}
-            transition={
-              shouldReduceMotion
-                ? undefined
-                : { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
-            }
-          >
-            <ChevronDown className="size-5 text-[#555]" />
-          </motion.div>
+          <ScrollArrow />
         </motion.div>
       </div>
 
