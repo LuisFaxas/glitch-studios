@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useState, useCallback } from "react"
 import dynamic from "next/dynamic"
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react"
 import Link from "next/link"
@@ -48,10 +48,17 @@ export function HeroSection({
     return palette[Math.floor(Math.random() * palette.length)]
   }, [])
 
+  // Track when WebGL canvas has rendered its first frame
+  const [canvasReady, setCanvasReady] = useState(false)
+  const handleDitherReady = useCallback(() => setCanvasReady(true), [])
+
   return (
-    <section className="relative h-[70vh] md:h-[90vh] overflow-hidden">
-      {/* Dithered wave background */}
-      <div className="absolute inset-0">
+    <section className="relative h-[70vh] md:h-[90vh] overflow-hidden bg-[#000000]">
+      {/* Dithered wave background — fades in once WebGL renders first frame */}
+      <div
+        className="absolute inset-0 transition-opacity duration-500"
+        style={{ opacity: canvasReady ? 1 : 0 }}
+      >
         <Dither
           waveSpeed={0.03}
           waveFrequency={3}
@@ -62,6 +69,7 @@ export function HeroSection({
           disableAnimation={shouldReduceMotion ?? false}
           enableMouseInteraction={true}
           mouseRadius={1}
+          onReady={handleDitherReady}
         />
       </div>
 
