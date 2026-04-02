@@ -12,18 +12,12 @@ export function SplashOverlay({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (shouldReduceMotion) {
-      sessionStorage.setItem("glitch-splash-seen", "true")
       setSplashState("done")
       return
     }
 
-    const seen = sessionStorage.getItem("glitch-splash-seen")
-    if (seen) {
-      setSplashState("done")
-    } else {
-      setSplashState("playing")
-      document.body.style.overflow = "hidden"
-    }
+    setSplashState("playing")
+    document.body.style.overflow = "hidden"
 
     return () => {
       document.body.style.overflow = ""
@@ -37,26 +31,19 @@ export function SplashOverlay({ children }: { children: React.ReactNode }) {
   }, [])
 
   const handleExitComplete = useCallback(() => {
-    sessionStorage.setItem("glitch-splash-seen", "true")
     document.body.style.overflow = ""
     setSplashState("done")
   }, [])
 
-  // SSR and pre-hydration: render children behind a black screen
-  // so there's no flash of content before splash plays
-  if (splashState === "pending") {
-    return (
-      <>
+  // Children always render first (same tree position) so they never
+  // remount when splash state changes. Overlay renders on top via z-50.
+  return (
+    <>
+      {children}
+      {splashState === "pending" && (
         <div className="fixed inset-0 z-50 bg-black" />
-        {children}
-      </>
-    )
-  }
-
-  // Splash is playing or exiting
-  if (splashState === "playing" || splashState === "exiting") {
-    return (
-      <>
+      )}
+      {(splashState === "playing" || splashState === "exiting") && (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black"
           animate={{ opacity: splashState === "exiting" ? 0 : 1 }}
@@ -88,11 +75,7 @@ export function SplashOverlay({ children }: { children: React.ReactNode }) {
             </div>
           </motion.div>
         </motion.div>
-        {children}
-      </>
-    )
-  }
-
-  // Done — just render children
-  return <>{children}</>
+      )}
+    </>
+  )
 }
