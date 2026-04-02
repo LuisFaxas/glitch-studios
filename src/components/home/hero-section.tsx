@@ -76,28 +76,35 @@ export function HeroSection({
       {/* Scrim for text readability over the dither — pointer-events-none so mouse reaches the canvas */}
       <div className="absolute inset-0 bg-[#000000]/40 pointer-events-none" />
 
-      {/* All hero content in a single centered flex column */}
+      {/* Subtitle + Logo — centered vertically in the upper portion of hero.
+           Uses top-[40%] instead of top-1/2 to sit slightly above true center,
+           giving more breathing room for the CTAs below. */}
       <div
         className={clsx(
-          "absolute inset-0 z-10 flex flex-col items-center justify-center pb-20 md:pb-0 px-6 pointer-events-none",
+          "absolute inset-x-0 top-[38%] -translate-y-1/2 z-10 flex flex-col items-center justify-center pointer-events-none",
           collapsed ? "md:-translate-x-8" : ""
         )}
       >
-        {/* Subtitle */}
-        <p className="font-mono text-[11px] md:text-4xl text-[#f5f5f0]/70 tracking-[0.15em] md:tracking-tight uppercase md:normal-case mb-3 md:mb-8 text-center">
+        <p className="font-mono text-sm md:text-4xl text-[#f5f5f0] tracking-tight mb-6 md:mb-8 px-4 text-center">
           {subtitle}
         </p>
-
-        {/* Logo */}
-        <div className="w-[70vw] max-w-[300px] md:w-[80vw] md:max-w-[600px] mb-8 md:mb-12">
+        <div className="w-[60vw] max-w-[280px] md:w-[80vw] md:max-w-[600px]">
           <div className={styles.glitchWrapper}>
             <div className={styles.glitchImg} />
             <div className={styles.glitchLayer1} aria-hidden="true" />
             <div className={styles.glitchLayer2} aria-hidden="true" />
           </div>
         </div>
+      </div>
 
-        {/* CTAs — 2-column grid on mobile, row on desktop */}
+      {/* CTAs — anchored to bottom, well-spaced from logo above.
+           2-column grid on mobile: primary CTA full-width, secondary pair side by side. */}
+      <div
+        className={clsx(
+          "absolute z-10 inset-x-0 bottom-20 md:bottom-24 flex flex-col items-center gap-4 px-6 text-center pointer-events-none",
+          collapsed ? "md:-translate-x-8" : ""
+        )}
+      >
         <div className="grid grid-cols-2 md:flex gap-2 md:gap-4 w-full max-w-[320px] md:max-w-none md:w-auto pointer-events-auto">
           <Link
             href={ctaLink}
@@ -119,8 +126,7 @@ export function HeroSection({
           </Link>
         </div>
 
-        {/* Studio tagline */}
-        <p className="font-mono text-[9px] md:text-xs text-[#555] uppercase tracking-[0.15em] mt-4 md:mt-6">
+        <p className="font-mono text-[10px] md:text-xs text-[#555] uppercase tracking-[0.1em]">
           Music &amp; Video Production Studio
         </p>
       </div>
@@ -128,7 +134,7 @@ export function HeroSection({
       {/* Animated scroll indicator */}
       <motion.div
         className={clsx(
-          "absolute bottom-4 left-1/2 -translate-x-1/2 z-10",
+          "absolute bottom-6 left-1/2 -translate-x-1/2 z-10",
           collapsed ? "md:ml-[-32px]" : ""
         )}
         style={{ opacity: indicatorOpacity }}
@@ -139,7 +145,7 @@ export function HeroSection({
             : { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
         }
       >
-        <ChevronDown className="size-8 text-[#555]" />
+        <ChevronDown className="size-6 text-[#555]" />
       </motion.div>
     </section>
   )
