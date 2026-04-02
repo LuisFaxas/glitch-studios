@@ -219,3 +219,126 @@ test.describe("Mobile audit - player-active state", () => {
     })
   }
 })
+
+// ── Describe block 5: Post-fix verification with overflow ASSERTIONS ──
+test.describe("Post-fix verification", () => {
+  // 5a: All 11 pages at all 3 viewports — overflow assertions (33 tests)
+  for (const vp of viewports) {
+    for (const pg of pages) {
+      test(`${pg.name} at ${vp.name}px - no overflow`, async ({ browser }) => {
+        const context = await createMobileContext(browser, vp)
+        const page = await context.newPage()
+
+        await page.addInitScript(() => {
+          sessionStorage.setItem("glitch-splash-seen", "true")
+        })
+
+        await page.goto(pg.path, { waitUntil: "networkidle" })
+        await page.waitForTimeout(500)
+
+        // ASSERT no horizontal overflow
+        const scrollWidth = await page.evaluate(
+          () => document.documentElement.scrollWidth
+        )
+        const innerWidth = await page.evaluate(() => window.innerWidth)
+        expect(scrollWidth).toBeLessThanOrEqual(innerWidth)
+
+        await page.screenshot({
+          path: path.join(
+            screenshotDir,
+            `${pg.name}-${vp.name}-postfix.png`
+          ),
+          fullPage: true,
+        })
+
+        await context.close()
+      })
+    }
+  }
+
+  // 5b: Overlay-open post-fix verification (3 tests)
+  for (const vp of viewports) {
+    test(`overlay-open at ${vp.name}px - no overflow`, async ({ browser }) => {
+      const context = await createMobileContext(browser, vp)
+      const page = await context.newPage()
+
+      await page.addInitScript(() => {
+        sessionStorage.setItem("glitch-splash-seen", "true")
+      })
+
+      await page.goto("/", { waitUntil: "networkidle" })
+      await page.waitForTimeout(500)
+
+      const menuButton = page.locator(
+        'button[aria-label="Open navigation menu"]'
+      )
+      const menuVisible = await menuButton.isVisible().catch(() => false)
+
+      if (menuVisible) {
+        await menuButton.click()
+        await page.waitForTimeout(300)
+      }
+
+      // ASSERT no horizontal overflow with overlay open
+      const scrollWidth = await page.evaluate(
+        () => document.documentElement.scrollWidth
+      )
+      const innerWidth = await page.evaluate(() => window.innerWidth)
+      expect(scrollWidth).toBeLessThanOrEqual(innerWidth)
+
+      await page.screenshot({
+        path: path.join(
+          screenshotDir,
+          `overlay-open-${vp.name}-postfix.png`
+        ),
+        fullPage: true,
+      })
+
+      await context.close()
+    })
+  }
+
+  // 5c: Player-active post-fix verification (3 tests)
+  for (const vp of viewports) {
+    test(`player-active at ${vp.name}px - verified`, async ({ browser }) => {
+      const context = await createMobileContext(browser, vp)
+      const page = await context.newPage()
+
+      await page.addInitScript(() => {
+        sessionStorage.setItem("glitch-splash-seen", "true")
+      })
+
+      await page.goto("/beats", { waitUntil: "networkidle" })
+      await page.waitForTimeout(500)
+
+      const playButton = page
+        .locator(
+          'button[aria-label*="Play"], button:has(svg.lucide-play), [data-testid="play-button"]'
+        )
+        .first()
+
+      const playVisible = await playButton.isVisible().catch(() => false)
+
+      if (playVisible) {
+        await playButton.click()
+        await page.waitForTimeout(1000)
+      }
+
+      // Verify player bar is visible if it exists
+      const playerBar = page.locator('[class*="z-40"][class*="fixed"]')
+      if ((await playerBar.count()) > 0) {
+        await expect(playerBar.first()).toBeVisible()
+      }
+
+      await page.screenshot({
+        path: path.join(
+          screenshotDir,
+          `player-active-${vp.name}-postfix.png`
+        ),
+        fullPage: true,
+      })
+
+      await context.close()
+    })
+  }
+})
