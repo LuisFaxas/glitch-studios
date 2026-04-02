@@ -101,7 +101,7 @@ export function HeroSection({
            2-column grid on mobile: primary CTA full-width, secondary pair side by side. */}
       <div
         className={clsx(
-          "absolute z-10 inset-x-0 bottom-20 md:bottom-24 flex flex-col items-center gap-4 px-6 text-center pointer-events-none",
+          "absolute z-10 inset-x-0 bottom-28 md:bottom-32 flex flex-col items-center gap-4 px-6 text-center pointer-events-none",
           collapsed ? "md:-translate-x-8" : ""
         )}
       >
@@ -129,24 +129,32 @@ export function HeroSection({
         <p className="font-mono text-[10px] md:text-xs text-[#555] uppercase tracking-[0.1em]">
           Music &amp; Video Production Studio
         </p>
+
+        {/* Scroll indicator — sits right below the tagline */}
+        <motion.div
+          className="mt-6 md:mt-8 flex flex-col items-center gap-1"
+          style={{ opacity: indicatorOpacity }}
+        >
+          <span className="font-mono text-[9px] text-[#444] uppercase tracking-[0.2em]">Scroll</span>
+          <motion.div
+            animate={shouldReduceMotion ? undefined : { y: [0, 6, 0] }}
+            transition={
+              shouldReduceMotion
+                ? undefined
+                : { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
+            }
+          >
+            <ChevronDown className="size-5 text-[#555]" />
+          </motion.div>
+        </motion.div>
       </div>
 
-      {/* Animated scroll indicator */}
-      <motion.div
-        className={clsx(
-          "absolute bottom-6 left-1/2 -translate-x-1/2 z-10",
-          collapsed ? "md:ml-[-32px]" : ""
-        )}
-        style={{ opacity: indicatorOpacity }}
-        animate={shouldReduceMotion ? undefined : { y: [0, 8, 0] }}
-        transition={
-          shouldReduceMotion
-            ? undefined
-            : { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
-        }
-      >
-        <ChevronDown className="size-6 text-[#555]" />
-      </motion.div>
+      {/* Bottom lip — gradient fade + thin border creates a visual edge
+           that hints at content below the hero */}
+      <div className="absolute bottom-0 inset-x-0 z-10 pointer-events-none">
+        <div className="h-24 md:h-32 bg-gradient-to-t from-[#000000] via-[#000000]/60 to-transparent" />
+        <div className="h-[1px] bg-[#222222]" />
+      </div>
     </section>
   )
 }
