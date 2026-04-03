@@ -238,13 +238,16 @@ Plans:
 
 **Goal**: Mobile nav overlay menu is clean, usable, and industry-quality — not a cluttered tile grid crammed into a fixed viewport
 **Depends on**: Phase 7.2
-**Requirements**: TBD (via /gsd:discuss-phase)
+**Requirements**: D-01, D-02, D-03, D-04, D-05, D-06, D-07, D-08, D-09, D-10
 **Success Criteria** (what must be TRUE):
   1. Mobile menu overlay is visually clean and easy to navigate on 375px viewport
   2. All navigation destinations are reachable with clear tap targets
   3. Menu does not feel cluttered or cramped — content fits naturally without overflow
   4. Menu design matches the cyberpunk metro aesthetic of the rest of the site
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 07.3-01-PLAN.md -- Grid restructure, remove Now Playing, stagger animation, swipe-to-dismiss
 
 **INSERTED**: yes
 
@@ -375,7 +378,7 @@ v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 7.2 -> 7.3 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 
 | 7. Beats Catalog | v2.0 | 2/3 | Complete (Plan 03 deferred) | 2026-03-31 |
 | 7.1 Listening Experience & Waveform Overhaul | v2.0 | 3/3 | Complete | 2026-03-31 |
 | 7.2 Mobile Experience Overhaul | v2.0 | 3/4 | Complete (Plan 04 deferred) | 2026-04-01 |
-| 7.3 Mobile Menu Overhaul | v2.0 | 0/0 | **Next up** | - |
+| 7.3 Mobile Menu Overhaul | v2.0 | 0/1 | **Next up** | - |
 | 8. Auth & Navigation | v2.0 | 0/0 | Not started | - |
 | 9. Services & Booking | v2.0 | 0/0 | Not started | - |
 | 10. Blog | v2.0 | 0/0 | Not started | - |
