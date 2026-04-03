@@ -247,7 +247,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 07.3-01-PLAN.md -- Grid restructure, remove Now Playing, stagger animation, swipe-to-dismiss
+- [x] 07.3-01-PLAN.md -- Grid restructure, remove Now Playing, stagger animation, swipe-to-dismiss
 
 **INSERTED**: yes
 
