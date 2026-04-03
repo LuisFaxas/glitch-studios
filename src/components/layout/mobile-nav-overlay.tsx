@@ -10,6 +10,7 @@ import {
 } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import {
+  animate,
   AnimatePresence,
   motion,
   useMotionValue,
@@ -86,7 +87,12 @@ export function MobileNavOverlay({
   const wasOpenRef = useRef(false)
   const shouldReduceMotion = useReducedMotion()
   const dragY = useMotionValue(0)
-  const overlayOpacity = useTransform(dragY, [0, 300], [1, 0])
+  const panelOpacity = useTransform(dragY, [0, 400], [1, 0.2])
+
+  // Reset drag position when menu opens
+  useEffect(() => {
+    if (isOpen) dragY.set(0)
+  }, [isOpen, dragY])
 
   const handleDeferredClose = useCallback(() => {
     window.setTimeout(() => onClose(), 0)
@@ -186,21 +192,28 @@ export function MobileNavOverlay({
 
           {/* Draggable menu panel */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 1, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 80 }}
-            transition={{ duration: 0.16 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             drag="y"
-            dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={{ top: 0, bottom: 0.4 }}
-            dragSnapToOrigin
+            dragConstraints={{ top: 0 }}
+            dragElastic={{ top: 0 }}
             dragMomentum={false}
             onDragEnd={(_, info) => {
-              if (info.offset.y > 80 && info.velocity.y > 300) {
+              // Dismiss: long drag OR quick flick
+              if (info.offset.y > 120 || info.velocity.y > 500) {
                 onClose()
+              } else {
+                // Smooth spring back to origin
+                animate(dragY, 0, {
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 35,
+                })
               }
             }}
-            style={{ y: dragY, opacity: overlayOpacity, touchAction: "none" }}
+            style={{ y: dragY, opacity: panelOpacity, touchAction: "none" }}
             className="fixed inset-x-0 bottom-0 z-[60] flex flex-col justify-end md:hidden"
           >
 
