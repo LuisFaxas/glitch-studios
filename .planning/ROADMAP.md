@@ -2,13 +2,13 @@
 
 ## Milestones
 
-- ~~**v1.0 Full Scaffold**~~ - Phases 1-4.1 (shipped 2015-03-28)
+- ~~**v1.0 Full Scaffold**~~ - Phases 1-4.1 (shipped 2026-03-28)
 - **v2.0 Quality Overhaul** - Phases 5-14 (in progress)
 
 ## Phases
 
 <details>
-<summary>v1.0 Full Scaffold (Phases 1-4.1) - SHIPPED 2015-03-28</summary>
+<summary>v1.0 Full Scaffold (Phases 1-4.1) - SHIPPED 2026-03-28</summary>
 
 **Phase Numbering:**
 - Integer phases (1, 2, 3): Planned milestone work
@@ -131,11 +131,13 @@ Plans:
 
 **Milestone Goal:** Transform every page from scaffolded placeholder to polished, industry-leading quality -- sequential, one page at a time, with Playwright visual verification.
 
-- [ ] **Phase 5: Admin Dashboard UX** - Independent sidebar scroll, cohesive dashboard layout
-- [ ] **Phase 6: Homepage** - Clear hierarchy, compelling CTAs, logical content flow
-- [ ] **Phase 7: Beats Catalog** - Industry-standard layout with prominent art, intuitive filters
-- [ ] **Phase 7.1: Listening Experience & Waveform Overhaul** - INSERTED -- Real waveforms, interactive scrubbing, mini-player widget, mobile waveform
-- [ ] **Phase 7.2: Mobile Experience Overhaul** - INSERTED -- Tab bar restructure, player coexistence, responsive hero, page-by-page audit
+- [x] **Phase 5: Admin Dashboard UX** - Independent sidebar scroll, cohesive dashboard layout
+- [x] **Phase 6: Homepage** - Clear hierarchy, compelling CTAs, logical content flow
+- [x] **Phase 6.1: Homepage Flair** - INSERTED -- Splash animation, scroll effects, Glitch logo in hero
+- [x] **Phase 7: Beats Catalog** - Industry-standard layout with prominent art, intuitive filters (Plan 03 deferred — seed data)
+- [x] **Phase 7.1: Listening Experience & Waveform Overhaul** - INSERTED -- Real waveforms, interactive scrubbing, mini-player widget, mobile waveform
+- [x] **Phase 7.2: Mobile Experience Overhaul** - INSERTED -- Tab bar restructure, player coexistence, responsive hero (Plan 04 deferred — verification after 07.3)
+- [ ] **Phase 7.3: Mobile Menu Overhaul** - INSERTED -- Fix the mobile nav overlay to be usable, clean, and industry-quality
 - [ ] **Phase 8: Auth & Navigation** - Role-based redirects, discoverable client accounts
 - [ ] **Phase 9: Services & Booking** - Comprehensive service info, clear booking step flow
 - [ ] **Phase 10: Blog** - Consistent cards, engagement hooks, smooth browsing
@@ -154,7 +156,7 @@ Plans:
   1. Admin sidebar scrolls independently when main content area is scrolled -- long sidebar menus are fully accessible without losing page position
   2. Dashboard stat tiles, activity feed, and navigation elements share a consistent visual weight and spacing -- nothing looks like a placeholder
   3. Admin can navigate between all dashboard sections without layout shift or visual jank
-**Plans**: 1 plan
+**Plans**: 1/1
 
 Plans:
 - [x] 05-01-PLAN.md -- Fix viewport scroll, merge sidebar sections, polish dashboard layout
@@ -208,8 +210,8 @@ Plans:
 
 Plans:
 - [x] 07-01-PLAN.md -- New components: beat card, card grid, view toggle, unified filter bar
-- [ ] 07-02-PLAN.md -- Wire catalog with view toggle, redesign list rows and page layout
-- [ ] 07-03-PLAN.md -- Real beat upload, Playwright visual verification, user approval
+- [x] 07-02-PLAN.md -- Wire catalog with view toggle, redesign list rows and page layout
+- [x] 07-03-PLAN.md -- ~~Real beat upload, Playwright visual verification~~ DEFERRED
 
 ### Phase 07.2: Mobile Experience Overhaul (INSERTED)
 
@@ -228,7 +230,21 @@ Plans:
 - [x] 07.2-01-PLAN.md -- Playwright mobile audit (screenshot all pages at 3 viewports)
 - [x] 07.2-02-PLAN.md -- Tab bar restructure, dynamic padding, overlay logo fix
 - [x] 07.2-03-PLAN.md -- Hero section mobile height and sidebar offset fix
-- [ ] 07.2-04-PLAN.md -- Post-fix audit, page-by-page fixes, user verification
+- [x] 07.2-04-PLAN.md -- ~~Post-fix audit, page-by-page fixes, user verification~~ DEFERRED (run after 07.3)
+
+**INSERTED**: yes
+
+### Phase 07.3: Mobile Menu Overhaul (INSERTED)
+
+**Goal**: Mobile nav overlay menu is clean, usable, and industry-quality — not a cluttered tile grid crammed into a fixed viewport
+**Depends on**: Phase 7.2
+**Requirements**: TBD (via /gsd:discuss-phase)
+**Success Criteria** (what must be TRUE):
+  1. Mobile menu overlay is visually clean and easy to navigate on 375px viewport
+  2. All navigation destinations are reachable with clear tap targets
+  3. Menu does not feel cluttered or cramped — content fits naturally without overflow
+  4. Menu design matches the cyberpunk metro aesthetic of the rest of the site
+**Plans**: TBD
 
 **INSERTED**: yes
 
@@ -340,25 +356,26 @@ Plans:
 
 **Execution Order:**
 v1.0: 1 -> 1.1 -> 1.2 -> 1.3 -> 1.4 -> 2 -> 3 -> 4 -> 4.1
-v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 7.2 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
+v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 7.2 -> 7.3 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 1. Foundation + Public Site | v1.0 | 6/6 | Complete | 2015-03-25 |
-| 1.1 Foundation Bug Fixes | v1.0 | 2/2 | Complete | 2015-03-25 |
-| 1.2 Design Language Overhaul | v1.0 | 3/3 | Complete | 2015-03-25 |
-| 1.3 Supabase DB Driver Fix | v1.0 | 1/1 | Complete | 2015-03-25 |
-| 1.4 Visual Polish & Sidebar Overhaul | v1.0 | 3/3 | Complete | 2015-03-25 |
-| 2. Beat Store | v1.0 | 8/8 | Complete | 2015-03-26 |
-| 3. Booking System | v1.0 | 6/6 | Complete | 2015-03-26 |
-| 4. Admin Dashboard + Email | v1.0 | 8/8 | Complete | 2015-03-27 |
-| 4.1 Stabilization & Integration Fix | v1.0 | 2/3 | Complete | 2015-03-28 |
-| 5. Admin Dashboard UX | v2.0 | 0/1 | In progress | - |
-| 6. Homepage | v2.0 | 0/2 | Not started | - |
-| 6.1 Homepage Flair | v2.0 | 0/2 | Not started | - |
-| 7. Beats Catalog | v2.0 | 0/3 | Not started | - |
-| 7.1 Listening Experience & Waveform Overhaul | v2.0 | 0/3 | Not started | - |
-| 7.2 Mobile Experience Overhaul | v2.0 | 0/4 | Not started | - |
+| 1. Foundation + Public Site | v1.0 | 6/6 | Complete | 2026-03-25 |
+| 1.1 Foundation Bug Fixes | v1.0 | 2/2 | Complete | 2026-03-25 |
+| 1.2 Design Language Overhaul | v1.0 | 3/3 | Complete | 2026-03-25 |
+| 1.3 Supabase DB Driver Fix | v1.0 | 1/1 | Complete | 2026-03-25 |
+| 1.4 Visual Polish & Sidebar Overhaul | v1.0 | 3/3 | Complete | 2026-03-25 |
+| 2. Beat Store | v1.0 | 8/8 | Complete | 2026-03-26 |
+| 3. Booking System | v1.0 | 6/6 | Complete | 2026-03-26 |
+| 4. Admin Dashboard + Email | v1.0 | 8/8 | Complete | 2026-03-27 |
+| 4.1 Stabilization & Integration Fix | v1.0 | 2/3 | Complete | 2026-03-28 |
+| 5. Admin Dashboard UX | v2.0 | 1/1 | Complete | 2026-03-29 |
+| 6. Homepage | v2.0 | 2/2 | Complete | 2026-03-30 |
+| 6.1 Homepage Flair | v2.0 | 3/3 | Complete | 2026-03-30 |
+| 7. Beats Catalog | v2.0 | 2/3 | Complete (Plan 03 deferred) | 2026-03-31 |
+| 7.1 Listening Experience & Waveform Overhaul | v2.0 | 3/3 | Complete | 2026-03-31 |
+| 7.2 Mobile Experience Overhaul | v2.0 | 3/4 | Complete (Plan 04 deferred) | 2026-04-01 |
+| 7.3 Mobile Menu Overhaul | v2.0 | 0/0 | **Next up** | - |
 | 8. Auth & Navigation | v2.0 | 0/0 | Not started | - |
 | 9. Services & Booking | v2.0 | 0/0 | Not started | - |
 | 10. Blog | v2.0 | 0/0 | Not started | - |
