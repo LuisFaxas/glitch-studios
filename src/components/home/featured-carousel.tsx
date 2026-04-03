@@ -13,7 +13,7 @@ type Beat = {
   bpm: number
   key: string
   genre: string
-  coverArtKey: string | null
+  coverArtUrl: string | null
 }
 
 interface FeaturedCarouselProps {
@@ -58,13 +58,13 @@ export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
               {beats.map((beat) => (
                 <Link
                   key={beat.id}
-                  href={"/beats/" + beat.slug}
+                  href="/beats"
                   className="flex-shrink-0 w-[42vw] md:w-[220px] bg-[#111] border border-[#222] rounded-none overflow-hidden hover:border-[#444] hover:bg-[#1a1a1a] transition-colors group"
                 >
                   <div className="relative aspect-square bg-[#0a0a0a]">
-                    {beat.coverArtKey ? (
+                    {beat.coverArtUrl ? (
                       <img
-                        src={"/api/media/" + beat.coverArtKey}
+                        src={beat.coverArtUrl}
                         alt={beat.title}
                         className="absolute inset-0 w-full h-full object-cover"
                       />

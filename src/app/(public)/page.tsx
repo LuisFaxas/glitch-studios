@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic"
 
 import { db } from "@/lib/db"
+import { getPublicUrl } from "@/lib/r2"
 import { services, testimonials, portfolioItems, beats, blogPosts } from "@/db/schema"
 import { eq, asc, desc } from "drizzle-orm"
 import { HeroSection } from "@/components/home/hero-section"
@@ -64,8 +65,12 @@ export default async function HomePage() {
     homepageSectionsResult.status === "fulfilled"
       ? homepageSectionsResult.value
       : []
-  const beatsList =
+  const beatsRaw =
     beatsResult.status === "fulfilled" ? beatsResult.value : []
+  const beatsList = beatsRaw.map((b) => ({
+    ...b,
+    coverArtUrl: b.coverArtKey ? getPublicUrl(b.coverArtKey) : null,
+  }))
   const blogList =
     blogResult.status === "fulfilled" ? blogResult.value : []
 
