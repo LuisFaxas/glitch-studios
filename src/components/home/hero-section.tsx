@@ -88,7 +88,7 @@ export function HeroSection({
         <p className="font-mono text-sm md:text-4xl text-[#f5f5f0] tracking-tight mb-6 md:mb-8 px-4 text-center">
           {subtitle}
         </p>
-        <div className="w-[60vw] max-w-[280px] md:w-[80vw] md:max-w-[600px]">
+        <div className="w-[60vw] max-w-[280px] md:w-[80vw] md:max-w-[600px] pointer-events-auto">
           <div className={styles.glitchWrapper}>
             <div className={styles.glitchImg} />
             <div className={styles.glitchLayer1} aria-hidden="true" />
