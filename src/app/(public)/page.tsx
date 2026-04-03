@@ -1,9 +1,9 @@
 export const dynamic = "force-dynamic"
 
 import { db } from "@/lib/db"
-import { getPublicUrl } from "@/lib/r2"
-import { services, testimonials, portfolioItems, beats, blogPosts } from "@/db/schema"
+import { services, testimonials, portfolioItems, blogPosts } from "@/db/schema"
 import { eq, asc, desc } from "drizzle-orm"
+import { getPublishedBeats } from "@/actions/beats"
 import { HeroSection } from "@/components/home/hero-section"
 import { ServicesOverview } from "@/components/home/services-overview"
 import { FeaturedCarousel } from "@/components/home/featured-carousel"
@@ -41,12 +41,7 @@ export default async function HomePage() {
         .where(eq(portfolioItems.isActive, true))
         .orderBy(asc(portfolioItems.sortOrder)),
       getPublicHomepageSections(),
-      db
-        .select()
-        .from(beats)
-        .where(eq(beats.status, "published"))
-        .orderBy(desc(beats.createdAt))
-        .limit(6),
+      getPublishedBeats(),
       db
         .select()
         .from(blogPosts)
@@ -65,12 +60,8 @@ export default async function HomePage() {
     homepageSectionsResult.status === "fulfilled"
       ? homepageSectionsResult.value
       : []
-  const beatsRaw =
+  const beatsList =
     beatsResult.status === "fulfilled" ? beatsResult.value : []
-  const beatsList = beatsRaw.map((b) => ({
-    ...b,
-    coverArtUrl: b.coverArtKey ? getPublicUrl(b.coverArtKey) : null,
-  }))
   const blogList =
     blogResult.status === "fulfilled" ? blogResult.value : []
 
