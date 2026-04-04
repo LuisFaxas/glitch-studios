@@ -218,13 +218,12 @@
    Tailwind Animation Utilities
    ============================================================ */
 
-@layer utilities {
-  .animate-glitch-hover {
-    animation: glitch-hover 200ms steps(1);
-  }
-  .animate-scan-line {
-    animation: scan-line 400ms ease-out forwards;
-  }
+@utility animate-glitch-hover {
+  animation: glitch-hover 200ms steps(1);
+}
+
+@utility animate-scan-line {
+  animation: scan-line 400ms ease-out forwards;
 }
 
 /* ============================================================

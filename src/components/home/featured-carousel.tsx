@@ -110,7 +110,7 @@ export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
                 >
                   {/* Glitch hover overlay */}
                   <div
-                    className="pointer-events-none absolute inset-0 z-10 bg-[#f5f5f0]/5 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden"
+                    className="pointer-events-none absolute inset-0 z-10 bg-[#f5f5f0]/10 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden"
                     aria-hidden="true"
                   />
                   {/* Cover art with play overlay */}
