@@ -20,6 +20,8 @@ export interface TileProps {
   layout?: "horizontal" | "vertical"
   /** When true, hide label/sublabel and reduce padding (icon-only mode). */
   compact?: boolean
+  /** Denser presentation for space-constrained mobile layouts. */
+  density?: "default" | "compact"
 }
 
 const sizeClasses: Record<TileSize, string> = {
@@ -41,12 +43,14 @@ export function Tile({
   className,
   layout = "vertical",
   compact = false,
+  density = "default",
 }: TileProps) {
   const [isHovered, setIsHovered] = useState(false)
+  const isInteractive = Boolean(href || onClick)
 
   const handleMouseEnter = useCallback(() => {
-    if (!isActive) setIsHovered(true)
-  }, [isActive])
+    if (!isActive && isInteractive) setIsHovered(true)
+  }, [isActive, isInteractive])
 
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false)
@@ -67,7 +71,15 @@ export function Tile({
     "relative overflow-hidden",
     contentLayoutClasses,
     // Padding — wide tiles get extra vertical padding for thickness
-    compact ? "p-2" : size === "wide" ? "px-4 py-5" : "p-4",
+    compact
+      ? "p-2"
+      : density === "compact"
+        ? size === "wide"
+          ? "px-3 py-3"
+          : "p-3"
+        : size === "wide"
+          ? "px-4 py-5"
+          : "p-4",
     "border border-solid",
     // Sharp corners (0px border-radius)
     "rounded-none",
@@ -83,22 +95,39 @@ export function Tile({
     // Default state: dark bg, subtle border
     !isActive && [
       "bg-[#111111] border-[#222222] text-[#f5f5f0]",
-      "cursor-pointer",
+      isInteractive && "cursor-pointer",
     ],
     // Hover state (when not active)
-    !isActive && isHovered && [
+    !isActive && isInteractive && isHovered && [
       "bg-[#1a1a1a] border-[#444444]",
     ],
     // Pressed state
-    !isActive && "active:bg-[#0a0a0a] active:scale-[0.97] active:duration-100",
+    !isActive &&
+      isInteractive &&
+      "active:bg-[#0a0a0a] active:scale-[0.97] active:duration-100",
     className,
   )
 
   const content = (
     <>
+      {/* Glitch hover overlay */}
+      {isHovered && isInteractive && !isActive && (
+        <div
+          className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/5 animate-glitch-hover motion-reduce:hidden"
+          style={{ animationDuration: "100ms" }}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Icon */}
       {icon && (
-        <span className="flex-shrink-0 [&>svg]:h-5 [&>svg]:w-5" aria-hidden="true">
+        <span
+          className={clsx(
+            "flex-shrink-0",
+            density === "compact" ? "[&>svg]:h-4 [&>svg]:w-4" : "[&>svg]:h-5 [&>svg]:w-5",
+          )}
+          aria-hidden="true"
+        >
           {icon}
         </span>
       )}
@@ -107,8 +136,20 @@ export function Tile({
       {label && !compact && (
         <span
           className={clsx(
-            "font-mono font-bold uppercase tracking-[0.05em]",
-            size === "wide" ? "text-2xl" : size === "small" ? "text-sm" : "text-xl",
+            "font-mono font-bold uppercase",
+            "leading-none whitespace-nowrap",
+            density === "compact" ? "tracking-[0.02em]" : "tracking-[0.05em]",
+            density === "compact"
+              ? size === "wide"
+                ? "text-[12px]"
+                : size === "small"
+                  ? "text-[9px]"
+                  : "text-[11px]"
+              : size === "wide"
+                ? "text-2xl"
+                : size === "small"
+                  ? "text-sm"
+                  : "text-xl",
             size === "large" && "text-center w-full",
           )}
         >
@@ -138,7 +179,7 @@ export function Tile({
   // Render as Link if href provided
   if (href) {
     return (
-      <Link href={href} {...sharedProps}>
+      <Link href={href} onClick={onClick} {...sharedProps}>
         {content}
       </Link>
     )
@@ -155,7 +196,7 @@ export function Tile({
 
   // Render as div (for widget containers)
   return (
-    <div {...sharedProps} tabIndex={0}>
+    <div {...sharedProps}>
       {content}
     </div>
   )

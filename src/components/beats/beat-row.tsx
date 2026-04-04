@@ -109,7 +109,7 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
 
         {/* Title + Producer + Genre/Mood */}
         <div className="min-w-0 flex-1 md:flex-initial md:w-[200px] md:shrink-0">
-          <span className="block truncate font-mono text-[15px] font-bold text-[#f5f5f0] group-hover:glitch-hover">
+          <span className="block truncate font-mono text-[15px] font-bold text-[#f5f5f0]">
             {beat.title}
           </span>
           <span className="block truncate font-sans text-[11px] text-[#888]">

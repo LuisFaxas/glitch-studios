@@ -59,10 +59,17 @@ export function BeatCard({ beat, variant = "compact" }: { beat: BeatSummary; var
   return (
     <div
       data-testid="beat-card"
-      className={`group border border-[#222] bg-[#111] transition-colors hover:border-[#444] hover:bg-[#1a1a1a] ${
+      className={`group relative overflow-hidden border border-[#222] bg-[#111] transition-colors hover:border-[#444] hover:bg-[#1a1a1a] ${
         isSoldExclusive ? "opacity-40" : ""
       }`}
     >
+      {/* Glitch hover overlay */}
+      {!isSoldExclusive && (
+        <div
+          className="pointer-events-none absolute inset-0 z-10 bg-[#f5f5f0]/5 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden"
+          aria-hidden="true"
+        />
+      )}
       {/* Cover art section */}
       <div className={`relative ${isCompact ? "aspect-[4/3]" : "aspect-square"}`}>
         {beat.coverArtUrl ? (
@@ -141,7 +148,7 @@ export function BeatCard({ beat, variant = "compact" }: { beat: BeatSummary; var
       >
         {/* Row 1: Title + Price */}
         <div className="flex items-baseline justify-between gap-2">
-          <span className={`truncate font-mono font-bold text-[#f5f5f0] group-hover:glitch-hover ${isCompact ? "text-[13px]" : "text-[15px]"}`}>
+          <span className={`truncate font-mono font-bold text-[#f5f5f0] ${isCompact ? "text-[13px]" : "text-[15px]"}`}>
             {beat.title}
           </span>
           {lowestPrice && (

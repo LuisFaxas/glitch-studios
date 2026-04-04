@@ -131,7 +131,7 @@ export function ServiceGrid({ services }: ServiceGridProps) {
                 onClick={() => handleTileClick(service.slug)}
                 aria-selected={isSelected}
                 className={clsx(
-                  "relative flex flex-col items-start justify-start gap-2 p-4 border border-solid rounded-none",
+                  "group relative overflow-hidden flex flex-col items-start justify-start gap-2 p-4 border border-solid rounded-none",
                   "transition-colors duration-200",
                   "outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2",
                   "min-h-[100px]",
@@ -140,6 +140,12 @@ export function ServiceGrid({ services }: ServiceGridProps) {
                     : "bg-[#111111] border-[#222222] text-[#f5f5f0] cursor-pointer hover:bg-[#1a1a1a] hover:border-[#444444] active:bg-[#0a0a0a] active:scale-[0.97] active:duration-100",
                 )}
               >
+                {!isSelected && (
+                  <span
+                    className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/5 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden"
+                    aria-hidden="true"
+                  />
+                )}
                 <span className="font-mono font-bold text-lg uppercase tracking-[0.05em]">
                   {service.name}
                 </span>

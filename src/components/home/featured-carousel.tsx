@@ -106,8 +106,13 @@ export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
               return (
                 <div
                   key={beat.id}
-                  className="group w-[46vw] flex-shrink-0 border border-[#222] bg-[#111] transition-colors hover:border-[#444] hover:bg-[#1a1a1a] md:w-[240px]"
+                  className="group relative overflow-hidden w-[46vw] flex-shrink-0 border border-[#222] bg-[#111] transition-colors hover:border-[#444] hover:bg-[#1a1a1a] md:w-[240px]"
                 >
+                  {/* Glitch hover overlay */}
+                  <div
+                    className="pointer-events-none absolute inset-0 z-10 bg-[#f5f5f0]/5 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden"
+                    aria-hidden="true"
+                  />
                   {/* Cover art with play overlay */}
                   <div className="relative aspect-square bg-[#0a0a0a]">
                     {beat.coverArtUrl ? (
