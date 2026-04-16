@@ -213,6 +213,43 @@ Plans:
 - [x] 07-02-PLAN.md -- Wire catalog with view toggle, redesign list rows and page layout
 - [x] 07-03-PLAN.md -- ~~Real beat upload, Playwright visual verification~~ DEFERRED
 
+### Phase 07.6: Reviews display & comparison tables (INSERTED)
+
+**Goal:** [Urgent work - to be planned]
+**Requirements**: TBD
+**Depends on:** Phase 7
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 07.6 to break down)
+
+### Phase 07.5: Product reviews data model & admin input (INSERTED)
+
+**Goal:** [Urgent work - to be planned]
+**Requirements**: TBD
+**Depends on:** Phase 7
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 07.5 to break down)
+
+### Phase 07.4: Brand architecture & Glitch Tech sub-brand foundation (INSERTED)
+
+**Goal:** Glitch Tech launches as its own entity at /tech with independent layout, nav, and landing page — sharing the Glitch Studios codebase, design system, admin, auth, and database. Ships the architectural shell (new `(tech)/` route group) and a full /tech homepage with placeholder content ready for 7.5/7.6 to populate.
+**Requirements**: TECH-01, TECH-02, TECH-03 (to be formalized in REQUIREMENTS.md during planning)
+**Depends on:** Phase 7
+**Success Criteria** (what must be TRUE):
+  1. `/tech` is a distinct entity with its own layout, its own nav (Reviews / Categories / Compare / Benchmarks / About), and its own mobile tab bar — not a subpage of Glitch Studios
+  2. Glitch Tech uses the Cyberpunk Metro aesthetic with a subtle accent variant + "GLITCH TECH" logo wordmark
+  3. /tech landing page has full homepage structure with placeholder content (hero, featured reviews, category tiles, benchmark spotlight, compare CTA, newsletter)
+  4. Each sidebar has a cross-link tile to the other entity's logo, using Next.js `<Link>` for seamless in-tab transition with preserved audio/cart/auth state
+  5. Glitch Studios homepage has a dedicated promotional section for Glitch Tech
+  6. Glitch Studios main nav (`publicNavItems`, mobile tab bar) is unchanged — no "Tech" item added
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 07.4 to break down)
+
 ### Phase 07.2: Mobile Experience Overhaul (INSERTED)
 
 **Goal:** Mobile experience is a first-class citizen -- working navigation, responsive hero, dynamic player/tab bar coexistence, and no layout breakage on any page
