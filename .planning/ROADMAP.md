@@ -236,7 +236,7 @@ Plans:
 ### Phase 07.4: Brand architecture & Glitch Tech sub-brand foundation (INSERTED)
 
 **Goal:** Glitch Tech launches as its own entity at /tech with independent layout, nav, and landing page — sharing the Glitch Studios codebase, design system, admin, auth, and database. Ships the architectural shell (new `(tech)/` route group) and a full /tech homepage with placeholder content ready for 7.5/7.6 to populate.
-**Requirements**: TECH-01, TECH-02, TECH-03 (to be formalized in REQUIREMENTS.md during planning)
+**Requirements**: TECH-01, TECH-02, TECH-03
 **Depends on:** Phase 7
 **Success Criteria** (what must be TRUE):
   1. `/tech` is a distinct entity with its own layout, its own nav (Reviews / Categories / Compare / Benchmarks / About), and its own mobile tab bar — not a subpage of Glitch Studios
@@ -245,10 +245,14 @@ Plans:
   4. Each sidebar has a cross-link tile to the other entity's logo, using Next.js `<Link>` for seamless in-tab transition with preserved audio/cart/auth state
   5. Glitch Studios homepage has a dedicated promotional section for Glitch Tech
   6. Glitch Studios main nav (`publicNavItems`, mobile tab bar) is unchanged — no "Tech" item added
-**Plans:** 0 plans
+**Plans:** 5 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 07.4 to break down)
+- [ ] 07.4-01-PLAN.md -- Parameterize layout primitives (TileNav, BottomTabBar, MobileNavOverlay, LogoTile, GlitchLogo, HeroSection), move FloatingCartButton to root, formalize TECH-01/02/03
+- [ ] 07.4-02-PLAN.md -- Create tech-nav-config + (tech)/ route group layout + 7 placeholder pages (/tech, /reviews, /reviews/[slug], /categories, /compare, /benchmarks, /about)
+- [ ] 07.4-03-PLAN.md -- Build GlitchTechPromoSection + TechCrossLinkTile, wire into Studios homepage and sidebar
+- [ ] 07.4-04-PLAN.md -- Build Tech landing page (6 sections) + Tech sidebar widgets (Latest Review, Featured Product, Social Tech) + StudiosCrossLinkTile + TechLogoTile, wire into Tech layout
+- [ ] 07.4-05-PLAN.md -- Cross-brand transition animation in template.tsx + [data-brand='tech'] CSS hook + Playwright verification suite + human verification
 
 ### Phase 07.2: Mobile Experience Overhaul (INSERTED)
 
@@ -416,6 +420,7 @@ v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 7.2 -> 7.3 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 
 | 7.1 Listening Experience & Waveform Overhaul | v2.0 | 3/3 | Complete | 2026-03-31 |
 | 7.2 Mobile Experience Overhaul | v2.0 | 3/4 | Complete (Plan 04 deferred) | 2026-04-01 |
 | 7.3 Mobile Menu Overhaul | v2.0 | 0/1 | **Next up** | - |
+| 7.4 Brand architecture & Glitch Tech sub-brand foundation | v2.0 | 0/5 | Planned | - |
 | 8. Auth & Navigation | v2.0 | 0/0 | Not started | - |
 | 9. Services & Booking | v2.0 | 0/0 | Not started | - |
 | 10. Blog | v2.0 | 0/0 | Not started | - |
