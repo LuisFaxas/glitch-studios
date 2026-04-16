@@ -143,6 +143,12 @@ Sequential page-by-page quality overhaul. No new backend features -- purely UX/U
 - [ ] **POLISH-02**: Footer sign-up is properly sized and positioned, not buried or undersized
 - [ ] **POLISH-03**: Audio player widget is visually refined and clearly functional
 
+### Glitch Tech Foundation
+
+- [ ] **TECH-01**: Glitch Tech entity shell — `(tech)/` route group with own `layout.tsx`, own tech-nav-config, own mobile bottom tab bar instance, own sidebar widget slots. Does NOT add a "Tech" item to Glitch Studios' `publicNavItems` or `mobileTabItems`.
+- [ ] **TECH-02**: `/tech` landing page with full homepage structure and placeholder content — hero with "GLITCH TECH" wordmark + scroll-collapsible menu, featured reviews carousel, category tiles, benchmark spotlight, compare CTA, newsletter signup, shared footer. Real data deferred to Phase 7.5/7.6.
+- [ ] **TECH-03**: Cross-entity navigation — each sidebar has a sister-site logo tile at the bottom (Studios sidebar → `/tech`, Tech sidebar → `/`) using Next.js `<Link>` for seamless client-side navigation. Audio playback, cart state, and auth session are preserved across `/` ↔ `/tech` crossover. Glitch Studios homepage has a dedicated `<GlitchTechPromoSection />`. Fade + glitch flicker transition animates the zone shift (`template.tsx`-based).
+
 ## Future Requirements
 
 Deferred beyond v2.0. Tracked but not in current roadmap.
@@ -272,12 +278,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | POLISH-01 | Phase 14 | Pending |
 | POLISH-02 | Phase 14 | Pending |
 | POLISH-03 | Phase 14 | Pending |
+| TECH-01 | Phase 07.4 | Pending |
+| TECH-02 | Phase 07.4 | Pending |
+| TECH-03 | Phase 07.4 | Pending |
 
 **v2.0 Coverage:**
-- v2.0 requirements: 25 total
-- Mapped to phases: 25
+- v2.0 requirements: 28 total
+- Mapped to phases: 28
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-25*
-*Last updated: 2026-03-28 -- v2.0 roadmap created, all 25 requirements mapped to Phases 5-14*
+*Last updated: 2026-04-16 -- Phase 07.4 adds TECH-01/02/03 (Glitch Tech foundation)*
