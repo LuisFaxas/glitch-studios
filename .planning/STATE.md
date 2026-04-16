@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Quality Overhaul
 status: Phase complete — ready for verification
-stopped_at: Completed 07.3-01-PLAN.md
-last_updated: "2026-04-03T19:44:43.108Z"
+stopped_at: Phase 07.4 context gathered
+last_updated: "2026-04-16T20:54:26.277Z"
 progress:
-  total_phases: 14
+  total_phases: 17
   completed_phases: 7
   total_plans: 17
   completed_plans: 17
@@ -90,6 +90,9 @@ Recent decisions affecting current work:
 - Phase 06.1 inserted after Phase 6: Homepage Flair (INSERTED) — Splash logo animation, scroll-driven effects, animated scroll indicator, Glitch logo in hero, beat card spacing. From user review during Phase 6 checkpoint.
 - Phase 07.1 inserted after Phase 7: Listening Experience & Waveform Overhaul (INSERTED) — Real waveform generation, WaveSurfer.js, interactive player bar, sidebar widget improvements
 - Phase 07.2 inserted after Phase 7.1: Mobile Experience Overhaul (URGENT) — Bottom nav broken, no hamburger menu, no sign-in, hero breaks on mobile, entire mobile UX needs overhaul. From Phase 07 UAT.
+- Phase 07.4 inserted after Phase 7: Brand architecture & Glitch Tech sub-brand foundation (INSERTED) — Pivot to add tech reviews vertical. Pick brand model (sections vs subdomains), build Glitch Tech shell, nav, landing page.
+- Phase 07.5 inserted after Phase 7: Product reviews data model & admin input (INSERTED) — Drizzle schema for products/categories/benchmarks, admin CRUD for computer reviews rubric (Geekbench, 3DMark, storage, AI).
+- Phase 07.6 inserted after Phase 7: Reviews display & comparison tables (INSERTED) — Public review page template with YouTube embed, comparison tables with Recharts.
 
 ### Pending Todos
 
@@ -112,6 +115,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-03T19:44:43.102Z
-Stopped at: Completed 07.3-01-PLAN.md
-Resume file: None
+Last session: 2026-04-16T20:54:26.272Z
+Stopped at: Phase 07.4 context gathered
+Resume file: .planning/phases/07.4-brand-architecture-glitch-tech-sub-brand-foundation/07.4-CONTEXT.md
