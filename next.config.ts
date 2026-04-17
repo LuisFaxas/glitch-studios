@@ -3,7 +3,9 @@ import type { NextConfig } from "next"
 const nextConfig: NextConfig = {
   allowedDevOrigins: [
     "192.168.1.122",
+    "100.123.116.23",
     "glitch-studios.codebox.local",
+    "glitch_studios.codebox.local",
   ],
   images: {
     remotePatterns: [
