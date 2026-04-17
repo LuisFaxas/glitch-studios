@@ -11,6 +11,11 @@ import {
   techMobileTabItems,
   techMobileMenuItems,
 } from "@/components/layout/tech-nav-config"
+import { TechLogoTile } from "@/components/tiles/tech-logo-tile"
+import { StudiosCrossLinkTile } from "@/components/tiles/studios-cross-link-tile"
+import { WidgetLatestReview } from "@/components/tiles/widget-latest-review"
+import { WidgetFeaturedProduct } from "@/components/tiles/widget-featured-product"
+import { WidgetSocialTech } from "@/components/tiles/widget-social-tech"
 
 export default function TechLayout({
   children,
@@ -23,7 +28,18 @@ export default function TechLayout({
   return (
     <SidebarProvider defaultCollapsed={isTechHome} isHomepage={isTechHome}>
       <div data-brand="tech" className="flex min-h-screen">
-        <TileNav navItems={techNavItems} />
+        <TileNav
+          navItems={techNavItems}
+          topLogoTile={<TechLogoTile />}
+          widgetSlots={
+            <>
+              <WidgetLatestReview />
+              <WidgetFeaturedProduct />
+              <WidgetSocialTech />
+            </>
+          }
+          crossLinkTile={<StudiosCrossLinkTile />}
+        />
         <MobileContentWrapper>
           {children}
           <Footer />

@@ -1,21 +1,28 @@
 import type { Metadata } from "next"
+import { TechHeroSection } from "@/components/home/tech-hero-section"
+import { TechFeaturedReviewsCarousel } from "@/components/home/tech-featured-reviews-carousel"
+import { TechCategoryTiles } from "@/components/home/tech-category-tiles"
+import { TechBenchmarkSpotlight } from "@/components/home/tech-benchmark-spotlight"
+import { TechCompareCta } from "@/components/home/tech-compare-cta"
+import { TechNewsletter } from "@/components/home/tech-newsletter"
+import { HomepageScrollWatcher } from "@/components/home/homepage-scroll-watcher"
 
 export const metadata: Metadata = {
   title: "Glitch Tech",
-  description: "Product reviews, benchmarks, and comparisons from Glitch Studios.",
+  description:
+    "Product reviews, benchmarks, and comparisons from Glitch Studios. Covering computers, audio, and peripherals.",
 }
 
 export default function TechHomePage() {
   return (
-    <main className="min-h-screen bg-black">
-      <section className="mx-auto max-w-7xl px-4 py-24 text-center">
-        <h1 className="font-mono text-5xl font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-[64px]">
-          GLITCH TECH
-        </h1>
-        <p className="mt-4 font-sans text-sm text-[#888]">
-          Landing page skeleton — full content arrives in Plan 04.
-        </p>
-      </section>
-    </main>
+    <>
+      <HomepageScrollWatcher />
+      <TechHeroSection />
+      <TechFeaturedReviewsCarousel />
+      <TechCategoryTiles />
+      <TechBenchmarkSpotlight />
+      <TechCompareCta />
+      <TechNewsletter />
+    </>
   )
 }
