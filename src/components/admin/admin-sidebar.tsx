@@ -21,9 +21,13 @@ import {
   Shield,
   Menu,
   X,
+  Star,
+  FolderTree,
+  BarChart3,
 } from "lucide-react"
 import type { Permission } from "@/lib/permissions-shared"
 import type { LucideIcon } from "lucide-react"
+import { AdminContextSwitcher } from "./admin-context-switcher"
 
 interface NavItem {
   label: string
@@ -38,7 +42,7 @@ interface NavSection {
   items: NavItem[]
 }
 
-function getNavSections(unreadCount: number): NavSection[] {
+function getStudiosSections(unreadCount: number): NavSection[] {
   return [
     {
       title: "Overview",
@@ -53,7 +57,6 @@ function getNavSections(unreadCount: number): NavSection[] {
         { label: "Services", href: "/admin/services", icon: Briefcase, permission: "manage_content" },
         { label: "Team", href: "/admin/team", icon: Users, permission: "manage_content" },
         { label: "Testimonials", href: "/admin/testimonials", icon: Quote, permission: "manage_content" },
-        { label: "Media Library", href: "/admin/media", icon: Image, permission: "manage_media" },
       ],
     },
     {
@@ -62,7 +65,6 @@ function getNavSections(unreadCount: number): NavSection[] {
         { label: "Beats", href: "/admin/beats", icon: Music, permission: "manage_bookings" },
         { label: "Bundles", href: "/admin/bundles", icon: Package, permission: "manage_bookings" },
         { label: "Bookings", href: "/admin/bookings", icon: CalendarDays, permission: "manage_bookings" },
-        { label: "Client List", href: "/admin/clients", icon: UserCircle, permission: "view_clients" },
       ],
     },
     {
@@ -79,11 +81,43 @@ function getNavSections(unreadCount: number): NavSection[] {
       ],
     },
     {
-      title: "Settings",
+      title: "Homepage",
       items: [
-        { label: "Site Settings", href: "/admin/settings", icon: Settings, permission: "manage_settings" },
         { label: "Homepage", href: "/admin/homepage", icon: Layout, permission: "manage_settings" },
+      ],
+    },
+  ]
+}
+
+function getTechSections(): NavSection[] {
+  return [
+    {
+      title: "Overview",
+      items: [
+        { label: "Tech Dashboard", href: "/admin/tech", icon: LayoutDashboard },
+      ],
+    },
+    {
+      title: "Catalog",
+      items: [
+        { label: "Products", href: "/admin/tech/products", icon: Package, permission: "manage_content" },
+        { label: "Reviews", href: "/admin/tech/reviews", icon: Star, permission: "manage_content" },
+        { label: "Categories", href: "/admin/tech/categories", icon: FolderTree, permission: "manage_settings" },
+        { label: "Benchmarks", href: "/admin/tech/benchmarks", icon: BarChart3, permission: "manage_content" },
+      ],
+    },
+  ]
+}
+
+function getSharedSections(): NavSection[] {
+  return [
+    {
+      title: "Shared",
+      items: [
+        { label: "Media Library", href: "/admin/media", icon: Image, permission: "manage_media" },
+        { label: "Client List", href: "/admin/clients", icon: UserCircle, permission: "view_clients" },
         { label: "Roles & Permissions", href: "/admin/roles", icon: Shield, permission: "manage_roles" },
+        { label: "Site Settings", href: "/admin/settings", icon: Settings, permission: "manage_settings" },
       ],
     },
   ]
@@ -91,6 +125,7 @@ function getNavSections(unreadCount: number): NavSection[] {
 
 function isActiveRoute(pathname: string, href: string): boolean {
   if (href === "/admin") return pathname === "/admin"
+  if (href === "/admin/tech") return pathname === "/admin/tech"
   return pathname.startsWith(href)
 }
 
@@ -105,63 +140,70 @@ function SidebarContent({
   pathname: string
   onNavigate?: () => void
 }) {
-  const sections = getNavSections(unreadCount)
+  const isTech = pathname.startsWith("/admin/tech")
+  const modeSections = isTech ? getTechSections() : getStudiosSections(unreadCount)
+  const sharedSections = getSharedSections()
+
+  const renderSection = (section: NavSection) => {
+    const visibleItems = section.items.filter(
+      (item) => !item.permission || permissions.includes(item.permission)
+    )
+    if (visibleItems.length === 0) return null
+
+    return (
+      <div key={section.title}>
+        <h3
+          className="mb-2 px-2 font-mono text-[13px] font-bold uppercase tracking-[0.05em]"
+          style={{ color: "#555555" }}
+        >
+          {section.title}
+        </h3>
+        <div className="flex flex-col gap-1">
+          {visibleItems.map((item) => {
+            const active = isActiveRoute(pathname, item.href)
+            const Icon = item.icon
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onNavigate}
+                className={`group relative flex min-h-[44px] items-center gap-3 px-3 py-2 font-mono text-[13px] font-bold uppercase tracking-[0.05em] transition-colors ${
+                  active
+                    ? "bg-[#f5f5f0] text-[#000000]"
+                    : "bg-[#111111] text-[#f5f5f0] hover:bg-[#1a1a1a]"
+                }`}
+              >
+                {!active && (
+                  <span
+                    className="pointer-events-none absolute inset-0 opacity-0 group-hover:animate-glitch-hover group-hover:opacity-60"
+                    style={{ background: "#f5f5f0" }}
+                    aria-hidden="true"
+                  />
+                )}
+                <Icon size={18} className="relative z-10 shrink-0" />
+                <span className="relative z-10">{item.label}</span>
+                {item.badge && item.badge > 0 ? (
+                  <span className="relative z-10 ml-auto flex h-5 min-w-5 items-center justify-center bg-[#f5f5f0] px-1 font-mono text-[11px] font-bold text-[#000000]">
+                    {item.badge}
+                  </span>
+                ) : null}
+              </Link>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <nav className="flex flex-col gap-4 p-4">
-      {sections.map((section) => {
-        const visibleItems = section.items.filter(
-          (item) => !item.permission || permissions.includes(item.permission)
-        )
-        if (visibleItems.length === 0) return null
-
-        return (
-          <div key={section.title}>
-            <h3
-              className="mb-2 px-2 font-mono text-[13px] font-bold uppercase tracking-[0.05em]"
-              style={{ color: "#555555" }}
-            >
-              {section.title}
-            </h3>
-            <div className="flex flex-col gap-1">
-              {visibleItems.map((item) => {
-                const active = isActiveRoute(pathname, item.href)
-                const Icon = item.icon
-
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={onNavigate}
-                    className={`group relative flex min-h-[44px] items-center gap-3 px-3 py-2 font-mono text-[13px] font-bold uppercase tracking-[0.05em] transition-colors ${
-                      active
-                        ? "bg-[#f5f5f0] text-[#000000]"
-                        : "bg-[#111111] text-[#f5f5f0] hover:bg-[#1a1a1a]"
-                    }`}
-                  >
-                    {/* Glitch hover overlay */}
-                    {!active && (
-                      <span
-                        className="pointer-events-none absolute inset-0 opacity-0 group-hover:animate-glitch-hover group-hover:opacity-60"
-                        style={{ background: "#f5f5f0" }}
-                        aria-hidden="true"
-                      />
-                    )}
-                    <Icon size={18} className="relative z-10 shrink-0" />
-                    <span className="relative z-10">{item.label}</span>
-                    {item.badge && item.badge > 0 ? (
-                      <span className="relative z-10 ml-auto flex h-5 min-w-5 items-center justify-center bg-[#f5f5f0] px-1 font-mono text-[11px] font-bold text-[#000000]">
-                        {item.badge}
-                      </span>
-                    ) : null}
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        )
-      })}
-    </nav>
+    <>
+      <AdminContextSwitcher onNavigate={onNavigate} />
+      <nav className="flex flex-col gap-4 p-4">
+        {modeSections.map(renderSection)}
+        {sharedSections.map(renderSection)}
+      </nav>
+    </>
   )
 }
 
