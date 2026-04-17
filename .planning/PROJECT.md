@@ -101,4 +101,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-28 — Milestone v2.0 started. v1.0 delivered full functional scaffold (40 plans, 9 phases). v2.0 focuses on UX quality overhaul.*
+*Last updated: 2026-04-17 — Phase 07.6 complete. Glitch Tech public surface (review detail, reviews list, categories, compare tool, homepage migration) now live against real DB.*
