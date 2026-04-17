@@ -216,22 +216,36 @@ export async function upsertReview(
 
 export async function publishReview(id: string): Promise<void> {
   await requirePermission("manage_content")
-  await db
+  const [updated] = await db
     .update(techReviews)
     .set({ status: "published", publishedAt: new Date(), updatedAt: new Date() })
     .where(eq(techReviews.id, id))
+    .returning({ slug: techReviews.slug })
   revalidatePath("/admin/tech/reviews")
   revalidatePath(`/admin/tech/reviews/${id}/edit`)
+  revalidatePath("/tech")
+  revalidatePath("/tech/reviews")
+  revalidatePath("/tech/categories")
+  if (updated?.slug) {
+    revalidatePath(`/tech/reviews/${updated.slug}`, "page")
+  }
 }
 
 export async function unpublishReview(id: string): Promise<void> {
   await requirePermission("manage_content")
-  await db
+  const [updated] = await db
     .update(techReviews)
     .set({ status: "draft", publishedAt: null, updatedAt: new Date() })
     .where(eq(techReviews.id, id))
+    .returning({ slug: techReviews.slug })
   revalidatePath("/admin/tech/reviews")
   revalidatePath(`/admin/tech/reviews/${id}/edit`)
+  revalidatePath("/tech")
+  revalidatePath("/tech/reviews")
+  revalidatePath("/tech/categories")
+  if (updated?.slug) {
+    revalidatePath(`/tech/reviews/${updated.slug}`, "page")
+  }
 }
 
 export async function deleteReview(id: string): Promise<void> {
