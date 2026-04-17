@@ -225,13 +225,27 @@ Plans:
 
 ### Phase 07.5: Product reviews data model & admin input (INSERTED)
 
-**Goal:** [Urgent work - to be planned]
-**Requirements**: TBD
-**Depends on:** Phase 7
-**Plans:** 0 plans
+**Goal:** Deliver the Drizzle schema and admin input surfaces for Glitch Tech's review vertical — 12 new `tech_*` tables, a Studios↔Tech admin context switcher, admin CRUD for categories (3-level tree with DnD reorder), products (flat form with dynamic specs by category), reviews (full-featured Tiptap editor with autosave, 4-dimension ratings, pros/cons, media gallery, audience callouts, draft→published workflow), and spec/benchmark template drawers per category.
+**Requirements**: TECH-01, TECH-02, TECH-03
+**Depends on:** Phase 7.4
+**Success Criteria** (what must be TRUE):
+  1. 12 `tech_*` tables exist in src/db/schema.ts and migrate cleanly (categories, spec templates/fields, products, product_specs join, reviews, review pros/cons/gallery, benchmark templates/tests/runs)
+  2. Admin sidebar renders Studios/Tech segmented pills with route-aware active state and a persistent shared section (Media/Clients/Roles/Settings)
+  3. Admin can build a 3-level category tree with inline rename, DnD reorder, and keyboard fallback
+  4. Per-category spec template editor (Text/Number/Enum/Boolean) and benchmark template editor ship as right-side drawers
+  5. Product form renders typed dynamic spec fields based on selected category; category change mid-edit shows a confirmation dialog
+  6. Review editor ships two-column body+preview on desktop, tab mode on narrow viewports, right-rail Details sheet for rating/pros-cons/media/audience/publishing, autosave (2s debounce + 30s periodic), explicit Publish/Unpublish
+  7. Playwright specs cover context switcher, category CRUD, product form with dynamic specs, and review editor; `pnpm tsc --noEmit` + `pnpm lint` pass phase-wide
+**Plans:** 7 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 07.5 to break down)
+- [ ] 07.5-01-PLAN.md -- Install shadcn command, extract slugify, append 12 tech_* tables + 3 enums + relations, generate + push migration
+- [ ] 07.5-02-PLAN.md -- AdminContextSwitcher component + refactor admin-sidebar.tsx (studios/tech/shared section split)
+- [ ] 07.5-03-PLAN.md -- 5 server action files (categories/products/reviews/benchmarks/templates) + 9 /admin/tech/* route pages (list pages functional, new/edit pages stubs)
+- [ ] 07.5-04-PLAN.md -- CategoryTreeView with dnd-kit + keyboard, CategoryDetailPanel, SpecTemplateEditor drawer, BenchmarkTemplateEditor drawer, wire /admin/tech/categories
+- [ ] 07.5-05-PLAN.md -- CategoryPicker (shadcn Command-in-Popover), DynamicSpecFields, ProductForm (create+edit with category-change warning), wire /admin/tech/products new/edit
+- [ ] 07.5-06-PLAN.md -- useAutosave hook, AutosaveIndicator, RatingSlider, ProsConsInput, MarkdownPreviewPane, ReviewEditor (body+preview desktop / tab mode mobile / Details sheet), listReviewers action, wire /admin/tech/reviews new/edit
+- [ ] 07.5-07-PLAN.md -- Playwright specs (context switcher, category tree, product form, review editor) + phase typecheck/lint gate + human visual verification checkpoint
 
 ### Phase 07.4: Brand architecture & Glitch Tech sub-brand foundation (INSERTED)
 
@@ -421,6 +435,7 @@ v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 7.2 -> 7.3 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 
 | 7.2 Mobile Experience Overhaul | v2.0 | 3/4 | Complete (Plan 04 deferred) | 2026-04-01 |
 | 7.3 Mobile Menu Overhaul | v2.0 | 0/1 | **Next up** | - |
 | 7.4 Brand architecture & Glitch Tech sub-brand foundation | v2.0 | 0/5 | Planned | - |
+| 7.5 Product reviews data model & admin input | v2.0 | 0/7 | Planned | - |
 | 8. Auth & Navigation | v2.0 | 0/0 | Not started | - |
 | 9. Services & Booking | v2.0 | 0/0 | Not started | - |
 | 10. Blog | v2.0 | 0/0 | Not started | - |
