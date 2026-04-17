@@ -36,11 +36,14 @@ export function TechPulseLine({ direction }: TechPulseLineProps) {
         strokeLinejoin="round"
         style={{ overflow: "visible" }}
       >
-        {/* Dim static baseline trace (always visible) */}
-        <path
-          d={ECG_PATH}
+        {/* Flat baseline — the heart-monitor resting line. NOT the full ECG path. */}
+        <line
+          x1="0"
+          y1="10"
+          x2="100"
+          y2="10"
           stroke="#f5f5f0"
-          strokeOpacity="0.2"
+          strokeOpacity="0.35"
           strokeWidth="1"
           vectorEffect="non-scaling-stroke"
         />
