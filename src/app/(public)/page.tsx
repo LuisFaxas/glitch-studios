@@ -10,6 +10,7 @@ import { FeaturedCarousel } from "@/components/home/featured-carousel"
 import { VideoPortfolioCarousel } from "@/components/home/video-portfolio-carousel"
 import { TestimonialsCarousel } from "@/components/home/testimonials-carousel"
 import { BlogSection } from "@/components/home/blog-section"
+import { GlitchTechPromoSection } from "@/components/home/glitch-tech-promo-section"
 import { SplashOverlay } from "@/components/home/splash-overlay"
 import { HomepageScrollWatcher } from "@/components/home/homepage-scroll-watcher"
 import { getPublicHomepageSections } from "@/actions/admin-homepage"
@@ -92,6 +93,7 @@ export default async function HomePage() {
     ),
     services: () => <ServicesOverview services={servicesList} />,
     portfolio: () => <VideoPortfolioCarousel portfolioItems={portfolioList} />,
+    glitch_tech_promo: () => <GlitchTechPromoSection />,
     testimonials: () => <TestimonialsCarousel testimonials={testimonialsList} />,
     blog: () => <BlogSection posts={blogList} />,
   }
@@ -108,20 +110,36 @@ export default async function HomePage() {
       <HomepageScrollWatcher />
       <SplashOverlay>
         {useDynamicLayout ? (
-          homepageSections.map((section) => {
-            const renderer = sectionRenderers[section.sectionType]
-            if (!renderer) return null
-            const config = parseConfig(section.config)
-            return (
-              <div key={section.id}>{renderer(config)}</div>
-            )
-          })
+          <>
+            {homepageSections.map((section, idx) => {
+              const renderer = sectionRenderers[section.sectionType]
+              if (!renderer) return null
+              const config = parseConfig(section.config)
+              const isPortfolio = section.sectionType === "portfolio"
+              const next = homepageSections[idx + 1]
+              const injectPromoAfter =
+                isPortfolio &&
+                (!next || next.sectionType === "testimonials") &&
+                !homepageSections.some((s) => s.sectionType === "glitch_tech_promo")
+              return (
+                <div key={section.id}>
+                  {renderer(config)}
+                  {injectPromoAfter && <GlitchTechPromoSection />}
+                </div>
+              )
+            })}
+            {/* Fallback: if no portfolio section exists, still render the promo once so TECH-03 holds */}
+            {!homepageSections.some(
+              (s) => s.sectionType === "portfolio" || s.sectionType === "glitch_tech_promo",
+            ) && <GlitchTechPromoSection />}
+          </>
         ) : (
           <>
             <HeroSection />
             <ServicesOverview services={servicesList} />
             <FeaturedCarousel beats={beatsList} />
             <VideoPortfolioCarousel portfolioItems={portfolioList} />
+            <GlitchTechPromoSection />
             <TestimonialsCarousel testimonials={testimonialsList} />
             <BlogSection posts={blogList} />
           </>
