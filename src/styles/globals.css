@@ -295,3 +295,88 @@
 [data-brand="tech"] {
   /* intentionally empty in Phase 07.4 — monochrome only */
 }
+
+/* Tech review body — scoped typography for Tiptap-authored HTML rendered via dangerouslySetInnerHTML */
+.review-body h1,
+.review-body h2,
+.review-body h3,
+.review-body h4 {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #f5f5f0;
+}
+
+.review-body h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.review-body h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.review-body h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.review-body img {
+  border: 1px solid #222;
+  width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+}
+
+.review-body a {
+  color: #f5f5f0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.review-body a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.review-body blockquote {
+  border-left: 2px solid #f5f5f0;
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: #888;
+  font-style: italic;
+}
+
+.review-body code {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  background-color: #111;
+  padding: 0.1rem 0.3rem;
+  border: 1px solid #222;
+  font-size: 0.9em;
+}
+
+.review-body pre {
+  background-color: #111;
+  border: 1px solid #222;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.review-body pre code {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+.review-body hr {
+  border: 0;
+  border-top: 1px solid #222;
+  margin: 2rem 0;
+}
