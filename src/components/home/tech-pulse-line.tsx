@@ -6,10 +6,11 @@ interface TechPulseLineProps {
   direction: "left" | "right"
 }
 
-// Classic ECG waveform in a 80x20 viewBox, baseline at y=10.
-// Structure: flat lead-in → P wave bump → flat → Q dip → tall R peak → S dip → T hump → flat trail.
+// Full-width ECG path. viewBox 100x20, baseline y=10.
+// Left chunk: flat baseline. Center: P-wave → Q dip → tall R peak → S dip → T hump. Right chunk: flat baseline.
+// Path is drawn left-to-right; LEFT-side line flips via scaleX(-1) so the pulse travels outward from TECH.
 const ECG_PATH =
-  "M0 10 L18 10 L20 9 L22 10.5 L24 10 L26 10 L28 11 L30 3 L32 17 L34 10 L37 7 L42 10 L80 10"
+  "M0 10 H42 L44 9.3 L46 10.5 L48 10 H53 L55 10.6 L57 11.4 L59 3 L61 17 L63 9 L66 7 L71 10 H100"
 
 export function TechPulseLine({ direction }: TechPulseLineProps) {
   const prefersReduced = useReducedMotion()
@@ -23,61 +24,67 @@ export function TechPulseLine({ direction }: TechPulseLineProps) {
     )
   }
 
-  // Pulse SVG is 5rem (80px) wide. Travel range:
-  // - emerge from behind TECH (just off the TECH-side edge, opacity 0)
-  // - full-width travel across the baseline
-  // - exit past the logo-side edge (opacity 0)
-  const xFrom = isLeft ? "100%" : "-100%"
-  const xTo = isLeft ? "-100%" : "100%"
-
   return (
-    <span
-      className="relative flex h-5 flex-1 items-center overflow-hidden"
-      aria-hidden="true"
-    >
-      {/* Static dim baseline */}
-      <span className="block h-px w-full bg-[#f5f5f0]/30" />
-
-      {/* Traveling ECG pulse */}
-      <motion.svg
-        viewBox="0 0 80 20"
-        className={`pointer-events-none absolute top-1/2 h-5 w-20 -translate-y-1/2 ${
-          isLeft ? "right-0" : "left-0"
-        }`}
+    <span className="relative flex h-5 flex-1 items-center" aria-hidden="true">
+      <svg
+        viewBox="0 0 100 20"
+        preserveAspectRatio="none"
+        className={`h-full w-full ${isLeft ? "-scale-x-100" : ""}`}
         fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"
-        initial={{ x: xFrom, opacity: 0 }}
-        animate={{
-          x: [xFrom, xFrom, xTo, xTo],
-          opacity: [0, 1, 1, 0],
-        }}
-        transition={{
-          duration: 2.4,
-          repeat: Infinity,
-          repeatDelay: 0.6,
-          ease: [0.22, 0.61, 0.36, 1],
-          times: [0, 0.05, 0.9, 1],
-        }}
       >
-        <defs>
-          <filter id={`pulse-glow-${direction}`} x="-20%" y="-100%" width="140%" height="300%">
-            <feGaussianBlur stdDeviation="1.6" />
-          </filter>
-        </defs>
-
-        {/* Soft glow underlay */}
+        {/* Dim static baseline trace (always visible) */}
         <path
           d={ECG_PATH}
           stroke="#f5f5f0"
-          strokeWidth="3"
-          strokeOpacity="0.22"
-          filter={`url(#pulse-glow-${direction})`}
+          strokeOpacity="0.2"
+          strokeWidth="1"
+          vectorEffect="non-scaling-stroke"
         />
 
-        {/* Crisp foreground trace */}
-        <path d={ECG_PATH} stroke="#f5f5f0" strokeWidth="1.3" />
-      </motion.svg>
+        {/* Glow underlay — blurred, tracks the same pulse segment */}
+        <motion.path
+          d={ECG_PATH}
+          stroke="#f5f5f0"
+          strokeWidth="4"
+          strokeOpacity="0.35"
+          vectorEffect="non-scaling-stroke"
+          style={{ filter: "blur(2px)" }}
+          initial={{ pathLength: 0.14, pathOffset: 0, opacity: 0 }}
+          animate={{
+            pathOffset: [0, 1],
+            opacity: [0, 1, 1, 0],
+          }}
+          transition={{
+            duration: 1.3,
+            repeat: Infinity,
+            repeatDelay: 1.1,
+            ease: [0.25, 0.1, 0.25, 1],
+            times: [0, 0.08, 0.92, 1],
+          }}
+        />
+
+        {/* Crisp foreground pulse */}
+        <motion.path
+          d={ECG_PATH}
+          stroke="#f5f5f0"
+          strokeWidth="1.6"
+          vectorEffect="non-scaling-stroke"
+          initial={{ pathLength: 0.14, pathOffset: 0, opacity: 0 }}
+          animate={{
+            pathOffset: [0, 1],
+            opacity: [0, 1, 1, 0],
+          }}
+          transition={{
+            duration: 1.3,
+            repeat: Infinity,
+            repeatDelay: 1.1,
+            ease: [0.25, 0.1, 0.25, 1],
+            times: [0, 0.08, 0.92, 1],
+          }}
+        />
+      </svg>
     </span>
   )
 }
