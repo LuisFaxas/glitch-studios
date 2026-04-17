@@ -236,16 +236,16 @@ Plans:
   5. Product form renders typed dynamic spec fields based on selected category; category change mid-edit shows a confirmation dialog
   6. Review editor ships two-column body+preview on desktop, tab mode on narrow viewports, right-rail Details sheet for rating/pros-cons/media/audience/publishing, autosave (2s debounce + 30s periodic), explicit Publish/Unpublish
   7. Playwright specs cover context switcher, category CRUD, product form with dynamic specs, and review editor; `pnpm tsc --noEmit` + `pnpm lint` pass phase-wide
-**Plans:** 7 plans
+**Plans:** 7/7 plans complete
 
 Plans:
-- [ ] 07.5-01-PLAN.md -- Install shadcn command, extract slugify, append 12 tech_* tables + 3 enums + relations, generate + push migration
-- [ ] 07.5-02-PLAN.md -- AdminContextSwitcher component + refactor admin-sidebar.tsx (studios/tech/shared section split)
-- [ ] 07.5-03-PLAN.md -- 5 server action files (categories/products/reviews/benchmarks/templates) + 9 /admin/tech/* route pages (list pages functional, new/edit pages stubs)
-- [ ] 07.5-04-PLAN.md -- CategoryTreeView with dnd-kit + keyboard, CategoryDetailPanel, SpecTemplateEditor drawer, BenchmarkTemplateEditor drawer, wire /admin/tech/categories
-- [ ] 07.5-05-PLAN.md -- CategoryPicker (shadcn Command-in-Popover), DynamicSpecFields, ProductForm (create+edit with category-change warning), wire /admin/tech/products new/edit
-- [ ] 07.5-06-PLAN.md -- useAutosave hook, AutosaveIndicator, RatingSlider, ProsConsInput, MarkdownPreviewPane, ReviewEditor (body+preview desktop / tab mode mobile / Details sheet), listReviewers action, wire /admin/tech/reviews new/edit
-- [ ] 07.5-07-PLAN.md -- Playwright specs (context switcher, category tree, product form, review editor) + phase typecheck/lint gate + human visual verification checkpoint
+- [x] 07.5-01-PLAN.md -- Install shadcn command, extract slugify, append 12 tech_* tables + 3 enums + relations, generate + push migration
+- [x] 07.5-02-PLAN.md -- AdminContextSwitcher component + refactor admin-sidebar.tsx (studios/tech/shared section split)
+- [x] 07.5-03-PLAN.md -- 5 server action files (categories/products/reviews/benchmarks/templates) + 9 /admin/tech/* route pages (list pages functional, new/edit pages stubs)
+- [x] 07.5-04-PLAN.md -- CategoryTreeView with dnd-kit + keyboard, CategoryDetailPanel, SpecTemplateEditor drawer, BenchmarkTemplateEditor drawer, wire /admin/tech/categories
+- [x] 07.5-05-PLAN.md -- CategoryPicker (shadcn Command-in-Popover), DynamicSpecFields, ProductForm (create+edit with category-change warning), wire /admin/tech/products new/edit
+- [x] 07.5-06-PLAN.md -- useAutosave hook, AutosaveIndicator, RatingSlider, ProsConsInput, MarkdownPreviewPane, ReviewEditor (body+preview desktop / tab mode mobile / Details sheet), listReviewers action, wire /admin/tech/reviews new/edit
+- [x] 07.5-07-PLAN.md -- Playwright specs (context switcher, category tree, product form, review editor) + phase typecheck/lint gate + human visual verification checkpoint
 
 ### Phase 07.4: Brand architecture & Glitch Tech sub-brand foundation (INSERTED)
 
