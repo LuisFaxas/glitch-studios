@@ -9,6 +9,7 @@ import {
   jsonb,
   pgEnum,
 } from "drizzle-orm/pg-core"
+import type { AnyPgColumn } from "drizzle-orm/pg-core"
 import { relations } from "drizzle-orm"
 
 // Better Auth tables (must match DB schema created by Better Auth migrations)
@@ -604,3 +605,336 @@ export const contactRepliesRelations = relations(
     }),
   })
 )
+
+// ============================================================
+// === Glitch Tech — Reviews Vertical (Phase 07.5) ===
+// ============================================================
+
+// --- Enums ---
+
+export const techSpecFieldTypeEnum = pgEnum("tech_spec_field_type", [
+  "text",
+  "number",
+  "enum",
+  "boolean",
+])
+
+export const techReviewStatusEnum = pgEnum("tech_review_status", [
+  "draft",
+  "published",
+])
+
+export const techBenchmarkDirectionEnum = pgEnum("tech_benchmark_direction", [
+  "higher_is_better",
+  "lower_is_better",
+])
+
+// --- Categories (3-level adjacency list) ---
+
+export const techCategories = pgTable("tech_categories", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  parentId: uuid("parent_id").references(
+    (): AnyPgColumn => techCategories.id,
+    { onDelete: "restrict" }
+  ),
+  level: integer("level").notNull(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+// --- Spec templates + fields ---
+
+export const techSpecTemplates = pgTable("tech_spec_templates", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  categoryId: uuid("category_id")
+    .notNull()
+    .references(() => techCategories.id, { onDelete: "cascade" })
+    .unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+export const techSpecFields = pgTable("tech_spec_fields", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  templateId: uuid("template_id")
+    .notNull()
+    .references(() => techSpecTemplates.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  type: techSpecFieldTypeEnum("type").notNull(),
+  unit: text("unit"),
+  enumOptions: jsonb("enum_options").$type<string[]>(),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+// --- Products ---
+
+export const techProducts = pgTable("tech_products", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  categoryId: uuid("category_id")
+    .notNull()
+    .references(() => techCategories.id, { onDelete: "restrict" }),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  manufacturer: text("manufacturer"),
+  heroImageId: uuid("hero_image_id").references(() => mediaAssets.id),
+  summary: text("summary"),
+  priceUsd: numeric("price_usd", { precision: 10, scale: 2 }),
+  affiliateUrl: text("affiliate_url"),
+  releaseDate: text("release_date"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+// --- Product spec values (typed join table) ---
+
+export const techProductSpecs = pgTable("tech_product_specs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id")
+    .notNull()
+    .references(() => techProducts.id, { onDelete: "cascade" }),
+  fieldId: uuid("field_id")
+    .notNull()
+    .references(() => techSpecFields.id, { onDelete: "cascade" }),
+  valueText: text("value_text"),
+  valueNumber: numeric("value_number", { precision: 14, scale: 4 }),
+  valueBoolean: boolean("value_boolean"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+// --- Reviews ---
+
+export const techReviews = pgTable("tech_reviews", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id")
+    .notNull()
+    .references(() => techProducts.id, { onDelete: "cascade" }),
+  reviewerId: text("reviewer_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "restrict" }),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  verdict: text("verdict").notNull(),
+  bodyHtml: text("body_html").notNull(),
+  ratingPerformance: integer("rating_performance").notNull(),
+  ratingBuild: integer("rating_build").notNull(),
+  ratingValue: integer("rating_value").notNull(),
+  ratingDesign: integer("rating_design").notNull(),
+  overallOverride: numeric("overall_override", { precision: 3, scale: 1 }),
+  heroImageId: uuid("hero_image_id")
+    .notNull()
+    .references(() => mediaAssets.id),
+  videoUrl: text("video_url"),
+  audienceFor: text("audience_for"),
+  audienceNotFor: text("audience_not_for"),
+  status: techReviewStatusEnum("status").notNull().default("draft"),
+  publishedAt: timestamp("published_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+})
+
+// --- Review pros/cons/gallery ---
+
+export const techReviewPros = pgTable("tech_review_pros", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  reviewId: uuid("review_id")
+    .notNull()
+    .references(() => techReviews.id, { onDelete: "cascade" }),
+  text: text("text").notNull(),
+  sortOrder: integer("sort_order").notNull().default(0),
+})
+
+export const techReviewCons = pgTable("tech_review_cons", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  reviewId: uuid("review_id")
+    .notNull()
+    .references(() => techReviews.id, { onDelete: "cascade" }),
+  text: text("text").notNull(),
+  sortOrder: integer("sort_order").notNull().default(0),
+})
+
+export const techReviewGallery = pgTable("tech_review_gallery", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  reviewId: uuid("review_id")
+    .notNull()
+    .references(() => techReviews.id, { onDelete: "cascade" }),
+  mediaId: uuid("media_id")
+    .notNull()
+    .references(() => mediaAssets.id, { onDelete: "restrict" }),
+  sortOrder: integer("sort_order").notNull().default(0),
+})
+
+// --- Benchmarks ---
+
+export const techBenchmarkTemplates = pgTable("tech_benchmark_templates", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  categoryId: uuid("category_id")
+    .notNull()
+    .references(() => techCategories.id, { onDelete: "cascade" })
+    .unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+export const techBenchmarkTests = pgTable("tech_benchmark_tests", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  templateId: uuid("template_id")
+    .notNull()
+    .references(() => techBenchmarkTemplates.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  unit: text("unit").notNull(),
+  direction: techBenchmarkDirectionEnum("direction")
+    .notNull()
+    .default("higher_is_better"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+})
+
+export const techBenchmarkRuns = pgTable("tech_benchmark_runs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("product_id")
+    .notNull()
+    .references(() => techProducts.id, { onDelete: "cascade" }),
+  testId: uuid("test_id")
+    .notNull()
+    .references(() => techBenchmarkTests.id, { onDelete: "cascade" }),
+  score: numeric("score", { precision: 14, scale: 4 }).notNull(),
+  notes: text("notes"),
+  recordedAt: timestamp("recorded_at").defaultNow().notNull(),
+  createdBy: text("created_by").references(() => user.id),
+})
+
+// --- Relations ---
+
+export const techCategoriesRelations = relations(techCategories, ({ one, many }) => ({
+  parent: one(techCategories, {
+    fields: [techCategories.parentId],
+    references: [techCategories.id],
+    relationName: "categoryHierarchy",
+  }),
+  children: many(techCategories, { relationName: "categoryHierarchy" }),
+  products: many(techProducts),
+  specTemplate: one(techSpecTemplates),
+  benchmarkTemplate: one(techBenchmarkTemplates),
+}))
+
+export const techSpecTemplatesRelations = relations(techSpecTemplates, ({ one, many }) => ({
+  category: one(techCategories, {
+    fields: [techSpecTemplates.categoryId],
+    references: [techCategories.id],
+  }),
+  fields: many(techSpecFields),
+}))
+
+export const techSpecFieldsRelations = relations(techSpecFields, ({ one, many }) => ({
+  template: one(techSpecTemplates, {
+    fields: [techSpecFields.templateId],
+    references: [techSpecTemplates.id],
+  }),
+  specs: many(techProductSpecs),
+}))
+
+export const techProductsRelations = relations(techProducts, ({ one, many }) => ({
+  category: one(techCategories, {
+    fields: [techProducts.categoryId],
+    references: [techCategories.id],
+  }),
+  heroImage: one(mediaAssets, {
+    fields: [techProducts.heroImageId],
+    references: [mediaAssets.id],
+  }),
+  specs: many(techProductSpecs),
+  reviews: many(techReviews),
+  benchmarkRuns: many(techBenchmarkRuns),
+}))
+
+export const techProductSpecsRelations = relations(techProductSpecs, ({ one }) => ({
+  product: one(techProducts, {
+    fields: [techProductSpecs.productId],
+    references: [techProducts.id],
+  }),
+  field: one(techSpecFields, {
+    fields: [techProductSpecs.fieldId],
+    references: [techSpecFields.id],
+  }),
+}))
+
+export const techReviewsRelations = relations(techReviews, ({ one, many }) => ({
+  product: one(techProducts, {
+    fields: [techReviews.productId],
+    references: [techProducts.id],
+  }),
+  reviewer: one(user, {
+    fields: [techReviews.reviewerId],
+    references: [user.id],
+  }),
+  heroImage: one(mediaAssets, {
+    fields: [techReviews.heroImageId],
+    references: [mediaAssets.id],
+  }),
+  pros: many(techReviewPros),
+  cons: many(techReviewCons),
+  gallery: many(techReviewGallery),
+}))
+
+export const techReviewProsRelations = relations(techReviewPros, ({ one }) => ({
+  review: one(techReviews, {
+    fields: [techReviewPros.reviewId],
+    references: [techReviews.id],
+  }),
+}))
+
+export const techReviewConsRelations = relations(techReviewCons, ({ one }) => ({
+  review: one(techReviews, {
+    fields: [techReviewCons.reviewId],
+    references: [techReviews.id],
+  }),
+}))
+
+export const techReviewGalleryRelations = relations(techReviewGallery, ({ one }) => ({
+  review: one(techReviews, {
+    fields: [techReviewGallery.reviewId],
+    references: [techReviews.id],
+  }),
+  media: one(mediaAssets, {
+    fields: [techReviewGallery.mediaId],
+    references: [mediaAssets.id],
+  }),
+}))
+
+export const techBenchmarkTemplatesRelations = relations(
+  techBenchmarkTemplates,
+  ({ one, many }) => ({
+    category: one(techCategories, {
+      fields: [techBenchmarkTemplates.categoryId],
+      references: [techCategories.id],
+    }),
+    tests: many(techBenchmarkTests),
+  })
+)
+
+export const techBenchmarkTestsRelations = relations(techBenchmarkTests, ({ one, many }) => ({
+  template: one(techBenchmarkTemplates, {
+    fields: [techBenchmarkTests.templateId],
+    references: [techBenchmarkTemplates.id],
+  }),
+  runs: many(techBenchmarkRuns),
+}))
+
+export const techBenchmarkRunsRelations = relations(techBenchmarkRuns, ({ one }) => ({
+  product: one(techProducts, {
+    fields: [techBenchmarkRuns.productId],
+    references: [techProducts.id],
+  }),
+  test: one(techBenchmarkTests, {
+    fields: [techBenchmarkRuns.testId],
+    references: [techBenchmarkTests.id],
+  }),
+  createdByUser: one(user, {
+    fields: [techBenchmarkRuns.createdBy],
+    references: [user.id],
+  }),
+}))
