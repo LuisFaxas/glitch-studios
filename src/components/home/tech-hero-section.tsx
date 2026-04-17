@@ -18,12 +18,16 @@ export function TechHeroSection() {
             <div className={styles.glitchLayer1} aria-hidden="true" />
             <div className={styles.glitchLayer2} aria-hidden="true" />
           </div>
-          <span
-            className="font-mono text-lg md:text-3xl font-bold uppercase tracking-[0.5em] text-[#f5f5f0]"
-            aria-label="Tech"
-          >
-            TECH
-          </span>
+          <div className="flex w-full items-center gap-3 md:gap-4">
+            <span className="h-px flex-1 bg-[#f5f5f0]" aria-hidden="true" />
+            <span
+              className="font-mono text-lg md:text-3xl font-bold uppercase tracking-[0.5em] text-[#f5f5f0]"
+              aria-label="Tech"
+            >
+              TECH
+            </span>
+            <span className="h-px flex-1 bg-[#f5f5f0]" aria-hidden="true" />
+          </div>
         </div>
       }
       secondaryCtas={
