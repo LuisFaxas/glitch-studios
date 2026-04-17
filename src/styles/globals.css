@@ -278,3 +278,20 @@
     }
   }
 }
+
+/*
+ * Glitch Tech accent scope hook.
+ *
+ * Phase 07.4 ships Tech with the identical monochrome palette as Studios
+ * (UI-SPEC locks accent deferral to Phase 07.5/07.6). This empty selector
+ * block exists so Phase 7.5/7.6 can enable accent CSS variables here
+ * without touching <TechLayout />. The data attribute is mounted by
+ * src/app/(tech)/layout.tsx.
+ *
+ * Example enablement (Phase 7.5):
+ *   --color-accent: #00aa00;          // terminal green
+ *   --color-accent-soft: #003311;
+ */
+[data-brand="tech"] {
+  /* intentionally empty in Phase 07.4 — monochrome only */
+}
