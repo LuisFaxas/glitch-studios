@@ -1,13 +1,22 @@
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { ScrollSection } from "@/components/home/scroll-section"
+import { GlitchHeading } from "@/components/ui/glitch-heading"
+import type { BenchmarkSpotlight } from "@/lib/tech/queries"
 
-export function TechBenchmarkSpotlight() {
+interface TechBenchmarkSpotlightProps {
+  spotlight: BenchmarkSpotlight | null
+}
+
+export function TechBenchmarkSpotlight({ spotlight }: TechBenchmarkSpotlightProps) {
+  if (!spotlight) return null
+
   return (
     <ScrollSection variant="clip-reveal" className="py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4">
         <h2 className="font-mono text-3xl font-bold uppercase tracking-tight text-[#f5f5f0] md:text-4xl">
-          Top-Benchmarked
+          <GlitchHeading text="Top-Benchmarked">Top-Benchmarked</GlitchHeading>
         </h2>
         <p className="mt-1 font-sans text-sm text-[#888]">
           Highest scores across Geekbench, 3DMark, and real-world workflows
@@ -20,33 +29,36 @@ export function TechBenchmarkSpotlight() {
                 Editor&apos;s Choice
               </span>
               <h3 className="font-mono text-2xl font-bold uppercase tracking-tight text-[#f5f5f0] md:text-3xl">
-                MacBook Pro 14&quot; (M4 Max)
+                {spotlight.productName}
               </h3>
-              <p className="font-sans text-[15px] leading-relaxed text-[#888]">
-                Unrivaled multi-core performance for creative professionals.
-              </p>
+              {spotlight.summary && (
+                <p className="font-sans text-[15px] leading-relaxed text-[#888]">
+                  {spotlight.summary}
+                </p>
+              )}
 
-              <dl className="mt-2 grid grid-cols-2 gap-4">
-                <div>
-                  <dt className="font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-[#888]">
-                    Geekbench 6 Multi
-                  </dt>
-                  <dd className="font-mono text-2xl font-bold text-[#f5f5f0]">
-                    21,000
-                  </dd>
-                </div>
-                <div>
-                  <dt className="font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-[#888]">
-                    3DMark Wild Life
-                  </dt>
-                  <dd className="font-mono text-2xl font-bold text-[#f5f5f0]">
-                    15,400
-                  </dd>
-                </div>
-              </dl>
+              {spotlight.topScores.length > 0 && (
+                <dl className="mt-2 grid grid-cols-2 gap-4">
+                  {spotlight.topScores.map((s) => (
+                    <div key={s.testName}>
+                      <dt className="font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-[#888]">
+                        {s.testName}
+                      </dt>
+                      <dd className="font-mono text-2xl font-bold text-[#f5f5f0]">
+                        {s.score.toLocaleString()}
+                        {s.unit && (
+                          <span className="ml-1 font-mono text-[11px] font-normal uppercase text-[#888]">
+                            {s.unit}
+                          </span>
+                        )}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
 
               <Link
-                href="/tech/compare?product=macbook-pro-m4"
+                href={`/tech/compare?products=${spotlight.productSlug}`}
                 className="group mt-2 inline-flex w-fit items-center gap-2 border border-[#f5f5f0] bg-[#f5f5f0] px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.05em] text-[#000000] transition-colors duration-200 hover:bg-transparent hover:text-[#f5f5f0]"
               >
                 <span>Compare</span>
@@ -55,11 +67,19 @@ export function TechBenchmarkSpotlight() {
             </div>
 
             <div className="relative aspect-square w-full overflow-hidden border border-[#222] bg-[#0a0a0a] md:w-64">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#444]">
-                  Product
-                </span>
-              </div>
+              {spotlight.heroImageUrl ? (
+                <Image
+                  src={spotlight.heroImageUrl}
+                  alt={spotlight.productName}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 256px"
+                  className="object-cover"
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#444]">Product</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
