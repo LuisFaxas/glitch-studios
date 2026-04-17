@@ -11,12 +11,47 @@ import { useSidebar } from "@/components/layout/sidebar-context"
 
 const Dither = dynamic(() => import("@/components/ui/dither"), { ssr: false })
 
+/** Button/link with glitch flash overlay on hover */
+function GlitchLink({
+  href,
+  className,
+  glitchColor,
+  children,
+}: {
+  href: string
+  className: string
+  glitchColor: string
+  children: React.ReactNode
+}) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <Link
+      href={href}
+      className={`relative overflow-hidden ${className}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {hovered && (
+        <span
+          className="pointer-events-none absolute inset-0 animate-glitch-hover opacity-60 motion-reduce:hidden"
+          style={{ background: glitchColor }}
+          aria-hidden="true"
+        />
+      )}
+      <span className="relative z-10">{children}</span>
+    </Link>
+  )
+}
+
 interface HeroSectionProps {
   title?: string
   subtitle?: string
   ctaText?: string
   ctaLink?: string
   backgroundMediaUrl?: string
+  wordmark?: React.ReactNode
+  secondaryCtas?: React.ReactNode
+  tagline?: string
 }
 
 export function HeroSection({
@@ -25,6 +60,9 @@ export function HeroSection({
   ctaText = "Book a Session",
   ctaLink = "/services",
   backgroundMediaUrl,
+  wordmark,
+  secondaryCtas,
+  tagline = "Music & Video Production Studio",
 }: HeroSectionProps) {
   const shouldReduceMotion = useReducedMotion()
   const { scrollY } = useScroll()
@@ -88,12 +126,14 @@ export function HeroSection({
         <p className="font-mono text-sm md:text-4xl text-[#f5f5f0] tracking-tight mb-6 md:mb-8 px-4 text-center">
           {subtitle}
         </p>
-        <div className="w-[60vw] max-w-[280px] md:w-[80vw] md:max-w-[600px] pointer-events-auto">
-          <div className={styles.glitchWrapper}>
-            <div className={styles.glitchImg} />
-            <div className={styles.glitchLayer1} aria-hidden="true" />
-            <div className={styles.glitchLayer2} aria-hidden="true" />
-          </div>
+        <div className="w-[60vw] max-w-[280px] md:w-[80vw] md:max-w-[600px] pointer-events-auto flex justify-center">
+          {wordmark ?? (
+            <div className={styles.glitchWrapper}>
+              <div className={styles.glitchImg} />
+              <div className={styles.glitchLayer1} aria-hidden="true" />
+              <div className={styles.glitchLayer2} aria-hidden="true" />
+            </div>
+          )}
         </div>
       </div>
 
@@ -105,32 +145,36 @@ export function HeroSection({
           collapsed ? "md:-translate-x-8" : ""
         )}
       >
-        <div className="grid grid-cols-2 md:flex md:items-center md:justify-center gap-3 md:gap-4 w-full max-w-[340px] md:max-w-none md:w-auto pointer-events-auto">
-          <Link
+        <div className="grid grid-cols-2 md:flex md:items-center md:justify-center gap-2 md:gap-3 w-full max-w-[320px] md:max-w-none md:w-auto pointer-events-auto">
+          <GlitchLink
             href={ctaLink}
-            className="group relative overflow-hidden col-span-2 bg-[#f5f5f0] text-[#000] border-2 border-[#f5f5f0] px-6 py-3.5 md:px-12 md:py-4 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-sm md:text-lg hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
+            glitchColor="#000"
+            className="col-span-2 bg-[#f5f5f0] text-[#000] border border-[#f5f5f0] px-5 py-3 md:px-10 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-sm hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
           >
-            <span className="pointer-events-none absolute inset-0 bg-[#000]/10 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden" aria-hidden="true" />
             {ctaText}
-          </Link>
-          <Link
-            href="/beats"
-            className="group relative overflow-hidden bg-transparent text-[#f5f5f0] border border-[#555] px-5 py-2.5 md:px-8 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-sm hover:bg-[#1a1a1a] hover:border-[#888] transition-colors duration-200 text-center"
-          >
-            <span className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden" aria-hidden="true" />
-            Beats
-          </Link>
-          <Link
-            href="/portfolio"
-            className="group relative overflow-hidden bg-transparent text-[#f5f5f0] border border-[#555] px-5 py-2.5 md:px-8 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-sm hover:bg-[#1a1a1a] hover:border-[#888] transition-colors duration-200 text-center"
-          >
-            <span className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden" aria-hidden="true" />
-            Portfolio
-          </Link>
+          </GlitchLink>
+          {secondaryCtas ?? (
+            <>
+              <GlitchLink
+                href="/beats"
+                glitchColor="#f5f5f0"
+                className="bg-[#111] text-[#f5f5f0] border border-[#444] px-4 py-3 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+              >
+                Beats
+              </GlitchLink>
+              <GlitchLink
+                href="/portfolio"
+                glitchColor="#f5f5f0"
+                className="bg-[#111] text-[#f5f5f0] border border-[#444] px-4 py-3 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+              >
+                Portfolio
+              </GlitchLink>
+            </>
+          )}
         </div>
 
         <p className="font-mono text-[10px] md:text-xs text-[#555] uppercase tracking-[0.1em]">
-          Music &amp; Video Production Studio
+          {tagline}
         </p>
 
         {/* Scroll indicator — big, glitchy, unmissable */}

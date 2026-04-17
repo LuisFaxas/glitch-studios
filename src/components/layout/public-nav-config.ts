@@ -8,18 +8,12 @@ import {
   Music,
   User,
   Wrench,
-  type LucideIcon,
 } from "lucide-react"
+import type { NavItem } from "@/components/layout/nav-config-types"
 
-export interface PublicNavItem {
-  label: string
-  href: string
-  icon: LucideIcon
-  desktopSize: "wide" | "medium" | "small"
-  mobileSpan: string
-}
+export type PublicNavItem = NavItem
 
-export const publicNavItems: readonly PublicNavItem[] = [
+export const publicNavItems: readonly NavItem[] = [
   {
     label: "Beats",
     href: "/beats",

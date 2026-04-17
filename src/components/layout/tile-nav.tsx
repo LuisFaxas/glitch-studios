@@ -2,19 +2,12 @@
 
 import { usePathname, useRouter } from "next/navigation"
 import {
-  Music,
-  Wrench,
-  Calendar,
-  Image,
-  User,
-  FileText,
-  Mail,
   LogIn,
   LogOut,
   ChevronsRight,
   ShoppingCart,
 } from "lucide-react"
-import { motion, AnimatePresence } from "motion/react"
+import { motion } from "motion/react"
 import { Tile } from "@/components/tiles/tile"
 import { LogoTile } from "@/components/tiles/logo-tile"
 import { WidgetNowPlaying } from "@/components/tiles/widget-now-playing"
@@ -25,23 +18,24 @@ import type { ReactNode } from "react"
 import { CartIcon } from "@/components/cart/cart-icon"
 import { useSidebar } from "@/components/layout/sidebar-context"
 import Link from "next/link"
+import type { NavItem } from "@/components/layout/nav-config-types"
 
 interface TileNavProps {
-  /** Server-rendered WidgetLatestPost slot (async server component) */
+  navItems: readonly NavItem[]
+  topLogoTile?: ReactNode
+  widgetSlots?: ReactNode
+  crossLinkTile?: ReactNode
+  /** Legacy slot for Studios-only WidgetLatestPost server component */
   latestPostSlot?: ReactNode
 }
 
-const navItems = [
-  { label: "Beats", href: "/beats", icon: Music, size: "wide" as const },
-  { label: "Services", href: "/services", icon: Wrench, size: "wide" as const },
-  { label: "Book Session", href: "/book", icon: Calendar, size: "wide" as const },
-  { label: "Portfolio", href: "/portfolio", icon: Image, size: "wide" as const },
-  { label: "Artists", href: "/artists", icon: User, size: "medium" as const },
-  { label: "Blog", href: "/blog", icon: FileText, size: "small" as const },
-  { label: "Contact", href: "/contact", icon: Mail, size: "small" as const },
-] as const
-
-export function TileNav({ latestPostSlot }: TileNavProps) {
+export function TileNav({
+  navItems,
+  topLogoTile,
+  widgetSlots,
+  crossLinkTile,
+  latestPostSlot,
+}: TileNavProps) {
   const pathname = usePathname()
   const router = useRouter()
   const { data: session } = useSession()
@@ -133,7 +127,7 @@ export function TileNav({ latestPostSlot }: TileNavProps) {
         /* ---- Expanded: full layout ---- */
         <>
           {/* Logo tile */}
-          <LogoTile />
+          {topLogoTile ?? <LogoTile />}
 
           {/* Navigation tiles */}
           <nav aria-label="Main navigation" className="mt-1">
@@ -144,7 +138,7 @@ export function TileNav({ latestPostSlot }: TileNavProps) {
                 return (
                   <Tile
                     key={item.href}
-                    size={item.size}
+                    size={item.desktopSize}
                     label={item.label}
                     icon={<item.icon className="h-9 w-9" />}
                     isActive={isActive}
@@ -191,12 +185,19 @@ export function TileNav({ latestPostSlot }: TileNavProps) {
           <div className="border-t border-[#222222] my-4" />
 
           {/* Widgets section */}
-          <div className="grid grid-cols-2 gap-1">
-            <WidgetNowPlaying />
-            <WidgetStudioStatus />
-            {latestPostSlot}
-            <WidgetSocial />
-          </div>
+          {widgetSlots ? (
+            <div className="grid grid-cols-2 gap-1">{widgetSlots}</div>
+          ) : (
+            <div className="grid grid-cols-2 gap-1">
+              <WidgetNowPlaying />
+              <WidgetStudioStatus />
+              {latestPostSlot}
+              <WidgetSocial />
+            </div>
+          )}
+
+          {/* Cross-link tile — sits between widgets and scroll hint */}
+          {crossLinkTile && <div className="mt-2">{crossLinkTile}</div>}
 
           {/* Scroll hint gradient */}
           <div className="pointer-events-none sticky bottom-0 h-8 bg-gradient-to-t from-black to-transparent" />

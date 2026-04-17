@@ -27,6 +27,7 @@ import {
   LogIn,
   LogOut,
   X,
+  type LucideIcon,
 } from "lucide-react"
 import { Tile } from "@/components/tiles/tile"
 import { LogoTile } from "@/components/tiles/logo-tile"
@@ -39,15 +40,18 @@ import {
   XIcon,
 } from "@/components/icons/social-icons"
 import { signOut, useSession } from "@/lib/auth-client"
+import type { SocialLink } from "@/components/layout/nav-config-types"
 
 interface MobileNavOverlayProps {
   isOpen: boolean
   onClose: () => void
   triggerRef?: RefObject<HTMLButtonElement | null>
   latestPostSlot?: ReactNode
+  navItems: readonly { label: string; href: string; icon: LucideIcon }[]
+  socialLinks: readonly SocialLink[]
 }
 
-const navItems = [
+export const defaultStudiosOverlayNavItems: readonly { label: string; href: string; icon: LucideIcon }[] = [
   { label: "Beats", href: "/beats", icon: Music },
   { label: "Services", href: "/services", icon: Wrench },
   { label: "Portfolio", href: "/portfolio", icon: Image },
@@ -56,7 +60,7 @@ const navItems = [
   { label: "Contact", href: "/contact", icon: Mail },
 ] as const
 
-const socialLinks = [
+export const defaultStudiosOverlaySocialLinks: readonly SocialLink[] = [
   { label: "Instagram", href: "https://instagram.com/glitchstudios", Icon: InstagramIcon },
   { label: "YouTube", href: "https://youtube.com/@glitchstudios", Icon: YouTubeIcon },
   { label: "SoundCloud", href: "https://soundcloud.com/glitchstudios", Icon: SoundCloudIcon },
@@ -78,6 +82,8 @@ export function MobileNavOverlay({
   onClose,
   triggerRef,
   latestPostSlot,
+  navItems,
+  socialLinks,
 }: MobileNavOverlayProps) {
   const pathname = usePathname()
   const router = useRouter()

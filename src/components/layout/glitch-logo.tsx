@@ -11,9 +11,10 @@ const sizeMap = {
 type GlitchLogoProps = {
   size?: keyof typeof sizeMap
   animate?: boolean
+  text?: string
 }
 
-export function GlitchLogo({ size = "md", animate = true }: GlitchLogoProps) {
+export function GlitchLogo({ size = "md", animate = true, text = "GLITCH" }: GlitchLogoProps) {
   const [settled, setSettled] = useState(!animate)
 
   useEffect(() => {
@@ -25,13 +26,13 @@ export function GlitchLogo({ size = "md", animate = true }: GlitchLogoProps) {
   return (
     <span
       className={`glitch-logo relative inline-block font-mono font-bold uppercase leading-none ${sizeMap[size]}`}
-      data-text="GLITCH"
+      data-text={text}
       style={{
         textShadow: "0 0 10px rgba(255,255,255,0.3)",
         color: "#ffffff",
       }}
     >
-      GLITCH
+      {text}
       <style jsx>{`
         .glitch-logo {
           position: relative;
