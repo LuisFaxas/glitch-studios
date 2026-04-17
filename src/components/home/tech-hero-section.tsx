@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { HeroSection } from "@/components/home/hero-section"
+import { TechPulseLine } from "@/components/home/tech-pulse-line"
 import styles from "@/components/tiles/logo-tile.module.css"
 
 export function TechHeroSection() {
@@ -19,14 +20,14 @@ export function TechHeroSection() {
             <div className={styles.glitchLayer2} aria-hidden="true" />
           </div>
           <div className="flex w-full items-center gap-3 md:gap-4">
-            <span className="h-px flex-1 bg-[#f5f5f0]" aria-hidden="true" />
+            <TechPulseLine direction="left" />
             <span
               className="font-mono text-lg md:text-3xl font-bold uppercase tracking-[0.5em] text-[#f5f5f0]"
               aria-label="Tech"
             >
               TECH
             </span>
-            <span className="h-px flex-1 bg-[#f5f5f0]" aria-hidden="true" />
+            <TechPulseLine direction="right" />
           </div>
         </div>
       }

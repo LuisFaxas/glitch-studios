@@ -295,3 +295,41 @@
 [data-brand="tech"] {
   /* intentionally empty in Phase 07.4 — monochrome only */
 }
+
+/* Glitch Tech hero — heartbeat/ECG pulse lines flanking the "TECH" caption.
+ * Two pulses spawn from behind the TECH text, travel outward toward the logo
+ * edges, exit off-screen past the edge, and rest before repeating. 2.4s cycle. */
+
+@keyframes tech-pulse-left {
+  0%   { right: -2.5rem; opacity: 1; }
+  15%  { right: 0;                       opacity: 1; }
+  55%  { right: calc(100% - 2.5rem);     opacity: 1; }
+  60%  { right: 100%;                    opacity: 0; }
+  100% { right: 100%;                    opacity: 0; }
+}
+
+@keyframes tech-pulse-right {
+  0%   { left: -2.5rem;  opacity: 1; }
+  15%  { left: 0;                       opacity: 1; }
+  55%  { left: calc(100% - 2.5rem);     opacity: 1; }
+  60%  { left: 100%;                    opacity: 0; }
+  100% { left: 100%;                    opacity: 0; }
+}
+
+.tech-pulse-left {
+  right: -2.5rem;
+  animation: tech-pulse-left 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.tech-pulse-right {
+  left: -2.5rem;
+  animation: tech-pulse-right 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-pulse-left,
+  .tech-pulse-right {
+    animation: none;
+    opacity: 0;
+  }
+}
