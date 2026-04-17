@@ -12,7 +12,7 @@ export function TechHeroSection() {
       ctaLink="/tech/reviews"
       tagline="Product Reviews & Benchmarks"
       wordmark={
-        <div className="flex flex-col items-center gap-3 md:gap-4">
+        <div className="flex w-full flex-col items-center gap-3 md:gap-4">
           <div className={styles.glitchWrapper}>
             <div className={styles.glitchImg} />
             <div className={styles.glitchLayer1} aria-hidden="true" />
