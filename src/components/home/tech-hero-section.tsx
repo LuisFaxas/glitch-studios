@@ -20,14 +20,14 @@ export function TechHeroSection() {
             <div className={styles.glitchLayer2} aria-hidden="true" />
           </div>
           <div className="flex w-full items-center gap-3 md:gap-4">
-            <TechPulseLine direction="left" />
+            <TechPulseLine delay={0} />
             <span
               className="font-mono text-lg md:text-3xl font-bold uppercase tracking-[0.5em] text-[#f5f5f0]"
               aria-label="Tech"
             >
               TECH
             </span>
-            <TechPulseLine direction="right" />
+            <TechPulseLine delay={1} />
           </div>
         </div>
       }

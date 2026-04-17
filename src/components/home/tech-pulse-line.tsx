@@ -3,19 +3,20 @@
 import { motion, useReducedMotion } from "motion/react"
 
 interface TechPulseLineProps {
-  direction: "left" | "right"
+  /** Seconds to delay the first pulse iteration. Used to stagger left+right
+   *  so a single pulse appears to travel continuously across the full width. */
+  delay?: number
 }
 
 // ECG path. viewBox 100x20, baseline y=10.
 // Flat → P wave → Q dip → tall R spike → S dip → T hump → flat.
-// Path is drawn left-to-right; LEFT-side line flips via scaleX(-1)
-// so the pulse travels outward from TECH.
+// Both sides draw the path left-to-right — no scaleX flip — so the pulse
+// visually continues in the same direction as it crosses the TECH gap.
 const ECG_PATH =
   "M0 10 H42 L44 9.3 L46 10.5 L48 10 H53 L55 10.6 L57 11.4 L59 3 L61 17 L63 9 L66 7 L71 10 H100"
 
-export function TechPulseLine({ direction }: TechPulseLineProps) {
+export function TechPulseLine({ delay = 0 }: TechPulseLineProps) {
   const prefersReduced = useReducedMotion()
-  const isLeft = direction === "left"
 
   if (prefersReduced) {
     return (
@@ -30,13 +31,13 @@ export function TechPulseLine({ direction }: TechPulseLineProps) {
       <svg
         viewBox="0 0 100 20"
         preserveAspectRatio="none"
-        className={`h-full w-full ${isLeft ? "-scale-x-100" : ""}`}
+        className="h-full w-full"
         fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"
         style={{ overflow: "visible" }}
       >
-        {/* Flat baseline — the heart-monitor resting line. NOT the full ECG path. */}
+        {/* Flat baseline — the heart-monitor resting line. */}
         <line
           x1="0"
           y1="10"
@@ -48,7 +49,9 @@ export function TechPulseLine({ direction }: TechPulseLineProps) {
           vectorEffect="non-scaling-stroke"
         />
 
-        {/* Single bright pulse — CSS drop-shadow provides the glow halo */}
+        {/* Single bright pulse — CSS drop-shadow provides the glow halo.
+         *  Active for 1s per 2s cycle; right-side instance delays by 1s so its
+         *  appearance coincides with the left-side pulse finishing behind TECH. */}
         <motion.path
           d={ECG_PATH}
           stroke="#f5f5f0"
@@ -60,15 +63,15 @@ export function TechPulseLine({ direction }: TechPulseLineProps) {
           }}
           initial={{ pathLength: 0.28, pathOffset: 0, opacity: 0 }}
           animate={{
-            pathOffset: [0, 1],
+            pathOffset: [0, 0, 1, 1],
             opacity: [0, 1, 1, 0],
           }}
           transition={{
             duration: 2,
             repeat: Infinity,
-            repeatDelay: 0.8,
-            ease: [0.25, 0.1, 0.25, 1],
-            times: [0, 0.06, 0.94, 1],
+            ease: "linear",
+            delay,
+            times: [0, 0.02, 0.5, 0.52],
           }}
         />
       </svg>
