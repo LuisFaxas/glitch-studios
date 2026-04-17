@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { HeroSection } from "@/components/home/hero-section"
-import { GlitchLogo } from "@/components/layout/glitch-logo"
+import styles from "@/components/tiles/logo-tile.module.css"
 
 export function TechHeroSection() {
   return (
@@ -10,7 +10,22 @@ export function TechHeroSection() {
       subtitle="Product Reviews & Benchmarks"
       ctaText="Explore Reviews"
       ctaLink="/tech/reviews"
-      wordmark={<GlitchLogo text="GLITCH TECH" size="lg" animate={true} />}
+      tagline="Product Reviews & Benchmarks"
+      wordmark={
+        <div className="flex flex-col items-center gap-3 md:gap-4">
+          <div className={styles.glitchWrapper}>
+            <div className={styles.glitchImg} />
+            <div className={styles.glitchLayer1} aria-hidden="true" />
+            <div className={styles.glitchLayer2} aria-hidden="true" />
+          </div>
+          <span
+            className="font-mono text-lg md:text-3xl font-bold uppercase tracking-[0.5em] text-[#f5f5f0]"
+            aria-label="Tech"
+          >
+            TECH
+          </span>
+        </div>
+      }
       secondaryCtas={
         <>
           <Link
