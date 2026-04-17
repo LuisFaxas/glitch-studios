@@ -239,3 +239,21 @@ export async function deleteReview(id: string): Promise<void> {
   await db.delete(techReviews).where(eq(techReviews.id, id))
   revalidatePath("/admin/tech/reviews")
 }
+
+export interface ReviewerOption {
+  id: string
+  name: string
+}
+
+export async function listReviewers(): Promise<ReviewerOption[]> {
+  const rows = await db
+    .select({
+      id: user.id,
+      name: user.name,
+      role: user.role,
+    })
+    .from(user)
+  return rows
+    .filter((r) => r.role && r.role !== "user")
+    .map((r) => ({ id: r.id, name: r.name }))
+}
