@@ -1,4 +1,9 @@
 import type { Metadata } from "next"
+import {
+  getLatestPublishedReviews,
+  listTopLevelCategoriesWithCounts,
+  getBenchmarkSpotlight,
+} from "@/lib/tech/queries"
 import { TechHeroSection } from "@/components/home/tech-hero-section"
 import { TechFeaturedReviewsCarousel } from "@/components/home/tech-featured-reviews-carousel"
 import { TechCategoryTiles } from "@/components/home/tech-category-tiles"
@@ -13,14 +18,22 @@ export const metadata: Metadata = {
     "Product reviews, benchmarks, and comparisons from Glitch Studios. Covering computers, audio, and peripherals.",
 }
 
-export default function TechHomePage() {
+export const revalidate = 300
+
+export default async function TechHomePage() {
+  const [featuredReviews, categories, spotlight] = await Promise.all([
+    getLatestPublishedReviews(3),
+    listTopLevelCategoriesWithCounts(),
+    getBenchmarkSpotlight(),
+  ])
+
   return (
     <>
       <HomepageScrollWatcher />
       <TechHeroSection />
-      <TechFeaturedReviewsCarousel />
-      <TechCategoryTiles />
-      <TechBenchmarkSpotlight />
+      <TechFeaturedReviewsCarousel reviews={featuredReviews} />
+      <TechCategoryTiles categories={categories} />
+      <TechBenchmarkSpotlight spotlight={spotlight} />
       <TechCompareCta />
       <TechNewsletter />
     </>
