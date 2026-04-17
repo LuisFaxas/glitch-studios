@@ -245,14 +245,14 @@ Plans:
   4. Each sidebar has a cross-link tile to the other entity's logo, using Next.js `<Link>` for seamless in-tab transition with preserved audio/cart/auth state
   5. Glitch Studios homepage has a dedicated promotional section for Glitch Tech
   6. Glitch Studios main nav (`publicNavItems`, mobile tab bar) is unchanged — no "Tech" item added
-**Plans:** 5 plans
+**Plans:** 5/5 plans complete
 
 Plans:
-- [ ] 07.4-01-PLAN.md -- Parameterize layout primitives (TileNav, BottomTabBar, MobileNavOverlay, LogoTile, GlitchLogo, HeroSection), move FloatingCartButton to root, formalize TECH-01/02/03
-- [ ] 07.4-02-PLAN.md -- Create tech-nav-config + (tech)/ route group layout + 7 placeholder pages (/tech, /reviews, /reviews/[slug], /categories, /compare, /benchmarks, /about)
-- [ ] 07.4-03-PLAN.md -- Build GlitchTechPromoSection + TechCrossLinkTile, wire into Studios homepage and sidebar
-- [ ] 07.4-04-PLAN.md -- Build Tech landing page (6 sections) + Tech sidebar widgets (Latest Review, Featured Product, Social Tech) + StudiosCrossLinkTile + TechLogoTile, wire into Tech layout
-- [ ] 07.4-05-PLAN.md -- Cross-brand transition animation in template.tsx + [data-brand='tech'] CSS hook + Playwright verification suite + human verification
+- [x] 07.4-01-PLAN.md -- Parameterize layout primitives (TileNav, BottomTabBar, MobileNavOverlay, LogoTile, GlitchLogo, HeroSection), move FloatingCartButton to root, formalize TECH-01/02/03
+- [x] 07.4-02-PLAN.md -- Create tech-nav-config + (tech)/ route group layout + 7 placeholder pages (/tech, /reviews, /reviews/[slug], /categories, /compare, /benchmarks, /about)
+- [x] 07.4-03-PLAN.md -- Build GlitchTechPromoSection + TechCrossLinkTile, wire into Studios homepage and sidebar
+- [x] 07.4-04-PLAN.md -- Build Tech landing page (6 sections) + Tech sidebar widgets (Latest Review, Featured Product, Social Tech) + StudiosCrossLinkTile + TechLogoTile, wire into Tech layout
+- [x] 07.4-05-PLAN.md -- Cross-brand transition animation in template.tsx + [data-brand='tech'] CSS hook + Playwright verification suite + human verification
 
 ### Phase 07.2: Mobile Experience Overhaul (INSERTED)
 
