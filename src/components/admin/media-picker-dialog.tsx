@@ -18,7 +18,7 @@ type MediaAsset = typeof mediaAssets.$inferSelect
 interface MediaPickerDialogProps {
   open: boolean
   onClose: () => void
-  onSelect: (asset: { url: string; alt: string }) => void
+  onSelect: (asset: { id: string; url: string; alt: string }) => void
   typeFilter?: "image" | "audio" | "video"
 }
 
@@ -69,7 +69,7 @@ export function MediaPickerDialog({
 
   const handleConfirm = () => {
     if (selectedAsset) {
-      onSelect({ url: selectedAsset.url, alt: selectedAsset.alt || "" })
+      onSelect({ id: selectedAsset.id, url: selectedAsset.url, alt: selectedAsset.alt || "" })
       onClose()
     }
   }
@@ -123,6 +123,7 @@ export function MediaPickerDialog({
                   onSelect={() => setSelectedId(asset.id)}
                   onDoubleClick={() => {
                     onSelect({
+                      id: asset.id,
                       url: asset.url,
                       alt: asset.alt || "",
                     })
