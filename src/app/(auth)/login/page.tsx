@@ -49,8 +49,8 @@ export default function LoginPage() {
         console.error("Sign-in error:", error)
         toast.error("Invalid email or password. Please try again.")
       } else {
-        console.log("Sign-in success:", data)
-        router.push("/admin")
+        const role = data?.user?.role
+        router.push(role === "admin" || role === "owner" ? "/admin" : "/dashboard")
         router.refresh()
       }
     } catch {
