@@ -440,7 +440,7 @@ v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 7.2 -> 7.3 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 
 | 7.3 Mobile Menu Overhaul | v2.0 | 0/1 | **Next up** | - |
 | 7.4 Brand architecture & Glitch Tech sub-brand foundation | v2.0 | 0/5 | Planned | - |
 | 7.5 Product reviews data model & admin input | v2.0 | 0/7 | Planned | - |
-| 8. Auth & Navigation | v2.0 | 3/3 | Complete   | 2026-04-18 |
+| 8. Auth & Navigation | v2.0 | 3/3 | Complete    | 2026-04-18 |
 | 9. Services & Booking | v2.0 | 0/0 | Not started | - |
 | 10. Blog | v2.0 | 0/0 | Not started | - |
 | 11. Portfolio | v2.0 | 0/0 | Not started | - |
