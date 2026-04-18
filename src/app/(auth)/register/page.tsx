@@ -65,7 +65,7 @@ export default function RegisterPage() {
         )
       } else {
         toast.success("Account created. Welcome to Glitch Studios.")
-        router.push("/")
+        router.push("/dashboard")
         router.refresh()
       }
     } catch {
