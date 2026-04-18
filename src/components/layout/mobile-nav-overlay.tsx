@@ -8,7 +8,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import {
   animate,
   AnimatePresence,
@@ -25,7 +25,6 @@ import {
   FileText,
   Mail,
   LogIn,
-  LogOut,
   X,
   type LucideIcon,
 } from "lucide-react"
@@ -39,7 +38,7 @@ import {
   SoundCloudIcon,
   XIcon,
 } from "@/components/icons/social-icons"
-import { signOut, useSession } from "@/lib/auth-client"
+import { useSession } from "@/lib/auth-client"
 import type { SocialLink } from "@/components/layout/nav-config-types"
 
 interface MobileNavOverlayProps {
@@ -86,7 +85,6 @@ export function MobileNavOverlay({
   socialLinks,
 }: MobileNavOverlayProps) {
   const pathname = usePathname()
-  const router = useRouter()
   const { data: session } = useSession()
   const overlayRef = useRef<HTMLDivElement>(null)
   const previousPathnameRef = useRef(pathname)
@@ -336,14 +334,10 @@ export function MobileNavOverlay({
               {session?.user ? (
                 <Tile
                   size="medium"
-                  label="Sign Out"
-                  icon={<LogOut className="h-5 w-5" />}
-                  onClick={async () => {
-                    await signOut()
-                    onClose()
-                    router.push("/")
-                    router.refresh()
-                  }}
+                  label="My Account"
+                  icon={<User className="h-5 w-5" />}
+                  href="/dashboard"
+                  onClick={handleDeferredClose}
                   layout="horizontal"
                   className="!col-span-1 !px-3"
                 />
