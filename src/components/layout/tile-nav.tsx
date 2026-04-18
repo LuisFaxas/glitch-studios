@@ -20,6 +20,16 @@ import { useSidebar } from "@/components/layout/sidebar-context"
 import Link from "next/link"
 import type { NavItem } from "@/components/layout/nav-config-types"
 
+function getInitials(name: string | null | undefined, email: string): string {
+  if (name?.trim()) {
+    const parts = name.trim().split(/\s+/)
+    return parts.length >= 2
+      ? (parts[0][0] + parts[1][0]).toUpperCase()
+      : parts[0][0].toUpperCase()
+  }
+  return (email.split("@")[0][0] ?? "U").toUpperCase()
+}
+
 interface TileNavProps {
   navItems: readonly NavItem[]
   topLogoTile?: ReactNode
@@ -87,18 +97,19 @@ export function TileNav({
           {/* Auth icon — right under cart */}
           <div className="mt-1 w-full">
             {session?.user ? (
-              <button
-                type="button"
-                onClick={async () => {
-                  await signOut()
-                  router.push("/")
-                  router.refresh()
-                }}
+              <Link
+                href={
+                  session.user.role === "admin" || session.user.role === "owner"
+                    ? "/admin"
+                    : "/dashboard"
+                }
                 className="flex items-center justify-center p-3 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] text-[#f5f5f0] w-full transition-colors duration-200"
-                aria-label="Sign Out"
+                aria-label="My Account"
               >
-                <LogOut className="h-5 w-5" />
-              </button>
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#222222] text-[#f5f5f0] font-mono text-[10px] font-bold uppercase shrink-0">
+                  {getInitials(session.user.name, session.user.email ?? "")}
+                </span>
+              </Link>
             ) : (
               <Link
                 href="/login"
@@ -158,18 +169,35 @@ export function TileNav({
           {/* Auth — same width as cart */}
           <div className="mt-1">
             {session?.user ? (
-              <button
-                type="button"
-                onClick={async () => {
-                  await signOut()
-                  router.push("/")
-                  router.refresh()
-                }}
-                className="flex w-full items-center justify-center gap-2 border border-[#222222] bg-[#111111] py-2 text-[#f5f5f0] hover:bg-[#1a1a1a] transition-colors duration-200"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="font-mono text-[11px] font-bold uppercase tracking-[0.05em]">Sign Out</span>
-              </button>
+              <div className="flex w-full border border-[#222222] bg-[#111111]">
+                <Link
+                  href={
+                    session.user.role === "admin" || session.user.role === "owner"
+                      ? "/admin"
+                      : "/dashboard"
+                  }
+                  className="flex flex-1 items-center gap-2 py-2 pl-3 hover:bg-[#1a1a1a] transition-colors duration-200"
+                >
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#222222] text-[#f5f5f0] font-mono text-[10px] font-bold uppercase shrink-0">
+                    {getInitials(session.user.name, session.user.email ?? "")}
+                  </span>
+                  <span className="font-mono text-[11px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0]">
+                    My Account
+                  </span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await signOut()
+                    router.push("/")
+                    router.refresh()
+                  }}
+                  className="flex items-center justify-center px-3 py-2 hover:bg-[#1a1a1a] transition-colors duration-200"
+                  aria-label="Sign Out"
+                >
+                  <LogOut className="h-4 w-4 text-[#f5f5f0]" />
+                </button>
+              </div>
             ) : (
               <Link
                 href="/login"
