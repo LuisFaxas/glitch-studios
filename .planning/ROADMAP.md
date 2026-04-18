@@ -336,8 +336,12 @@ Plans:
   2. Main navigation includes visible "Sign In" / "My Account" links -- client account access is not buried or hidden
   3. Sign-up and login pages are clearly separated from admin login, with appropriate sizing and visual hierarchy
   4. A logged-in client can reach their dashboard (purchases, bookings) in one click from any page
-**Plans**: TBD
-**UI hint**: yes
+**Plans**: 3 plans
+
+Plans:
+- [ ] 08-01-PLAN.md -- Fix login role redirect bug + post-registration redirect to /dashboard
+- [ ] 08-02-PLAN.md -- Desktop sidebar + mobile overlay logged-in auth state upgrade
+- [ ] 08-03-PLAN.md -- Dashboard landing page (greeting + My Purchases + My Bookings)
 
 ### Phase 9: Services & Booking
 **Goal**: Visitors get enough information about each service to confidently book, and the booking flow guides them clearly through each step
