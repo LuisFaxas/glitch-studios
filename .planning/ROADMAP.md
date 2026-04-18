@@ -138,7 +138,7 @@ Plans:
 - [x] **Phase 7.1: Listening Experience & Waveform Overhaul** - INSERTED -- Real waveforms, interactive scrubbing, mini-player widget, mobile waveform
 - [x] **Phase 7.2: Mobile Experience Overhaul** - INSERTED -- Tab bar restructure, player coexistence, responsive hero (Plan 04 deferred — verification after 07.3)
 - [ ] **Phase 7.3: Mobile Menu Overhaul** - INSERTED -- Fix the mobile nav overlay to be usable, clean, and industry-quality
-- [ ] **Phase 8: Auth & Navigation** - Role-based redirects, discoverable client accounts
+- [x] **Phase 8: Auth & Navigation** - Role-based redirects, discoverable client accounts (completed 2026-04-18)
 - [ ] **Phase 9: Services & Booking** - Comprehensive service info, clear booking step flow
 - [ ] **Phase 10: Blog** - Consistent cards, engagement hooks, smooth browsing
 - [ ] **Phase 11: Portfolio** - Detail view navigation, refined carousel animations
@@ -339,9 +339,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 08-01-PLAN.md -- Fix login role redirect bug + post-registration redirect to /dashboard
-- [ ] 08-02-PLAN.md -- Desktop sidebar + mobile overlay logged-in auth state upgrade
-- [ ] 08-03-PLAN.md -- Dashboard landing page (greeting + My Purchases + My Bookings)
+- [x] 08-01-PLAN.md -- Fix login role redirect bug + post-registration redirect to /dashboard
+- [x] 08-02-PLAN.md -- Desktop sidebar + mobile overlay logged-in auth state upgrade
+- [x] 08-03-PLAN.md -- Dashboard landing page (greeting + My Purchases + My Bookings)
 
 ### Phase 9: Services & Booking
 **Goal**: Visitors get enough information about each service to confidently book, and the booking flow guides them clearly through each step
@@ -440,7 +440,7 @@ v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 7.2 -> 7.3 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 
 | 7.3 Mobile Menu Overhaul | v2.0 | 0/1 | **Next up** | - |
 | 7.4 Brand architecture & Glitch Tech sub-brand foundation | v2.0 | 0/5 | Planned | - |
 | 7.5 Product reviews data model & admin input | v2.0 | 0/7 | Planned | - |
-| 8. Auth & Navigation | v2.0 | 0/0 | Not started | - |
+| 8. Auth & Navigation | v2.0 | 3/3 | Complete   | 2026-04-18 |
 | 9. Services & Booking | v2.0 | 0/0 | Not started | - |
 | 10. Blog | v2.0 | 0/0 | Not started | - |
 | 11. Portfolio | v2.0 | 0/0 | Not started | - |

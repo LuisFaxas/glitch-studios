@@ -104,9 +104,9 @@ Sequential page-by-page quality overhaul. No new backend features -- purely UX/U
 
 ### Auth & Navigation
 
-- [ ] **NAV-01**: Login redirects users based on role -- admin to /admin, regular users to /dashboard
-- [ ] **NAV-02**: Client account access (sign up, login, dashboard) is discoverable in main navigation, not buried
-- [ ] **NAV-03**: Sign-up flow is clearly separated from admin login with appropriate sizing and placement
+- [x] **NAV-01**: Login redirects users based on role -- admin to /admin, regular users to /dashboard
+- [x] **NAV-02**: Client account access (sign up, login, dashboard) is discoverable in main navigation, not buried
+- [x] **NAV-03**: Sign-up flow is clearly separated from admin login with appropriate sizing and placement
 
 ### Services & Booking
 
@@ -258,9 +258,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BEATS-01 | Phase 7 | Complete |
 | BEATS-02 | Phase 7 | Complete |
 | BEATS-03 | Phase 7 | Complete |
-| NAV-01 | Phase 8 | Pending |
-| NAV-02 | Phase 8 | Pending |
-| NAV-03 | Phase 8 | Pending |
+| NAV-01 | Phase 8 | Complete |
+| NAV-02 | Phase 8 | Complete |
+| NAV-03 | Phase 8 | Complete |
 | BOOK-06 (v2) | Phase 9 | Pending |
 | BOOK-07 | Phase 9 | Pending |
 | BOOK-08 | Phase 9 | Pending |
