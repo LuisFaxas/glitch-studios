@@ -14,7 +14,7 @@ import { WidgetNowPlaying } from "@/components/tiles/widget-now-playing"
 import { WidgetStudioStatus } from "@/components/tiles/widget-studio-status"
 import { WidgetSocial } from "@/components/tiles/widget-social"
 import { signOut, useSession } from "@/lib/auth-client"
-import { useEffect, type ReactNode } from "react"
+import type { ReactNode } from "react"
 import { CartIcon } from "@/components/cart/cart-icon"
 import { useSidebar } from "@/components/layout/sidebar-context"
 import Link from "next/link"
@@ -60,33 +60,15 @@ export function TileNav({
 
   const targetWidth = collapsed ? 64 : 280
 
-  // Publish the sidebar width as a root CSS variable so fixed-position
-  // bottom UI (player bar, etc.) can offset its `left` and not cover the
-  // sidebar on desktop. Reset to 0 when this sidebar unmounts (mobile
-  // routes, etc.) so consumers don't inherit a stale value.
-  useEffect(() => {
-    const root = document.documentElement
-    root.style.setProperty("--sidebar-width", `${targetWidth}px`)
-    return () => {
-      root.style.setProperty("--sidebar-width", "0px")
-    }
-  }, [targetWidth])
-
   return (
     <motion.aside
-      className={`hidden md:flex flex-col shrink-0 bg-[#000000] overflow-y-auto sticky top-0 sidebar-scroll ${
+      className={`hidden md:flex flex-col shrink-0 bg-[#000000] overflow-y-auto h-screen sticky top-0 sidebar-scroll ${
         collapsed ? "p-2 items-center" : "p-3"
       }`}
       initial={false}
       animate={{ width: targetWidth, minWidth: targetWidth }}
       transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-      style={{
-        width: targetWidth,
-        minWidth: targetWidth,
-        // Sidebar sits ABOVE the fixed player bar. When the player is
-        // hidden (--player-bar-height: 0) this is equivalent to h-screen.
-        height: "calc(100vh - var(--player-bar-height, 0px))",
-      }}
+      style={{ width: targetWidth, minWidth: targetWidth }}
     >
       {collapsed ? (
         /* ---- Collapsed: icon strip ---- */

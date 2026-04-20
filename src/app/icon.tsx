@@ -39,12 +39,12 @@ export default function Icon() {
         <span
           style={{
             fontFamily: fontData ? "ArchivoBlack" : "monospace",
-            fontSize: 46,
+            fontSize: 54,
             fontWeight: 900,
             color: "#ffffff",
             lineHeight: 1,
             display: "block",
-            transform: "translate(-1px, 4px)",
+            transform: "translate(-1px, 0)",
           }}
         >
           G

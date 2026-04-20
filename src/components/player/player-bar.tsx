@@ -62,18 +62,6 @@ export function PlayerBar() {
   const shouldShow = currentBeat && !isMinimized
   const showMinimizedBar = currentBeat && isMinimized
 
-  // Publish the current player-bar height as a root CSS variable so
-  // other fixed/sticky UI (sidebar, modals) can reserve space and avoid
-  // being covered. 72px = full bar, 32px = minimized, 0px = hidden.
-  useEffect(() => {
-    const root = document.documentElement
-    const h = shouldShow ? 72 : showMinimizedBar ? 32 : 0
-    root.style.setProperty("--player-bar-height", `${h}px`)
-    return () => {
-      root.style.setProperty("--player-bar-height", "0px")
-    }
-  }, [shouldShow, showMinimizedBar])
-
   return (
     <>
       {/* Minimized restore bar */}
