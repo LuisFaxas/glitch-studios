@@ -14,7 +14,7 @@ import { WidgetNowPlaying } from "@/components/tiles/widget-now-playing"
 import { WidgetStudioStatus } from "@/components/tiles/widget-studio-status"
 import { WidgetSocial } from "@/components/tiles/widget-social"
 import { signOut, useSession } from "@/lib/auth-client"
-import type { ReactNode } from "react"
+import { useEffect, type ReactNode } from "react"
 import { CartIcon } from "@/components/cart/cart-icon"
 import { useSidebar } from "@/components/layout/sidebar-context"
 import Link from "next/link"
@@ -59,6 +59,18 @@ export function TileNav({
   const { collapsed, setCollapsed } = useSidebar()
 
   const targetWidth = collapsed ? 64 : 280
+
+  // Publish the sidebar width as a root CSS variable so fixed-position
+  // bottom UI (player bar, etc.) can offset its `left` and not cover the
+  // sidebar on desktop. Reset to 0 when this sidebar unmounts (mobile
+  // routes, etc.) so consumers don't inherit a stale value.
+  useEffect(() => {
+    const root = document.documentElement
+    root.style.setProperty("--sidebar-width", `${targetWidth}px`)
+    return () => {
+      root.style.setProperty("--sidebar-width", "0px")
+    }
+  }, [targetWidth])
 
   return (
     <motion.aside

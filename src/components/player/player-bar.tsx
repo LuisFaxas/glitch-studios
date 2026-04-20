@@ -74,7 +74,7 @@ export function PlayerBar() {
             exit={{ y: 32 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
             onClick={() => setMinimized(false)}
-            className="fixed left-0 right-0 z-40 flex items-center justify-center gap-2 h-8 bg-[#111111] border-t border-[#222222] bottom-[calc(var(--tab-bar-height,0px)+env(safe-area-inset-bottom))] md:bottom-0 cursor-pointer hover:bg-[#1a1a1a] transition-colors"
+            className="fixed left-0 right-0 md:left-[var(--sidebar-width,0px)] z-40 flex items-center justify-center gap-2 h-8 bg-[#111111] border-t border-[#222222] bottom-[calc(var(--tab-bar-height,0px)+env(safe-area-inset-bottom))] md:bottom-0 cursor-pointer hover:bg-[#1a1a1a] transition-colors"
           >
             <Maximize2 className="h-3 w-3 text-[#888888]" />
             <span className="font-mono text-[11px] text-[#888888] truncate max-w-[200px]">
@@ -92,7 +92,7 @@ export function PlayerBar() {
           animate={{ y: 0 }}
           exit={{ y: 72 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="fixed left-0 right-0 z-40 h-[72px] bg-[#111111] border-t border-[#222222] bottom-[calc(var(--tab-bar-height,0px)+env(safe-area-inset-bottom))] md:bottom-0"
+          className="fixed left-0 right-0 md:left-[var(--sidebar-width,0px)] z-40 h-[72px] bg-[#111111] border-t border-[#222222] bottom-[calc(var(--tab-bar-height,0px)+env(safe-area-inset-bottom))] md:bottom-0"
         >
           {/* Desktop layout */}
           <div className="hidden md:flex items-center h-full px-4 gap-4">
