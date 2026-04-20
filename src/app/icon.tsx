@@ -3,11 +3,8 @@ import { ImageResponse } from "next/og"
 export const size = { width: 32, height: 32 }
 export const contentType = "image/png"
 
-// Glitchy "G" — transparent background, the glyph itself is the icon.
-// Three stacked layers: cyan shifted left, magenta shifted right, white
-// center. Edges of the cyan/magenta layers peek out past the white core
-// producing the RGB channel-split look of the wordmark. Glyph is sized
-// to near-fill the 32x32 canvas so the mark still reads at 16x16.
+// Plain white fat G — matches the hero logo's default (non-hover) state.
+// Transparent background, one glyph, subtle white glow. No RGB split.
 export default function Icon() {
   return new ImageResponse(
     (
@@ -18,40 +15,16 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          position: "relative",
           fontFamily: "monospace",
           fontSize: 44,
           fontWeight: 900,
           letterSpacing: "-0.05em",
           lineHeight: 1,
+          color: "#ffffff",
+          textShadow: "0 0 6px rgba(255,255,255,0.35)",
         }}
       >
-        <span
-          style={{
-            position: "absolute",
-            color: "#00ffff",
-            transform: "translate(-2.5px, 0)",
-          }}
-        >
-          G
-        </span>
-        <span
-          style={{
-            position: "absolute",
-            color: "#ff00ff",
-            transform: "translate(2.5px, 0)",
-          }}
-        >
-          G
-        </span>
-        <span
-          style={{
-            position: "absolute",
-            color: "#f5f5f0",
-          }}
-        >
-          G
-        </span>
+        G
       </div>
     ),
     { ...size }
