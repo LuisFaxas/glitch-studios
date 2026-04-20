@@ -1,11 +1,28 @@
 import { ImageResponse } from "next/og"
+import fs from "node:fs"
+import path from "node:path"
 
-export const size = { width: 32, height: 32 }
+// Glitch "G" favicon — fat G on a black circle.
+// Uses Archivo Black (Google Fonts, SIL Open Font License — free for
+// commercial use). TTF bundled in public/fonts/.
+
+export const runtime = "nodejs"
+export const size = { width: 64, height: 64 }
 export const contentType = "image/png"
 
-// Plain white fat G — matches the hero logo's default (non-hover) state.
-// Transparent background, one glyph, subtle white glow. No RGB split.
 export default function Icon() {
+  const fontPath = path.join(
+    process.cwd(),
+    "public/fonts/archivo-black.ttf"
+  )
+  let fontData: Buffer | null = null
+  try {
+    fontData = fs.readFileSync(fontPath)
+  } catch {
+    // File missing — fall back to system monospace so the build never
+    // breaks. Production should always have the font present.
+  }
+
   return new ImageResponse(
     (
       <div
@@ -15,18 +32,37 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontFamily: "monospace",
-          fontSize: 44,
-          fontWeight: 900,
-          letterSpacing: "-0.05em",
-          lineHeight: 1,
-          color: "#ffffff",
-          textShadow: "0 0 6px rgba(255,255,255,0.35)",
+          background: "#000000",
+          borderRadius: "50%",
         }}
       >
-        G
+        <span
+          style={{
+            fontFamily: fontData ? "ArchivoBlack" : "monospace",
+            fontSize: 46,
+            fontWeight: 900,
+            color: "#ffffff",
+            lineHeight: 1,
+            display: "block",
+            transform: "translate(-1px, 4px)",
+          }}
+        >
+          G
+        </span>
       </div>
     ),
-    { ...size }
+    {
+      ...size,
+      fonts: fontData
+        ? [
+            {
+              name: "ArchivoBlack",
+              data: fontData,
+              style: "normal",
+              weight: 900,
+            },
+          ]
+        : undefined,
+    }
   )
 }
