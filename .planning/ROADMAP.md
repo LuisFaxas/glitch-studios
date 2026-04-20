@@ -356,13 +356,13 @@ Plans:
 **UI hint**: yes
 
 Plans:
-- [ ] 09-01-PLAN.md -- Playwright mobile audit at 375px (Wave 0)
-- [ ] 09-02-PLAN.md -- Portfolio-to-service match DB audit + decision record (Wave 0)
-- [ ] 09-03-PLAN.md -- getBookingLive util + setBookingLive action + newsletter source tagging (Wave 1)
-- [ ] 09-04-PLAN.md -- Coming-soon manifesto, admin toggle, public page branching, CTA rerouting (Wave 2)
-- [ ] 09-05-PLAN.md -- Service detail panel enrichment (9 sections, D-08) (Wave 3)
-- [ ] 09-06-PLAN.md -- Booking wizard polish (summary sidebar, subtitles, terms block, rich tiles) (Wave 3)
-- [ ] 09-07-PLAN.md -- Mobile fix application + verification spec + human sign-off (Wave 4)
+- [x] 09-01-PLAN.md -- Playwright mobile audit at 375px (Wave 0)
+- [x] 09-02-PLAN.md -- Portfolio-to-service match DB audit + decision record (Wave 0)
+- [x] 09-03-PLAN.md -- getBookingLive util + setBookingLive action + newsletter source tagging (Wave 1)
+- [x] 09-04-PLAN.md -- Coming-soon manifesto, admin toggle, public page branching, CTA rerouting (Wave 2)
+- [x] 09-05-PLAN.md -- Service detail panel enrichment (9 sections, D-08) (Wave 3)
+- [x] 09-06-PLAN.md -- Booking wizard polish (summary sidebar, subtitles, terms block, rich tiles) (Wave 3)
+- [x] 09-07-PLAN.md -- Mobile fix application + verification spec + human sign-off (Wave 4)
 
 ### Phase 10: Blog
 **Goal**: Blog page feels intentional and engaging -- visitors want to read, not bounce
