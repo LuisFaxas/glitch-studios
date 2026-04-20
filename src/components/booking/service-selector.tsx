@@ -1,30 +1,23 @@
 "use client"
 
-import { useState, useCallback } from "react"
 import clsx from "clsx"
-import {
-  Headphones,
-  Sliders,
-  Volume2,
-  Video,
-  Waves,
-  Palette,
-} from "lucide-react"
+import { Clock } from "lucide-react"
 import type { ServiceBookingInfo } from "@/types/booking"
-
-const SERVICE_ICONS: Record<string, React.ReactNode> = {
-  studio_session: <Headphones className="h-5 w-5" />,
-  mixing: <Sliders className="h-5 w-5" />,
-  mastering: <Volume2 className="h-5 w-5" />,
-  video_production: <Video className="h-5 w-5" />,
-  sfx: <Waves className="h-5 w-5" />,
-  graphic_design: <Palette className="h-5 w-5" />,
-}
+import { GlitchHeading } from "@/components/ui/glitch-heading"
 
 interface ServiceSelectorProps {
   services: ServiceBookingInfo[]
   selectedId: string | null
   onSelect: (id: string) => void
+}
+
+function formatDurationLabel(minutes: number): string {
+  if (minutes >= 60) {
+    const h = minutes / 60
+    const rounded = h % 1 === 0 ? h.toString() : h.toFixed(1)
+    return `${rounded} ${h === 1 ? "HOUR" : "HOURS"}`
+  }
+  return `${minutes} MINUTES`
 }
 
 export function ServiceSelector({
@@ -33,20 +26,15 @@ export function ServiceSelector({
   onSelect,
 }: ServiceSelectorProps) {
   return (
-    <div>
-      <h2 className="font-mono text-[13px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0] mb-4">
-        SELECT SERVICE
-      </h2>
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-[var(--gap-tile)]">
-        {services.map((service) => (
-          <ServiceTile
-            key={service.serviceId}
-            service={service}
-            isSelected={selectedId === service.serviceId}
-            onSelect={onSelect}
-          />
-        ))}
-      </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {services.map((service) => (
+        <ServiceTile
+          key={service.serviceId}
+          service={service}
+          isSelected={selectedId === service.serviceId}
+          onSelect={onSelect}
+        />
+      ))}
     </div>
   )
 }
@@ -60,68 +48,71 @@ function ServiceTile({
   isSelected: boolean
   onSelect: (id: string) => void
 }) {
-  const [isHovered, setIsHovered] = useState(false)
-
-  const handleMouseEnter = useCallback(() => {
-    if (!isSelected) setIsHovered(true)
-  }, [isSelected])
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false)
-  }, [])
-
-  // Derive service type from slug for icon mapping
-  const serviceType = service.serviceSlug.replace(/-/g, "_")
-  const icon = SERVICE_ICONS[serviceType] || <Headphones className="h-5 w-5" />
-
-  const durationLabel =
-    service.durationMinutes >= 60
-      ? `${service.durationMinutes / 60} hour${service.durationMinutes > 60 ? "s" : ""}`
-      : `${service.durationMinutes} min`
-
   return (
     <button
       type="button"
       onClick={() => onSelect(service.serviceId)}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      aria-pressed={isSelected}
       className={clsx(
-        "relative overflow-hidden flex flex-col items-start gap-2 p-4 border border-solid rounded-none transition-colors duration-200",
+        "w-full text-left p-4 border border-solid rounded-none transition-colors duration-200",
         "outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2",
-        "active:scale-[0.97] active:duration-100",
-        isSelected && "bg-[#f5f5f0] text-[#000000] border-[#f5f5f0]",
-        !isSelected && "bg-[#111111] text-[#f5f5f0] border-[#222222] cursor-pointer",
-        !isSelected && isHovered && "bg-[#1a1a1a] border-[#444444]"
+        "active:scale-[0.98] active:duration-100",
+        "min-h-[48px]",
+        isSelected
+          ? "bg-[#f5f5f0] text-[#000000] border-[#f5f5f0]"
+          : "bg-[#111111] text-[#f5f5f0] border-[#222222] hover:bg-[#1a1a1a] hover:border-[#444444] cursor-pointer"
       )}
     >
-      {/* Glitch hover overlay on unselected tiles */}
-      {!isSelected && isHovered && (
-        <div
-          className="pointer-events-none absolute inset-0 flex flex-col items-start gap-2 p-4 bg-[#f5f5f0]/5 animate-glitch-hover motion-reduce:animate-none"
-          aria-hidden="true"
+      <div className="space-y-3">
+        {/* 1. Name */}
+        <h3
+          className={clsx(
+            "font-mono text-[20px] font-bold uppercase tracking-[0.05em]",
+            isSelected ? "text-[#000000]" : "text-[#f5f5f0]"
+          )}
         >
-          <span className="flex-shrink-0" aria-hidden="true">{icon}</span>
-          <span className="font-mono text-sm font-bold uppercase tracking-[0.05em]">
-            {service.serviceName}
-          </span>
-        </div>
-      )}
+          {isSelected ? (
+            service.serviceName.toUpperCase()
+          ) : (
+            <GlitchHeading text={service.serviceName.toUpperCase()}>
+              {service.serviceName.toUpperCase()}
+            </GlitchHeading>
+          )}
+        </h3>
 
-      <span className="flex-shrink-0" aria-hidden="true">
-        {icon}
-      </span>
-      <span className="font-mono text-sm font-bold uppercase tracking-[0.05em]">
-        {service.serviceName}
-      </span>
-      <span className="font-sans text-[13px] text-[#888888]">
-        {durationLabel}
-      </span>
-      <span className={clsx(
-        "font-mono text-[13px] font-bold",
-        isSelected ? "text-[#000000]" : "text-[#f5f5f0]"
-      )}>
-        {service.priceLabel}
-      </span>
+        {/* 2. Description — 1-line truncated */}
+        {service.prepInstructions && (
+          <p
+            className={clsx(
+              "font-sans text-[14px] leading-[1.5] truncate",
+              isSelected ? "text-[#000000]" : "text-[#888888]"
+            )}
+          >
+            {service.prepInstructions}
+          </p>
+        )}
+
+        {/* 3. Price */}
+        <div
+          className={clsx(
+            "font-mono text-[20px] font-bold uppercase tracking-[0.05em]",
+            isSelected ? "text-[#000000]" : "text-[#f5f5f0]"
+          )}
+        >
+          {service.priceLabel}
+        </div>
+
+        {/* 4. Duration with Clock icon */}
+        <div
+          className={clsx(
+            "flex items-center gap-2 font-mono text-[12px] font-bold uppercase tracking-[0.05em]",
+            isSelected ? "text-[#000000]" : "text-[#888888]"
+          )}
+        >
+          <Clock size={14} aria-hidden />
+          <span>{formatDurationLabel(service.durationMinutes)}</span>
+        </div>
+      </div>
     </button>
   )
 }

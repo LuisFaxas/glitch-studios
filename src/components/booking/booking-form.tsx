@@ -177,7 +177,7 @@ export function BookingForm({
         disabled={isSubmitting}
         className="w-full bg-[#f5f5f0] text-[#000000] font-mono font-bold uppercase px-6 py-3 tracking-[0.05em] hover:bg-[#ffffff] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isSubmitting ? "Processing..." : "Continue to Payment"}
+        {isSubmitting ? "PROCESSING..." : "CONTINUE TO PAYMENT"}
       </button>
     </form>
   )

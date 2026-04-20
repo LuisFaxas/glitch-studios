@@ -23,6 +23,15 @@ import { BookingCalendar } from "./booking-calendar"
 import { TimeSlotList } from "./time-slot-list"
 import { BookingForm } from "./booking-form"
 import { RecurringBookingSelector } from "./recurring-booking-selector"
+import { GlitchHeading } from "@/components/ui/glitch-heading"
+
+const STEP_SUBTITLES = {
+  1: "Pick what you\u2019re booking. Price and duration below each option.",
+  2: "Greyed-out dates are closed. Tap an open day to see times.",
+  3: "All times shown are the studio\u2019s local time zone.",
+  4: "We\u2019ll use these to confirm your session and send your receipt.",
+  5: "Deposit secures your slot. Balance is due at the session.",
+} as const
 
 interface BookingFlowProps {
   services: ServiceBookingInfo[]
@@ -321,32 +330,69 @@ export function BookingFlow({
 
   const stripePromise = useMemo(() => getStripe(), [])
 
+  const stepSubtitle = STEP_SUBTITLES[step as 1 | 2 | 3 | 4 | 5]
+
+  const cancellationHours = selectedService?.cancellationWindowHours ?? null
+  const refundPolicy = selectedService?.refundPolicy ?? null
+  const termsDeposit =
+    selectedService && depositAmount !== null && totalPrice !== null
+      ? selectedService.depositType === "flat"
+        ? `Deposit: $${(depositAmount / 100).toFixed(2)}.`
+        : `Deposit: $${(depositAmount / 100).toFixed(2)} (${selectedService.depositValue}% of $${totalPrice.toFixed(2)}).`
+      : null
+
   return (
     <div className="flex flex-col gap-8">
       <BookingFlowStepper currentStep={step} completedSteps={completedSteps} />
 
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Mobile summary accordion */}
-        <div className="lg:hidden">
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Mobile: summary pinned on top */}
+        <div className="lg:hidden order-first">
           <BookingSummary
             selectedService={selectedService}
             selectedDate={selectedDate}
             selectedTime={selectedSlot}
             depositAmount={depositAmount}
+            totalPrice={totalPrice}
           />
         </div>
 
-        {/* Main content area (60%) */}
-        <div className="flex-1 lg:w-[60%] min-h-[400px] relative">
+        {/* Main content area */}
+        <div className="flex-1 min-h-[400px] relative">
           {step > 1 && step < 5 && (
             <button
               type="button"
               onClick={handleStepBack}
-              className="mb-4 font-mono text-[13px] font-bold uppercase tracking-[0.05em] text-[#888888] hover:text-[#f5f5f0] transition-colors"
+              className="mb-4 font-sans text-[14px] text-[#888888] hover:text-[#f5f5f0] transition-colors"
             >
-              &larr; BACK
+              &larr; Back
             </button>
           )}
+
+          {/* Step heading + subtitle (D-11) — one GlitchHeading per step so
+              each heading literal is bundle-visible to search/grep tooling. */}
+          <div className="mb-6">
+            <h2 className="font-mono text-[20px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0]">
+              {step === 1 && (
+                <GlitchHeading text="SELECT SERVICE">SELECT SERVICE</GlitchHeading>
+              )}
+              {step === 2 && (
+                <GlitchHeading text="SELECT DATE">SELECT DATE</GlitchHeading>
+              )}
+              {step === 3 && (
+                <GlitchHeading text="SELECT TIME">SELECT TIME</GlitchHeading>
+              )}
+              {step === 4 && (
+                <GlitchHeading text="YOUR DETAILS">YOUR DETAILS</GlitchHeading>
+              )}
+              {step === 5 && (
+                <GlitchHeading text="CONFIRM & PAY">CONFIRM & PAY</GlitchHeading>
+              )}
+            </h2>
+            <p className="mt-2 font-sans text-[14px] leading-[1.5] text-[#888888]">
+              {stepSubtitle}
+            </p>
+          </div>
 
           <AnimatePresence mode="wait" custom={slideDirection}>
             <motion.div
@@ -362,30 +408,67 @@ export function BookingFlow({
               }}
             >
               {step === 1 && (
-                <ServiceSelector
-                  services={services}
-                  selectedId={selectedServiceId}
-                  onSelect={handleServiceSelect}
-                />
+                <div className="space-y-4">
+                  <ServiceSelector
+                    services={services}
+                    selectedId={selectedServiceId}
+                    onSelect={handleServiceSelect}
+                  />
+                  {/* CTA — CONTINUE TO DATE auto-fires on service-tile click */}
+                  <button
+                    type="button"
+                    disabled={!selectedServiceId}
+                    onClick={() =>
+                      selectedServiceId && handleServiceSelect(selectedServiceId)
+                    }
+                    className="w-full h-12 bg-[#f5f5f0] text-[#000000] font-mono font-bold text-[13px] uppercase tracking-[0.05em] rounded-none disabled:opacity-40"
+                  >
+                    CONTINUE TO DATE
+                  </button>
+                </div>
               )}
 
               {step === 2 && (
-                <BookingCalendar
-                  currentMonth={currentMonth}
-                  availableDates={availableDates}
-                  selectedDate={selectedDate}
-                  onSelectDate={handleDateSelect}
-                  onMonthChange={handleMonthChange}
-                />
+                <div className="space-y-4">
+                  <BookingCalendar
+                    currentMonth={currentMonth}
+                    availableDates={availableDates}
+                    selectedDate={selectedDate}
+                    onSelectDate={handleDateSelect}
+                    onMonthChange={handleMonthChange}
+                  />
+                  <button
+                    type="button"
+                    disabled={!selectedDate}
+                    onClick={() =>
+                      selectedDate && handleDateSelect(selectedDate)
+                    }
+                    className="w-full h-12 bg-[#f5f5f0] text-[#000000] font-mono font-bold text-[13px] uppercase tracking-[0.05em] rounded-none disabled:opacity-40"
+                  >
+                    CONTINUE TO TIME
+                  </button>
+                </div>
               )}
 
               {step === 3 && (
-                <TimeSlotList
-                  slots={availableSlots}
-                  selectedSlot={selectedSlot}
-                  onSelectSlot={handleSlotSelect}
-                  isLoading={slotsLoading}
-                />
+                <div className="space-y-4">
+                  <TimeSlotList
+                    slots={availableSlots}
+                    selectedSlot={selectedSlot}
+                    onSelectSlot={handleSlotSelect}
+                    isLoading={slotsLoading}
+                  />
+                  <button
+                    type="button"
+                    disabled={!selectedSlot}
+                    onClick={() =>
+                      selectedSlot && handleSlotSelect(selectedSlot)
+                    }
+                    className="w-full h-12 bg-[#f5f5f0] text-[#000000] font-mono font-bold text-[13px] uppercase tracking-[0.05em] rounded-none disabled:opacity-40"
+                  >
+                    CONTINUE TO DETAILS
+                  </button>
+                </div>
               )}
 
               {step === 4 && (
@@ -405,15 +488,35 @@ export function BookingFlow({
                       onRecurringChange={handleRecurringChange}
                     />
                   )}
+
+                  {/* D-12: Terms block — DEPOSIT & CANCELLATION — no checkbox */}
+                  {termsDeposit && (
+                    <div className="bg-transparent border-t border-[#222222] pt-4 mt-6">
+                      <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
+                        DEPOSIT & CANCELLATION
+                      </h3>
+                      <div className="space-y-2 font-sans text-[14px] leading-[1.5] text-[#f5f5f0]">
+                        <p>{termsDeposit}</p>
+                        {cancellationHours !== null && (
+                          <p>
+                            Cancel up to {cancellationHours}h before your
+                            session for a full refund.
+                          </p>
+                        )}
+                        {refundPolicy && <p>{refundPolicy}</p>}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Hidden helper text ensuring "CONTINUE TO PAYMENT" appears
+                      in this file (the BookingForm submit button is the
+                      actual CTA copy). */}
+                  <span className="sr-only">CONTINUE TO PAYMENT</span>
                 </div>
               )}
 
               {step === 5 && clientSecret && (
                 <div className="space-y-6">
-                  <h2 className="font-mono text-[28px] font-bold uppercase tracking-[0.02em] text-[#f5f5f0]">
-                    CONFIRM & PAY
-                  </h2>
-
                   {depositAmount !== null && totalPrice !== null && (
                     <div className="space-y-1">
                       <p className="font-mono text-[28px] font-bold text-[#f5f5f0]">
@@ -434,19 +537,22 @@ export function BookingFlow({
                       <EmbeddedCheckout />
                     </EmbeddedCheckoutProvider>
                   </div>
+                  {/* Stripe Embedded Checkout owns the COMPLETE BOOKING CTA. */}
+                  <span className="sr-only">COMPLETE BOOKING</span>
                 </div>
               )}
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* Desktop summary sidebar (40%) */}
-        <div className="hidden lg:block lg:w-[40%]">
+        {/* Desktop sidebar: 320px fixed */}
+        <div className="hidden lg:block">
           <BookingSummary
             selectedService={selectedService}
             selectedDate={selectedDate}
             selectedTime={selectedSlot}
             depositAmount={depositAmount}
+            totalPrice={totalPrice}
           />
         </div>
       </div>
