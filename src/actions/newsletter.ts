@@ -5,7 +5,12 @@ import { db } from "@/lib/db"
 import { newsletterSubscribers } from "@/db/schema"
 import { eq } from "drizzle-orm"
 
-export async function subscribeNewsletter(email: string) {
+export type NewsletterSource = "footer" | "launch-notify" | "blog"
+
+export async function subscribeNewsletter(
+  email: string,
+  source: NewsletterSource = "footer"
+): Promise<{ success: boolean; message: string }> {
   const normalizedEmail = email.toLowerCase().trim()
 
   const existing = await db
@@ -15,16 +20,33 @@ export async function subscribeNewsletter(email: string) {
     .limit(1)
 
   if (existing.length > 0) {
-    return { success: false, message: "You are already subscribed." }
+    // D-19: reuse existing .tags array (no schema migration); upsert tag if absent
+    const currentTags = existing[0].tags ?? []
+    if (!currentTags.includes(source)) {
+      await db
+        .update(newsletterSubscribers)
+        .set({ tags: [...currentTags, source] })
+        .where(eq(newsletterSubscribers.email, normalizedEmail))
+    }
+    return {
+      success: true,
+      message:
+        source === "launch-notify"
+          ? "You're on the list. We'll email you when bookings open."
+          : "You are already subscribed.",
+    }
   }
 
   await db
     .insert(newsletterSubscribers)
-    .values({ email: normalizedEmail })
+    .values({ email: normalizedEmail, tags: [source] })
 
   return {
     success: true,
-    message: "You are subscribed. Welcome to the Glitch community.",
+    message:
+      source === "launch-notify"
+        ? "You're on the list. We'll email you when bookings open."
+        : "You are subscribed. Welcome to the Glitch community.",
   }
 }
 

@@ -3,11 +3,18 @@
 import { useState } from "react"
 import { z } from "zod/v4"
 import { toast } from "sonner"
-import { subscribeNewsletter } from "@/actions/newsletter"
+import {
+  subscribeNewsletter,
+  type NewsletterSource,
+} from "@/actions/newsletter"
 
 const emailSchema = z.email("Please enter a valid email address")
 
-export function NewsletterForm() {
+interface NewsletterFormProps {
+  source?: NewsletterSource
+}
+
+export function NewsletterForm({ source }: NewsletterFormProps = {}) {
   const [isLoading, setIsLoading] = useState(false)
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -23,7 +30,7 @@ export function NewsletterForm() {
 
     setIsLoading(true)
     try {
-      const response = await subscribeNewsletter(email)
+      const response = await subscribeNewsletter(email, source)
       if (response.success) {
         toast.success(response.message)
         e.currentTarget.reset()
@@ -38,7 +45,7 @@ export function NewsletterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
+    <form onSubmit={handleSubmit} className="flex gap-2" data-source={source}>
       <input
         name="email"
         type="email"
