@@ -43,3 +43,9 @@ next-env.d.ts
 .claude/
 _share
 test-results/
+
+# Cloudflare CLI cache
+.wrangler/
+
+# Local creative assets (beat sessions, stems, etc.) — not source code
+_RESOURECES/
