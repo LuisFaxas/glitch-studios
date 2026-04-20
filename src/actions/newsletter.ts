@@ -5,7 +5,11 @@ import { db } from "@/lib/db"
 import { newsletterSubscribers } from "@/db/schema"
 import { eq } from "drizzle-orm"
 
-export type NewsletterSource = "footer" | "launch-notify" | "blog"
+export type NewsletterSource =
+  | "footer"
+  | "launch-notify"
+  | "blog"
+  | "apparel"
 
 export async function subscribeNewsletter(
   email: string,
@@ -33,7 +37,9 @@ export async function subscribeNewsletter(
       message:
         source === "launch-notify"
           ? "You're on the list. We'll email you when bookings open."
-          : "You are already subscribed.",
+          : source === "apparel"
+            ? "You're on the Glitch Apparel waitlist. We'll email you at launch."
+            : "You are already subscribed.",
     }
   }
 
@@ -46,7 +52,9 @@ export async function subscribeNewsletter(
     message:
       source === "launch-notify"
         ? "You're on the list. We'll email you when bookings open."
-        : "You are subscribed. Welcome to the Glitch community.",
+        : source === "apparel"
+          ? "You're on the Glitch Apparel waitlist. We'll email you at launch."
+          : "You are subscribed. Welcome to the Glitch community.",
   }
 }
 
