@@ -1,10 +1,11 @@
 ---
 phase: 10
 slug: blog
-status: draft
+status: approved
 shadcn_initialized: true
 preset: base-nova
 created: 2026-04-20
+reviewed_at: 2026-04-20
 ---
 
 # Phase 10 — UI Design Contract
