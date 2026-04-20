@@ -29,6 +29,8 @@ export const publicNavItems: readonly NavItem[] = [
     mobileSpan: "col-span-8",
   },
   {
+    // NOTE: /book is rewritten to /services at render time by (public)/layout.tsx
+    // when booking_live = false (Phase 09 D-03). Do not change the href here.
     label: "Book Session",
     href: "/book",
     icon: Calendar,

@@ -17,6 +17,8 @@ interface BottomTabBarProps {
   menuLabel?: string
   overlayNavItems?: readonly { label: string; href: string; icon: LucideIcon }[]
   overlaySocialLinks?: readonly SocialLink[]
+  /** Phase 09 D-03: when false, "/book" hrefs are rewritten to "/services". */
+  bookingLive?: boolean
 }
 
 export function BottomTabBar({
@@ -24,6 +26,7 @@ export function BottomTabBar({
   menuLabel = "Menu",
   overlayNavItems,
   overlaySocialLinks,
+  bookingLive = true,
 }: BottomTabBarProps) {
   const pathname = usePathname()
   const [overlayOpen, setOverlayOpen] = useState(false)
@@ -38,12 +41,14 @@ export function BottomTabBar({
       >
         {/* Nav tabs with labels */}
         {items.map((item) => {
+          const resolvedHref =
+            !bookingLive && item.href === "/book" ? "/services" : item.href
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/")
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={resolvedHref}
               aria-label={item.label}
               className={clsx(
                 "flex flex-1 flex-col items-center justify-center gap-0.5",

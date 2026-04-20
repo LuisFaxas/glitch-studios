@@ -2,6 +2,8 @@ import { eq } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { services, serviceBookingConfig } from "@/db/schema"
 import { BookingFlow } from "@/components/booking/booking-flow"
+import { ComingSoonManifesto } from "@/components/services/coming-soon-manifesto"
+import { getBookingLive } from "@/lib/get-booking-live"
 import type { ServiceBookingInfo, DepositType, RefundPolicy } from "@/types/booking"
 
 export const dynamic = "force-dynamic"
@@ -18,7 +20,11 @@ export default async function BookPage({
 }) {
   const params = await searchParams
 
-  // Query services that have booking config (inner join)
+  const bookingLive = await getBookingLive()
+  if (!bookingLive) {
+    return <ComingSoonManifesto />
+  }
+
   const rows = await db
     .select({
       serviceId: services.id,
@@ -42,6 +48,10 @@ export default async function BookPage({
     )
     .where(eq(services.isActive, true))
     .orderBy(services.sortOrder)
+
+  if (rows.length === 0) {
+    return <ComingSoonManifesto />
+  }
 
   const bookableServices: ServiceBookingInfo[] = rows.map((row) => ({
     serviceId: row.serviceId,

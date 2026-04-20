@@ -10,7 +10,14 @@ import type { getPublishedBundles } from "@/actions/bundles"
 
 type BundleData = Awaited<ReturnType<typeof getPublishedBundles>>
 
-export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
+export function BeatsHeroCarousel({
+  bundles,
+  bookingLive,
+}: {
+  bundles: BundleData
+  bookingLive: boolean
+}) {
+  const bookCtaHref = bookingLive ? "/book" : "/services"
   const { addItem } = useCart()
   const [selectedIndex, setSelectedIndex] = useState(0)
 
@@ -166,7 +173,7 @@ export function BeatsHeroCarousel({ bundles }: { bundles: BundleData }) {
                   Recording. Mixing. Mastering. Video production.
                 </p>
                 <Link
-                  href="/booking"
+                  href={bookCtaHref}
                   className="mt-4 w-fit border border-[#f5f5f0] px-6 py-2 font-mono text-[12px] uppercase tracking-[0.05em] text-[#f5f5f0] transition-colors hover:bg-[#f5f5f0] hover:text-[#000]"
                 >
                   Book Now

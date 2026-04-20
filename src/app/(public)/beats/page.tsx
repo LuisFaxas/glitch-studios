@@ -4,6 +4,7 @@ import { getPublishedBeats, getBeatFilterOptions } from "@/actions/beats"
 import { getPublishedBundles } from "@/actions/bundles"
 import { BeatCatalog } from "@/components/beats/beat-catalog"
 import { BeatsHeroCarousel } from "@/components/beats/beats-hero-carousel"
+import { getBookingLive } from "@/lib/get-booking-live"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -26,10 +27,11 @@ export default async function BeatsPage({
     search: params.q || undefined,
   }
 
-  const [beats, filterOptions, bundles] = await Promise.all([
+  const [beats, filterOptions, bundles, bookingLive] = await Promise.all([
     getPublishedBeats(filters),
     getBeatFilterOptions(),
     getPublishedBundles(),
+    getBookingLive(),
   ])
 
   const hasActiveFilters = Object.values(filters).some(
@@ -38,7 +40,7 @@ export default async function BeatsPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <BeatsHeroCarousel bundles={bundles} />
+      <BeatsHeroCarousel bundles={bundles} bookingLive={bookingLive} />
       <div id="beat-catalog">
         <BeatCatalog
           beats={beats}

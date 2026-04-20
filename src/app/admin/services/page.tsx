@@ -2,12 +2,20 @@ export const dynamic = "force-dynamic"
 
 import { getServices } from "@/actions/admin-services"
 import { AdminServiceTable } from "@/components/admin/admin-service-table"
+import { getBookingLive } from "@/lib/get-booking-live"
+import { BookingLiveToggle } from "@/components/admin/booking-live-toggle"
 import Link from "next/link"
 
 export default async function AdminServicesPage() {
-  const services = await getServices()
+  const [services, bookingLive] = await Promise.all([
+    getServices(),
+    getBookingLive(),
+  ])
   return (
     <div className="p-6 max-w-5xl mx-auto">
+      <div className="mb-8">
+        <BookingLiveToggle initialValue={bookingLive} />
+      </div>
       <div className="flex items-center justify-between mb-8">
         <h1 className="font-mono font-bold text-[28px] uppercase tracking-[0.05em]">
           Services

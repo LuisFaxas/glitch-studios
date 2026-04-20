@@ -37,6 +37,12 @@ interface TileNavProps {
   crossLinkTile?: ReactNode
   /** Legacy slot for Studios-only WidgetLatestPost server component */
   latestPostSlot?: ReactNode
+  /** Phase 09 D-03: when false, "/book" hrefs are rewritten to "/services". */
+  bookingLive?: boolean
+}
+
+function resolveHref(href: string, bookingLive: boolean): string {
+  return !bookingLive && href === "/book" ? "/services" : href
 }
 
 export function TileNav({
@@ -45,6 +51,7 @@ export function TileNav({
   widgetSlots,
   crossLinkTile,
   latestPostSlot,
+  bookingLive = true,
 }: TileNavProps) {
   const pathname = usePathname()
   const router = useRouter()
@@ -69,12 +76,13 @@ export function TileNav({
           {/* Nav icons */}
           <nav aria-label="Main navigation" className="mt-1 flex flex-col gap-1 w-full">
             {navItems.map((item) => {
+              const resolvedHref = resolveHref(item.href, bookingLive)
               const isActive =
                 pathname === item.href || pathname.startsWith(item.href + "/")
               return (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={resolvedHref}
                   className={`flex items-center justify-center p-3 border border-[#222] transition-colors duration-200 ${
                     isActive
                       ? "bg-[#f5f5f0] border-[#f5f5f0] text-[#000]"
@@ -144,6 +152,7 @@ export function TileNav({
           <nav aria-label="Main navigation" className="mt-1">
             <div className="grid grid-cols-2 gap-1">
               {navItems.map((item) => {
+                const resolvedHref = resolveHref(item.href, bookingLive)
                 const isActive =
                   pathname === item.href || pathname.startsWith(item.href + "/")
                 return (
@@ -153,7 +162,7 @@ export function TileNav({
                     label={item.label}
                     icon={<item.icon className="h-9 w-9" />}
                     isActive={isActive}
-                    href={item.href}
+                    href={resolvedHref}
                     layout="horizontal"
                   />
                 )

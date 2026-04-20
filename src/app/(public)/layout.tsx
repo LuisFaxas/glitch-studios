@@ -6,12 +6,15 @@ import { HomepageSidebarController } from "@/components/layout/homepage-sidebar-
 import { MobileContentWrapper } from "@/components/layout/mobile-content-wrapper"
 import { publicNavItems, mobileTabItems } from "@/components/layout/public-nav-config"
 import { TechCrossLinkTile } from "@/components/tiles/tech-cross-link-tile"
+import { getBookingLive } from "@/lib/get-booking-live"
 
-export default function PublicLayout({
+export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const bookingLive = await getBookingLive()
+
   return (
     <HomepageSidebarController>
       <div className="flex min-h-screen">
@@ -19,12 +22,13 @@ export default function PublicLayout({
           navItems={publicNavItems}
           latestPostSlot={<WidgetLatestPost />}
           crossLinkTile={<TechCrossLinkTile />}
+          bookingLive={bookingLive}
         />
         <MobileContentWrapper>
           {children}
           <Footer />
         </MobileContentWrapper>
-        <BottomTabBar items={mobileTabItems} />
+        <BottomTabBar items={mobileTabItems} bookingLive={bookingLive} />
       </div>
     </HomepageSidebarController>
   )
