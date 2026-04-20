@@ -53,33 +53,34 @@ Declared values (multiples of 4 — align with existing `--gap-tile`, `--pad-til
 | md | 16px | Default element padding (`--pad-tile`, service tile interior, form field vertical rhythm) |
 | lg | 24px | Section padding (`--pad-page`), service detail-panel section separation, wizard step vertical rhythm |
 | xl | 32px | Layout gaps — between detail panel sections, between wizard body and summary sidebar |
-| 2xl | 48px | Manifesto hero vertical rhythm, major section breaks on `/services` |
+| 2xl | 48px | Manifesto hero vertical rhythm, major section breaks on `/services`, mobile summary collapsed header height |
 | 3xl | 64px | Page-level top/bottom spacing on manifesto + service detail hero |
 
 Exceptions:
 - Minimum tap target: 48px height — applies to all tiles, wizard CTAs, service tile, calendar day tile, time-slot tile, admin toggle switch. Pre-existing constraint from `bottom-tab-bar.tsx` and `calendar-day-tile.tsx`; do not shrink.
 - Persistent booking summary sidebar (desktop): fixed width 320px — sits alongside the 5-step wizard body, `xl` gap (32px) between body and summary. Rationale: wide enough to show service name + date + time + deposit line without wrapping at common brand lengths.
-- Mobile collapsible summary: pinned top of wizard body, 56px collapsed height (header only), expands inline with `lg` (24px) internal padding. No overlay — pushes content down.
-- Stepper dot diameter: 12px (exception to 4-mult scale only because pre-existing in `booking-flow-stepper.tsx` — do not redesign).
+- Mobile collapsible summary: pinned top of wizard body, **48px collapsed height** (header only — meets tap-target minimum), expands inline with `lg` (24px) internal padding. No overlay — pushes content down.
+- Stepper dot diameter: 8px (aligns with `sm` standard token) — adjust existing `booking-flow-stepper.tsx` inline styles if currently rendering at a non-standard diameter.
 
 ---
 
 ## Typography
 
-| Role | Font | Size | Weight | Line Height | Tracking |
-|------|------|------|--------|-------------|----------|
-| Body | Inter (`--font-sans`) | 14px | 400 regular | 1.5 | normal |
-| Form label | Inter (`--font-sans`) | 14px | 400 regular | 1.4 | normal |
-| Nav item / step label / small uppercase label | JetBrains Mono (`--font-mono`) | 11px uppercase | 700 bold | 1 | 0.05em |
-| Section heading (detail panel section titles, step titles, wizard step heading) | JetBrains Mono (`--font-mono`) | 20px uppercase | 700 bold | 1.2 | 0.05em |
-| Page heading (service detail name, `/services` page h1) | JetBrains Mono (`--font-mono`) | 28px uppercase | 700 bold | 1.2 | 0.05em |
-| Manifesto display h1 ("WE'RE BUILDING GLITCH STUDIOS.") | JetBrains Mono (`--font-mono`) | 28px mobile / 48px desktop, uppercase | 700 bold | 1.1 | 0.05em |
+Exactly 4 declared sizes. All heading roles consolidate onto the `display` / `heading` / `label` tokens; all body roles consolidate onto `body`.
+
+| Token | Font | Size | Weight | Line Height | Tracking | Roles |
+|-------|------|------|--------|-------------|----------|-------|
+| label | JetBrains Mono (`--font-mono`) | 12px uppercase | 700 bold | 1 | 0.05em | Nav item, step label, step number, section label (e.g., "PRICING", "DURATION & INCLUDES", "POLICIES", "EXAMPLE WORK", "PROCESS", "WHAT WE'RE BUILDING", "BOOKING STATUS", "DEPOSIT & CANCELLATION"), duration readout ("2 HOURS"), summary-sidebar row labels ("SERVICE", "DATE", "TIME", "DURATION", "DEPOSIT"), primary CTA button text (uppercase mono), notify-me button text, stepper dot number overlay |
+| body | Inter (`--font-sans`) | 14px | 400 regular | 1.5 | normal | Body paragraphs (incl. manifesto lede + manifesto body), form label, form input, stepper subtitle, helper copy, muted notes, policy lines, terms block lines, step subtitle, portfolio caption, back-link ("← Back"), admin helper text, admin modal body, toast copy |
+| heading | JetBrains Mono (`--font-mono`) | 20px uppercase | 700 bold | 1.2 | 0.05em | Section heading (detail panel section titles where a full 20px heading is wanted in place of a 12px label — planner's discretion per section), wizard step heading, "BE FIRST IN THE DOOR" manifesto sub-heading, admin confirmation modal title, emphasized/status text (admin status label "BOOKING: LIVE" / "BOOKING: COMING SOON", service-tile price label "FROM $150", detail-panel price value) |
+| display | JetBrains Mono (`--font-mono`) | clamp(28px, 5vw, 48px) uppercase | 700 bold | 1.1 (mobile) / 1.2 (desktop) | 0.05em | Manifesto h1 ("WE'RE BUILDING GLITCH STUDIOS."), service detail page h1 (service name), `/services` page h1 — single responsive token: renders at 28px on small viewports and scales to 48px on wide viewports via `clamp(28px, 5vw, 48px)` |
 
 Notes:
-- Hover-only RGB-split glitch rule applies site-wide (from `feedback_glitch_headers`). ALL headings in this phase — manifesto h1, service detail h1, detail-panel section titles, step headings — must be rendered via `GlitchHeading` component (or an equivalent that only triggers glitch on hover). No auto-running glitch animations on any heading.
-- Stepper subtitles (new in Phase 9, D-11) use Inter 14px regular `--color-text-muted` (#888888), line-height 1.5. They are NOT headings and do NOT get the glitch treatment.
-- Body paragraphs on the manifesto: Inter 16px, line-height 1.6, color `--color-text-fg` (#f5f5f0). Max width 640px for readability.
+- Hover-only RGB-split glitch rule applies site-wide (from `feedback_glitch_headers`). ALL headings in this phase — manifesto h1 (`display`), service detail h1 (`display`), detail-panel section titles (`heading` or `label`), wizard step headings (`heading`) — must be rendered via `GlitchHeading` component (or an equivalent that only triggers glitch on hover). No auto-running glitch animations on any heading.
+- Stepper subtitles (new in Phase 9, D-11) use the `body` token (Inter 14px regular) at `--color-text-muted` (#888888). They are NOT headings and do NOT get the glitch treatment.
+- Manifesto lede and manifesto body paragraphs use the `body` token (Inter 14px, line-height 1.5, color `--color-text-fg` #f5f5f0). Max width 640px for readability.
 - All mono text uses `tracking-[0.05em]` (established pattern).
+- Consolidation summary: all small uppercase labels (previously 11/12px split) use `label` (12px). All previously-16px emphasized elements (price label, status label) promote to `heading` (20px). All previously-16px body copy (manifesto lede) demotes to `body` (14px). The `display` token is a single responsive size replacing the prior split 28/48 heading pair.
 
 ---
 
@@ -103,7 +104,7 @@ Accent reserved for (explicit list — do NOT extend):
 2. Active service tile in Step 1 of wizard (bg `#f5f5f0`, text `#000000`).
 3. Selected date tile in calendar (existing `calendar-day-tile.tsx` selected state).
 4. Selected time-slot tile (existing `time-slot-tile.tsx` selected state).
-5. Primary CTA in wizard / manifesto ("CONTINUE", "COMPLETE BOOKING", "NOTIFY ME") — filled button bg `#f5f5f0`, text `#000000`.
+5. Primary CTA in wizard / manifesto ("CONTINUE TO DATE", "CONTINUE TO TIME", "CONTINUE TO DETAILS", "CONTINUE TO PAYMENT", "COMPLETE BOOKING", "NOTIFY ME") — filled button bg `#f5f5f0`, text `#000000`.
 6. Admin booking-live toggle ON state — switch track `#f5f5f0`.
 
 Do NOT introduce any color outside the four base tokens (`#000000`, `#111111`, `#222222`, `#f5f5f0`) plus the existing `--color-text-muted` / `--color-text-subdued` and the single `destructive` token. No neon. No colored glow. No per-service category color coding.
@@ -135,14 +136,14 @@ Do NOT introduce any color outside the four base tokens (`#000000`, `#111111`, `
 ### Admin toggle surfaces (D-04)
 
 - Both `/admin/settings` and `/admin/services` (or `/admin/bookings`) render a `<BookingLiveToggle>` component in a dedicated card.
-- Card: `#111111` bg, `#222222` border, 24px padding. Contains: toggle switch (shadcn `Switch`), status label ("BOOKING: LIVE" / "BOOKING: COMING SOON"), helper text (14px muted Inter) explaining what toggling does, and an explicit "Save" button that opens the confirmation modal.
-- Confirmation modal: shadcn `AlertDialog`. Title mono 20px uppercase. Body Inter 14px. Cancel button secondary style, Confirm button destructive style (bg `#dc2626`, text `#f5f5f0`) regardless of toggle direction — reinforces that this is a site-wide change.
+- Card: `#111111` bg, `#222222` border, 24px padding. Contains: toggle switch (shadcn `Switch`), status label ("BOOKING: LIVE" / "BOOKING: COMING SOON"), helper text (`body` token — Inter 14px muted) explaining what toggling does, and an explicit "Save" button that opens the confirmation modal.
+- Confirmation modal: shadcn `AlertDialog`. Title uses `heading` token (mono 20px uppercase). Body uses `body` token (Inter 14px). Cancel button secondary style, Confirm button destructive style (bg `#dc2626`, text `#f5f5f0`) regardless of toggle direction — reinforces that this is a site-wide change.
 
 ---
 
 ## Booking Wizard — Per-Step Contract
 
-Each of the 5 steps gets: step heading (mono 20px uppercase), one-line subtitle (Inter 14px muted), body content. Step subtitles are NEW in Phase 9 (D-11).
+Each of the 5 steps gets: step heading (`heading` token — mono 20px uppercase), one-line subtitle (`body` token — Inter 14px muted), body content. Step subtitles are NEW in Phase 9 (D-11).
 
 | # | Step | Heading | Subtitle (copy) |
 |---|------|---------|-----------------|
@@ -154,8 +155,8 @@ Each of the 5 steps gets: step heading (mono 20px uppercase), one-line subtitle 
 
 ### Persistent Booking Summary Sidebar (D-10)
 
-| Row | Label (mono 11px uppercase muted) | Value (Inter 14px fg) | Visible from step |
-|-----|-----------------------------------|----------------------|-------------------|
+| Row | Label (`label` token — mono 12px uppercase muted) | Value (`body` token — Inter 14px fg) | Visible from step |
+|-----|---------------------------------------------------|--------------------------------------|-------------------|
 | 1 | SERVICE | service name or em-dash placeholder `—` | 1+ |
 | 2 | DATE | "Thu, Apr 23 2026" or `—` | 2+ |
 | 3 | TIME | "2:00 PM – 4:00 PM" or `—` | 3+ |
@@ -165,15 +166,15 @@ Each of the 5 steps gets: step heading (mono 20px uppercase), one-line subtitle 
 - Summary card: `#111111` bg, `#222222` border, 24px padding.
 - Each row: 8px vertical gap between rows, label/value stacked with 4px between label and value.
 - Empty / not-yet-selected rows render `—` in `#555555`. No hiding rows — the full shape of the booking is always visible so the user sees what's still required.
-- On mobile: collapsed state shows "BOOKING SUMMARY ▾" header + a single-line status like "Mixing · Apr 23 · 2pm" (muted). Tap expands to full 5-row table.
+- On mobile: collapsed state (48px header) shows "BOOKING SUMMARY ▾" header + a single-line status like "Mixing · Apr 23 · 2pm" (`body` token, muted). Tap expands to full 5-row table.
 
 ### Step 4 (Details) — Terms Surface Block (D-12)
 
-A `Terms` block appears at the bottom of Step 4 body, above the "Continue to Payment" CTA:
+A `Terms` block appears at the bottom of Step 4 body, above the "CONTINUE TO PAYMENT" CTA:
 
-- Container: `#111111` bg on a slightly darker inset region — actually render as `bg-transparent border-t border-[#222222] pt-4 mt-6` so it reads as a footer, not a new card.
-- Heading (mono 11px uppercase muted): "DEPOSIT & CANCELLATION".
-- Three lines of 14px Inter body, 8px vertical gap:
+- Container: rendered as `bg-transparent border-t border-[#222222] pt-4 mt-6` so it reads as a footer, not a new card.
+- Heading (`label` token — mono 12px uppercase muted): "DEPOSIT & CANCELLATION".
+- Three lines of `body` token (Inter 14px), 8px vertical gap:
   - "Deposit: ${depositAmount} ({depositPercent}% of ${totalPrice})."
   - "Cancel up to {cancellationWindowHours}h before your session for a full refund."
   - "{refundPolicy}" — pulled verbatim from `service_booking_config.refund_policy`.
@@ -183,10 +184,10 @@ A `Terms` block appears at the bottom of Step 4 body, above the "Continue to Pay
 
 Each service tile renders four pieces of info, stacked:
 
-1. **Name** — mono 16px uppercase bold `#f5f5f0`, tracking-[0.05em], hover-only glitch.
-2. **One-line description** — Inter 14px `#888888`, line-height 1.5, single line truncated with ellipsis at narrow widths.
-3. **Price label** — mono 14px `#f5f5f0` (e.g., "FROM $150").
-4. **Duration** — Inter 12px `#888888` with clock icon (Lucide `Clock`, 14px, `#888888`), e.g., "2 HOURS". Rendered inline: `[icon] 2 HOURS`.
+1. **Name** — `heading` token (mono 20px uppercase bold) `#f5f5f0`, tracking-[0.05em], hover-only glitch.
+2. **One-line description** — `body` token (Inter 14px) `#888888`, line-height 1.5, single line truncated with ellipsis at narrow widths.
+3. **Price label** — `heading` token (mono 20px) `#f5f5f0` (e.g., "FROM $150") — emphasized readout.
+4. **Duration** — `label` token (mono 12px) `#888888` with clock icon (Lucide `Clock`, 14px, `#888888`), e.g., "2 HOURS". Rendered inline: `[icon] 2 HOURS`.
 
 Tile container: 100% width in Step 1 grid, 16px padding, 48px min-height per info group. Hover: `#1a1a1a` bg + `#444444` border. Selected: `#f5f5f0` bg + `#000000` text inversion on all four pieces of info.
 
@@ -196,16 +197,16 @@ Tile container: 100% width in Step 1 grid, 16px padding, 48px min-height per inf
 
 The existing panel (name, description, priceLabel, features) is extended with 4 new sections. Final order top-to-bottom:
 
-| # | Section | Heading (mono 11px uppercase) | Body |
-|---|---------|-------------------------------|------|
-| 1 | Name | — (h1 mono 28px) | Service name |
-| 2 | Short description | — (body 14px) | Existing description field |
-| 3 | Price | "PRICING" | `priceLabel` (mono 16px fg) + deposit hint line (Inter 14px muted) |
-| 4 | Duration & what's included (NEW) | "DURATION & INCLUDES" | Duration line ("2 hours") + bulleted deliverables list. Bullets use mono `›` prefix, not disc — aligns with cyberpunk. Each item Inter 14px fg. |
-| 5 | Features (existing) | "HIGHLIGHTS" | Existing `features` array, rendered as 2-column grid on desktop, single column mobile. |
-| 6 | Process / timeline (NEW) | "PROCESS" | 4-step numbered list: (1) prep → (2) session → (3) revisions → (4) delivery. Each step: mono 12px step number + Inter 14px step body. Generic template used across all services (executor discretion per D-08; see "Open Decisions" below). |
-| 7 | Policies (NEW) | "POLICIES" | 3-line block: deposit amount line, cancellation window line, refund policy line — mirror the Terms block format from Step 4. All pulled from `service_booking_config`. |
-| 8 | Example work (NEW) | "EXAMPLE WORK" | Horizontal scroll row of 2–3 portfolio cards (existing portfolio item component). If no matching portfolio items exist, section is hidden entirely (no empty state in this sub-section). |
+| # | Section | Heading | Body |
+|---|---------|---------|------|
+| 1 | Name | — (`display` token — responsive 28→48px) | Service name |
+| 2 | Short description | — (`body` token — 14px) | Existing description field |
+| 3 | Price | "PRICING" (`label` 12px) | `priceLabel` rendered with `heading` token (mono 20px fg) + deposit hint line (`body` 14px muted) |
+| 4 | Duration & what's included (NEW) | "DURATION & INCLUDES" (`label` 12px) | Duration line ("2 hours") + bulleted deliverables list. Bullets use mono `›` prefix, not disc — aligns with cyberpunk. Each item `body` token (Inter 14px fg). |
+| 5 | Features (existing) | "HIGHLIGHTS" (`label` 12px) | Existing `features` array, rendered as 2-column grid on desktop, single column mobile. |
+| 6 | Process / timeline (NEW) | "PROCESS" (`label` 12px) | 4-step numbered list: (1) prep → (2) session → (3) revisions → (4) delivery. Each step: `label` token (mono 12px) step number + `body` token (Inter 14px) step body. Generic template used across all services (executor discretion per D-08; see "Open Decisions" below). |
+| 7 | Policies (NEW) | "POLICIES" (`label` 12px) | 3-line block: deposit amount line, cancellation window line, refund policy line — mirror the Terms block format from Step 4. All pulled from `service_booking_config`. |
+| 8 | Example work (NEW) | "EXAMPLE WORK" (`label` 12px) | Horizontal scroll row of 2–3 portfolio cards (existing portfolio item component). If no matching portfolio items exist, section is hidden entirely (no empty state in this sub-section). |
 | 9 | CTA | — (button) | "BOOK THIS SERVICE" → `/book?service={slug}` (deep link, pre-existing pattern). Primary accent button. |
 
 Vertical rhythm: 24px between sections. Each section heading has 8px bottom margin before its body.
@@ -221,21 +222,21 @@ Rendered at `/services` and `/book` when `booking_live = false` OR when zero boo
 ```
 [ Hero block ]
   - GlitchLogo component (existing) at top, size="md" or "lg" (executor discretion)
-  - h1: "WE'RE BUILDING GLITCH STUDIOS."  (mono 28/48px uppercase, hover-only glitch)
-  - Lede paragraph (Inter 16px, line-height 1.6, max-width 640px, fg): 2-3 sentences. See copywriting contract.
+  - h1: "WE'RE BUILDING GLITCH STUDIOS."  (`display` token — responsive 28→48px uppercase, hover-only glitch)
+  - Lede paragraph (`body` token — Inter 14px, line-height 1.5, max-width 640px, fg): 2-3 sentences. See copywriting contract.
   - Spacer: 2xl (48px)
 
 [ What's Coming block ]
-  - Section heading (mono 11px uppercase muted): "WHAT WE'RE BUILDING"
+  - Section heading (`label` token — mono 12px uppercase muted): "WHAT WE'RE BUILDING"
   - 3-up tile grid (desktop), stacked (mobile): MUSIC PRODUCTION / VIDEO PRODUCTION / CREATIVE SERVICES
-  - Each tile: #111111 bg, #222222 border, 16px padding, mono 14px uppercase title + Inter 14px muted 2-line description.
+  - Each tile: #111111 bg, #222222 border, 16px padding, `label` token (mono 12px uppercase) title + `body` token (Inter 14px muted) 2-line description.
   - Spacer: 2xl (48px)
 
 [ Notify-me block ]
-  - Section heading (mono 20px uppercase, hover glitch): "BE FIRST IN THE DOOR"
-  - Sub-copy (Inter 14px muted, max-width 480px): "Drop your email. We'll let you know the day bookings open. No spam, no filler."
-  - Newsletter form (reuse <NewsletterForm />) — email input (Inter 14px) + "NOTIFY ME" button (mono 11px uppercase accent)
-  - Success state: replace form with mono 14px "YOU'RE ON THE LIST." + Inter 14px muted sub-line
+  - Section heading (`heading` token — mono 20px uppercase, hover glitch): "BE FIRST IN THE DOOR"
+  - Sub-copy (`body` token — Inter 14px muted, max-width 480px): "Drop your email. We'll let you know the day bookings open. No spam, no filler."
+  - Newsletter form (reuse <NewsletterForm />) — email input (`body` token — Inter 14px) + "NOTIFY ME" button (`label` token — mono 12px uppercase accent)
+  - Success state: replace form with `body` token mono 14px "YOU'RE ON THE LIST." + `body` token Inter 14px muted sub-line
   - Spacer: 3xl (64px)
 ```
 
@@ -251,11 +252,11 @@ Rendered at `/services` and `/book` when `booking_live = false` OR when zero boo
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│ BOOKING STATUS                                       │ mono 11px uppercase muted
+│ BOOKING STATUS                                       │ `label` token — mono 12px uppercase muted
 │                                                      │
-│ [ Switch ]  BOOKING: LIVE                           │ shadcn Switch + mono 16px fg
+│ [ Switch ]  BOOKING: LIVE                           │ shadcn Switch + `heading` token (mono 20px fg)
 │                                                      │
-│ When OFF, every Book CTA on the site redirects to   │ Inter 14px muted
+│ When OFF, every Book CTA on the site redirects to   │ `body` token — Inter 14px muted
 │ the coming-soon page. Toggle ON to accept bookings. │
 │                                                      │
 │                             [ Save Changes ]        │ primary accent button
@@ -264,7 +265,7 @@ Rendered at `/services` and `/book` when `booking_live = false` OR when zero boo
 
 - Switch track: OFF state `#222222`, ON state `#f5f5f0`.
 - Switch thumb: `#f5f5f0` when OFF (on dark track), `#000000` when ON (on light track).
-- Status label: "BOOKING: LIVE" (when ON) or "BOOKING: COMING SOON" (when OFF). Mono 16px uppercase.
+- Status label: "BOOKING: LIVE" (when ON) or "BOOKING: COMING SOON" (when OFF). `heading` token (mono 20px uppercase).
 - "Save Changes" button is only enabled when the switch state differs from persisted state. Clicking opens the confirmation modal.
 
 ### Confirmation modal (shadcn `AlertDialog`)
@@ -272,14 +273,14 @@ Rendered at `/services` and `/book` when `booking_live = false` OR when zero boo
 Two copy variants depending on direction:
 
 **ON → OFF (disabling):**
-- Title (mono 20px): "TURN OFF BOOKING?"
-- Body (Inter 14px): "Every Book Session and Book Now button across the site will redirect clients to the coming-soon page. The booking wizard will be hidden until you turn this back on."
+- Title (`heading` token — mono 20px): "TURN OFF BOOKING?"
+- Body (`body` token — Inter 14px): "Every Book Session and Book Now button across the site will redirect clients to the coming-soon page. The booking wizard will be hidden until you turn this back on."
 - Cancel button: secondary, "Keep Booking Live"
 - Confirm button: destructive (`#dc2626` bg, `#f5f5f0` text), "Turn Off Booking"
 
 **OFF → ON (enabling):**
-- Title (mono 20px): "TURN ON BOOKING?"
-- Body (Inter 14px): "The booking wizard will become available to clients and Book CTAs will route to /book. Make sure at least one service has a booking config."
+- Title (`heading` token — mono 20px): "TURN ON BOOKING?"
+- Body (`body` token — Inter 14px): "The booking wizard will become available to clients and Book CTAs will route to /book. Make sure at least one service has a booking config."
 - Cancel button: secondary, "Keep Coming Soon"
 - Confirm button: destructive style retained (for visual emphasis that this is site-wide), "Turn On Booking"
 
@@ -291,14 +292,16 @@ Post-confirmation: success toast ("Booking turned off — site now shows coming 
 
 All copy matches the cyberpunk brand voice — short, confident, mono-uppercase headings, sentence-case body. No exclamation points except where noted.
 
+Wizard CTAs follow a consistent **verb + noun** pattern ("CONTINUE TO {next-step-name}") across all forward steps so the user always knows where they're headed.
+
 | Element | Copy |
 |---------|------|
-| Primary CTA — wizard Step 1→2 | "CONTINUE" (mono uppercase button) |
-| Primary CTA — wizard Step 2→3 | "CONTINUE" |
+| Primary CTA — wizard Step 1→2 | "CONTINUE TO DATE" (mono uppercase button) |
+| Primary CTA — wizard Step 2→3 | "CONTINUE TO TIME" |
 | Primary CTA — wizard Step 3→4 | "CONTINUE TO DETAILS" |
 | Primary CTA — wizard Step 4→5 | "CONTINUE TO PAYMENT" |
 | Primary CTA — wizard Step 5 final | "COMPLETE BOOKING" |
-| Back link (all wizard steps after step 1) | "← Back" (Inter 14px muted, no uppercase) |
+| Back link (all wizard steps after step 1) | "← Back" (`body` token — Inter 14px muted, no uppercase) |
 | Primary CTA — service detail panel | "BOOK THIS SERVICE" |
 | Primary CTA — non-bookable service on `/services` | "CONTACT FOR QUOTE" (routes to `/contact?service={slug}`) |
 | Primary CTA — manifesto notify-me | "NOTIFY ME" |
@@ -383,7 +386,7 @@ Target viewports: 375px, 390px, 430px. Tested in Plan 01 (Playwright mobile audi
 Non-negotiables:
 - Zero horizontal overflow on `/services`, `/book` (all 5 steps), `/services` coming-soon, `/book` coming-soon.
 - Stepper dots remain visible on 375px — compact mode only shows current step number + total (pre-existing behavior, verify not regressed).
-- Summary sidebar becomes the collapsible top-pinned block (56px header, expands inline).
+- Summary sidebar becomes the collapsible top-pinned block (48px header, expands inline).
 - Service detail panel sections stack vertically with 24px gaps; no 2-column layouts below `lg` breakpoint (except `HIGHLIGHTS` which stays single-column on mobile).
 - All tap targets remain ≥48px.
 - Manifesto 3-up tile grid becomes single column; tiles retain 16px padding and 48px min-height per content section.
@@ -399,10 +402,10 @@ Concrete break list is produced by Plan 01 audit and resolved in subsequent plan
 |-----------|--------|--------|
 | `src/components/services/service-grid.tsx` | Modify | Extend `ServiceDetailPanel` with 4 new sections (D-08). |
 | `src/components/services/coming-soon-manifesto.tsx` | **Create** | New. Renders manifesto hero + what's-coming + notify-me. Shared by `/services` and `/book` when toggle OFF. |
-| `src/components/booking/booking-flow.tsx` | Modify | Add persistent summary sidebar layout (D-10). Add step subtitles (D-11). Wire terms block into Step 4 (D-12). |
-| `src/components/booking/booking-summary.tsx` | Modify | Upgrade to full 5-row sidebar format (service / date / time / duration / deposit). Add mobile collapsible variant. |
+| `src/components/booking/booking-flow.tsx` | Modify | Add persistent summary sidebar layout (D-10). Add step subtitles (D-11). Wire terms block into Step 4 (D-12). Update step 1→2 and 2→3 CTA labels to "CONTINUE TO DATE" and "CONTINUE TO TIME". |
+| `src/components/booking/booking-summary.tsx` | Modify | Upgrade to full 5-row sidebar format (service / date / time / duration / deposit). Add mobile collapsible variant with 48px collapsed header. |
 | `src/components/booking/service-selector.tsx` | Modify | Enrich tiles with description + price + duration (D-13). |
-| `src/components/booking/booking-flow-stepper.tsx` | Modify (light) | Verify mobile compact mode renders correctly at 375px. No structural changes. |
+| `src/components/booking/booking-flow-stepper.tsx` | Modify (light) | Verify mobile compact mode renders correctly at 375px. Adjust dot diameter to 8px if currently at a non-standard value. |
 | `src/app/(public)/services/page.tsx` | Modify | Read `booking_live` flag, branch between `<ServiceGrid>` and `<ComingSoonManifesto>`. |
 | `src/app/(public)/book/page.tsx` | Modify | Read `booking_live` flag + check for bookable services. Branch between wizard and manifesto. |
 | `src/app/admin/settings/page.tsx` | Modify | Add `<BookingLiveToggle>` card. |
