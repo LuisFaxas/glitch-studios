@@ -12,6 +12,10 @@ const APPAREL_HOSTS = new Set([
   "glitchapparel.com",
   "www.glitchapparel.com",
 ])
+const REVIEWS_HOSTS = new Set([
+  "glitch.reviews",
+  "www.glitch.reviews",
+])
 
 function getHostname(request: NextRequest): string {
   const header = request.headers.get("host") ?? ""
@@ -31,6 +35,16 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/login", request.url))
     }
     return NextResponse.next()
+  }
+
+  // glitch.reviews — vanity redirect to glitchtech.io/reviews. Path is
+  // preserved so glitch.reviews/rtx-5090 lands at glitchtech.io/reviews/rtx-5090.
+  // 301 permanent so search engines forward link juice.
+  if (REVIEWS_HOSTS.has(hostname)) {
+    const suffix =
+      url.pathname === "/" ? "" : url.pathname.replace(/^\/+/, "/")
+    const targetUrl = `https://glitchtech.io/reviews${suffix}${url.search}`
+    return NextResponse.redirect(targetUrl, 301)
   }
 
   // glitchapparel.com — rewrite everything to the coming-soon page.
