@@ -62,6 +62,18 @@ export function PlayerBar() {
   const shouldShow = currentBeat && !isMinimized
   const showMinimizedBar = currentBeat && isMinimized
 
+  // Publish the current bar height (0 / 32 / 72) as a root CSS variable
+  // so scroll containers can reserve space at the bottom of their
+  // content and keep critical UI above the fixed player bar.
+  useEffect(() => {
+    const root = document.documentElement
+    const h = shouldShow ? 72 : showMinimizedBar ? 32 : 0
+    root.style.setProperty("--player-bar-height", `${h}px`)
+    return () => {
+      root.style.setProperty("--player-bar-height", "0px")
+    }
+  }, [shouldShow, showMinimizedBar])
+
   return (
     <>
       {/* Minimized restore bar */}

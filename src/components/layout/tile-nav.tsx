@@ -141,6 +141,13 @@ export function TileNav({
           >
             <ChevronsRight className="h-5 w-5" />
           </button>
+
+          {/* Player-bar-height spacer — same pattern as expanded layout. */}
+          <div
+            aria-hidden
+            className="shrink-0"
+            style={{ height: "var(--player-bar-height, 0px)" }}
+          />
         </>
       ) : (
         /* ---- Expanded: full layout ---- */
@@ -235,6 +242,16 @@ export function TileNav({
 
           {/* Cross-link tile — sits between widgets and scroll hint */}
           {crossLinkTile && <div className="mt-2">{crossLinkTile}</div>}
+
+          {/* Spacer equal to the current player-bar height. Extends the
+              scrollable content downward so the last tile (cross-link)
+              can scroll up past the fixed player bar instead of being
+              hidden behind it. No-op when --player-bar-height is 0. */}
+          <div
+            aria-hidden
+            className="shrink-0"
+            style={{ height: "var(--player-bar-height, 0px)" }}
+          />
 
           {/* Scroll hint gradient */}
           <div className="pointer-events-none sticky bottom-0 h-8 bg-gradient-to-t from-black to-transparent" />
