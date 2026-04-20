@@ -1,0 +1,107 @@
+/* Hover-only RGB-split glitch effect for headings across the app.
+ * Uses the same burst shape as the TECH wordmark (clip-path insets + translates)
+ * but fires instantly on hover so the user sees it even on a brief mouse-over,
+ * then repeats every 2s while held. */
+
+.wrapper {
+  position: relative;
+  display: inline-block;
+  line-height: inherit;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.wrapper:hover .layer1 {
+  filter: hue-rotate(-40deg) saturate(3) brightness(1.2);
+  animation: hover-glitch-1 2s linear infinite;
+}
+
+.wrapper:hover .layer2 {
+  filter: hue-rotate(40deg) saturate(3) brightness(1.2);
+  animation: hover-glitch-2 2s linear infinite;
+}
+
+/* Same burst shape as beam-glitch (logo-tile.module.css) — 6 jitter frames
+ * spanning ~200ms — but at the START of the cycle so it fires on hover-in. */
+@keyframes hover-glitch-1 {
+  0% {
+    opacity: 0.8;
+    clip-path: inset(15% 0 55% 0);
+    transform: translate(-6px, 1px);
+  }
+  2% {
+    opacity: 0.8;
+    clip-path: inset(60% 0 5% 0);
+    transform: translate(8px, -1px);
+  }
+  4% {
+    opacity: 0.8;
+    clip-path: inset(25% 0 45% 0);
+    transform: translate(5px, -2px);
+  }
+  6% {
+    opacity: 0.8;
+    clip-path: inset(70% 0 10% 0);
+    transform: translate(-7px, 1px);
+  }
+  8% {
+    opacity: 0.8;
+    clip-path: inset(5% 0 75% 0);
+    transform: translate(9px, 0);
+  }
+  10%,
+  100% {
+    opacity: 0;
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+}
+
+@keyframes hover-glitch-2 {
+  0% {
+    opacity: 0.8;
+    clip-path: inset(55% 0 15% 0);
+    transform: translate(7px, -1px);
+  }
+  2% {
+    opacity: 0.8;
+    clip-path: inset(10% 0 70% 0);
+    transform: translate(-9px, 2px);
+  }
+  4% {
+    opacity: 0.8;
+    clip-path: inset(35% 0 35% 0);
+    transform: translate(6px, 1px);
+  }
+  6% {
+    opacity: 0.8;
+    clip-path: inset(8% 0 65% 0);
+    transform: translate(-8px, -1px);
+  }
+  8% {
+    opacity: 0.8;
+    clip-path: inset(45% 0 30% 0);
+    transform: translate(10px, 1px);
+  }
+  10%,
+  100% {
+    opacity: 0;
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrapper:hover .layer1,
+  .wrapper:hover .layer2 {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
