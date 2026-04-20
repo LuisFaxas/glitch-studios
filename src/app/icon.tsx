@@ -3,27 +3,26 @@ import { ImageResponse } from "next/og"
 export const size = { width: 32, height: 32 }
 export const contentType = "image/png"
 
-// A glitchy "G" — matches the GLITCH wordmark treatment. Base glyph in
-// near-white on black, flanked by cyan (shifted left) and magenta
-// (shifted right) clones to simulate RGB channel split. Offsets are kept
-// small (2px) so the mark still reads cleanly when the browser scales
-// this 32x32 PNG down to 16x16.
+// Glitchy "G" — transparent background, the glyph itself is the icon.
+// Three stacked layers: cyan shifted left, magenta shifted right, white
+// center. Edges of the cyan/magenta layers peek out past the white core
+// producing the RGB channel-split look of the wordmark. Glyph is sized
+// to near-fill the 32x32 canvas so the mark still reads at 16x16.
 export default function Icon() {
   return new ImageResponse(
     (
       <div
         style={{
-          position: "relative",
           width: "100%",
           height: "100%",
-          background: "#000000",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          position: "relative",
           fontFamily: "monospace",
-          fontSize: 28,
+          fontSize: 44,
           fontWeight: 900,
-          letterSpacing: "-0.02em",
+          letterSpacing: "-0.05em",
           lineHeight: 1,
         }}
       >
@@ -31,8 +30,7 @@ export default function Icon() {
           style={{
             position: "absolute",
             color: "#00ffff",
-            transform: "translate(-2px, 0)",
-            mixBlendMode: "screen",
+            transform: "translate(-2.5px, 0)",
           }}
         >
           G
@@ -41,8 +39,7 @@ export default function Icon() {
           style={{
             position: "absolute",
             color: "#ff00ff",
-            transform: "translate(2px, 0)",
-            mixBlendMode: "screen",
+            transform: "translate(2.5px, 0)",
           }}
         >
           G
