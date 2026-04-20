@@ -1,10 +1,11 @@
 ---
 phase: 9
 slug: services-booking
-status: draft
+status: approved
 shadcn_initialized: true
 preset: base-nova / neutral / cssVariables
 created: 2026-04-20
+reviewed_at: 2026-04-20
 ---
 
 # Phase 9 — UI Design Contract: Services & Booking
