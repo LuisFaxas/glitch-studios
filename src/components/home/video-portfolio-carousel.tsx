@@ -4,6 +4,7 @@ import { useCallback } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { ChevronLeft, ChevronRight, Play } from "lucide-react"
 import { ScrollSection } from "@/components/home/scroll-section"
+import { GlitchHeading } from "@/components/ui/glitch-heading"
 
 type PortfolioItem = {
   id: string
@@ -37,7 +38,7 @@ export function VideoPortfolioCarousel({ portfolioItems }: VideoPortfolioCarouse
       <ScrollSection className="py-16 md:py-24 border-t border-[#1a1a1a]">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="font-mono font-bold uppercase text-2xl md:text-4xl tracking-tight text-[#f5f5f0] mb-8">
-            Our Work
+            <GlitchHeading text="Our Work">Our Work</GlitchHeading>
           </h2>
           <div className="bg-[#111111] border border-[#222222] rounded-none p-12 text-center">
             <h3 className="font-mono font-bold text-xl text-[#f5f5f0] mb-2">
@@ -57,7 +58,7 @@ export function VideoPortfolioCarousel({ portfolioItems }: VideoPortfolioCarouse
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-start justify-between gap-4 mb-8">
           <h2 className="font-mono font-bold uppercase text-2xl md:text-4xl tracking-tight text-[#f5f5f0]">
-            Our Work
+            <GlitchHeading text="Our Work">Our Work</GlitchHeading>
           </h2>
           <div className="flex gap-2 shrink-0 mt-1">
             <button

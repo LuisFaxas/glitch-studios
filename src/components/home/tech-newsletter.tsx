@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react"
 import { ScrollSection } from "@/components/home/scroll-section"
+import { GlitchHeading } from "@/components/ui/glitch-heading"
 
 export function TechNewsletter() {
   const [email, setEmail] = useState("")
@@ -21,7 +22,7 @@ export function TechNewsletter() {
     <ScrollSection variant="clip-reveal" className="py-16 md:py-24">
       <div className="mx-auto max-w-3xl px-4 text-center">
         <h2 className="font-mono text-3xl font-bold uppercase tracking-tight text-[#f5f5f0] md:text-4xl">
-          Get Tech Reviews in Your Inbox
+          <GlitchHeading text="Get Tech Reviews in Your Inbox">Get Tech Reviews in Your Inbox</GlitchHeading>
         </h2>
         <p className="mx-auto mt-3 font-sans text-[15px] leading-relaxed text-[#888]">
           Weekly reviews, benchmarks, and deep dives.

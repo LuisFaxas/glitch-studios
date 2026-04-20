@@ -5,6 +5,7 @@ import useEmblaCarousel from "embla-carousel-react"
 import Autoplay from "embla-carousel-autoplay"
 import { ChevronLeft, ChevronRight, Star } from "lucide-react"
 import { ScrollSection } from "@/components/home/scroll-section"
+import { GlitchHeading } from "@/components/ui/glitch-heading"
 
 type Testimonial = {
   id: string
@@ -36,7 +37,7 @@ export function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-start justify-between gap-4 mb-8">
           <h2 className="font-mono font-bold uppercase text-2xl md:text-4xl tracking-tight text-[#f5f5f0]">
-            What They Say
+            <GlitchHeading text="What They Say">What They Say</GlitchHeading>
           </h2>
           <div className="flex gap-2 shrink-0 mt-1">
             <button

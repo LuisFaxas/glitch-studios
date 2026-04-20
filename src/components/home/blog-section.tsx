@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { ScrollSection } from "@/components/home/scroll-section"
+import { GlitchHeading } from "@/components/ui/glitch-heading"
 
 type BlogPost = {
   id: string
@@ -22,7 +23,7 @@ export function BlogSection({ posts }: BlogSectionProps) {
     <ScrollSection className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="font-mono font-bold uppercase text-3xl md:text-4xl tracking-tight text-[#f5f5f0] mb-8">
-          Latest News
+          <GlitchHeading text="Latest News">Latest News</GlitchHeading>
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-[2px]">

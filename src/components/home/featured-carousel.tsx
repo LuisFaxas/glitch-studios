@@ -8,6 +8,7 @@ import Image from "next/image"
 import { useAudioPlayer } from "@/components/player/audio-player-provider"
 import { LicenseModal } from "@/components/beats/license-modal"
 import { ScrollSection } from "@/components/home/scroll-section"
+import { GlitchHeading } from "@/components/ui/glitch-heading"
 import type { BeatSummary } from "@/types/beats"
 
 interface FeaturedCarouselProps {
@@ -63,7 +64,7 @@ export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
         <div className="mb-8 flex items-end justify-between">
           <div>
             <h2 className="font-mono text-3xl font-bold uppercase tracking-tight text-[#f5f5f0] md:text-4xl">
-              Featured Beats
+              <GlitchHeading text="Featured Beats">Featured Beats</GlitchHeading>
             </h2>
             <p className="mt-1 font-sans text-sm text-[#888]">
               Preview, license, and download — ready for your next project

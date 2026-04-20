@@ -18,14 +18,28 @@ export function TechHeroSection() {
             <div className={styles.glitchImg} />
             <div className={styles.glitchLayer1} aria-hidden="true" />
             <div className={styles.glitchLayer2} aria-hidden="true" />
+            <div className={styles.beamLayer1} aria-hidden="true" />
+            <div className={styles.beamLayer2} aria-hidden="true" />
           </div>
           <div className="flex w-full items-center gap-3 md:gap-4">
             <TechPulseLine delay={0} />
             <span
-              className="font-mono text-lg md:text-3xl font-bold uppercase tracking-[0.5em] text-[#f5f5f0]"
+              className={`${styles.glitchTextWrapper} font-mono text-lg md:text-3xl font-bold uppercase tracking-[0.5em] text-[#f5f5f0]`}
               aria-label="Tech"
             >
               TECH
+              <span
+                className={`${styles.glitchTextLayer} ${styles.glitchTextLayer1}`}
+                aria-hidden="true"
+              >
+                TECH
+              </span>
+              <span
+                className={`${styles.glitchTextLayer} ${styles.glitchTextLayer2}`}
+                aria-hidden="true"
+              >
+                TECH
+              </span>
             </span>
             <TechPulseLine delay={1} />
           </div>

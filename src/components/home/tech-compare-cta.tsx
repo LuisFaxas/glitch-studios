@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { ScrollSection } from "@/components/home/scroll-section"
+import { GlitchHeading } from "@/components/ui/glitch-heading"
 
 export function TechCompareCta() {
   return (
@@ -8,7 +9,7 @@ export function TechCompareCta() {
       <div className="mx-auto max-w-7xl px-4">
         <div className="border border-[#222] bg-[#111] p-8 text-center md:p-16">
           <h2 className="font-mono text-3xl font-bold uppercase tracking-tight text-[#f5f5f0] md:text-4xl">
-            Advanced Comparison Tool
+            <GlitchHeading text="Advanced Comparison Tool">Advanced Comparison Tool</GlitchHeading>
           </h2>
           <p className="mx-auto mt-3 max-w-xl font-sans text-[15px] leading-relaxed text-[#888]">
             Compare specs, benchmarks, and value across products. Find the

@@ -163,9 +163,144 @@
   }
 }
 
+/* Beam-synced layers for the GLITCH logo in the tech hero. These are
+ * independent from `.glitchLayer1/2` (hover layers) so hover never restarts
+ * or replaces the beam animation — the two effects compose visually. */
+.beamLayer1,
+.beamLayer2 {
+  position: absolute;
+  inset: 0;
+  background: url("/logo-white.png") center / contain no-repeat;
+  opacity: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.beamLayer1 {
+  filter: hue-rotate(-40deg) saturate(3) brightness(1.2);
+  animation: beam-glitch-1 2s linear infinite;
+}
+.beamLayer2 {
+  filter: hue-rotate(40deg) saturate(3) brightness(1.2);
+  animation: beam-glitch-2 2s linear infinite;
+}
+
+/* Text variant — for glitching the "TECH" wordmark beside the logo. Three
+ * stacked spans (base + 2 tinted clones) sharing beam-glitch keyframes so
+ * the text glitches in sync with the logo on each beam handoff. */
+.glitchTextWrapper {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+}
+
+.glitchTextLayer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.glitchTextLayer1 {
+  filter: hue-rotate(-40deg) saturate(3) brightness(1.2);
+  animation: beam-glitch-1 2s linear infinite;
+}
+
+.glitchTextLayer2 {
+  filter: hue-rotate(40deg) saturate(3) brightness(1.2);
+  animation: beam-glitch-2 2s linear infinite;
+}
+
+/* Beam-synced glitch burst. 2s total cycle; burst spans ~45-55% (≈200ms)
+ * centered on 50% to coincide with the beam handoff at t=1s. */
+@keyframes beam-glitch-1 {
+  0%,
+  44% {
+    opacity: 0;
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+  46% {
+    opacity: 0.8;
+    clip-path: inset(15% 0 55% 0);
+    transform: translate(-6px, 1px);
+  }
+  48% {
+    opacity: 0.8;
+    clip-path: inset(60% 0 5% 0);
+    transform: translate(8px, -1px);
+  }
+  50% {
+    opacity: 0.8;
+    clip-path: inset(25% 0 45% 0);
+    transform: translate(5px, -2px);
+  }
+  52% {
+    opacity: 0.8;
+    clip-path: inset(70% 0 10% 0);
+    transform: translate(-7px, 1px);
+  }
+  54% {
+    opacity: 0.8;
+    clip-path: inset(5% 0 75% 0);
+    transform: translate(9px, 0);
+  }
+  56%,
+  100% {
+    opacity: 0;
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+}
+
+@keyframes beam-glitch-2 {
+  0%,
+  44% {
+    opacity: 0;
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+  46% {
+    opacity: 0.8;
+    clip-path: inset(55% 0 15% 0);
+    transform: translate(7px, -1px);
+  }
+  48% {
+    opacity: 0.8;
+    clip-path: inset(10% 0 70% 0);
+    transform: translate(-9px, 2px);
+  }
+  50% {
+    opacity: 0.8;
+    clip-path: inset(35% 0 35% 0);
+    transform: translate(6px, 1px);
+  }
+  52% {
+    opacity: 0.8;
+    clip-path: inset(8% 0 65% 0);
+    transform: translate(-8px, -1px);
+  }
+  54% {
+    opacity: 0.8;
+    clip-path: inset(45% 0 30% 0);
+    transform: translate(10px, 1px);
+  }
+  56%,
+  100% {
+    opacity: 0;
+    clip-path: inset(0 0 0 0);
+    transform: translate(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .glitchLayer1,
-  .glitchLayer2 {
+  .glitchLayer2,
+  .beamLayer1,
+  .beamLayer2,
+  .glitchTextLayer1,
+  .glitchTextLayer2 {
     animation: none !important;
     opacity: 0 !important;
   }
