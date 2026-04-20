@@ -74,13 +74,19 @@ export function TileNav({
 
   return (
     <motion.aside
-      className={`hidden md:flex flex-col shrink-0 bg-[#000000] overflow-y-auto h-screen sticky top-0 sidebar-scroll ${
+      className={`hidden md:flex flex-col shrink-0 bg-[#000000] overflow-y-auto sticky top-0 sidebar-scroll ${
         collapsed ? "p-2 items-center" : "p-3"
       }`}
       initial={false}
       animate={{ width: targetWidth, minWidth: targetWidth }}
       transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-      style={{ width: targetWidth, minWidth: targetWidth }}
+      style={{
+        width: targetWidth,
+        minWidth: targetWidth,
+        // Sidebar sits ABOVE the fixed player bar. When the player is
+        // hidden (--player-bar-height: 0) this is equivalent to h-screen.
+        height: "calc(100vh - var(--player-bar-height, 0px))",
+      }}
     >
       {collapsed ? (
         /* ---- Collapsed: icon strip ---- */
