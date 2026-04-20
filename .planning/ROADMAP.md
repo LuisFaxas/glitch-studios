@@ -352,8 +352,17 @@ Plans:
   2. Booking wizard steps (service, date, time, details, payment) are clearly separated with contextual information at each step -- no barren or confusing screens
   3. All bookable services are visible and selectable in the booking flow -- nothing is hidden or missing
   4. Service and booking pages render correctly on mobile with no broken step indicators or overlapping elements
-**Plans**: TBD
+**Plans**: 7 plans
 **UI hint**: yes
+
+Plans:
+- [ ] 09-01-PLAN.md -- Playwright mobile audit at 375px (Wave 0)
+- [ ] 09-02-PLAN.md -- Portfolio-to-service match DB audit + decision record (Wave 0)
+- [ ] 09-03-PLAN.md -- getBookingLive util + setBookingLive action + newsletter source tagging (Wave 1)
+- [ ] 09-04-PLAN.md -- Coming-soon manifesto, admin toggle, public page branching, CTA rerouting (Wave 2)
+- [ ] 09-05-PLAN.md -- Service detail panel enrichment (9 sections, D-08) (Wave 3)
+- [ ] 09-06-PLAN.md -- Booking wizard polish (summary sidebar, subtitles, terms block, rich tiles) (Wave 3)
+- [ ] 09-07-PLAN.md -- Mobile fix application + verification spec + human sign-off (Wave 4)
 
 ### Phase 10: Blog
 **Goal**: Blog page feels intentional and engaging -- visitors want to read, not bounce
@@ -364,7 +373,7 @@ Plans:
   2. Blog page includes a featured/hero post, category navigation, and reading time estimates that encourage browsing
   3. Pagination or infinite scroll works smoothly -- no jarring page reloads or dead-end states
   4. Blog page renders correctly on mobile with cards stacking cleanly in a single column
-**Plans**: TBD
+**Plans**: 7 plans
 **UI hint**: yes
 
 ### Phase 11: Portfolio
@@ -375,7 +384,7 @@ Plans:
   1. Portfolio detail view has visible prev/next navigation to browse between items without returning to the grid
   2. Existing carousel animations and category filters work smoothly with no regressions from v1
   3. Portfolio page renders correctly on mobile with appropriate touch interactions
-**Plans**: TBD
+**Plans**: 7 plans
 **UI hint**: yes
 
 ### Phase 12: Artists & Team
@@ -387,7 +396,7 @@ Plans:
   2. Each artist card displays role, specialties, social links, and a short bio -- not just a name and photo
   3. Artists page includes a carousel or horizontal browsing mechanism consistent with the portfolio page pattern
   4. Artists page renders correctly on mobile with cards readable at small viewports
-**Plans**: TBD
+**Plans**: 7 plans
 **UI hint**: yes
 
 ### Phase 13: Contact
@@ -399,7 +408,7 @@ Plans:
   2. Contact page shows studio location with an embedded map (Google Maps or similar)
   3. Contact page includes social media links (Instagram, YouTube, SoundCloud, etc.) with recognizable icons
   4. Contact page renders correctly on mobile with all channels accessible without horizontal scrolling
-**Plans**: TBD
+**Plans**: 7 plans
 **UI hint**: yes
 
 ### Phase 14: Global Polish
@@ -411,7 +420,7 @@ Plans:
   2. Footer newsletter signup is properly sized, clearly labeled, and positioned as a natural part of the footer -- not buried or undersized
   3. Audio player widget has polished controls, clear now-playing info, and looks intentional rather than bolted on
   4. All global changes render correctly on mobile without breaking any page layouts
-**Plans**: TBD
+**Plans**: 7 plans
 **UI hint**: yes
 
 ## Progress
