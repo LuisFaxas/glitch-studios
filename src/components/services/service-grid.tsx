@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "motion/react"
-import { Check } from "lucide-react"
 import clsx from "clsx"
+import { GlitchHeading } from "@/components/ui/glitch-heading"
 
 type Service = {
   id: string
@@ -19,74 +19,261 @@ type Service = {
   sortOrder: number | null
   isActive: boolean | null
   isBookable?: boolean
+  durationMinutes: number | null
+  depositType: "flat" | "percentage" | null
+  depositValue: number | null
+  cancellationWindowHours: number | null
+  refundPolicy: string | null
+  deliverables: string[]
+}
+
+interface PortfolioItemLite {
+  id: string
+  title: string
+  slug: string
+  type: string
+  category: string | null
+  thumbnailUrl: string | null
 }
 
 interface ServiceGridProps {
   services: Service[]
+  portfolioByServiceId: Record<string, PortfolioItemLite[]>
 }
 
-function ServiceDetailPanel({ service }: { service: Service }) {
-  return (
-    <div className="border border-[#222222] bg-[#111111] p-6 md:p-8 rounded-none min-h-[300px]">
-      <h2 className="font-mono font-bold text-[28px] uppercase tracking-[0.05em] text-[#f5f5f0] mb-4">
-        {service.name}
-      </h2>
+function formatDuration(minutes: number): string {
+  if (minutes >= 60) {
+    const h = minutes / 60
+    const rounded = h % 1 === 0 ? h.toString() : h.toFixed(1)
+    return `${rounded} hour${h === 1 ? "" : "s"}`
+  }
+  return `${minutes} minutes`
+}
 
-      <p className="font-sans text-[15px] leading-relaxed text-[#f5f5f0] mb-6 max-w-2xl">
+const PROCESS_STEPS = [
+  {
+    n: "01",
+    title: "PREP",
+    body: "We confirm your goals, tech requirements, and session brief.",
+  },
+  {
+    n: "02",
+    title: "SESSION",
+    body: "Full-focus studio time on the service you booked.",
+  },
+  {
+    n: "03",
+    title: "REVISIONS",
+    body: "Up to two revision passes on deliverables where applicable.",
+  },
+  {
+    n: "04",
+    title: "DELIVERY",
+    body: "Final files delivered digitally within the agreed window.",
+  },
+]
+
+function ServiceDetailPanel({
+  service,
+  portfolioItems,
+}: {
+  service: Service
+  portfolioItems: PortfolioItemLite[]
+}) {
+  const depositHint =
+    service.depositType && service.depositValue !== null
+      ? service.depositType === "flat"
+        ? `Deposit: $${service.depositValue.toFixed(2)} due at booking`
+        : `Deposit: ${service.depositValue}% due at booking`
+      : null
+
+  const depositPolicy =
+    service.depositType && service.depositValue !== null
+      ? service.depositType === "flat"
+        ? `Deposit: $${service.depositValue.toFixed(2)} secures your booking.`
+        : `Deposit: ${service.depositValue}% of total secures your booking.`
+      : null
+
+  const hasPolicies = service.cancellationWindowHours !== null
+  const portfolio = portfolioItems ?? []
+  const hasExamples = portfolio.length > 0
+
+  return (
+    <div className="border border-[#222222] bg-[#111111] p-6 md:p-8 rounded-none min-h-[300px] space-y-6">
+      {/* Section 1: Name */}
+      <h1
+        className="font-mono font-bold uppercase tracking-[0.05em] leading-[1.1] md:leading-[1.2] text-[#f5f5f0]"
+        style={{ fontSize: "clamp(28px, 5vw, 48px)" }}
+      >
+        <GlitchHeading text={service.name}>{service.name}</GlitchHeading>
+      </h1>
+
+      {/* Section 2: Description */}
+      <p className="font-sans text-[14px] leading-[1.5] text-[#f5f5f0] max-w-2xl">
         {service.description || service.shortDescription}
       </p>
 
-      <p
-        className="font-mono font-bold text-xl text-[#f5f5f0] mb-6"
-        style={{ fontVariantNumeric: "tabular-nums" }}
-      >
-        {service.priceLabel}
-      </p>
+      {/* Section 3: Pricing */}
+      <section>
+        <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
+          PRICING
+        </h3>
+        <p
+          className="font-mono text-[20px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0]"
+          style={{ fontVariantNumeric: "tabular-nums" }}
+        >
+          {service.priceLabel}
+        </p>
+        {depositHint && (
+          <p className="font-sans text-[14px] leading-[1.5] text-[#888888] mt-1">
+            {depositHint}
+          </p>
+        )}
+      </section>
 
-      {service.features && service.features.length > 0 && (
-        <ul className="space-y-3 mb-8">
-          {service.features.map((feature, i) => (
-            <li
-              key={i}
-              className="flex items-start gap-3 text-[#f5f5f0] font-sans text-[15px]"
-            >
-              <Check
-                className="h-5 w-5 text-[#f5f5f0] shrink-0 mt-0.5"
-                aria-hidden="true"
-              />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
+      {/* Section 4: Duration & Includes */}
+      {service.durationMinutes !== null && (
+        <section>
+          <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
+            DURATION & INCLUDES
+          </h3>
+          <p className="font-sans text-[14px] leading-[1.5] text-[#f5f5f0] mb-3">
+            {formatDuration(service.durationMinutes)}
+          </p>
+          <ul className="space-y-1">
+            {service.deliverables.map((d) => (
+              <li
+                key={d}
+                className="font-sans text-[14px] leading-[1.5] text-[#f5f5f0] before:content-['›'] before:mr-2 before:text-[#888888]"
+              >
+                {d}
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
-      <div className="flex flex-wrap gap-3">
-        {service.isBookable && (
+      {/* Section 5: Highlights */}
+      {service.features && service.features.length > 0 && (
+        <section>
+          <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
+            HIGHLIGHTS
+          </h3>
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6">
+            {service.features.map((feature, i) => (
+              <li
+                key={i}
+                className="font-sans text-[14px] leading-[1.5] text-[#f5f5f0] before:content-['›'] before:mr-2 before:text-[#888888]"
+              >
+                {feature}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Section 6: Process */}
+      <section>
+        <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
+          PROCESS
+        </h3>
+        <ol className="space-y-3">
+          {PROCESS_STEPS.map((step) => (
+            <li key={step.n} className="flex gap-3">
+              <span className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] min-w-[32px]">
+                {step.n}
+              </span>
+              <div>
+                <div className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0]">
+                  {step.title}
+                </div>
+                <p className="font-sans text-[14px] leading-[1.5] text-[#f5f5f0]">
+                  {step.body}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Section 7: Policies */}
+      {hasPolicies && (
+        <section>
+          <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
+            POLICIES
+          </h3>
+          <div className="space-y-2 font-sans text-[14px] leading-[1.5] text-[#f5f5f0]">
+            {depositPolicy && <p>{depositPolicy}</p>}
+            <p>
+              Cancel up to {service.cancellationWindowHours}h before your
+              session for a full refund.
+            </p>
+            {service.refundPolicy && <p>{service.refundPolicy}</p>}
+          </div>
+        </section>
+      )}
+
+      {/* Section 8: Example Work */}
+      {hasExamples && (
+        <section>
+          <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
+            EXAMPLE WORK
+          </h3>
+          <div className="flex gap-4 overflow-x-auto pb-2">
+            {portfolio.map((item) => (
+              <Link
+                key={item.id}
+                href={`/portfolio/${item.slug}`}
+                className="flex-shrink-0 w-[240px] bg-[#111111] border border-[#222222] hover:border-[#444444] p-4 transition-colors"
+              >
+                {item.thumbnailUrl && (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={item.thumbnailUrl}
+                    alt={item.title}
+                    className="w-full aspect-video object-cover mb-2"
+                  />
+                )}
+                <p className="font-sans text-[14px] leading-[1.5] text-[#f5f5f0]">
+                  {item.title}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Section 9: CTA */}
+      <div className="flex flex-wrap gap-3 pt-2">
+        {service.isBookable ? (
           <Link
             href={`/book?service=${service.slug}`}
             className="inline-flex items-center justify-center bg-[#f5f5f0] text-[#000000] font-mono font-bold text-[13px] uppercase tracking-[0.05em] px-8 py-3 rounded-none transition-colors duration-200 hover:bg-[#e5e5e0] outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2"
           >
-            Book Now
+            BOOK THIS SERVICE
+          </Link>
+        ) : (
+          <Link
+            href={`/contact?service=${service.slug}`}
+            className="inline-flex items-center justify-center bg-[#f5f5f0] text-[#000000] font-mono font-bold text-[13px] uppercase tracking-[0.05em] px-8 py-3 rounded-none transition-colors duration-200 hover:bg-[#e5e5e0] outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2"
+          >
+            CONTACT FOR QUOTE
           </Link>
         )}
-        <Link
-          href={`/contact?service=${service.slug}`}
-          className="inline-flex items-center justify-center border border-[#f5f5f0] bg-transparent text-[#f5f5f0] font-mono font-bold text-[13px] uppercase tracking-[0.05em] px-8 py-3 rounded-none transition-colors duration-200 hover:bg-[#f5f5f0] hover:text-[#000000] outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2"
-        >
-          {service.isBookable ? "Contact Us" : (service.ctaText || "Book a Session")}
-        </Link>
       </div>
     </div>
   )
 }
 
-export function ServiceGrid({ services }: ServiceGridProps) {
-  const [selectedSlug, setSelectedSlug] = useState<string | null>(
-    services[0]?.slug ?? null,
-  )
-  const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
+export function ServiceGrid({
+  services,
+  portfolioByServiceId,
+}: ServiceGridProps) {
+  const firstSlug = services[0]?.slug ?? null
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(firstSlug)
+  // B-01 fix: default mobile accordion to first service so content is visible on load
+  const [expandedSlug, setExpandedSlug] = useState<string | null>(firstSlug)
 
-  // Support deep-linking via URL hash
   useEffect(() => {
     const hash = window.location.hash.slice(1)
     if (hash && services.some((s) => s.slug === hash)) {
@@ -98,11 +285,8 @@ export function ServiceGrid({ services }: ServiceGridProps) {
   const selectedService = services.find((s) => s.slug === selectedSlug)
 
   const handleTileClick = (slug: string) => {
-    // Desktop: select service for detail panel
     setSelectedSlug(slug)
     window.history.replaceState(null, "", `#${slug}`)
-
-    // Mobile: toggle accordion
     setExpandedSlug((prev) => (prev === slug ? null : slug))
   }
 
@@ -120,7 +304,6 @@ export function ServiceGrid({ services }: ServiceGridProps) {
     <>
       {/* Desktop: master-detail layout */}
       <div className="hidden md:grid md:grid-cols-[1fr_1fr] md:gap-1">
-        {/* Left: tile grid */}
         <div className="grid grid-cols-2 gap-1">
           {services.map((service) => {
             const isSelected = service.slug === selectedSlug
@@ -137,7 +320,7 @@ export function ServiceGrid({ services }: ServiceGridProps) {
                   "min-h-[100px]",
                   isSelected
                     ? "bg-[#f5f5f0] border-[#f5f5f0] text-[#000000] shadow-[0_0_20px_rgba(255,255,255,0.08)]"
-                    : "bg-[#111111] border-[#222222] text-[#f5f5f0] cursor-pointer hover:bg-[#1a1a1a] hover:border-[#444444] active:bg-[#0a0a0a] active:scale-[0.97] active:duration-100",
+                    : "bg-[#111111] border-[#222222] text-[#f5f5f0] cursor-pointer hover:bg-[#1a1a1a] hover:border-[#444444] active:bg-[#0a0a0a] active:scale-[0.97] active:duration-100"
                 )}
               >
                 {!isSelected && (
@@ -152,7 +335,7 @@ export function ServiceGrid({ services }: ServiceGridProps) {
                 <span
                   className={clsx(
                     "font-sans text-[13px]",
-                    isSelected ? "text-[#000000]/70" : "text-[#888888]",
+                    isSelected ? "text-[#000000]/70" : "text-[#888888]"
                   )}
                 >
                   {service.shortDescription}
@@ -162,7 +345,6 @@ export function ServiceGrid({ services }: ServiceGridProps) {
           })}
         </div>
 
-        {/* Right: detail panel */}
         <div aria-live="polite">
           <AnimatePresence mode="wait">
             {selectedService && (
@@ -173,7 +355,12 @@ export function ServiceGrid({ services }: ServiceGridProps) {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
               >
-                <ServiceDetailPanel service={selectedService} />
+                <ServiceDetailPanel
+                  service={selectedService}
+                  portfolioItems={
+                    portfolioByServiceId[selectedService.id] ?? []
+                  }
+                />
               </motion.div>
             )}
           </AnimatePresence>
@@ -185,7 +372,10 @@ export function ServiceGrid({ services }: ServiceGridProps) {
         {services.map((service) => {
           const isExpanded = service.slug === expandedSlug
           return (
-            <div key={service.slug} className="border border-[#222222] overflow-hidden">
+            <div
+              key={service.slug}
+              className="border border-[#222222] overflow-hidden"
+            >
               <button
                 type="button"
                 onClick={() => handleTileClick(service.slug)}
@@ -197,7 +387,7 @@ export function ServiceGrid({ services }: ServiceGridProps) {
                   "min-h-[48px]",
                   isExpanded
                     ? "bg-[#f5f5f0] border-[#f5f5f0] text-[#000000]"
-                    : "bg-[#111111] border-[#222222] text-[#f5f5f0] active:bg-[#0a0a0a]",
+                    : "bg-[#111111] border-[#222222] text-[#f5f5f0] active:bg-[#0a0a0a]"
                 )}
               >
                 <span className="font-mono font-bold text-lg uppercase tracking-[0.05em]">
@@ -206,7 +396,7 @@ export function ServiceGrid({ services }: ServiceGridProps) {
                 <span
                   className={clsx(
                     "font-sans text-[13px]",
-                    isExpanded ? "text-[#000000]/70" : "text-[#888888]",
+                    isExpanded ? "text-[#000000]/70" : "text-[#888888]"
                   )}
                 >
                   {service.shortDescription}
@@ -222,7 +412,10 @@ export function ServiceGrid({ services }: ServiceGridProps) {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <ServiceDetailPanel service={service} />
+                    <ServiceDetailPanel
+                      service={service}
+                      portfolioItems={portfolioByServiceId[service.id] ?? []}
+                    />
                   </motion.div>
                 )}
               </AnimatePresence>
