@@ -87,7 +87,10 @@ export const config = {
     // Match all request paths except:
     // - Next internals (/_next/*)
     // - API routes (keep CORS/rewrite out of the middleware hot path)
+    // - Next.js generated icon routes (icon, apple-icon, opengraph-image, etc.)
+    //   These are served from /icon-<hash> without a file extension, so they
+    //   would otherwise match the default "page path" rule and get rewritten.
     // - Static image extensions and favicon
-    "/((?!_next/static|_next/image|api|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:png|jpg|jpeg|gif|svg|ico|webp|webmanifest)$).*)",
+    "/((?!_next/static|_next/image|api|favicon.ico|icon|apple-icon|opengraph-image|twitter-image|robots.txt|sitemap.xml|.*\\.(?:png|jpg|jpeg|gif|svg|ico|webp|webmanifest)$).*)",
   ],
 }
