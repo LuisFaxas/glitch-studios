@@ -1,19 +1,55 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { motion, useReducedMotion } from "motion/react"
+import { motion } from "motion/react"
 import logoStyles from "@/components/tiles/logo-tile.module.css"
 import splashStyles from "./splash-overlay.module.css"
+import type { SplashMode } from "@/lib/get-splash-mode"
 
-export function SplashOverlay({ children }: { children: React.ReactNode }) {
-  // Start with splash pending — decide in useEffect (avoids SSR mismatch)
-  const [splashState, setSplashState] = useState<"pending" | "playing" | "exiting" | "done">("pending")
-  const shouldReduceMotion = useReducedMotion()
+// localStorage key used by first_visit mode to remember a visitor has
+// already seen the intro across browser sessions.
+const SEEN_KEY = "glitch-splash-seen"
+
+interface SplashOverlayProps {
+  children: React.ReactNode
+  mode?: SplashMode
+}
+
+export function SplashOverlay({
+  children,
+  mode = "first_visit",
+}: SplashOverlayProps) {
+  // Start with splash pending — decide in useEffect (avoids SSR mismatch
+  // and lets us safely read localStorage).
+  const [splashState, setSplashState] = useState<
+    "pending" | "playing" | "exiting" | "done"
+  >("pending")
 
   useEffect(() => {
-    if (shouldReduceMotion) {
+    // Admin-controlled — no OS reduce-motion bypass here. The individual
+    // motion.div animations inside still honor prefers-reduced-motion
+    // because motion/react does that automatically.
+    if (mode === "never") {
       setSplashState("done")
       return
+    }
+
+    if (mode === "first_visit") {
+      let seen = false
+      try {
+        seen = localStorage.getItem(SEEN_KEY) === "1"
+      } catch {
+        // Private mode / localStorage unavailable — treat as first visit.
+      }
+      if (seen) {
+        setSplashState("done")
+        return
+      }
+      try {
+        localStorage.setItem(SEEN_KEY, "1")
+      } catch {
+        // ignore
+      }
     }
 
     setSplashState("playing")
@@ -22,7 +58,7 @@ export function SplashOverlay({ children }: { children: React.ReactNode }) {
     return () => {
       document.body.style.overflow = ""
     }
-  }, [shouldReduceMotion])
+  }, [mode])
 
   const handleLogoAnimationComplete = useCallback(() => {
     setTimeout(() => {
@@ -35,8 +71,6 @@ export function SplashOverlay({ children }: { children: React.ReactNode }) {
     setSplashState("done")
   }, [])
 
-  // Children always render first (same tree position) so they never
-  // remount when splash state changes. Overlay renders on top via z-50.
   return (
     <>
       {children}

@@ -14,6 +14,7 @@ import { GlitchTechPromoSection } from "@/components/home/glitch-tech-promo-sect
 import { SplashOverlay } from "@/components/home/splash-overlay"
 import { HomepageScrollWatcher } from "@/components/home/homepage-scroll-watcher"
 import { getPublicHomepageSections } from "@/actions/admin-homepage"
+import { getSplashMode } from "@/lib/get-splash-mode"
 
 function parseConfig(config: string | null) {
   try {
@@ -24,6 +25,7 @@ function parseConfig(config: string | null) {
 }
 
 export default async function HomePage() {
+  const splashMode = await getSplashMode()
   const [servicesResult, testimonialsResult, portfolioResult, homepageSectionsResult, beatsResult, blogResult] =
     await Promise.allSettled([
       db
@@ -108,7 +110,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
       <HomepageScrollWatcher />
-      <SplashOverlay>
+      <SplashOverlay mode={splashMode}>
         {useDynamicLayout ? (
           <>
             {homepageSections.map((section, idx) => {
