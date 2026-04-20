@@ -23,7 +23,10 @@ export default function TechLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
-  const isTechHome = pathname === "/tech"
+  // On glitchtech.io, middleware rewrites "/" -> "/tech" internally but
+  // usePathname() reports the browser URL ("/"), so both paths are the
+  // tech homepage for layout-state purposes.
+  const isTechHome = pathname === "/tech" || pathname === "/"
 
   return (
     <SidebarProvider defaultCollapsed={isTechHome} isHomepage={isTechHome}>
