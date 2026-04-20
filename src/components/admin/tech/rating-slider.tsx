@@ -26,7 +26,7 @@ export function RatingSlider({
         max={10}
         step={1}
         value={[value]}
-        onValueChange={(v) => onChange(v[0])}
+        onValueChange={(v) => onChange(Array.isArray(v) ? v[0] : v)}
         aria-label={`Rating for ${label}, 1 to 10, current value ${value}`}
       />
     </div>

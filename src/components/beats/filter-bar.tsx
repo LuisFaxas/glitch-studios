@@ -188,7 +188,7 @@ export function FilterBar({
                     : [value, value]
                   setLocalBpm(values as number[])
                 }}
-                onValueCommit={(value: number | readonly number[]) => {
+                onValueCommitted={(value: number | readonly number[]) => {
                   const values = Array.isArray(value)
                     ? value
                     : [value, value]
