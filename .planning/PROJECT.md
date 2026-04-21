@@ -13,9 +13,22 @@ Both brands share a single Next.js app, root layout, auth, cart, audio player, a
 
 One platform that makes Glitch Studios' work discoverable and Glitch Tech's hardware reviews credible — clients book/buy, tech readers trust the scorecards.
 
-## Current Milestone
+## Current Milestone: v3.0 GlitchTek Launch
 
-_Not started. Define via `/gsd:new-milestone`._
+**Goal:** Take GlitchTek from "foundation live" to "launched with credibility." Lock the methodology, hydrate rubric v1.1 benchmarks from the Mac harness, ship the flagship MBP 16" M5 Max review, and add category leaderboards so readers can rank every reviewed product side-by-side. Templates flow together; every future review slots into the locked structure without ad-hoc reinvention.
+
+**Target features (in priority order):**
+1. Methodology lock-in — rubric v1.1 schema + review template spec + `/tech/methodology` page
+2. JSONL log ingestion from the Mac bench harness
+3. BPR rollup + medal UI (Platinum / Gold / Silver / Bronze)
+4. Category master leaderboard — sortable/filterable ranked tables per category (the headline feature)
+5. Flagship review: MBP 16" M5 Max 64GB
+6. GlitchTek blog at `/tech/blog`
+7. glitchtech.io deployment hardening
+
+**Process commitment:** Phase 1 locks the methodology. Subsequent phases reference it — if data doesn't fit, we fix the template, not hack the review.
+
+**Explicitly NOT in scope:** 2-way `/tech/compare` stays as-is. Studios contact page still deferred. Only one flagship review.
 
 ## Requirements
 
@@ -43,9 +56,15 @@ _Not started. Define via `/gsd:new-milestone`._
 - [x] Artists & Team (internal + collaborators sections, rich cards, chip filter) — v2.0 Phase 12
 - [x] Global polish (brand social icons, footer newsletter, player widget) — v2.0 Phase 14
 
-### Active
+### Active (v3.0)
 
-_Cleared at v2.0 completion. New Active items populated by next `/gsd:new-milestone`._
+- [ ] Rubric v1.1 locked in schema + methodology page
+- [ ] JSONL ingest pipeline (Mac → DB)
+- [ ] BPR rollup + medal UI
+- [ ] Category master leaderboards (sortable/filterable ranked tables)
+- [ ] MBP 16" M5 Max 64GB flagship review published
+- [ ] `/tech/blog` live
+- [ ] glitchtech.io deploy hardened
 
 ### Out of Scope
 
