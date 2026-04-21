@@ -447,8 +447,12 @@ Plans:
   2. Footer newsletter signup is properly sized, clearly labeled, and positioned as a natural part of the footer -- not buried or undersized
   3. Audio player widget has polished controls, clear now-playing info, and looks intentional rather than bolted on
   4. All global changes render correctly on mobile without breaking any page layouts
-**Plans**: 7 plans
-**UI hint**: yes
+**Plans**: 3 plans
+
+Plans:
+- [ ] 14-01-brand-social-icons-PLAN.md — Retire Lucide SocialIcon in artist-card + artist-profile; replace with shared brand SVGs (POLISH-01)
+- [ ] 14-02-footer-newsletter-polish-PLAN.md — Add label, rename button to Subscribe, separate copyright in footer (POLISH-02)
+- [ ] 14-03-player-widget-polish-verify-PLAN.md — Wire License Beat Link, next/image cover art, NOW PLAYING label, Playwright verification (POLISH-03)
 
 ## Progress
 
