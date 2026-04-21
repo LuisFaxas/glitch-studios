@@ -1,25 +1,25 @@
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeft } from "lucide-react"
+import { readingTimeCached } from "@/lib/reading-time"
+import { ReadingTimeBadge } from "./reading-time-badge"
 import type { BlogPost, BlogCategory } from "@/types"
 
 interface PostContentProps {
   post: BlogPost & { category?: BlogCategory | null }
 }
 
-function estimateReadTime(content: string): number {
-  const wordCount = content.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length
-  return Math.max(1, Math.ceil(wordCount / 200))
-}
-
 export function PostContent({ post }: PostContentProps) {
-  const readTime = estimateReadTime(post.content)
+  const minutes = readingTimeCached(post.content)
   const formattedDate = post.publishedAt
-    ? new Date(post.publishedAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
+    ? new Date(post.publishedAt)
+        .toLocaleDateString("en-US", {
+          month: "short",
+          day: "2-digit",
+          year: "numeric",
+        })
+        .toUpperCase()
+        .replace(",", "")
     : null
 
   return (
@@ -49,14 +49,22 @@ export function PostContent({ post }: PostContentProps) {
         {post.title}
       </h1>
 
-      <div className="flex flex-wrap items-center gap-4 text-sm text-[#888888] mb-12">
-        {formattedDate && <time>{formattedDate}</time>}
-        {post.category && (
-          <span className="bg-[#222222] text-[#888888] px-2 py-1 rounded-none text-[11px] font-sans">
-            {post.category.name}
-          </span>
+      <div className="flex flex-wrap items-center gap-2 mb-12">
+        <ReadingTimeBadge minutes={minutes} />
+        <span className="text-[#555555]" aria-hidden="true">·</span>
+        {formattedDate && (
+          <time className="font-mono text-[11px] font-bold uppercase tracking-wide text-[#888888]">
+            {formattedDate}
+          </time>
         )}
-        <span>{readTime} min read</span>
+        {post.category && (
+          <>
+            <span className="text-[#555555]" aria-hidden="true">·</span>
+            <span className="bg-[#222222] text-[#888888] text-[11px] font-mono font-bold uppercase tracking-wide px-2 py-1">
+              {post.category.name.toUpperCase()}
+            </span>
+          </>
+        )}
       </div>
 
       <div
