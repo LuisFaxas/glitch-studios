@@ -8,15 +8,23 @@ import Link from "next/link"
 // the absolute Tech URL so the click actually crosses domains. Locally
 // and in Vercel previews the same deployment serves both brands, so a
 // relative "/tech" works there.
+//
+// When crossing domains we open in a new tab so the studios tab keeps
+// running (esp. important if the user has a beat playing — the <audio>
+// element lives in the studios document and cannot survive a cross-origin
+// navigation).
 export function TechCrossLinkTile() {
   const [href, setHref] = useState("/tech")
+  const [crossOrigin, setCrossOrigin] = useState(false)
 
   useEffect(() => {
     const h = window.location.hostname.toLowerCase()
     if (h === "glitchstudios.io" || h === "www.glitchstudios.io") {
       setHref("https://glitchtech.io/")
+      setCrossOrigin(true)
     } else {
       setHref("/tech")
+      setCrossOrigin(false)
     }
   }, [])
 
@@ -27,6 +35,7 @@ export function TechCrossLinkTile() {
   return (
     <Link
       href={href}
+      {...(crossOrigin && { target: "_blank", rel: "noopener noreferrer" })}
       aria-label="Glitch Tech — sister site"
       className={`group relative col-span-2 flex items-center justify-center overflow-hidden border px-4 py-5 font-mono font-bold uppercase tracking-[0.05em] outline-none transition-colors duration-200 focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2 ${
         isActive

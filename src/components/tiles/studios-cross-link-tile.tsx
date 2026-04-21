@@ -10,13 +10,16 @@ import Link from "next/link"
 // "/" works there.
 export function StudiosCrossLinkTile() {
   const [href, setHref] = useState("/")
+  const [crossOrigin, setCrossOrigin] = useState(false)
 
   useEffect(() => {
     const h = window.location.hostname.toLowerCase()
     if (h === "glitchtech.io" || h === "www.glitchtech.io") {
       setHref("https://glitchstudios.io/")
+      setCrossOrigin(true)
     } else {
       setHref("/")
+      setCrossOrigin(false)
     }
   }, [])
 
@@ -28,6 +31,7 @@ export function StudiosCrossLinkTile() {
   return (
     <Link
       href={href}
+      {...(crossOrigin && { target: "_blank", rel: "noopener noreferrer" })}
       aria-label="Glitch Studios — sister site"
       className={`group relative col-span-2 flex items-center justify-center overflow-hidden border px-4 py-5 font-mono font-bold uppercase tracking-[0.05em] outline-none transition-colors duration-200 focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2 ${
         isActive
