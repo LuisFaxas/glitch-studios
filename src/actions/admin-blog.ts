@@ -7,7 +7,7 @@ import {
   blogTags,
   blogPostTags,
 } from "@/db/schema"
-import { eq, desc, ilike, and, count, sql } from "drizzle-orm"
+import { eq, desc, ilike, and, count, sql, ne } from "drizzle-orm"
 import { requirePermission } from "@/lib/permissions"
 import { revalidatePath } from "next/cache"
 
@@ -34,6 +34,7 @@ interface BlogPostFormData {
   content: string
   status: "draft" | "scheduled" | "published"
   scheduledAt: string | null
+  isFeatured: boolean
 }
 
 export async function createBlogPost(data: BlogPostFormData) {
@@ -52,6 +53,13 @@ export async function createBlogPost(data: BlogPostFormData) {
     scheduledAt = new Date(data.scheduledAt)
   }
 
+  if (data.isFeatured) {
+    await db
+      .update(blogPosts)
+      .set({ isFeatured: false })
+      .where(eq(blogPosts.isFeatured, true))
+  }
+
   const [inserted] = await db
     .insert(blogPosts)
     .values({
@@ -65,6 +73,7 @@ export async function createBlogPost(data: BlogPostFormData) {
       status: data.status,
       publishedAt,
       scheduledAt,
+      isFeatured: data.isFeatured,
     })
     .returning({ id: blogPosts.id })
 
@@ -136,6 +145,13 @@ export async function updateBlogPost(id: string, data: BlogPostFormData) {
     scheduledAt = new Date(data.scheduledAt)
   }
 
+  if (data.isFeatured) {
+    await db
+      .update(blogPosts)
+      .set({ isFeatured: false })
+      .where(and(eq(blogPosts.isFeatured, true), ne(blogPosts.id, id)))
+  }
+
   await db
     .update(blogPosts)
     .set({
@@ -148,6 +164,7 @@ export async function updateBlogPost(id: string, data: BlogPostFormData) {
       status: to,
       publishedAt,
       scheduledAt,
+      isFeatured: data.isFeatured,
       updatedAt: new Date(),
     })
     .where(eq(blogPosts.id, id))

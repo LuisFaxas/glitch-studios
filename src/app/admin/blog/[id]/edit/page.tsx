@@ -51,6 +51,7 @@ export default async function EditBlogPostPage({
           content: post.content,
           status: post.status,
           scheduledAt: post.scheduledAt,
+          isFeatured: post.isFeatured,
         }}
       />
     </div>

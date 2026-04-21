@@ -160,6 +160,7 @@ export const blogPosts = pgTable("blog_posts", {
   status: postStatusEnum("status").default("draft"),
   publishedAt: timestamp("published_at"),
   scheduledAt: timestamp("scheduled_at"),
+  isFeatured: boolean("is_featured").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })

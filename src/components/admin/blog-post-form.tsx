@@ -8,6 +8,7 @@ import { MediaPickerDialog } from "./media-picker-dialog"
 import { toast } from "sonner"
 import { z } from "zod"
 import { ImageIcon } from "lucide-react"
+import { Switch } from "@/components/ui/switch"
 
 const blogPostSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters").max(200),
@@ -38,6 +39,7 @@ interface BlogPostFormProps {
     content: string
     status: "draft" | "scheduled" | "published" | null
     scheduledAt: Date | string | null
+    isFeatured: boolean | null
   }
 }
 
@@ -77,6 +79,7 @@ export function BlogPostForm({
     }
     return ""
   })
+  const [isFeatured, setIsFeatured] = useState(initialData?.isFeatured ?? false)
   const [showCoverPicker, setShowCoverPicker] = useState(false)
   const [showInlinePicker, setShowInlinePicker] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -137,6 +140,7 @@ export function BlogPostForm({
         content,
         status: targetStatus,
         scheduledAt: targetStatus === "scheduled" ? scheduledAt : null,
+        isFeatured,
       }
 
       if (mode === "create") {
@@ -306,6 +310,25 @@ export function BlogPostForm({
               {errors.scheduledAt}
             </p>
           )}
+        </div>
+
+        {/* Featured on blog page */}
+        <div>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <label htmlFor="is-featured-switch" className="block font-mono text-[13px] text-[#888888] uppercase mb-1">
+                Feature on blog page
+              </label>
+              <p className="text-[#555555] font-sans text-[13px] max-w-md">
+                Only one post can be featured at a time. Turning this on will un-feature any currently featured post.
+              </p>
+            </div>
+            <Switch
+              id="is-featured-switch"
+              checked={isFeatured}
+              onCheckedChange={setIsFeatured}
+            />
+          </div>
         </div>
 
         {/* Content */}
