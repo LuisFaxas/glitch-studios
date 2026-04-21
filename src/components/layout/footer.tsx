@@ -68,13 +68,22 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Right: Newsletter + copyright */}
-          <div className="flex flex-col items-start gap-2 md:flex-row md:items-center md:gap-4 shrink-0">
-            <NewsletterForm />
-            <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-[#333333] whitespace-nowrap">
-              &copy; 2026 Glitch Studios
+          {/* Right: Newsletter */}
+          <div className="flex flex-col gap-1 shrink-0 w-full md:w-auto">
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#555555]">
+              Stay in the loop
             </p>
+            <div className="w-full md:w-[280px]">
+              <NewsletterForm compact />
+            </div>
           </div>
+        </div>
+
+        {/* Copyright — own row below the main footer content */}
+        <div className="mt-4 pt-4 border-t border-[#1a1a1a]">
+          <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-[#333333]">
+            &copy; 2026 Glitch Studios
+          </p>
         </div>
       </div>
     </footer>
