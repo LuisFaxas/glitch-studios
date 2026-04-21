@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: GlitchTek Launch
-status: roadmap generated — ready to plan Phase 15
-stopped_at: Phase 15 context gathered
-last_updated: "2026-04-21T06:34:36.328Z"
+status: Ready to execute
+stopped_at: Completed 15-01-PLAN.md
+last_updated: "2026-04-21T08:39:30.786Z"
 progress:
   total_phases: 7
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 3
+  completed_plans: 1
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-21)
 
 **Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience. Tech readers trust GlitchTek's hardware scorecards.
-**Current focus:** Phase 15 — Methodology Lock + Schema
+**Current focus:** Phase 15 — methodology-lock-schema
 
 ## Current Position
 
-Phase: 15
-Plan: Not started
+Phase: 15 (methodology-lock-schema) — EXECUTING
+Plan: 2 of 3
 
 Progress: [================----] 24/33 phases complete
 
@@ -69,6 +69,7 @@ Progress: [================----] 24/33 phases complete
 | Phase 08 P01 | 2min | 2 tasks | 2 files |
 | Phase 08 P02 | 4min | 2 tasks | 2 files |
 | Phase 08 P03 | 4min | 1 tasks | 1 files |
+| Phase 15 P01 | 15min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -102,6 +103,9 @@ Recent decisions affecting current work:
 - [v3.0 Roadmap]: Methodology content is DB-driven via Tiptap (not MDX) so Josh can update without a redeploy
 - [v3.0 Roadmap]: Leaderboard client-sort in memory (corpus <20); flip to server-sort if category exceeds ~500 rows
 - [v3.0 Roadmap]: JSONL ingest is parse-then-commit (validate all lines before opening DB transaction) — no partial writes
+- [Phase 15]: Migration 0003 applied via direct postgres-js script (not drizzle-kit migrate) — drizzle-kit hits interactive prompt on column conflicts; same pattern as 0002
+- [Phase 15]: tech_review_discipline_exclusions table name (D-20/METH-02) — not tech_benchmark_exclusions from ROADMAP wording; CONTEXT is authoritative
+- [Phase 15]: discipline column kept nullable on tech_benchmark_tests — rubric seed guarantees non-null on new rows; safer than NOT NULL race during migration
 
 ### Roadmap Evolution
 
@@ -138,6 +142,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-21T06:34:36.323Z
-Stopped at: Phase 15 context gathered
-Resume file: .planning/phases/15-methodology-lock-schema/15-CONTEXT.md
+Last session: 2026-04-21T08:39:30.780Z
+Stopped at: Completed 15-01-PLAN.md
+Resume file: None

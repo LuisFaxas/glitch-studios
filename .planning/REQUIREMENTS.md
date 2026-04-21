@@ -8,8 +8,8 @@
 
 ### Methodology & Schema (METH-*)
 
-- [ ] **METH-01** Rubric v1.1 seeded into `tech_benchmark_templates` — 13 disciplines with their exact tool set (Geekbench 6, Cinebench 2024, ripgrep cargo, 3DMark Wild Life / Steel Nomad / Solar Bay, Blender, STREAM, AmorphousDiskMark, llama-bench, MLX-LM, HandBrakeCLI, FFmpeg, pyperformance, PyTorch MPS, BG3, Cyberpunk/GPTK, Cinebench loop, video loop, Safari YouTube, web rotation, Cinebench drain, standby drain, iperf3, TB5, DisplayCAL, Lagom).
-- [ ] **METH-02** Schema additions — all migrations land together in Phase 1 before any ingest code:
+- [x] **METH-01** Rubric v1.1 seeded into `tech_benchmark_templates` — 13 disciplines with their exact tool set (Geekbench 6, Cinebench 2024, ripgrep cargo, 3DMark Wild Life / Steel Nomad / Solar Bay, Blender, STREAM, AmorphousDiskMark, llama-bench, MLX-LM, HandBrakeCLI, FFmpeg, pyperformance, PyTorch MPS, BG3, Cyberpunk/GPTK, Cinebench loop, video loop, Safari YouTube, web rotation, Cinebench drain, standby drain, iperf3, TB5, DisplayCAL, Lagom).
+- [x] **METH-02** Schema additions — all migrations land together in Phase 1 before any ingest code:
   - `tech_benchmark_tests` adds: `mode` enum (`ac` | `battery` | `both`), `discipline` text, `direction` enum (`higher_is_better` | `lower_is_better`), `unit` text.
   - `tech_benchmark_runs` adds: `mode` enum (`ac` | `battery`), `rubric_version` text, `run_uuid` text (session ID, one per reviewer session), `source_file` text, `ingest_batch_id` uuid, `superseded` boolean default false, `ambient_temp_c` numeric nullable, `macos_build` text nullable, `run_flagged` text nullable (reason), `permalink_url` text nullable (Geekbench etc.).
   - `tech_benchmark_runs` gets `UNIQUE(product_id, test_id, mode, run_uuid) WHERE superseded = false` constraint.
@@ -17,11 +17,11 @@
   - New enum `artist_kind`-style `bpr_tier_enum`.
   - New enum `discipline_exclusion_reason` (`no_hardware` | `requires_license` | `device_class_exempt` | `test_failed`).
   - New table `tech_review_discipline_exclusions` — `(review_id, discipline, reason, notes)`.
-- [ ] **METH-03** BPR formula locked — geometric mean of `battery_score_d / ac_score_d` across the **7 eligible disciplines**: CPU, GPU, LLM, Video, Dev, Python, Games. Wireless / Display / Memory / Storage / Thermal are AC-only and excluded from BPR by design. `tech_review_discipline_exclusions` with reason `device_class_exempt` is the only valid way to drop a discipline from BPR (e.g. no GPU on Mac mini).
-- [ ] **METH-04** Medal thresholds locked — Platinum ≥ 90%, Gold ≥ 80%, Silver ≥ 70%, Bronze ≥ 60%. Below 60% = no medal displayed. Tier computed once on ingest commit and stored on `tech_reviews.bpr_tier`.
+- [x] **METH-03** BPR formula locked — geometric mean of `battery_score_d / ac_score_d` across the **7 eligible disciplines**: CPU, GPU, LLM, Video, Dev, Python, Games. Wireless / Display / Memory / Storage / Thermal are AC-only and excluded from BPR by design. `tech_review_discipline_exclusions` with reason `device_class_exempt` is the only valid way to drop a discipline from BPR (e.g. no GPU on Mac mini).
+- [x] **METH-04** Medal thresholds locked — Platinum ≥ 90%, Gold ≥ 80%, Silver ≥ 70%, Bronze ≥ 60%. Below 60% = no medal displayed. Tier computed once on ingest commit and stored on `tech_reviews.bpr_tier`.
 - [ ] **METH-05** `/tech/methodology` page live — explains the rubric, BPR formula, the 7 eligible disciplines, medal thresholds, exclusion policy, and rubric versioning. Public-facing credibility layer. Linked from every review's scorecard and every leaderboard column header.
 - [ ] **METH-06** Rubric version visibility — every review detail page shows `Rubric v1.1` badge in the scorecard. Leaderboards filter to a single rubric version by default (latest) with a toggle to show older.
-- [ ] **METH-07** Pre-ingest query refactors — `getBenchmarkRunsForProducts` uses `DISTINCT ON (product_id, test_id, mode) … ORDER BY created_at DESC` so the compare tool and leaderboard always show the latest non-superseded run. `getBenchmarkSpotlight` uses test id lookup via rubric map, not a fragile `ilike` name match.
+- [x] **METH-07** Pre-ingest query refactors — `getBenchmarkRunsForProducts` uses `DISTINCT ON (product_id, test_id, mode) … ORDER BY created_at DESC` so the compare tool and leaderboard always show the latest non-superseded run. `getBenchmarkSpotlight` uses test id lookup via rubric map, not a fragile `ilike` name match.
 
 ### Ingest Pipeline (ING-*)
 
