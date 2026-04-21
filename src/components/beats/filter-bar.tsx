@@ -105,9 +105,9 @@ export function FilterBar({
       data-testid="filter-bar"
       className="sticky top-0 z-10 border border-[#222] bg-[#0a0a0a] px-4 py-2"
     >
-      <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-2">
-        {/* Row 1 (mobile) / inline (desktop): Search input */}
-        <div className="relative w-full md:min-w-[200px] md:flex-1">
+      <div className="flex flex-col gap-2 xl:flex-row xl:items-center xl:gap-2">
+        {/* Row 1 (narrow) / inline (xl+ only): Search input */}
+        <div className="relative w-full xl:min-w-[200px] xl:flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#555]" />
           <input
             type="text"
@@ -118,8 +118,9 @@ export function FilterBar({
           />
         </div>
 
-        {/* Row 2 (mobile scrollable) / inline (desktop) */}
-        <div className="flex items-center gap-2 overflow-x-auto overflow-y-visible touch-pan-x [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden md:contents">
+        {/* Row 2: horizontal scroll at all sizes below xl (prevents clip on iPad);
+            becomes inline siblings of Search on xl+ for a single compact row */}
+        <div className="flex items-center gap-2 overflow-x-auto overflow-y-visible touch-pan-x [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden xl:contents">
           {/* Genre Select */}
           <Select
             value={genre ?? undefined}
