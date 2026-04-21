@@ -142,7 +142,7 @@ Plans:
 - [ ] **Phase 9: Services & Booking** - Comprehensive service info, clear booking step flow
 - [x] **Phase 10: Blog** - Consistent cards, engagement hooks, smooth browsing (completed 2026-04-21)
 - [x] **Phase 11: Portfolio** - Detail view navigation, refined carousel animations (completed 2026-04-21)
-- [ ] **Phase 12: Artists & Team** - Clear sections, rich content, browsing mechanism
+- [x] **Phase 12: Artists & Team** - Clear sections, rich content, browsing mechanism (completed 2026-04-21)
 - [ ] **Phase 13: Contact** - WhatsApp, phone, location map, social links
 - [ ] **Phase 14: Global Polish** - Brand social icons, footer signup, player widget refinement
 
@@ -480,7 +480,7 @@ v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 7.2 -> 7.3 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 
 | 9. Services & Booking | v2.0 | 0/0 | Not started | - |
 | 10. Blog | v2.0 | 0/0 | Complete    | 2026-04-21 |
 | 11. Portfolio | v2.0 | 0/0 | Complete    | 2026-04-21 |
-| 12. Artists & Team | v2.0 | 0/0 | Not started | - |
+| 12. Artists & Team | v2.0 | 0/0 | Complete    | 2026-04-21 |
 | 13. Contact | v2.0 | 0/0 | Not started | - |
 | 14. Global Polish | v2.0 | 0/0 | Not started | - |
 
