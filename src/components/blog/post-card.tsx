@@ -1,18 +1,18 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
 import { GlitchHeading } from "@/components/ui/glitch-heading"
 import { PostCardPlaceholder } from "./post-card-placeholder"
 import { ReadingTimeBadge } from "./reading-time-badge"
-import { readingTimeCached } from "@/lib/reading-time"
 import type { BlogPost, BlogCategory } from "@/types"
 
 interface PostCardProps {
   post: BlogPost & { category?: BlogCategory | null }
+  minutes: number
 }
 
-export function PostCard({ post }: PostCardProps) {
-  const minutes = readingTimeCached(post.content ?? "")
-
+export function PostCard({ post, minutes }: PostCardProps) {
   const formattedDate = post.publishedAt
     ? new Date(post.publishedAt)
         .toLocaleDateString("en-US", {

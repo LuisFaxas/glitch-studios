@@ -1,9 +1,13 @@
 import { Suspense } from "react"
 import { db } from "@/lib/db"
 import { blogPosts, blogCategories } from "@/db/schema"
-import { eq, desc, and, count } from "drizzle-orm"
+import { eq, desc, and, ne } from "drizzle-orm"
 import { PostCard } from "@/components/blog/post-card"
 import { CategoryFilter } from "@/components/blog/category-filter"
+import { BlogHeroBanner } from "@/components/blog/blog-hero-banner"
+import { LoadMoreButton } from "@/components/blog/load-more-button"
+import { GlitchHeading } from "@/components/ui/glitch-heading"
+import { readingTimeCached } from "@/lib/reading-time"
 import type { Metadata } from "next"
 
 const POSTS_PER_PAGE = 9
@@ -17,99 +21,128 @@ export const metadata: Metadata = {
 async function BlogContent({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; category?: string }>
+  searchParams: Promise<{ offset?: string; category?: string }>
 }) {
   const params = await searchParams
-  const page = Math.max(1, parseInt(params.page || "1", 10))
+  const requestedOffset = Math.max(0, parseInt(params.offset || "0", 10))
   const categorySlug = params.category || null
 
-  // Fetch categories
   const categories = await db.select().from(blogCategories)
 
-  // Build query conditions
-  const conditions = [eq(blogPosts.status, "published")]
+  let categoryId: string | null = null
   if (categorySlug) {
     const cat = categories.find((c) => c.slug === categorySlug)
-    if (cat) conditions.push(eq(blogPosts.categoryId, cat.id))
+    categoryId = cat?.id ?? null
   }
 
-  // Fetch posts with pagination
-  const whereClause = conditions.length === 1 ? conditions[0] : and(...conditions)
-
-  const [posts, countResult] = await Promise.all([
-    db
+  let featured: (typeof blogPosts.$inferSelect & {
+    category: (typeof blogCategories.$inferSelect) | null
+  }) | null = null
+  if (!categorySlug) {
+    const featuredRows = await db
       .select()
       .from(blogPosts)
-      .where(whereClause)
-      .orderBy(desc(blogPosts.publishedAt))
-      .limit(POSTS_PER_PAGE)
-      .offset((page - 1) * POSTS_PER_PAGE),
-    db
-      .select({ total: count() })
-      .from(blogPosts)
-      .where(whereClause),
-  ])
+      .where(and(eq(blogPosts.status, "published"), eq(blogPosts.isFeatured, true)))
+      .limit(1)
+    if (featuredRows[0]) {
+      const fp = featuredRows[0]
+      featured = {
+        ...fp,
+        category: categories.find((c) => c.id === fp.categoryId) ?? null,
+      }
+    }
+  }
 
-  const total = countResult[0]?.total ?? 0
-  const totalPages = Math.ceil(total / POSTS_PER_PAGE)
+  const gridConditions = [
+    eq(blogPosts.status, "published"),
+    ne(blogPosts.isFeatured, true),
+  ]
+  if (categoryId) gridConditions.push(eq(blogPosts.categoryId, categoryId))
+  const whereClause = gridConditions.length === 1 ? gridConditions[0] : and(...gridConditions)
 
-  // Map category to each post
-  const postsWithCategory = posts.map((post) => ({
+  const initialBatchSize = requestedOffset + POSTS_PER_PAGE
+  const rows = await db
+    .select()
+    .from(blogPosts)
+    .where(whereClause)
+    .orderBy(desc(blogPosts.publishedAt))
+    .limit(initialBatchSize + 1)
+
+  const hasMore = rows.length > initialBatchSize
+  const gridRows = hasMore ? rows.slice(0, initialBatchSize) : rows
+
+  const postsWithMeta = gridRows.map((post) => ({
     ...post,
     category: categories.find((c) => c.id === post.categoryId) ?? null,
+    readingTime: readingTimeCached(post.content ?? ""),
   }))
 
-  // Empty state
-  if (posts.length === 0 && page === 1 && !categorySlug) {
+  if (postsWithMeta.length === 0 && !featured) {
+    if (categorySlug) {
+      return (
+        <div className="max-w-7xl mx-auto px-4 py-16 md:py-24">
+          <h1 className="font-mono font-bold uppercase tracking-wide text-[#f5f5f0] mb-8 text-[clamp(28px,5vw,48px)] leading-[1.1]">
+            <GlitchHeading text="BLOG">BLOG</GlitchHeading>
+          </h1>
+          <Suspense fallback={null}>
+            <CategoryFilter categories={categories} activeCategory={categorySlug} />
+          </Suspense>
+          <div className="mt-16 text-center">
+            <h2 className="font-mono font-bold text-2xl uppercase text-[#f5f5f0] mb-4">
+              NO POSTS IN THIS CATEGORY
+            </h2>
+            <p className="text-[#888888] font-sans">
+              Try a different category or clear the filter to see every post.
+            </p>
+          </div>
+        </div>
+      )
+    }
     return (
       <div className="max-w-7xl mx-auto px-4 py-24 text-center">
-        <h1 className="font-mono font-bold text-4xl uppercase mb-4 text-white">
-          No posts yet
+        <h1 className="font-mono font-bold text-4xl uppercase mb-4 text-[#f5f5f0]">
+          NO POSTS YET
         </h1>
-        <p className="text-[#888888] text-lg">
-          Check back soon for news, updates, and behind-the-scenes content.
+        <p className="text-[#888888] font-sans">
+          New writing is in the works. Check back soon.
         </p>
       </div>
     )
   }
 
+  const nextOffset = gridRows.length
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-16 md:py-24">
-      <h1 className="font-mono font-bold text-4xl md:text-5xl uppercase tracking-tight mb-8 text-white">
-        Blog
+      <h1 className="font-mono font-bold uppercase tracking-wide text-[#f5f5f0] mb-8 text-[clamp(28px,5vw,48px)] leading-[1.1]">
+        <GlitchHeading text="BLOG">BLOG</GlitchHeading>
       </h1>
       <Suspense fallback={null}>
         <CategoryFilter categories={categories} activeCategory={categorySlug} />
       </Suspense>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 mt-8">
-        {postsWithCategory.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </div>
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <nav className="flex justify-center gap-2 mt-12">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <a
-              key={p}
-              href={`/blog?page=${p}${categorySlug ? `&category=${categorySlug}` : ""}`}
-              className={`px-4 py-2 rounded-none font-mono text-sm ${
-                p === page
-                  ? "bg-[#f5f5f0] text-[#000000] border border-[#f5f5f0]"
-                  : "text-[#888888] hover:text-[#f5f5f0] hover:bg-[#222222]"
-              }`}
-            >
-              {p}
-            </a>
-          ))}
-        </nav>
+      {featured && (
+        <div className="mt-8">
+          <BlogHeroBanner post={featured} />
+        </div>
       )}
+      {postsWithMeta.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 mt-8">
+          {postsWithMeta.map((post) => (
+            <PostCard key={post.id} post={post} minutes={post.readingTime} />
+          ))}
+        </div>
+      )}
+      <LoadMoreButton
+        initialOffset={nextOffset}
+        initialHasMore={hasMore}
+        categorySlug={categorySlug}
+      />
     </div>
   )
 }
 
 export default async function BlogPage(props: {
-  searchParams: Promise<{ page?: string; category?: string }>
+  searchParams: Promise<{ offset?: string; category?: string }>
 }) {
   return <BlogContent searchParams={props.searchParams} />
 }
