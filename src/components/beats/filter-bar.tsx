@@ -121,6 +121,12 @@ export function FilterBar({
         {/* Row 2: horizontal scroll at all sizes below xl (prevents clip on iPad);
             becomes inline siblings of Search on xl+ for a single compact row */}
         <div className="flex items-center gap-2 overflow-x-auto overflow-y-visible touch-pan-x [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden xl:contents">
+          {/* View toggle: sticky-left on mobile/tablet so chips scroll behind it;
+              reorders to end on xl+ */}
+          <div className="sticky left-0 z-20 shrink-0 bg-[#0a0a0a] pr-2 -mr-1 xl:static xl:order-[999] xl:bg-transparent xl:pr-0 xl:mr-0">
+            <ViewToggle view={view} onViewChange={onViewChange} />
+          </div>
+
           {/* Genre Select */}
           <Select
             value={genre ?? undefined}
@@ -221,9 +227,6 @@ export function FilterBar({
               CLEAR FILTERS
             </button>
           )}
-
-          {/* View toggle */}
-          <ViewToggle view={view} onViewChange={onViewChange} />
         </div>
       </div>
     </div>
