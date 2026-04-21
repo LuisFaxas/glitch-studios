@@ -47,10 +47,10 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 4. `getBenchmarkSpotlight` resolves via test `id` lookup (not ilike name match) — changing a test name in `tech_benchmark_tests` no longer breaks the spotlight query
 5. `UNIQUE(product_id, test_id, run_uuid)` constraint exists on `tech_benchmark_runs` and rejects a duplicate insert with a clear Postgres error
 
-**Plans**: ~3 plans
-- 01 — Drizzle migration DDL: 1 new enum, 14 column additions across 5 tables, 1 new `tech_benchmark_exclusions` table, UNIQUE constraint, publishedAt CHECK constraint
-- 02 — `src/lib/tech/rubric-map.ts` + `src/db/seeds/rubric-v1.1.ts` (CPU discipline first; extend as remaining 12 disciplines are benchmarked after Mac returns 2026-04-25)
-- 03 — `getBenchmarkRunsForProducts` DISTINCT ON refactor + `getBenchmarkSpotlight` id-lookup fix + regression verification on /tech/compare
+**Plans**: 3 plans
+- [ ] 15-01-PLAN.md — Drizzle migration DDL: 4 new pgEnums, 14 column additions across 3 tech tables, new `tech_review_discipline_exclusions` table (name corrected from ROADMAP `tech_benchmark_exclusions` — D-20 + METH-02 authoritative), partial UNIQUE index with WHERE superseded=false, published_at CHECK constraint
+- [ ] 15-02-PLAN.md — `src/lib/tech/rubric-map.ts` (RUBRIC_V1_1 Record with 39 entries across all 13 disciplines) + `src/db/seeds/rubric-v1.1.ts` idempotent append-only seed
+- [ ] 15-03-PLAN.md — `getBenchmarkRunsForProducts` DISTINCT ON refactor + `getBenchmarkSpotlight` RUBRIC_V1_1 id-lookup fix + runtime assertion script (no `next build` per CodeBox constraint)
 
 **UI hint**: no
 
