@@ -59,6 +59,9 @@ interface TeamMemberData {
   credits: string | null
   featuredTrackUrl: string | null
   sortOrder: number | null
+  kind?: "internal" | "collaborator"
+  specialties?: string[]
+  isFeatured?: boolean
 }
 
 function parseSocialLinks(json: string | null): {
@@ -102,6 +105,13 @@ export function TeamMemberForm({
   const [youtube, setYoutube] = useState(social.youtube)
   const [soundcloud, setSoundcloud] = useState(social.soundcloud)
   const [sortOrder, setSortOrder] = useState(member?.sortOrder ?? 0)
+  const [kind, setKind] = useState<"internal" | "collaborator">(
+    member?.kind ?? "internal"
+  )
+  const [specialties, setSpecialties] = useState(
+    (member?.specialties ?? []).join(", ")
+  )
+  const [isFeatured, setIsFeatured] = useState(member?.isFeatured ?? false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -140,6 +150,11 @@ export function TeamMemberForm({
       soundcloud: soundcloud || undefined,
     })
 
+    const specialtiesArray = specialties
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
+
     const formData = {
       name,
       slug: slugify(name),
@@ -151,6 +166,9 @@ export function TeamMemberForm({
       credits: credits || null,
       featuredTrackUrl: featuredTrackUrl || null,
       sortOrder,
+      kind,
+      specialties: specialtiesArray,
+      isFeatured: kind === "internal" ? isFeatured : false,
     }
 
     startTransition(async () => {
@@ -339,6 +357,62 @@ export function TeamMemberForm({
           className={`${inputClass} w-24`}
         />
       </div>
+
+      {/* Member Type */}
+      <div>
+        <label className={labelClass}>Member Type</label>
+        <select
+          value={kind}
+          onChange={(e) => {
+            setKind(e.target.value as "internal" | "collaborator")
+            if (e.target.value !== "internal") setIsFeatured(false)
+          }}
+          className={inputClass}
+        >
+          <option value="internal">Internal Team Member</option>
+          <option value="collaborator">Collaborating Artist</option>
+        </select>
+      </div>
+
+      {/* Specialties */}
+      <div>
+        <label className={labelClass}>Specialties</label>
+        <input
+          type="text"
+          value={specialties}
+          onChange={(e) => setSpecialties(e.target.value)}
+          placeholder="Trap, Mixing, Video Editing (comma-separated)"
+          className={inputClass}
+        />
+        <p className="text-[#555555] font-sans text-[11px] mt-1">
+          Enter tags separated by commas. These appear as filter chips on the Artists page.
+        </p>
+      </div>
+
+      {/* isFeatured (internal only) */}
+      {kind === "internal" && (
+        <div>
+          <label className={labelClass}>Featured (hero banner)</label>
+          <div className="flex items-center gap-3 mt-1">
+            <input
+              type="checkbox"
+              id="isFeatured"
+              checked={isFeatured}
+              onChange={(e) => setIsFeatured(e.target.checked)}
+              className="w-4 h-4 accent-[#f5f5f0]"
+            />
+            <label
+              htmlFor="isFeatured"
+              className="font-sans text-[13px] text-[#888888] cursor-pointer"
+            >
+              Show this member as the hero on the Artists page
+            </label>
+          </div>
+          <p className="text-[#555555] font-sans text-[11px] mt-1">
+            Only one internal member can be featured at a time. Setting this will unfeature others automatically.
+          </p>
+        </div>
+      )}
 
       {/* Submit */}
       <div className="flex gap-3 pt-4">
