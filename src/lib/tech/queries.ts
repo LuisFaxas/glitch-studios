@@ -773,20 +773,47 @@ export interface BenchmarkSpotlight {
 }
 
 export async function getBenchmarkSpotlight(): Promise<BenchmarkSpotlight | null> {
-  const candidate = await db
+  // Resolve the spotlight test via the rubric-map canonical key (D-17).
+  // Renaming the test row in tech_benchmark_tests no longer breaks the spotlight —
+  // the rubric-map constant is the source of truth.
+  const spotlightEntry = RUBRIC_V1_1["cpu:geekbench6:multi"]
+  if (!spotlightEntry) return null
+
+  // Look up the test id by natural key (discipline, mode, name) — unique per v1.1 seed.
+  const [spotlightTest] = await db
+    .select({ id: techBenchmarkTests.id })
+    .from(techBenchmarkTests)
+    .where(and(
+      eq(techBenchmarkTests.discipline, spotlightEntry.discipline),
+      eq(techBenchmarkTests.mode, spotlightEntry.mode),
+      eq(techBenchmarkTests.name, spotlightEntry.name),
+    ))
+    .limit(1)
+
+  if (!spotlightTest) return null
+
+  // Top AC run for this test, scoped to products with published reviews.
+  // Spotlight is explicitly AC-only (editorial: homepage hero must be a single canonical score).
+  const [candidate] = await db
     .select({
       productId: techBenchmarkRuns.productId,
       score: techBenchmarkRuns.score,
     })
     .from(techBenchmarkRuns)
-    .innerJoin(techBenchmarkTests, eq(techBenchmarkRuns.testId, techBenchmarkTests.id))
-    .innerJoin(techReviews, and(eq(techReviews.productId, techBenchmarkRuns.productId), eq(techReviews.status, "published")))
-    .where(ilike(techBenchmarkTests.name, "%Geekbench 6 Multi%"))
+    .innerJoin(techReviews, and(
+      eq(techReviews.productId, techBenchmarkRuns.productId),
+      eq(techReviews.status, "published"),
+    ))
+    .where(and(
+      eq(techBenchmarkRuns.testId, spotlightTest.id),
+      eq(techBenchmarkRuns.mode, "ac"),
+      eq(techBenchmarkRuns.superseded, false),
+    ))
     .orderBy(desc(techBenchmarkRuns.score))
     .limit(1)
 
-  if (candidate.length === 0) return null
-  const { productId } = candidate[0]
+  if (!candidate) return null
+  const { productId } = candidate
 
   const productRow = await db
     .select({
@@ -801,6 +828,7 @@ export async function getBenchmarkSpotlight(): Promise<BenchmarkSpotlight | null
   if (productRow.length === 0) return null
   const p = productRow[0]
 
+  // Top 2 other AC runs for this product (keeps existing behavior).
   const topRuns = await db
     .select({
       testName: techBenchmarkTests.name,
@@ -808,8 +836,15 @@ export async function getBenchmarkSpotlight(): Promise<BenchmarkSpotlight | null
       score: techBenchmarkRuns.score,
     })
     .from(techBenchmarkRuns)
-    .innerJoin(techBenchmarkTests, eq(techBenchmarkRuns.testId, techBenchmarkTests.id))
-    .where(eq(techBenchmarkRuns.productId, productId))
+    .innerJoin(
+      techBenchmarkTests,
+      eq(techBenchmarkRuns.testId, techBenchmarkTests.id),
+    )
+    .where(and(
+      eq(techBenchmarkRuns.productId, productId),
+      eq(techBenchmarkRuns.mode, "ac"),
+      eq(techBenchmarkRuns.superseded, false),
+    ))
     .orderBy(desc(techBenchmarkRuns.score))
     .limit(2)
 
@@ -819,6 +854,10 @@ export async function getBenchmarkSpotlight(): Promise<BenchmarkSpotlight | null
     manufacturer: p.product.manufacturer,
     summary: p.product.summary,
     heroImageUrl: p.heroImageUrl,
-    topScores: topRuns.map((r) => ({ testName: r.testName, unit: r.unit, score: Number(r.score) })),
+    topScores: topRuns.map((r) => ({
+      testName: r.testName,
+      unit: r.unit,
+      score: Number(r.score),
+    })),
   }
 }
