@@ -58,7 +58,7 @@ One platform that makes Glitch Studios' work discoverable and Glitch Tech's hard
 
 ### Active (v3.0)
 
-- [ ] Rubric v1.1 locked in schema + methodology page
+- [x] Rubric v1.1 locked in schema (Phase 15) — methodology page deferred to Phase 17
 - [ ] JSONL ingest pipeline (Mac → DB)
 - [ ] BPR rollup + medal UI
 - [ ] Category master leaderboards (sortable/filterable ranked tables)
@@ -111,7 +111,7 @@ One platform that makes Glitch Studios' work discoverable and Glitch Tech's hard
 | Drizzle over Prisma | Lighter, no codegen, Neon-native | Validated v1.0+v2.0 — 12 tech_ tables added without migration friction |
 | Two brands in one app | Shared infra, cross-brand nav, single DB | Validated v2.0 — middleware host routing, `(tech)/` route group, `data-brand` CSS hook |
 | GlitchHeading hover-glitch | Interactive easter-egg on all headers | ⚠️ Revisit — removed from blog/portfolio/artists v2.0 (duplicate-layer technique clips multi-line titles). Homepage/tech/services only. |
-| Rubric v1.1 for tech reviews | Cross-device comparability + BPR medal tier | — Pending v3.0 wire-up (schema exists; discipline mapping + BPR rollup not yet implemented) |
+| Rubric v1.1 for tech reviews | Cross-device comparability + BPR medal tier | Validated v3.0 Phase 15 — schema locked (4 enums, 17 cols, partial UNIQUE, CHECK), RUBRIC_V1_1 (43 entries, 13 disciplines) seeded; BPR rollup pending Phase 16/17 |
 | Cross-brand link in new tab | Audio persists on studios tab when crossing domains | Validated v2.0 Phase 14 — full same-origin fix deferred |
 
 ## Evolution
@@ -132,4 +132,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 — v2.0 Quality Overhaul shipped. 10 phases, 47 plans, Playwright-verified per phase. GlitchTek foundation (7.4/7.5/7.6) live on the public tech surface with admin CRUD; hydration with rubric v1.1 benchmarks + first published review is the v3.0 target.*
+*Last updated: 2026-04-21 — Phase 15 (Methodology Lock + Schema) complete. Rubric v1.1 schema landed (4 enums, 17 cols, partial UNIQUE on runs, CHECK on reviews, new exclusions table) + 43-entry RUBRIC_V1_1 seeded + pre-ingest queries refactored to DISTINCT ON. Phase 16 (JSONL ingest) is now unblocked.*
