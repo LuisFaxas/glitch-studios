@@ -1,9 +1,9 @@
 "use client"
 
-import { useState, useCallback } from "react"
 import Link from "next/link"
-import { Play } from "lucide-react"
-import clsx from "clsx"
+import Image from "next/image"
+import { GlitchHeading } from "@/components/ui/glitch-heading"
+import { VideoCardPlaceholder } from "./video-card-placeholder"
 import type { PortfolioItem } from "@/types"
 
 function extractYouTubeId(url: string): string | null {
@@ -14,97 +14,70 @@ function extractYouTubeId(url: string): string | null {
 }
 
 export function VideoCard({ item }: { item: PortfolioItem }) {
-  const [playing, setPlaying] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
   const videoId = item.videoUrl ? extractYouTubeId(item.videoUrl) : null
-  const isCaseStudy = item.type === "case_study"
+  const thumbnailUrl =
+    item.isYouTubeEmbed && videoId
+      ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+      : item.thumbnailUrl || null
 
-  const thumbnailUrl = item.isYouTubeEmbed && videoId
-    ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
-    : item.thumbnailUrl || null
-
-  const handleMouseEnter = useCallback(() => setIsHovered(true), [])
-  const handleMouseLeave = useCallback(() => setIsHovered(false), [])
+  const typeLabel = item.type === "case_study" ? "CASE STUDY" : "VIDEO"
+  const year = item.createdAt
+    ? new Date(item.createdAt).getFullYear()
+    : null
 
   return (
-    <div
-      className="relative bg-[#111111] border border-[#222222] rounded-none overflow-hidden transition-colors duration-200 hover:border-[#444444]"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+    <Link
+      href={`/portfolio/${item.slug}`}
+      className="group block h-full"
     >
-      {/* Glitch hover animation overlay */}
-      {isHovered && (
+      <article className="relative bg-[#111111] border border-[#222222] rounded-none overflow-hidden transition-colors duration-200 h-full flex flex-col group-hover:border-[#444444]">
         <div
-          className="pointer-events-none absolute inset-0 z-10 bg-[#f5f5f0]/5 animate-glitch-hover motion-reduce:hidden"
+          className="pointer-events-none absolute inset-0 z-10 bg-[#f5f5f0]/5 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden transition-opacity"
           style={{ animationDuration: "100ms" }}
           aria-hidden="true"
         />
-      )}
 
-      {/* Media area */}
-      <div className="relative aspect-video bg-[#111111]">
-        {playing && videoId ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
-            title={item.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="absolute inset-0 w-full h-full"
-          />
-        ) : (
-          <>
-            {thumbnailUrl ? (
-              <img
-                src={thumbnailUrl}
-                alt={item.title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            ) : (
-              <div className="absolute inset-0 bg-[#111111]" />
-            )}
-
-            {isCaseStudy ? (
-              <Link
-                href={`/portfolio/${item.slug}`}
-                className="absolute inset-0 flex items-center justify-center bg-[#000000]/40 hover:bg-[#000000]/60 transition-colors"
-              >
-                <span className="font-mono font-bold text-sm uppercase tracking-[0.05em] text-[#f5f5f0] bg-[#111111]/80 border border-[#222222] px-4 py-2 rounded-none">
-                  View Case Study
-                </span>
-              </Link>
-            ) : videoId ? (
-              <button
-                onClick={() => setPlaying(true)}
-                className="absolute inset-0 flex items-center justify-center group/play"
-                aria-label={`Play ${item.title}`}
-              >
-                <div className="w-[60px] h-[60px] rounded-none bg-[#000000]/60 hover:bg-[#000000]/80 border border-[#222222] flex items-center justify-center transition-colors">
-                  <Play className="w-6 h-6 text-[#f5f5f0] ml-1" fill="#f5f5f0" />
-                </div>
-              </button>
-            ) : null}
-          </>
-        )}
-      </div>
-
-      {/* Info area */}
-      <div className="p-4 space-y-2">
-        <div className="flex items-start justify-between gap-2">
-          <h3 className="font-mono font-bold text-lg text-[#f5f5f0]">
-            {item.title}
-          </h3>
+        <div className="aspect-video relative">
+          {thumbnailUrl ? (
+            <Image
+              src={thumbnailUrl}
+              alt={item.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+          ) : (
+            <VideoCardPlaceholder title={item.title} />
+          )}
         </div>
-        {item.category && (
-          <span className="inline-block bg-[#222222] text-[#888888] text-[11px] font-sans px-2 py-1 rounded-none">
-            {item.category}
-          </span>
-        )}
-        {item.description && (
-          <p className="text-[#888888] text-[13px] font-sans line-clamp-2">
-            {item.description}
-          </p>
-        )}
-      </div>
-    </div>
+
+        <div className="p-4 flex flex-col flex-1">
+          {item.category && (
+            <span className="bg-[#222222] text-[#888888] text-[11px] font-sans px-2 py-1 rounded-none inline-block mb-2 self-start">
+              {item.category}
+            </span>
+          )}
+          <h3 className="font-mono font-bold text-lg text-[#f5f5f0] line-clamp-2 mt-2">
+            <GlitchHeading text={item.title}>{item.title}</GlitchHeading>
+          </h3>
+          {item.description && (
+            <p className="line-clamp-2 text-[#888888] font-sans text-[13px] mt-2">
+              {item.description}
+            </p>
+          )}
+
+          <div className="mt-auto pt-3 flex items-center justify-between">
+            <span className="font-mono text-[11px] font-bold uppercase tracking-wide text-[#888888] bg-[#0a0a0a] px-2 py-1">
+              {typeLabel}
+            </span>
+            {year && (
+              <time className="font-mono text-[11px] font-bold uppercase tracking-wide text-[#888888]">
+                {year}
+              </time>
+            )}
+          </div>
+        </div>
+      </article>
+    </Link>
   )
 }
