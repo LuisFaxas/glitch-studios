@@ -1,5 +1,3 @@
-// TODO(Phase 14): replace Lucide icon map with brand SVGs (POLISH-01)
-
 export type SocialLink = { platform: string; url: string }
 
 export function parseSocialLinks(json: string | null): SocialLink[] {

@@ -1,8 +1,12 @@
-// TODO(Phase 14): replace Lucide social icons with brand SVGs (POLISH-01)
-
 import Link from "next/link"
 import Image from "next/image"
-import { AtSign, Globe, Music, ExternalLink } from "lucide-react"
+import { ExternalLink } from "lucide-react"
+import {
+  InstagramIcon,
+  YouTubeIcon,
+  SoundCloudIcon,
+  XIcon,
+} from "@/components/icons/social-icons"
 import { parseSocialLinks } from "@/lib/parse-social-links"
 import type { TeamMember } from "@/types"
 
@@ -15,13 +19,19 @@ function getInitials(name: string): string {
     .slice(0, 2)
 }
 
-function SocialIcon({ platform }: { platform: string }) {
+function SocialBrandIcon({
+  platform,
+  className,
+}: {
+  platform: string
+  className?: string
+}) {
   const p = platform.toLowerCase()
-  if (p.includes("instagram")) return <AtSign className="w-4 h-4" />
-  if (p.includes("twitter") || p.includes("x")) return <AtSign className="w-4 h-4" />
-  if (p.includes("youtube")) return <Globe className="w-4 h-4" />
-  if (p.includes("soundcloud") || p.includes("music")) return <Music className="w-4 h-4" />
-  return <ExternalLink className="w-4 h-4" />
+  if (p.includes("instagram")) return <InstagramIcon className={className} />
+  if (p.includes("youtube")) return <YouTubeIcon className={className} />
+  if (p.includes("soundcloud")) return <SoundCloudIcon className={className} />
+  if (p.includes("twitter") || p.includes("x")) return <XIcon className={className} />
+  return <ExternalLink className={className} />
 }
 
 export function ArtistCard({ member }: { member: TeamMember }) {
@@ -102,7 +112,7 @@ export function ArtistCard({ member }: { member: TeamMember }) {
                 className="text-[#555555] hover:text-[#f5f5f0] transition-colors"
                 aria-label={link.platform}
               >
-                <SocialIcon platform={link.platform} />
+                <SocialBrandIcon platform={link.platform} className="w-4 h-4" />
               </a>
             ))}
           </div>

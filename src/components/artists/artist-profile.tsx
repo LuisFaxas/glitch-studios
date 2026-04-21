@@ -1,6 +1,12 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowLeft, Globe, AtSign, ExternalLink, Music } from "lucide-react"
+import { ArrowLeft, ExternalLink } from "lucide-react"
+import {
+  InstagramIcon,
+  YouTubeIcon,
+  SoundCloudIcon,
+  XIcon,
+} from "@/components/icons/social-icons"
 import { parseSocialLinks } from "@/lib/parse-social-links"
 import type { TeamMember } from "@/types"
 
@@ -30,15 +36,19 @@ function parseCredits(json: string | null): Credit[] {
   }
 }
 
-function SocialIcon({ platform }: { platform: string }) {
+function SocialBrandIcon({
+  platform,
+  className,
+}: {
+  platform: string
+  className?: string
+}) {
   const p = platform.toLowerCase()
-  if (p.includes("instagram")) return <AtSign className="w-5 h-5" />
-  if (p.includes("twitter") || p.includes("x"))
-    return <AtSign className="w-5 h-5" />
-  if (p.includes("youtube")) return <Globe className="w-5 h-5" />
-  if (p.includes("soundcloud") || p.includes("music"))
-    return <Music className="w-5 h-5" />
-  return <ExternalLink className="w-5 h-5" />
+  if (p.includes("instagram")) return <InstagramIcon className={className} />
+  if (p.includes("youtube")) return <YouTubeIcon className={className} />
+  if (p.includes("soundcloud")) return <SoundCloudIcon className={className} />
+  if (p.includes("twitter") || p.includes("x")) return <XIcon className={className} />
+  return <ExternalLink className={className} />
 }
 
 export function ArtistProfile({ member }: { member: TeamMember }) {
@@ -97,7 +107,7 @@ export function ArtistProfile({ member }: { member: TeamMember }) {
                   className="text-[#888888] hover:text-[#f5f5f0] transition-colors p-2"
                   aria-label={link.platform}
                 >
-                  <SocialIcon platform={link.platform} />
+                  <SocialBrandIcon platform={link.platform} className="w-5 h-5" />
                 </a>
               ))}
             </div>
@@ -106,7 +116,7 @@ export function ArtistProfile({ member }: { member: TeamMember }) {
           {member.featuredTrackUrl && (
             <div className="bg-[#111111] border border-[#222222] rounded-none p-4">
               <div className="flex items-center gap-3">
-                <Music className="w-5 h-5 text-[#888888]" />
+                <span className="font-mono text-lg text-[#888888]" aria-hidden="true">♪</span>
                 <span className="font-mono font-bold text-sm uppercase text-[#f5f5f0]">
                   Featured Track
                 </span>
