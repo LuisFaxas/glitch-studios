@@ -1,12 +1,12 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: v2.0 milestone complete
-stopped_at: v3.0 GlitchTek Launch — starting research
-last_updated: "2026-04-21T05:22:41.304Z"
+milestone: v3.0
+milestone_name: GlitchTek Launch
+status: roadmap generated — ready to plan Phase 15
+stopped_at: Phase 15 — Methodology Lock + Schema (not started)
+last_updated: "2026-04-20T00:00:00.000Z"
 progress:
-  total_phases: 26
+  total_phases: 33
   completed_phases: 24
   total_plans: 110
   completed_plans: 109
@@ -16,23 +16,24 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-28)
+See: .planning/PROJECT.md (updated 2026-04-21)
 
-**Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience.
-**Current focus:** Phase 14 — global-polish
+**Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience. Tech readers trust GlitchTek's hardware scorecards.
+**Current focus:** Phase 15 — Methodology Lock + Schema
 
 ## Current Position
 
-Phase: 999.1
+Phase: 15
 Plan: Not started
+
+Progress: [================----] 24/33 phases complete
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 0 (v2.0) / 36 (v1.0)
+- Total plans completed: 109 (v1.0 + v2.0)
 - Average duration: ~4 min (v1.0 baseline)
-- Total execution time: 0 hours (v2.0)
 
 **v1.0 Reference (36 plans):**
 
@@ -94,6 +95,13 @@ Recent decisions affecting current work:
 - [Phase 07.2]: Container-relative positioning (top-1/2, bottom-16) replaces viewport-relative (50vh, 12vh) for correct centering within variable-height hero
 - [Phase 07.3]: Removed CompactNowPlaying from menu overlay (D-10) -- redundant with persistent player bar
 - [Phase 07.3]: Menu shows only 3 nav items not in tab bar (Book Session, Artists, Contact) per iOS More tab pattern (D-01)
+- [v3.0 Roadmap]: Phase 15 is load-bearing — all METH-* schema work must complete before Phase 16 ingest code is written (PITFALLS B-1 to B-5)
+- [v3.0 Roadmap]: Phase 17 (BPR Medal + Methodology) can run in parallel with Phase 16 after Phase 15 ships
+- [v3.0 Roadmap]: Phase 20 (GlitchTek Blog) can run in parallel after Phase 15 ships — only needs blog brand column
+- [v3.0 Roadmap]: BPR medal uses monochrome intensity variants per flat palette (not colors) — requires Josh color approval before Phase 17 ships
+- [v3.0 Roadmap]: Methodology content is DB-driven via Tiptap (not MDX) so Josh can update without a redeploy
+- [v3.0 Roadmap]: Leaderboard client-sort in memory (corpus <20); flip to server-sort if category exceeds ~500 rows
+- [v3.0 Roadmap]: JSONL ingest is parse-then-commit (validate all lines before opening DB transaction) — no partial writes
 
 ### Roadmap Evolution
 
@@ -103,15 +111,19 @@ Recent decisions affecting current work:
 - Phase 07.4 inserted after Phase 7: Brand architecture & Glitch Tech sub-brand foundation (INSERTED) — Pivot to add tech reviews vertical. Pick brand model (sections vs subdomains), build Glitch Tech shell, nav, landing page.
 - Phase 07.5 inserted after Phase 7: Product reviews data model & admin input (INSERTED) — Drizzle schema for products/categories/benchmarks, admin CRUD for computer reviews rubric (Geekbench, 3DMark, storage, AI).
 - Phase 07.6 inserted after Phase 7: Reviews display & comparison tables (INSERTED) — Public review page template with YouTube embed, comparison tables with Recharts.
+- v3.0 Milestone started: Phases 15-21 added (2026-04-20) — GlitchTek Launch: methodology lock, JSONL ingest, BPR medal, category leaderboard, flagship review, tech blog, deploy hardening.
 
 ### Pending Todos
 
-None yet.
+- Phase 15 plan-phase needed before any v3.0 code is written
+- Medal color approval from Josh required before Phase 17 ships (current proposal: monochrome intensity — Platinum white/black, Gold #888/black, Silver outlined, Bronze dashed)
+- Rubric map completeness: CPU discipline confirmed from §3.1; extend rubric-map.ts as remaining 12 disciplines are benchmarked when Mac returns 2026-04-25
 
 ### Blockers/Concerns
 
+- Review Mac (MBP 16" M5 Max 64GB) returns 2026-04-25 — only CPU §3.1 benchmarks captured; 12 disciplines remaining. Ingest wizard must be ready by then.
+- `blog_categories` UNIQUE(slug) constraint — check schema.ts before writing Phase 15 migration to confirm whether to change to UNIQUE(slug, brand)
 - Phase 4.1 Plan 03 (smoke test) still marked incomplete from v1 -- site may have untested routes
-- Social icons need brand SVGs or react-icons (Lucide dropped brand icons in v1.6+)
 
 ### Quick Tasks Completed
 
@@ -126,6 +138,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-21T05:22:41.300Z
-Stopped at: v3.0 GlitchTek Launch — starting research
+Last session: 2026-04-20T00:00:00.000Z
+Stopped at: v3.0 GlitchTek Launch — ROADMAP.md generated, ready to run /gsd:plan-phase 15
 Resume file: None
