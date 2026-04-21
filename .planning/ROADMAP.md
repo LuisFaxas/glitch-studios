@@ -373,8 +373,17 @@ Plans:
   2. Blog page includes a featured/hero post, category navigation, and reading time estimates that encourage browsing
   3. Pagination or infinite scroll works smoothly -- no jarring page reloads or dead-end states
   4. Blog page renders correctly on mobile with cards stacking cleanly in a single column
-**Plans**: 7 plans
+**Plans:** 7 plans
 **UI hint**: yes
+
+Plans:
+- [ ] 10-01-featured-schema-admin-PLAN.md -- Add is_featured column, admin Switch toggle, single-featured invariant
+- [ ] 10-02-reading-time-helper-PLAN.md -- readingTime() helper + react.cache variant + ReadingTimeBadge component
+- [ ] 10-03-post-card-refactor-PLAN.md -- PostCard uniform height + GlitchHeading title + on-brand placeholder (D-03/D-04)
+- [ ] 10-04-category-filter-polish-PLAN.md -- ALL-first chip, inverse active state, mobile horizontal scroll, offset reset
+- [ ] 10-05-hero-banner-PLAN.md -- BlogHeroBanner server component (featured post hero with gradient + CTA)
+- [ ] 10-06-blog-page-integration-PLAN.md -- Wire hero + LOAD MORE button + offset-based pagination into /blog
+- [ ] 10-07-post-detail-reading-time-PLAN.md -- Adopt shared reading-time helper on /blog/[slug] metadata row
 
 ### Phase 11: Portfolio
 **Goal**: Visitors can browse portfolio items fluidly with clear navigation between detail views
