@@ -5,6 +5,9 @@ import { portfolioItems } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import { notFound } from "next/navigation"
 import { CaseStudyContent } from "@/components/portfolio/case-study-content"
+import { VideoDetailLayout } from "@/components/portfolio/video-detail-layout"
+import { PortfolioDetailLayout } from "@/components/portfolio/portfolio-detail-layout"
+import { getPortfolioNeighbors } from "@/lib/portfolio/get-portfolio-neighbors"
 import type { Metadata } from "next"
 
 type Props = {
@@ -38,7 +41,6 @@ export async function generateStaticParams() {
 
     return items.map((item) => ({ slug: item.slug }))
   } catch {
-    // Database not available at build time -- use dynamic rendering
     return []
   }
 }
@@ -55,5 +57,17 @@ export default async function PortfolioDetailPage({ params }: Props) {
     notFound()
   }
 
-  return <CaseStudyContent item={item} />
+  const neighbors = await getPortfolioNeighbors(slug)
+
+  const isCaseStudy = item.type === "case_study"
+
+  return (
+    <PortfolioDetailLayout neighbors={neighbors}>
+      {isCaseStudy ? (
+        <CaseStudyContent item={item} />
+      ) : (
+        <VideoDetailLayout item={item} />
+      )}
+    </PortfolioDetailLayout>
+  )
 }
