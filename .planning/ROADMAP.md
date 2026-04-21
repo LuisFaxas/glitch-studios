@@ -71,11 +71,12 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 4. A JSONL file with ambient_temp_c > 26 in the header is blocked with an error message until admin checks the override checkbox and enters a reason
 5. After a successful commit, `tech_reviews.bpr_score` and `bpr_tier` are updated and `revalidatePath` fires — the review detail page shows the updated BPR medal without a manual redeploy
 
-**Plans**: ~4 plans
-- 01 — `src/lib/tech/bpr.ts`: `computeBprScore(productId)` geometric mean + `bprMedal(score)` tier thresholds
-- 02 — `ingestBenchmarkRunsDryRun` + `commitBenchmarkIngest` server actions added to `src/actions/admin-tech-benchmarks.ts`; rubric-map lookup + Zod validation per line; transactional commit; BPR recompute on commit
-- 03 — `src/app/admin/tech/reviews/[id]/ingest/page.tsx`: 3-step wizard UI (upload+mode select → preview table → commit button); ambient temp override checkbox; duplicate history view
-- 04 — "Import Benchmark Data" link wired into `src/app/admin/tech/reviews/[id]/edit/page.tsx`; Playwright smoke test: upload CPU file → preview shows matched rows → commit → verify bpr_score populated in DB
+**Plans**: 4 plans
+Plans:
+- [ ] 16-01-PLAN.md — bpr.ts: computeBprScore (geometric mean) + bprMedal (tier thresholds) + unit tests
+- [ ] 16-02-PLAN.md — admin-tech-ingest.ts: ingestBenchmarkRunsDryRun + commitBenchmarkIngest server actions (Zod validation, transaction, BPR recompute, revalidatePath)
+- [ ] 16-03-PLAN.md — ingest wizard UI: 3-step wizard page + discipline accordion + ambient override + supersede confirm
+- [ ] 16-04-PLAN.md — Import Benchmark Data link on edit page + JSONL fixtures + Playwright E2E tests
 
 **UI hint**: no
 
