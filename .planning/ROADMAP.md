@@ -474,3 +474,23 @@ v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 7.2 -> 7.3 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 
 | 12. Artists & Team | v2.0 | 0/0 | Not started | - |
 | 13. Contact | v2.0 | 0/0 | Not started | - |
 | 14. Global Polish | v2.0 | 0/0 | Not started | - |
+
+## Backlog
+
+### Phase 999.1: GlitchTek blog (BACKLOG)
+
+**Goal:** Tech-themed blog for the `/tech` GlitchTek sub-brand — mirrors the Studios blog routing/components exactly (index, category filter, hero banner, post cards, detail view, load-more), but content is 100% tech. Sidebar positioned identically to the Glitch Studios layout.
+
+**Requirements:** TBD
+
+**Open questions for /gsd:discuss-phase 999.1:**
+  - Shared `blog_posts` table with a `surface` / `brand` discriminator, or separate `tech_blog_posts` table?
+  - Shared categories taxonomy or independent tech category set?
+  - Reuse `PostCard` / `BlogHeroBanner` / `CategoryFilter` components vs. fork for tech styling?
+  - Routing: `/tech/blog` vs `/tech/reviews` integration?
+  - Admin UX for cross-brand authoring in one dashboard.
+
+**Plans**: 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd:review-backlog when ready)
