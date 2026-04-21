@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: GlitchTek Launch
 status: Ready to execute
-stopped_at: Completed 15-01-PLAN.md
-last_updated: "2026-04-21T08:39:30.786Z"
+stopped_at: Completed 15-02-PLAN.md
+last_updated: "2026-04-21T08:49:29.897Z"
 progress:
   total_phases: 7
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 ## Current Position
 
 Phase: 15 (methodology-lock-schema) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 Progress: [================----] 24/33 phases complete
 
@@ -70,6 +70,7 @@ Progress: [================----] 24/33 phases complete
 | Phase 08 P02 | 4min | 2 tasks | 2 files |
 | Phase 08 P03 | 4min | 1 tasks | 1 files |
 | Phase 15 P01 | 15min | 2 tasks | 4 files |
+| Phase 15 P02 | 7min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -106,6 +107,9 @@ Recent decisions affecting current work:
 - [Phase 15]: Migration 0003 applied via direct postgres-js script (not drizzle-kit migrate) — drizzle-kit hits interactive prompt on column conflicts; same pattern as 0002
 - [Phase 15]: tech_review_discipline_exclusions table name (D-20/METH-02) — not tech_benchmark_exclusions from ROADMAP wording; CONTEXT is authoritative
 - [Phase 15]: discipline column kept nullable on tech_benchmark_tests — rubric seed guarantees non-null on new rows; safer than NOT NULL race during migration
+- [Phase 15]: 43 entries in RUBRIC_V1_1 (not 39 as plan must_haves stated) — research matrix and action section both enumerate 43 rows; trusted source of truth over plan typo
+- [Phase 15]: Rubric v1.1 seed is self-contained — auto-creates Laptops category if absent so it runs on a fresh DB without prerequisite seeds
+- [Phase 15]: Seed env loading: require('dotenv') pattern with config({ path: '.env.local' }) — dotenv is transitive dep; import form causes TS2307 without explicit devDependency
 
 ### Roadmap Evolution
 
@@ -142,6 +146,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-21T08:39:30.780Z
-Stopped at: Completed 15-01-PLAN.md
+Last session: 2026-04-21T08:49:29.892Z
+Stopped at: Completed 15-02-PLAN.md
 Resume file: None

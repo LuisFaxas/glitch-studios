@@ -49,7 +49,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 
 **Plans**: 3 plans
 - [x] 15-01-PLAN.md — Drizzle migration DDL: 4 new pgEnums, 14 column additions across 3 tech tables, new `tech_review_discipline_exclusions` table (name corrected from ROADMAP `tech_benchmark_exclusions` — D-20 + METH-02 authoritative), partial UNIQUE index with WHERE superseded=false, published_at CHECK constraint
-- [ ] 15-02-PLAN.md — `src/lib/tech/rubric-map.ts` (RUBRIC_V1_1 Record with 39 entries across all 13 disciplines) + `src/db/seeds/rubric-v1.1.ts` idempotent append-only seed
+- [x] 15-02-PLAN.md — `src/lib/tech/rubric-map.ts` (RUBRIC_V1_1 Record with 39 entries across all 13 disciplines) + `src/db/seeds/rubric-v1.1.ts` idempotent append-only seed
 - [ ] 15-03-PLAN.md — `getBenchmarkRunsForProducts` DISTINCT ON refactor + `getBenchmarkSpotlight` RUBRIC_V1_1 id-lookup fix + runtime assertion script (no `next build` per CodeBox constraint)
 
 **UI hint**: no
@@ -236,7 +236,7 @@ v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 1
 | 12. Artists & Team | v2.0 | 7/7 | Complete | 2026-04-21 |
 | 13. Contact | v2.0 | 0/0 | Deferred | - |
 | 14. Global Polish | v2.0 | 3/3 | Complete | 2026-04-21 |
-| 15. Methodology Lock + Schema | v3.0 | 1/3 | In Progress|  |
+| 15. Methodology Lock + Schema | v3.0 | 2/3 | In Progress|  |
 | 16. JSONL Ingest Pipeline | v3.0 | 0/4 | Not started | - |
 | 17. BPR Medal + Methodology Page | v3.0 | 0/3 | Not started | - |
 | 18. Category Master Leaderboard | v3.0 | 0/4 | Not started | - |
