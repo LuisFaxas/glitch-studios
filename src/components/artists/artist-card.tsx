@@ -29,79 +29,85 @@ export function ArtistCard({ member }: { member: TeamMember }) {
   const specialties = (member.specialties ?? []).slice(0, 3)
 
   return (
-    <Link href={`/artists/${member.slug}`} className="group block h-full">
-      <article className="relative bg-[#111111] border border-[#222222] rounded-none overflow-hidden transition-colors duration-200 h-full flex flex-col group-hover:border-[#444444]">
-        <div
-          className="pointer-events-none absolute inset-0 z-10 bg-[#f5f5f0]/5 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden transition-opacity"
-          style={{ animationDuration: "100ms" }}
-          aria-hidden="true"
-        />
+    <article className="group relative bg-[#111111] border border-[#222222] rounded-none overflow-hidden transition-colors duration-200 h-full flex flex-col hover:border-[#444444]">
+      {/* Whole-card click target — sits behind content so social <a>s can opt out */}
+      <Link
+        href={`/artists/${member.slug}`}
+        aria-label={`View ${member.name}`}
+        className="absolute inset-0 z-10"
+      />
 
-        <div className="relative aspect-[4/3] bg-[#111111]">
-          {member.photoUrl ? (
-            <Image
-              src={member.photoUrl}
-              alt={member.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-mono font-bold text-4xl text-[#555555]">
-                {getInitials(member.name)}
+      <div
+        className="pointer-events-none absolute inset-0 z-20 bg-[#f5f5f0]/5 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden transition-opacity"
+        style={{ animationDuration: "100ms" }}
+        aria-hidden="true"
+      />
+
+      <div className="relative aspect-[4/3] bg-[#111111]">
+        {member.photoUrl ? (
+          <Image
+            src={member.photoUrl}
+            alt={member.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="font-mono font-bold text-4xl text-[#555555]">
+              {getInitials(member.name)}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Content — pointer-events-none so clicks fall through to the overlay Link;
+          social row re-enables pointer events so its <a>s remain clickable */}
+      <div className="relative p-4 flex flex-col flex-1 pointer-events-none">
+        <span className="bg-[#222222] text-[#888888] text-[11px] font-mono font-bold uppercase tracking-wide px-2 py-1 self-start mb-2">
+          {member.role}
+        </span>
+
+        <h3 className="font-mono font-bold text-lg text-[#f5f5f0] leading-tight mb-2">
+          {member.name}
+        </h3>
+
+        {member.bio && (
+          <p className="text-[#888888] font-sans text-[13px] leading-relaxed line-clamp-3 mb-3">
+            {member.bio}
+          </p>
+        )}
+
+        {specialties.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-3">
+            {specialties.map((s) => (
+              <span
+                key={s}
+                className="bg-[#0a0a0a] border border-[#222222] text-[#555555] text-[10px] font-mono uppercase tracking-wide px-2 py-0.5"
+              >
+                {s}
               </span>
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
 
-        <div className="p-4 flex flex-col flex-1">
-          <span className="bg-[#222222] text-[#888888] text-[11px] font-mono font-bold uppercase tracking-wide px-2 py-1 self-start mb-2">
-            {member.role}
-          </span>
-
-          <h3 className="font-mono font-bold text-lg text-[#f5f5f0] leading-tight mb-2">
-            {member.name}
-          </h3>
-
-          {member.bio && (
-            <p className="text-[#888888] font-sans text-[13px] leading-relaxed line-clamp-3 mb-3">
-              {member.bio}
-            </p>
-          )}
-
-          {specialties.length > 0 && (
-            <div className="flex flex-wrap gap-1 mb-3">
-              {specialties.map((s) => (
-                <span
-                  key={s}
-                  className="bg-[#0a0a0a] border border-[#222222] text-[#555555] text-[10px] font-mono uppercase tracking-wide px-2 py-0.5"
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {socialLinks.length > 0 && (
-            <div className="mt-auto pt-3 flex gap-3">
-              {socialLinks.map((link) => (
-                <a
-                  key={link.platform}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-[#555555] hover:text-[#f5f5f0] transition-colors"
-                  aria-label={link.platform}
-                >
-                  <SocialIcon platform={link.platform} />
-                </a>
-              ))}
-            </div>
-          )}
-        </div>
-      </article>
-    </Link>
+        {socialLinks.length > 0 && (
+          <div className="relative z-30 mt-auto pt-3 flex gap-3 pointer-events-auto">
+            {socialLinks.map((link) => (
+              <a
+                key={link.platform}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#555555] hover:text-[#f5f5f0] transition-colors"
+                aria-label={link.platform}
+              >
+                <SocialIcon platform={link.platform} />
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </article>
   )
 }
