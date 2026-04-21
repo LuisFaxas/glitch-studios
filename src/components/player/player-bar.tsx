@@ -14,7 +14,7 @@ import {
 } from "lucide-react"
 import { useAudioPlayer } from "@/components/player/audio-player-provider"
 import { Waveform } from "@/components/player/waveform"
-import ElasticSlider from "@/components/ui/ElasticSlider"
+import { Slider } from "@/components/ui/slider"
 
 function formatTime(seconds: number): string {
   if (!seconds || !isFinite(seconds)) return "0:00"
@@ -174,14 +174,30 @@ export function PlayerBar() {
             </button>
 
             {/* Volume */}
-            <div className="flex items-center flex-shrink-0 w-[140px] text-[#888888]">
-              <ElasticSlider
-                defaultValue={volume}
-                startingValue={0}
-                maxValue={100}
-                onChange={handleVolumeChange}
-                leftIcon={<VolumeX className="h-4 w-4" />}
-                rightIcon={<Volume2 className="h-4 w-4" />}
+            <div className="flex items-center flex-shrink-0 w-[140px] gap-2 text-[#888888]">
+              <button
+                type="button"
+                onClick={() => setIsMuted((m) => !m)}
+                aria-label={isMuted ? "Unmute" : "Mute"}
+                className="shrink-0 text-[#888888] hover:text-[#f5f5f0] transition-colors"
+              >
+                {isMuted || volume === 0 ? (
+                  <VolumeX className="h-4 w-4" />
+                ) : (
+                  <Volume2 className="h-4 w-4" />
+                )}
+              </button>
+              <Slider
+                value={[isMuted ? 0 : volume]}
+                min={0}
+                max={100}
+                step={1}
+                onValueChange={(v: number | readonly number[]) => {
+                  const next = Array.isArray(v) ? v[0] : v
+                  handleVolumeChange(next as number)
+                }}
+                className="flex-1"
+                aria-label="Volume"
               />
             </div>
 

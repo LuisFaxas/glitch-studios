@@ -119,7 +119,7 @@ export function FilterBar({
         </div>
 
         {/* Row 2 (mobile scrollable) / inline (desktop) */}
-        <div className="flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden md:contents">
+        <div className="flex items-center gap-2 overflow-x-auto overflow-y-visible touch-pan-x [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden md:contents">
           {/* Genre Select */}
           <Select
             value={genre ?? undefined}
@@ -172,11 +172,17 @@ export function FilterBar({
           </Select>
 
           {/* BPM Slider */}
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2 px-1">
             <span className="shrink-0 font-mono text-[11px] uppercase text-[#888]">
               BPM
             </span>
-            <div className="w-[120px]">
+            <span
+              className="shrink-0 font-mono text-[11px] tabular-nums text-[#f5f5f0] min-w-[60px] text-center"
+              aria-live="polite"
+            >
+              {localBpm[0]}–{localBpm[1]}
+            </span>
+            <div className="w-[120px] py-2">
               <Slider
                 min={60}
                 max={200}
