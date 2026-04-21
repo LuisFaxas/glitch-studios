@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: GlitchTek Launch
-status: Ready to execute
-stopped_at: Completed 15-02-PLAN.md
-last_updated: "2026-04-21T08:49:29.897Z"
+status: Phase complete — ready for verification
+stopped_at: Completed 15-03-PLAN.md
+last_updated: "2026-04-21T08:59:34.488Z"
 progress:
   total_phases: 7
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
+  completed_plans: 3
 ---
 
 # Project State
@@ -71,6 +71,7 @@ Progress: [================----] 24/33 phases complete
 | Phase 08 P03 | 4min | 1 tasks | 1 files |
 | Phase 15 P01 | 15min | 2 tasks | 4 files |
 | Phase 15 P02 | 7min | 2 tasks | 2 files |
+| Phase 15 P03 | 6 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -110,6 +111,9 @@ Recent decisions affecting current work:
 - [Phase 15]: 43 entries in RUBRIC_V1_1 (not 39 as plan must_haves stated) — research matrix and action section both enumerate 43 rows; trusted source of truth over plan typo
 - [Phase 15]: Rubric v1.1 seed is self-contained — auto-creates Laptops category if absent so it runs on a fresh DB without prerequisite seeds
 - [Phase 15]: Seed env loading: require('dotenv') pattern with config({ path: '.env.local' }) — dotenv is transitive dep; import form causes TS2307 without explicit devDependency
+- [Phase 15]: D-16 3-column DISTINCT ON (productId, testId, mode) in getBenchmarkRunsForProducts — no mode='ac' WHERE filter; callers filter downstream
+- [Phase 15]: getBenchmarkSpotlight resolves Geekbench 6 Multi via RUBRIC_V1_1 id lookup, not ilike name match (D-17) — rename-safe
+- [Phase 15]: Phase 15 assertion scripts use standalone postgres.js (not @/lib/db) to avoid server-only guard in queries.ts
 
 ### Roadmap Evolution
 
@@ -146,6 +150,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-21T08:49:29.892Z
-Stopped at: Completed 15-02-PLAN.md
+Last session: 2026-04-21T08:59:34.483Z
+Stopped at: Completed 15-03-PLAN.md
 Resume file: None
