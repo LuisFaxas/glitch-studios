@@ -43,6 +43,9 @@ interface TeamMemberFormData {
   credits: string | null
   featuredTrackUrl: string | null
   sortOrder: number
+  kind?: "internal" | "collaborator"
+  specialties?: string[]
+  isFeatured?: boolean
 }
 
 export async function createTeamMember(data: TeamMemberFormData) {
@@ -62,10 +65,14 @@ export async function createTeamMember(data: TeamMemberFormData) {
       credits: data.credits,
       featuredTrackUrl: data.featuredTrackUrl,
       sortOrder: data.sortOrder,
+      kind: data.kind ?? "internal",
+      specialties: data.specialties ?? [],
+      isFeatured: data.isFeatured ?? false,
     })
     .returning({ id: teamMembers.id })
 
   revalidatePath("/admin/team")
+  revalidatePath("/artists")
   return inserted
 }
 
@@ -73,6 +80,14 @@ export async function updateTeamMember(id: string, data: TeamMemberFormData) {
   await requirePermission("manage_content")
 
   const slug = data.slug || slugify(data.name)
+
+  if (data.isFeatured === true) {
+    // Enforce single-featured invariant: clear all other internal members first
+    await db
+      .update(teamMembers)
+      .set({ isFeatured: false, updatedAt: new Date() })
+      .where(eq(teamMembers.kind, "internal"))
+  }
 
   await db
     .update(teamMembers)
@@ -86,11 +101,15 @@ export async function updateTeamMember(id: string, data: TeamMemberFormData) {
       credits: data.credits,
       featuredTrackUrl: data.featuredTrackUrl,
       sortOrder: data.sortOrder,
+      kind: data.kind ?? "internal",
+      specialties: data.specialties ?? [],
+      isFeatured: data.isFeatured ?? false,
       updatedAt: new Date(),
     })
     .where(eq(teamMembers.id, id))
 
   revalidatePath("/admin/team")
+  revalidatePath("/artists")
 }
 
 export async function deleteTeamMember(id: string) {

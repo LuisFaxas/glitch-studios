@@ -84,6 +84,8 @@ export const postStatusEnum = pgEnum("post_status", [
   "published",
 ])
 
+export const artistKindEnum = pgEnum("artist_kind", ["internal", "collaborator"])
+
 // Services table (BOOK-01)
 export const services = pgTable("services", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -114,6 +116,9 @@ export const teamMembers = pgTable("team_members", {
   featuredTrackUrl: text("featured_track_url"),
   sortOrder: integer("sort_order").default(0),
   isActive: boolean("is_active").default(true),
+  kind: artistKindEnum("kind").default("internal").notNull(),
+  specialties: text("specialties").array().default([]).notNull(),
+  isFeatured: boolean("is_featured").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
