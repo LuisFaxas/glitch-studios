@@ -201,3 +201,191 @@ npm install -D prettier prettier-plugin-tailwindcss
 ---
 *Stack research for: Glitch Studios -- music/video production studio website*
 *Researched: 2026-03-25*
+
+---
+
+## v3.0 GlitchTek Launch — Stack Gaps
+
+**Added:** 2026-04-20
+**Scope:** New capabilities only — JSONL ingest, leaderboard tables, BPR rollup, medal UI, YAML parsing, methodology page. Everything above this line is already live.
+
+### What Is Already Installed (confirmed from package.json as of 2026-04-20)
+
+| Package | Installed Version | Notes |
+|---------|-------------------|-------|
+| `zod` | ^4.3.6 | Already covers JSONL schema validation |
+| `nuqs` | ^2.8.9 | Already covers leaderboard URL state |
+| `recharts` | ^3.8.1 | Already in use for compare charts |
+| `@tiptap/*` | ^3.20.5 | Already covers methodology page editor |
+| `isomorphic-dompurify` | ^3.9.0 | Already covers methodology HTML rendering |
+| `@tanstack/react-table` | NOT IN package.json | Listed in original STACK.md as planned; never actually installed. Must be added. |
+| `@next/mdx` | NOT IN package.json | Not referenced in next.config.ts either. Skip — see methodology section below. |
+
+shadcn/ui components confirmed present in `src/components/ui/`: `table.tsx`, `tabs.tsx`, `badge.tsx`, `sheet.tsx`, `select.tsx`, `input.tsx`, `button.tsx`, `separator.tsx`. `toggle-group.tsx` is NOT present.
+
+### New Dependencies Required
+
+#### 1. Leaderboard Table Engine
+
+| Library | Version | Purpose | Integration Point |
+|---------|---------|---------|-------------------|
+| `@tanstack/react-table` | `^8.21.3` | Sortable/filterable headless table for leaderboards | `src/components/tech/leaderboard-table.tsx` (new client component); data fetched server-side in page, passed as prop |
+
+**Why `@tanstack/react-table` over alternatives:** The existing `src/components/ui/table.tsx` is a plain HTML `<table>` wrapper — no sort or filter logic. For a leaderboard requiring multi-column sort (score, name, price, BPR), text filter, and nuqs URL state sync, a headless engine is required. `@tanstack/react-table` v8 is headless, TypeScript-native, React 19 compatible, and the existing `table.tsx` shadcn primitive is designed to wrap it for rendering. The alternative — rolling custom sort with `Array.prototype.sort` + `useState` — breaks down at multi-column sort and doesn't give keyboard-accessible column headers for free.
+
+**Architecture decision — client vs server sort/filter:** At MVP (≤200 products per category), pass the full dataset to the client table and let `@tanstack/react-table` sort/filter in memory. `nuqs` syncs sort column + direction + filter text to the URL. If a category grows past ~500 rows, switch the page to read sort/filter params from the URL at the Server Component level, pass them to a Drizzle query, and stream pre-sorted rows to the client table (which then does no client-side sorting). The table component interface stays the same — only the data-fetching layer changes.
+
+#### 2. Missing shadcn/ui Primitive
+
+| Component | Install Command | Needed For |
+|-----------|----------------|------------|
+| `toggle-group` | `pnpm dlx shadcn@latest add toggle-group` | Leaderboard metric column picker (e.g., "show: Score / BPR / Price") |
+
+This adds `src/components/ui/toggle-group.tsx` and installs `@radix-ui/react-toggle-group` as a dependency. The `tabs.tsx`, `table.tsx`, `badge.tsx`, and other primitives already present cover all other leaderboard UI needs.
+
+### What Requires NO New Libraries
+
+#### JSONL Ingest — Server Action + Zod
+
+The JSONL format from `logging.sh` is minimal: one JSON object per line. Header line has `_header: true`, `discipline`, `tool`, `timestamp`, `macos_build`, `hostname`, `rubric_version`. Data lines have discipline-specific numeric fields.
+
+**Ingest approach:** Admin Server Action with `FormData` + `<input type="file" accept=".jsonl">`. No Uploadthing — this is structured data going directly into Postgres, not a media asset being stored in cloud storage.
+
+```typescript
+// src/app/admin/tech/benchmarks/ingest/actions.ts
+const text = await file.text()
+const lines = text.split("\n").filter(Boolean)
+const records = lines.map((l) => JSON.parse(l))
+```
+
+Then validate with `zod` (already installed at ^4.3.6). The largest realistic file is one discipline run = 5–20 lines. No streaming, no readline — `file.text()` is fine.
+
+Zod schema shape:
+
+```typescript
+const BenchHeaderSchema = z.object({
+  _header: z.literal(true),
+  discipline: z.string(),
+  tool: z.string(),
+  timestamp: z.string(),
+  macos_build: z.string(),
+  hostname: z.string(),
+  rubric_version: z.string(),
+})
+
+const BenchDataSchema = z.object({
+  _header: z.undefined().optional(),
+}).catchall(z.unknown())
+// Discipline-specific schemas extend BenchDataSchema for strict validation per tool
+```
+
+Product and test IDs are resolved by name lookup against `techBenchmarkTests` before inserting into `techBenchmarkRuns`. The action returns a summary of rows inserted and any validation errors per line.
+
+#### BPR Rollup — Pure Math
+
+No library. Geometric mean of `(battery_score / ac_score)` ratios is `Math.exp(sum of Math.log(ratios) / n)`. Add to `src/lib/tech/bpr.ts`:
+
+```typescript
+export function geometricMean(values: number[]): number {
+  if (values.length === 0) return 0
+  return Math.exp(values.reduce((acc, v) => acc + Math.log(v), 0) / values.length)
+}
+
+export function computeBpr(pairs: Array<{ ac: number; battery: number }>): number {
+  return geometricMean(pairs.map(({ ac, battery }) => battery / ac)) * 100
+}
+
+export type MedalTier = "platinum" | "gold" | "silver" | "bronze" | "none"
+
+export function bprMedal(bpr: number): MedalTier {
+  if (bpr >= 90) return "platinum"
+  if (bpr >= 80) return "gold"
+  if (bpr >= 70) return "silver"
+  if (bpr >= 60) return "bronze"
+  return "none"
+}
+```
+
+Thresholds confirmed from `00_README.md` §3.13: "90%+ = Platinum, 80%+ = Gold, etc."
+
+BPR is computed at query time from `techBenchmarkRuns` rows with `ac`/`battery` power state metadata. No stored rollup column needed at MVP. If computing BPR for 1000+ products becomes slow, add a `bpr_score numeric` column to `techProducts` and update it on ingest.
+
+Note: the schema currently has no `power_state` field on `techBenchmarkRuns`. The ingest action will need to accept power state as a form field (not from the JSONL itself — the header has no power_state field in v1.1). Either (a) add it as a form field on the admin ingest UI, or (b) add it to the JSONL header in v1.2 of the harness.
+
+#### Medal Badge Component — Pure CSS
+
+No library. Extend the existing `src/components/ui/badge.tsx` with medal variants. Medal colors are a deliberate deviation from the flat monochrome palette — they communicate tier at a glance. Flag this with Josh before shipping; he has strong opinions about the design.
+
+```tsx
+// src/components/tech/medal-badge.tsx
+// Uses badge.tsx as the base, adds medal-specific color classes
+const MEDAL = {
+  platinum: "bg-[#e2e8f0] text-[#1e293b] border border-[#94a3b8]",
+  gold:     "bg-[#fef3c7] text-[#92400e] border border-[#f59e0b]",
+  silver:   "bg-[#f1f5f9] text-[#475569] border border-[#94a3b8]",
+  bronze:   "bg-[#fef9c3] text-[#78350f] border border-[#d97706]",
+  none:     "bg-[#1a1a1a] text-[#555555] border border-[#333333]",
+} as const
+```
+
+#### Methodology Page — DB-Driven via Existing Tiptap
+
+Do NOT install `@next/mdx`. Rationale: Josh is a non-technical user; methodology content that lives in a `.mdx` file in git cannot be updated without a git commit. The Tiptap review editor is already in the project for writing review body HTML. The same pattern applies here.
+
+Approach: add a `tech_pages` table (or a single `methodology_content` text column in a settings-like table) storing HTML. Admin edits via a Tiptap editor at `/admin/tech/methodology`. `/tech/methodology` renders it server-side with `isomorphic-dompurify` (already installed). Zero new dependencies.
+
+#### YAML Manifest Parsing — Skip for v3.0
+
+The `pack/manifests/tool-versions.yaml` and related files live on the review Mac and are not ingested into the website DB. The methodology page will describe tool versions as static editorial content (what the rubric requires), not as a dynamic reflection of what the harness has pinned. Skip `js-yaml` entirely for this milestone. Revisit only if a future phase wants to auto-generate the "Tools Used" section of a review from a YAML manifest that travels alongside the JSONL logs.
+
+### Install Commands (v3.0 additions only)
+
+```bash
+# Required: headless table engine for leaderboards
+pnpm add @tanstack/react-table@^8.21.3
+
+# Required: shadcn toggle-group primitive for leaderboard column picker
+pnpm dlx shadcn@latest add toggle-group
+```
+
+Total new production npm packages: **1** (`@tanstack/react-table`).
+Total shadcn components: **1** (`toggle-group`, which pulls in `@radix-ui/react-toggle-group` as a transitive dep).
+Everything else — JSONL parsing, BPR, medal badges, methodology page — is pure TypeScript using already-installed dependencies.
+
+### Integration Map
+
+| Feature | New Dep | New File(s) | Calls Into |
+|---------|---------|-------------|------------|
+| Leaderboard table | `@tanstack/react-table` | `src/components/tech/leaderboard-table.tsx` | `src/components/ui/table.tsx`, `nuqs` for URL state |
+| Leaderboard data | none | `src/lib/tech/queries.ts` — new `listLeaderboardRows()` | Drizzle + Neon |
+| Leaderboard column picker | `toggle-group` (shadcn) | Inside `leaderboard-table.tsx` | `src/components/ui/toggle-group.tsx` |
+| JSONL ingest action | none (zod already installed) | `src/app/admin/tech/benchmarks/ingest/actions.ts` | `techBenchmarkRuns` Drizzle insert |
+| BPR rollup | none | `src/lib/tech/bpr.ts` | Called from leaderboard query + review detail |
+| Medal badge | none | `src/components/tech/medal-badge.tsx` | `src/components/ui/badge.tsx` |
+| Methodology page (admin) | none (Tiptap already installed) | `src/app/admin/tech/methodology/page.tsx` | Existing Tiptap editor component |
+| Methodology page (public) | none (dompurify already installed) | `src/app/(tech)/tech/methodology/page.tsx` | `isomorphic-dompurify` |
+
+### Confidence Assessment
+
+| Claim | Confidence | Basis |
+|-------|------------|-------|
+| `@tanstack/react-table` NOT in package.json | HIGH | Direct grep of package.json — no match |
+| `@tanstack/react-table` v8.21.3 is latest | HIGH | `pnpm info @tanstack/react-table version` returned 8.21.3 |
+| `@next/mdx` NOT installed | HIGH | Not in package.json, not referenced in next.config.ts |
+| `toggle-group` NOT in shadcn components | HIGH | `ls src/components/ui/` confirms no toggle-group.tsx |
+| JSONL lines are small (5–20 per file) | HIGH | Confirmed from logging.sh — one file per discipline+tool, header + data lines only |
+| BPR formula is geometric mean | HIGH | Confirmed from 00_README.md §3.13 verbatim |
+| Medal thresholds are 90/80/70/60 | HIGH | Confirmed from 00_README.md §3.13 verbatim |
+| `power_state` gap in schema | HIGH | Reviewed techBenchmarkRuns table in schema.ts — no power_state column |
+| `js-yaml` not needed for v3.0 | MEDIUM | YAML files stay on Mac harness; no current ingest path for manifests. Could change if harness evolves. |
+
+### Sources (v3.0 section)
+
+- `package.json` — confirmed installed packages, absence of @tanstack/react-table
+- `src/components/ui/` directory listing — confirmed shadcn component inventory
+- `src/db/schema.ts` — confirmed techBenchmarkRuns column set (no power_state)
+- `src/lib/tech/queries.ts` — confirmed existing query patterns for context
+- `pack/disciplines/_lib/logging.sh` — confirmed JSONL format and line structure
+- `00_README.md` §3.13 — confirmed BPR formula and medal thresholds verbatim
+- `pnpm info @tanstack/react-table version` → 8.21.3 (live query, 2026-04-20)
+- `pnpm info js-yaml version` → 4.1.1 (live query, 2026-04-20)

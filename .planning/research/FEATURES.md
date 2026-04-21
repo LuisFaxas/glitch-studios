@@ -1,266 +1,253 @@
-# Feature Research
+# Feature Landscape: GlitchTek v3.0 Leaderboards + Methodology
 
-**Domain:** Music/Video Production Studio Website + Beat Store
-**Researched:** 2026-03-25
-**Confidence:** HIGH
+**Domain:** Hardware review site — category leaderboards, methodology exposition, JSONL evidence, BPR rollup
+**Researched:** 2026-04-20
+**Scope:** v3.0 new features only. Assumes v2.0 review detail, reviews list, 2-way compare, categories, Tiptap editor are already shipped.
 
-## Feature Landscape
+---
 
-### Table Stakes (Users Expect These)
+## Reference Sites Studied
 
-Features users assume exist. Missing these = product feels incomplete or untrustworthy.
+| Site | Defining Format | What to Extract |
+|------|----------------|-----------------|
+| PassMark CPU Charts | 3-column ranked table (CPU / Score / Price), "NA" for missing prices, pagination across 4+ pages, search box, category pills | Column economy, NA handling, pill filters |
+| PassMark Mega Page | 12-column table with toggleable columns, range sliders per column, category dropdown, compare URL encoding (`/compare/6304vs5157/`) | Filter depth, column visibility, URL-encoded compare state |
+| Tom's Hardware CPU Hierarchy | Article-embedded tables; 7 columns default; % relative to top chip (fastest = 100%); methodology inline on same page; "Out of Stock" for missing prices | Relative % scoring, inline methodology, no separate page needed |
+| NotebookCheck Ranking | Weighted Sum Model; category-dependent weights (a 2kg ultrabook vs 2kg gaming laptop score differently for weight); sortable by any column; reviewer impression adjustment (`+/- X%`) | Sub-score weighting, category-dependent scoring, editorial adjustment |
+| RTings | "Performance Usages" score boxes; per-score "how we test" inline links; versioned test benches with changelogs; raw data spreadsheet public; category-weighted overall scores | Inline methodology links, versioning, evidence transparency, paywall backlash |
+| Geekbench Browser | Permalink per result (`/v6/cpu/17731392`); compare URL (`/compare/[id]?baseline=[id]`); URL-encoded search/sort (`?q=&sort=score&dir=desc`); workload breakdown PDFs | Evidence permalinks, URL state for sort/filter, multi-result comparison pattern |
+| GamersNexus Living Doc | Centralized methodology doc; per-platform test bench specs listed with purchase links; "Reason" column per benchmark tool; "Last Updated: 2025-01-17" timestamp | Living doc structure, per-benchmark rationale column |
+| Digital Foundry | Video-first with frametime overlay graphs; frame-by-frame analysis from uncompressed capture; side-by-side comparison clips | Evidence density; their format doesn't map directly to leaderboards |
+| Laptop Mag | 1–5 star editorial synthesis (not formula); 12 sub-categories; Editor's Choice at ≥ 4 stars; dedicated "how we review" page | Verdict box simplicity; downside of opaque editorial scoring |
 
-#### Beat Store / E-Commerce
+---
 
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| Persistent audio player with waveform | Every beat platform (BeatStars, Airbit, Traktrain) has this. Buyers need to browse while listening. Without it, beats stop playing on navigation and buyers leave. | HIGH | Use WaveSurfer.js for waveform rendering. Must persist across Next.js page transitions (layout-level component). This is the single hardest table-stakes feature. |
-| Tiered licensing (MP3 Lease, WAV Lease, Trackout/Stems, Unlimited, Exclusive) | Industry standard pricing tiers. Artists expect to choose quality/rights level. Typical: MP3 ($20-30), WAV ($30-50), Stems ($50-100), Unlimited ($100-250), Exclusive ($300-2000+). | MEDIUM | Each tier needs: price, file format delivered, usage rights (stream caps, performance limits), and a license agreement PDF auto-generated on purchase. |
-| Beat watermarking on previews | Every platform watermarks preview audio. Without watermarks, beats get stolen immediately. | MEDIUM | Audio watermark overlaid on preview MP3s. Can be done at upload time (server-side with FFmpeg) or pre-baked before upload. Pre-bake is simpler for v1. |
-| License agreement / contract delivery | Buyers expect a PDF license agreement with each purchase defining usage rights. BeatStars and Airbit both auto-generate these. | MEDIUM | Template-based PDF generation per license tier. Delivered via email and available in client account downloads. |
-| Shopping cart and checkout | Standard e-commerce. Must support adding multiple beats. | MEDIUM | Stripe + PayPal as specified in PROJECT.md. Cart state persists across sessions (localStorage or server-side for logged-in users). |
-| Beat categorization and filtering | Genre tags, BPM, key, mood. Buyers search by these attributes. | LOW | Tag system on beats. Filter UI with genre, BPM range, key, mood selectors. |
-| Instant digital delivery | Buyers expect files immediately after payment, not manual fulfillment. | MEDIUM | Secure download links (signed URLs with expiry) delivered post-checkout. Files stored in cloud storage (Vercel Blob or S3). |
-| Beat search | Buyers need to find specific sounds. At minimum: text search across title, tags, genre. | LOW | Full-text search across beat metadata. Can start with client-side filtering, upgrade to server-side later. |
+## Table Stakes
 
-#### Studio Services / Booking
+Every competing site has these. Missing any of them makes the leaderboard feel unfinished or untrustworthy.
 
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| Service pages with clear pricing | Clients need to know what you offer and what it costs before reaching out. Every studio website lists services. | LOW | Static-ish pages editable from admin. Services: studio sessions, mixing/mastering, video production, SFX, graphic design. |
-| Calendar booking system | PROJECT.md specifies this. Modern studios use online booking vs. inquiry forms. Reduces friction. Clients expect self-service scheduling. | HIGH | Need: availability management, time slot selection, service type selection, buffer times between sessions, booking confirmation. Consider integrating with Google Calendar for sync. |
-| Booking deposit / prepayment | Studios lose money on no-shows. Prepayment on booking is standard practice for recording studios. | MEDIUM | Collect deposit (or full amount for smaller services) at booking time via Stripe/PayPal. Refund policy displayed clearly. |
-| Contact form | Fallback for clients who prefer to discuss before booking. Expected on every service website. | LOW | Simple form with name, email, service interest, message. Routes to admin inbox. |
-| Testimonials / social proof | Clients need trust signals before booking studio time or buying services. | LOW | Testimonial cards with client name, project type, quote. Admin-managed. |
+| Feature | Why Expected | Complexity | v2.0 Dependency | Concrete Copy |
+|---------|--------------|------------|-----------------|---------------|
+| **Rank column** | First column on every leaderboard. PassMark, NotebookCheck, Tom's Hardware all lead with it | Easy | None | Column header: `#` |
+| **Product name column linking to review** | Universal. Name is always a hyperlink to the full review | Easy | Existing review detail pages at `/tech/reviews/[slug]` | Column header: `Device` |
+| **Overall score column** | Every site leads with the composite or primary score | Easy | Needs aggregate score field in `tech_products` or `tech_reviews` | Column header: `GlitchTek Score` (0–100) |
+| **Primary benchmark score column** | PassMark leads with CPU Mark; Tom's Hardware with 1080p gaming %. GlitchTek equivalent: Geekbench 6 Multi-Core for Laptop/CPU category | Easy | `tech_benchmark_results` table exists | Column header: `Geekbench 6 MC` |
+| **Price column with explicit N/A for unknown** | PassMark uses `NA` — not blank. Tom's Hardware uses `Out of Stock`. Blank cells look like bugs | Easy | `tech_products.price_usd` field exists | Display: `—` or `N/A` in muted text |
+| **Year column** | NotebookCheck includes release year. Critical for filtering old vs new hardware | Easy | `tech_products` has release date field | Column header: `Year` |
+| **Sort on any column by clicking header** | NotebookCheck, PassMark Mega Page, RTings table all sort on column header click with ↑/↓ indicator | Medium | `@tanstack/react-table` already in stack | Visual: `↑` or `↓` on active sort column |
+| **Default sort: score descending** | Every leaderboard opens ranked best→worst. Users expect the #1 product at top | Easy | Table `initialState` | No UI needed — just the default |
+| **Category filter** | PassMark category pills: Desktop / Laptop / Server / Mobile. Same concept here | Easy | `tech_categories` table and slug pattern exist from v2.0 | Filter label: `Category` pills — Laptop / Desktop / Mobile / Audio |
+| **"Not tested" cell handling** | PassMark uses `NA`; RTings leaves cells blank (confusing). Must be explicit and consistent | Easy | Null check in display layer | `—` (em dash) in grey/muted text; hover tooltip: "Not yet tested" |
+| **Pagination** | PassMark paginates across 4+ pages. At v3.0 launch corpus is <20 — no pagination needed yet, but architecture must support it | Easy | TanStack table pagination pattern | Default page size: 25. Add when corpus > 25 |
+| **Methodology page** | Every credible site has one. RTings: `/research`. GamersNexus: living doc. Tom's Hardware: inline same page. Laptop Mag: `/articles/how-we-review` | Medium | Nothing yet — new route | URL: `/tech/methodology` (already in v3.0 spec) |
+| **"How we test X" link per score section** | RTings links from each score card to the specific test methodology page. Makes individual scores verifiable | Easy | Methodology page must exist first | Inline text: "How we test battery life →" linking to `/tech/methodology#battery` |
 
-#### Portfolio / Showcase
+---
 
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| Video portfolio with embedded playback | Core value prop of the studio. Visitors must see the work. Embedded players (YouTube/Vimeo) are standard. | LOW | Grid/gallery of video projects. Each with thumbnail, title, description, embedded player. Categorize by type (music video, promo, etc.). |
-| Audio portfolio / credits | Producers showcase their catalog. Visitors want to hear finished work beyond just beats for sale. | LOW | Can overlap with beat catalog but should also include client work, placements, featured tracks. |
-| Artist/producer profile pages | PROJECT.md specifies this. Shows the team, builds personal brand. | LOW | Bio, photo, role, credits, social links. Admin-editable. |
+## Differentiators
 
-#### Content / Marketing
+Features only 1–2 sites have that meaningfully elevate credibility. Worth shipping.
 
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| Blog / news section | SEO driver. Expected on creative agency sites. Behind-the-scenes, announcements, tutorials. | LOW | Markdown or rich-text blog posts. Basic pagination, categories/tags. |
-| Newsletter signup | Standard for audience building. Every creative business collects emails. | LOW | Email capture form. Integrate with email system (specified in PROJECT.md). |
-| SEO fundamentals | Must rank for local studio searches and beat-related keywords. | LOW | Next.js metadata, Open Graph tags, structured data, sitemap, proper heading hierarchy. Built into the framework. |
+| Feature | Who Has It | Value Proposition | Complexity | v2.0 Dependency | Concrete Copy |
+|---------|-----------|-------------------|------------|-----------------|---------------|
+| **Geekbench permalink inline** | Nobody does this in review articles consistently. Geekbench Browser assigns `/v6/cpu/[id]` to every run automatically | Proof the score is real. Readers click the link and see the result on Primate Labs' servers — independently hosted, uneditable | Easy | `tech_benchmark_results` needs a `permalink_url` column | Link text: "Geekbench 6 result →" |
+| **Raw log / screenshot attachment per benchmark** | GamersNexus posts terminal screenshots inline. RTings publishes raw data spreadsheets. No one links actual `.txt` log files | Maximal evidence: reader downloads the terminal output from the bench session and verifies the number themselves | Medium | New `tech_benchmark_evidence` table; Uploadthing already in stack | UI: paperclip icon → "Download raw log (cpu-ac.txt, 3.2 KB)" |
+| **URL-encoded filter + sort state** | Geekbench Browser (`?sort=score&dir=desc`). PassMark compare (`/compare/6304vs5157/`). Almost no editorial review sites do this for leaderboard pages | Shareable filtered views. Example: "M-series Macs under $2,000 sorted by battery life" | Easy | `nuqs` already in stack; this is exactly how the v2.0 reviews list works | URL: `/tech/leaderboards/laptops?arch=apple-silicon&maxPrice=2000&sort=battery&dir=desc` |
+| **Versioned methodology** | RTings introduced versioned test benches in 2019 with changelogs. GamersNexus labels living doc by year. Most editorial sites don't version at all | When rubric changes, old scores stay labeled with the version that produced them. Eliminates "why did the score change?" confusion | Medium | Schema needs `rubric_version` field on `tech_benchmark_results` | Badge on score: "Rubric v1.1". Methodology page shows changelog: v1.1 (2026-04-20) — initial |
+| **BPR rollup medal** | Nobody does this | Only GlitchTek tells you how much performance you lose when you unplug. Battery *life* (hours) != battery *performance retention* (% of plugged-in speed). The M5 Max may run 18 hours AND retain 97% performance — Platinum. A Snapdragon laptop may run 22 hours but throttle to 60% — Bronze | Hard | Requires AC and battery `mode` flag on `tech_benchmark_results`; geometric mean computation query | Medal tiers — Platinum: ≥90% "Full performance untethered" / Gold: ≥80% "Minimal unplugged penalty" / Silver: ≥70% "Noticeable throttle, usable" / Bronze: <70% "Significant performance drop on battery" |
+| **Inline score contribution breakdown** | RTings shows how each sub-score feeds into overall with weighting displayed in a "box score" | Readers understand *why* a laptop ranks where it ranks. Makes the score auditable | Medium | Review detail page exists; needs new score breakdown component | Collapsible section: "How this score is calculated" with per-discipline bar chart showing contribution |
+| **AC vs Battery split columns (optional)** | No review site surfaces this as toggleable leaderboard columns | GlitchTek's unique data asset: we have both AC and battery benchmark runs for every discipline | Medium | Benchmark rows need `mode: 'ac' | 'battery'` flag + BPR computation query | Optional columns (off by default, toggled via column visibility): `Plugged Score` / `Battery Score` / `BPR %` |
 
-#### Accounts / Admin
+---
 
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| Client accounts (login, purchase history, downloads) | Buyers need to re-download purchased files. Booking clients need to see upcoming sessions. | MEDIUM | Auth system, purchase history, download links, booking history. |
-| Admin dashboard | PROJECT.md specifies this. Owner needs to manage content, beats, bookings, clients, pricing without touching code. | HIGH | CRUD for beats, services, blog posts, team bios, testimonials. Booking management. Client list. Site settings. This is a large surface area. |
-| Transactional emails | Booking confirmations, purchase receipts, download links. Users expect immediate email confirmation for any transaction. | MEDIUM | Email templates triggered by events. Use Resend or similar transactional email service. |
-| Mobile-responsive design | Over 60% of music consumption and discovery happens on mobile. Non-negotiable. | MEDIUM | Tailwind makes this manageable but the persistent audio player on mobile needs careful UX treatment. |
+## Anti-Features
 
-### Differentiators (Competitive Advantage)
+Things competing sites do that we should explicitly NOT copy.
 
-Features that set Glitch Studios apart from generic beat stores and studio websites.
+| Anti-Feature | Who Does It | Why Avoid | What to Do Instead |
+|--------------|------------|-----------|-------------------|
+| **Affiliate link injection in table cells** | PassMark (Amazon/Newegg inline in price cells), Tom's Hardware (Amazon affiliate on every link) | Undermines credibility. Readers know the site profits from showing certain products. Skews trust | Show price plainly. Single "Check price" link that opens a neutral search. Explicit disclaimer: "We earn no affiliate fees" |
+| **Thousands of rows with no virtualization** | PassMark CPU Mega Page (1M+ entries, one page, filter-heavy) | DOM performance disaster on mobile. Page becomes unusable below 1,000 rows without virtualization | Cap display at 100 visible rows. Paginate at 25/page. Only add `@tanstack/react-virtual` if corpus exceeds 200 rows. At v3.0 launch, corpus is <20 — just render all |
+| **Letter-tier gamer ranking theater (S/A/B/C/D)** | Various gaming hardware sites (implied by community requests on Tom's Hardware forums) | Arbitrary cutoffs invite endless argument. Tiers obscure the actual numeric distance between products | Numeric scores + BPR medals (cutoffs are formula-defined and published). No letter tiers |
+| **Paywalling score details** | RTings (moved full test results behind subscription in 2025) | Generated 200+ negative replies on ResetEra within days. Community stopped linking RTings. Destroyed trust built over years | All scores free. GlitchTek has no advertising model to protect. Full transparency IS the brand |
+| **Un-versioned methodology** | Most editorial sites (The Verge, Engadget, Laptop Mag) — they say "we test performance" without versioning or dating the methodology | When methodology changes silently, old scores become meaningless. "Why did score change?" has no answer | Version every rubric revision explicitly. Every benchmark result carries `rubric_version`. Methodology page shows changelog |
+| **Opaque editorial score** | Laptop Mag (1–5 star synthesis with no formula disclosure, purely reviewer judgment) | Readers can't verify or predict the score. Trust depends entirely on brand reputation | GlitchTek scores are formula-derived. Publish the formula on `/tech/methodology`. Show it inline on review detail via the score breakdown component |
+| **Gradient/flame cell highlights** | GPU review sites (red→green gradient fills, flame icons for top scores) | Clashes with GlitchTek's flat monochrome brand. Adds noise without information. Feels like gamer-bait | Subtle cell shading: top quartile gets slightly lighter background (`#222` vs `#111`). Brand color accent only for rank `#1` |
+| **Static non-shareable tables** | Tom's Hardware CPU Hierarchy (no URL filter state; article-embedded static HTML table) | Can't share a filtered view. Forces every user to re-apply their own filters. Leaderboards derive much of their value from being shareable | All filter and sort state in URL via nuqs |
 
-| Feature | Value Proposition | Complexity | Notes |
-|---------|-------------------|------------|-------|
-| Unified platform (beats + services + portfolio) | BeatStars/Airbit are beat-only. Studio websites are booking-only. Combining both under one brand with one account is rare and powerful. This IS the differentiator of the whole project. | HIGH | Architecture must support both e-commerce and service booking under unified auth and admin. |
-| Cyberpunk/glitch visual identity | Most beat stores look generic (BeatStars templates). Most studio sites are bland. A strong, distinctive aesthetic (flat black/white, glitch effects, dramatic typography) creates memorability and brand recognition. | MEDIUM | Tailwind + custom CSS. Subtle WebGL or CSS glitch effects. Must not sacrifice performance or usability for style. |
-| Video showreel as hero content | Video production studios lead with showreels. Beat producers rarely do this. Leading with a cinematic showreel immediately communicates production quality above typical beat sellers. | LOW | Auto-playing muted hero video on homepage. Short (30-60s) highlight reel. Lazy-loaded for performance. |
-| Case studies for client work | Creative agencies use case studies (problem, process, result) instead of just portfolio thumbnails. Applying this to music/video production shows professionalism beyond typical producer sites. | LOW | Template for case study pages: client, challenge, approach, result, media embeds. |
-| Bulk/bundle pricing for beats | BeatStars introduced "Collections" in 2025. Offering curated beat packs at a discount drives higher average order value. | LOW | Bundle product type in beat store. Discount applied when purchasing as bundle vs. individual. |
-| Co-producer split tracking | Airbit offers this. If Glitch Studios has collaborators, tracking revenue splits per beat builds trust and professionalism. | MEDIUM | Per-beat co-producer assignment with percentage splits. Reporting in admin. Actual payout can be manual for v1. |
-| Newsletter with exclusive content | Beyond basic signup -- offering free beat downloads, behind-the-scenes content, or early access to new releases drives email list growth and repeat visits. | LOW | Integrate with email campaigns from admin. Segment by client type (beat buyers vs. studio clients). |
-| Admin analytics dashboard | BeatStars and Airbit provide analytics (plays, sales, conversion). Building this into the admin gives the owner business intelligence without third-party platforms. | MEDIUM | Track: page views, beat plays, play-to-purchase conversion, booking conversion, revenue by service type, top beats. |
+---
 
-### Anti-Features (Commonly Requested, Often Problematic)
+## Novel for GlitchTek (No Competitor Has These)
 
-Features that seem good but create problems for this project.
+### BPR (Battery Performance Ratio) Rollup Medal
 
-| Feature | Why Requested | Why Problematic | Alternative |
-|---------|---------------|-----------------|-------------|
-| Real-time chat / messaging | Seems like it would help client communication | Massive complexity (WebSockets, presence, message storage, notifications). Owner can't monitor 24/7. Creates support expectations. PROJECT.md already marks this out of scope. | Contact form + email. Link to social DMs (Instagram, Twitter) for informal communication. |
-| Beat marketplace (multi-producer) | BeatStars model -- let other producers sell on the platform | Completely different business model. Requires: multi-tenant accounts, commission tracking, payout infrastructure, dispute resolution, content moderation. Enormous scope expansion for v1. | Single-producer store. If collaborators contribute beats, handle via co-producer splits on owner's store. |
-| AI beat recommendations / personalization | BeatStars rebuilt their recommendation engine in 2025 | Requires usage data at scale to be useful. With a catalog of dozens to hundreds of beats (not millions), simple genre/mood filtering works better. AI is premature. | Good tagging, filtering, and curated collections/bundles. |
-| Streaming / subscription model | Monthly access to beat catalog, Spotify-style | PROJECT.md explicitly out of scope. Complicates licensing (streaming rights vs. purchase rights). Requires different payment infrastructure (recurring billing). Cannibalizes per-beat sales. | Per-beat licensing is the proven model. Offer bulk discounts via bundles instead. |
-| Mobile app | Native app for browsing beats or managing bookings | PROJECT.md out of scope. Responsive web covers the use case. App store approval, dual codebase maintenance, push notification infrastructure -- all for features the website handles fine. | Progressive Web App (PWA) if needed later. Responsive design for v1. |
-| Social features (comments, likes, follows) | Community engagement on beats | Requires moderation. Low engagement on single-producer sites (not enough users). Spam magnet. Adds complexity to every beat page. | Social proof via play counts and purchase counts (displayed numbers). Link to actual social media for community. |
-| Content ID / YouTube monetization | Airbit offers Content ID. Seems like a revenue stream. | Requires partnerships with distributors (complex legal agreements). Not feasible for a self-hosted website. | If needed, use Airbit or DistroKid separately for Content ID. Keep the website focused on direct sales. |
-| Multi-language support | Reach international audience | PROJECT.md out of scope for v1. i18n adds complexity to every string, every page, every email template. | English only. Revisit if analytics show significant non-English traffic. |
-| DAW plugin / desktop integration | Some beat stores offer VST plugins for browsing beats inside the DAW | Extremely high complexity. Separate software product. Tiny user base for a single studio. | Good mobile-responsive website that producers can use alongside their DAW on a second screen or phone. |
+**Definition:** Geometric mean of `(battery_score / ac_score)` across all disciplines where both modes were tested. Expressed as a percentage. Mapped to 4 medal tiers.
 
-## Feature Dependencies
-
+**Formula (to publish on methodology page):**
 ```
-[Auth System (Client Accounts)]
-    |
-    |-- requires --> [Database + User Model]
-    |
-    +-- enables --> [Beat Store (Purchase History, Downloads)]
-    |                   |
-    |                   +-- requires --> [Payment Processing (Stripe + PayPal)]
-    |                   +-- requires --> [Persistent Audio Player]
-    |                   +-- requires --> [Beat Catalog + Licensing System]
-    |                   +-- requires --> [Digital File Storage + Delivery]
-    |                   +-- requires --> [Transactional Email (Receipts)]
-    |
-    +-- enables --> [Booking System]
-    |                   |
-    |                   +-- requires --> [Calendar/Availability Management]
-    |                   +-- requires --> [Payment Processing (Deposits)]
-    |                   +-- requires --> [Transactional Email (Confirmations)]
-    |
-    +-- enables --> [Client Dashboard (View History)]
-
-[Admin Dashboard]
-    |
-    +-- requires --> [Auth System (Admin Role)]
-    +-- requires --> [Beat Catalog CRUD]
-    +-- requires --> [Booking Management]
-    +-- requires --> [Content CMS (Blog, Pages, Bios)]
-    +-- requires --> [Email Campaign System]
-
-[Public Website (No Auth Required)]
-    |
-    +-- includes --> [Service Pages]
-    +-- includes --> [Video Portfolio]
-    +-- includes --> [Artist Profiles]
-    +-- includes --> [Blog]
-    +-- includes --> [Contact Form]
-    +-- includes --> [Newsletter Signup]
-    +-- includes --> [Beat Catalog Browsing (Preview Only)]
-
-[Persistent Audio Player]
-    +-- requires --> [Audio File Hosting (Watermarked Previews)]
-    +-- enhances --> [Beat Catalog]
-    +-- enhances --> [Audio Portfolio]
+BPR = geometric_mean(battery_score_d / ac_score_d) for each discipline d
+    = exp(mean(ln(battery_score_d / ac_score_d)))
 ```
 
-### Dependency Notes
+**Why nobody else has it:** Competitors report battery *life* (hours until empty). We report battery *performance retention* (how fast it runs while on battery). These answer completely different questions. An M5 Max MacBook might run 18 hours AND retain 97% of plugged-in performance — that's Platinum. A Snapdragon laptop might run 22 hours but throttle to 60% performance when unplugged — that's Bronze.
 
-- **Beat Store requires Auth + Payments + Player:** Cannot sell beats without all three. These form a critical dependency chain -- no single piece works alone.
-- **Booking requires Calendar + Payments:** Calendar availability is the core of booking. Prepayment prevents no-shows.
-- **Admin Dashboard requires all content models:** Admin is the last thing to build because it surfaces CRUD for everything else. Build the data models and public-facing features first, admin UI second.
-- **Public Website is independent:** Service pages, portfolio, blog, and profiles can ship without auth or e-commerce. This is the logical Phase 1.
-- **Persistent Audio Player is a cross-cutting concern:** Affects layout architecture from day one. Must be planned into the app shell early, even if the full beat store comes later.
+**Medal tiers (copy-ready):**
+- `PLATINUM` — BPR ≥ 90% — "Full performance untethered"
+- `GOLD` — BPR ≥ 80% — "Minimal unplugged penalty"
+- `SILVER` — BPR ≥ 70% — "Noticeable throttle, usable"
+- `BRONZE` — BPR < 70% — "Significant performance drop on battery"
 
-## MVP Definition
+**Framing to avoid feeling arbitrary:** Publish the formula on `/tech/methodology`. Reference Apple Silicon as the empirical anchor (known ~95%+ performance retention on battery) — that's what defines Platinum. The thresholds are grounded in real hardware behavior, not marketing copy.
 
-### Launch With (v1)
+**Schema:** `tech_benchmark_results` needs `mode: 'ac' | 'battery'`. BPR is computed at query time (Drizzle view or derived query), not stored — no migration needed for the medal itself, only the `mode` column addition.
 
-Minimum viable product -- what's needed to validate the concept and start generating revenue.
+### Rubric v1.1 Evidence Transparency
 
-- [ ] Public website with cyberpunk aesthetic (homepage, service pages, about/team) -- establishes brand presence
-- [ ] Video portfolio with embedded playback -- showcases work immediately
-- [ ] Artist/producer profile pages -- builds personal brand
-- [ ] Contact form with email routing -- enables client inquiries
-- [ ] Beat catalog with persistent audio player, genre/BPM/key filtering -- core product for beat sales
-- [ ] Tiered licensing system (MP3, WAV, Stems, Exclusive) with license PDF generation -- industry-standard sales model
-- [ ] Watermarked previews -- protects intellectual property
-- [ ] Shopping cart + Stripe/PayPal checkout -- enables revenue
-- [ ] Instant digital delivery (signed download URLs) -- fulfills orders without manual work
-- [ ] Client accounts (auth, purchase history, re-downloads) -- required for digital delivery
-- [ ] Calendar booking with deposit payment -- enables studio session revenue
-- [ ] Admin dashboard (beat CRUD, booking management, basic content editing) -- owner can operate independently
-- [ ] Transactional emails (purchase receipts, booking confirmations) -- professional communication
-- [ ] Mobile-responsive design -- majority of traffic will be mobile
-- [ ] SEO fundamentals -- discoverability
+**What it is:** Each benchmark result in a review article links to three independent evidence sources:
+1. Geekbench permalink (auto-uploaded by the app after run: `browser.geekbench.com/v6/cpu/[id]`)
+2. Screenshot from the session (`screenshots/cpu-geekbench-ac.png`, stored in Uploadthing)
+3. Raw log file (`logs/cpu-ac.txt`, terminal output from `bash pack/disciplines/cpu.sh ac`)
 
-### Add After Validation (v1.x)
+**Schema:** New table `tech_benchmark_evidence`: `(benchmark_result_id, evidence_type: 'geekbench_permalink' | 'screenshot' | 'raw_log', url, captured_at)`
 
-Features to add once core is working and generating revenue.
+**Why it matters:** The Geekbench permalink is hosted by Primate Labs — a third party with no relationship to GlitchTek. Readers can verify the score independently. This is the hardware review equivalent of showing your work.
 
-- [ ] Blog / news section -- add when SEO strategy is defined and owner commits to content cadence
-- [ ] Newsletter system with campaigns -- add when email list reaches meaningful size (100+ subscribers)
-- [ ] Beat bundles / collection pricing -- add when catalog is large enough (20+ beats) to justify bundles
-- [ ] Case studies for client work -- add when there are 3+ completed client projects to feature
-- [ ] Admin analytics dashboard (plays, sales, conversions) -- add when there's enough data to be meaningful
-- [ ] Testimonials section -- add when testimonials are collected from real clients
-- [ ] Co-producer split tracking -- add if/when collaborator beats are listed
+---
 
-### Future Consideration (v2+)
+## Filter UX for Leaderboards
 
-Features to defer until product-market fit is established.
+Research sources: PassMark Mega Page (range sliders, category pills), RTings table (above-table controls), v2.0 reviews list (nuqs pattern).
 
-- [ ] Progressive Web App (PWA) -- defer until mobile usage patterns justify offline/install capabilities
-- [ ] Advanced search (full-text, similar beats) -- defer until catalog exceeds 100+ beats
-- [ ] Client file sharing / review portal (upload stems for mix review) -- defer until studio booking volume justifies the complexity
-- [ ] Multi-admin roles (engineer, manager, owner permissions) -- defer until team grows beyond solo operator
-- [ ] Affiliate / referral program -- defer until consistent sales volume exists
+### Recommended Filter Controls
 
-## Feature Prioritization Matrix
+| Filter | UI Control | Values | Source |
+|--------|-----------|--------|--------|
+| Category | Pill group | Laptop / Desktop / Mobile / Audio | PassMark category pills pattern |
+| Year | Select or dual range | 2022–2026, "Any" default | NotebookCheck seasonal roundup pattern |
+| Max Price | Range slider | $0–$5,000, "Any" default | PassMark Mega Page range slider pattern |
+| CPU Architecture | Checkbox group | Apple Silicon / Intel / AMD / Qualcomm | NotebookCheck filter sidebar |
+| Sort | Dropdown | GlitchTek Score / BPR Medal / Battery Life / Geekbench MC / Price / Year | Tom's Hardware sort pattern |
+| BPR Medal | Pill group | Platinum / Gold / Silver / Bronze | GlitchTek-specific |
 
-| Feature | User Value | Implementation Cost | Priority |
-|---------|------------|---------------------|----------|
-| Public website + aesthetic | HIGH | MEDIUM | P1 |
-| Video portfolio | HIGH | LOW | P1 |
-| Persistent audio player | HIGH | HIGH | P1 |
-| Beat catalog + filtering | HIGH | MEDIUM | P1 |
-| Licensing system + contracts | HIGH | MEDIUM | P1 |
-| Beat watermarking | HIGH | MEDIUM | P1 |
-| Shopping cart + checkout | HIGH | MEDIUM | P1 |
-| Digital delivery | HIGH | MEDIUM | P1 |
-| Client auth + accounts | HIGH | MEDIUM | P1 |
-| Calendar booking | HIGH | HIGH | P1 |
-| Admin dashboard | HIGH | HIGH | P1 |
-| Transactional emails | HIGH | MEDIUM | P1 |
-| Service pages | HIGH | LOW | P1 |
-| Contact form | MEDIUM | LOW | P1 |
-| Mobile responsive | HIGH | MEDIUM | P1 |
-| SEO | MEDIUM | LOW | P1 |
-| Artist profiles | MEDIUM | LOW | P1 |
-| Blog | MEDIUM | LOW | P2 |
-| Newsletter system | MEDIUM | MEDIUM | P2 |
-| Beat bundles | MEDIUM | LOW | P2 |
-| Case studies | MEDIUM | LOW | P2 |
-| Admin analytics | MEDIUM | MEDIUM | P2 |
-| Testimonials | LOW | LOW | P2 |
-| Co-producer splits | LOW | MEDIUM | P2 |
-| Cyberpunk visual effects (advanced) | MEDIUM | MEDIUM | P2 |
-| PWA capabilities | LOW | MEDIUM | P3 |
-| Client file sharing portal | MEDIUM | HIGH | P3 |
-| Multi-admin roles | LOW | MEDIUM | P3 |
+### Filter UX Rules
 
-**Priority key:**
-- P1: Must have for launch
-- P2: Should have, add when possible
-- P3: Nice to have, future consideration
+1. **Filters above the table, not in a sidebar.** Sidebar hides filters on mobile. Above-table pill/chip pattern is what PassMark, RTings, and the v2.0 reviews list all use.
+2. **Active filters as dismissible chips.** Show `Apple Silicon ×` chips below the filter controls so users see what's active without scrolling back up.
+3. **All filter + sort state in URL via nuqs.** The v2.0 reviews list already does this — reuse the same `useQueryStates` hook pattern.
+4. **"Reset filters" link** always visible when any filter is active.
+5. **Filter count badge on mobile.** When collapsed to mobile: "Filters (3)" button so users know filters are applied.
 
-## Competitor Feature Analysis
+### Mobile Leaderboard Layout
 
-| Feature | BeatStars | Airbit | Typical Studio Sites | Glitch Studios Approach |
-|---------|-----------|--------|---------------------|------------------------|
-| Beat audio player | Persistent player, waveform, queue | Persistent player, clean UI | N/A | Persistent player with WaveSurfer.js waveform, cyberpunk styling |
-| Licensing tiers | MP3, WAV, Stems, Unlimited, Exclusive | MP3, WAV, Tracked Out, Unlimited, Exclusive | N/A | MP3, WAV, Stems, Unlimited, Exclusive -- industry standard tiers |
-| Watermarking | Auto-watermark on upload | Auto-watermark on upload | N/A | Pre-baked watermarked previews for v1, automated later |
-| License contracts | Auto-generated PDF per tier | Auto-generated per tier | N/A | Template-based PDF generation per tier |
-| Video portfolio | None | None | Showreel + project grid | Full video portfolio with case studies -- differentiator from beat platforms |
-| Studio booking | None | None | Contact form or Calendly embed | Built-in calendar booking with deposit -- differentiator from beat platforms |
-| Service listings | None | None | Service pages with pricing | Service pages integrated with booking -- unified experience |
-| Analytics | Detailed play/sale analytics | Strong analytics focus | Basic Google Analytics | Custom admin analytics dashboard -- owns the data |
-| Customization | Template-based storefront | Customizable website | Fully custom | Fully custom Next.js -- complete creative control |
-| Commission | 0% Pro Page, 12% marketplace | 0% own site, 10-20% marketplace | N/A | 0% commission -- own platform, keep everything |
-| Payment options | Stripe, PayPal, Apple Pay, Google Pay | Stripe, PayPal | Varies | Stripe + PayPal at launch, expandable |
-| Blog / content | None | None | Sometimes | Blog for SEO + audience building |
-| Email marketing | Basic notifications | Basic notifications | Newsletter via Mailchimp etc. | Built-in newsletter + transactional from admin |
+PassMark and NotebookCheck are desktop-first horizontal scroll tables — unusable on mobile. Tom's Hardware hierarchy degrades to an article with unresponsive embedded tables.
+
+**GlitchTek approach (switch to cards on mobile):**
+- Desktop (≥768px): Full multi-column table
+- Mobile (<768px): Card list — one card per product with rank number (`#1`), product name, GlitchTek score badge, BPR medal pill, battery hours, price. Tap card → review detail.
+- Single "Sort by" dropdown floats above the card list on mobile.
+
+This matches the mobile UX research recommendation: "Show only the fields that help a person decide, then reveal the rest on tap."
+
+---
+
+## Default Column Set for GlitchTek Leaderboard
+
+Desktop first load (8 columns):
+
+| Order | Column Header | Width | Default Sort | Notes |
+|-------|--------------|-------|-------------|-------|
+| 1 | `#` | 40px | — | Rank based on current sort |
+| 2 | `Device` | 220px | — | Product name + chip model subtitle. Links to review. |
+| 3 | `GlitchTek Score` | 100px | **DESC (default)** | Overall aggregate score 0–100 |
+| 4 | `BPR` | 80px | — | Medal pill: Platinum / Gold / Silver / Bronze |
+| 5 | `Battery` | 90px | — | Best battery life result (hours) |
+| 6 | `Geekbench MC` | 100px | — | Multi-core. For GPU category: 3DMark score |
+| 7 | `Price` | 80px | — | USD. `N/A` if unknown |
+| 8 | `Year` | 60px | — | Release year |
+
+Optional / off by default (column visibility toggle — defer to post-v3.0):
+- `Geekbench SC` (single-core)
+- `Plugged Score` (AC benchmark)
+- `Battery Score` (battery benchmark)
+- `BPR %` (raw percentage behind medal)
+- `Cinebench R24 MC`
+- `LLM tps` (tokens/sec from llama-bench)
+
+---
+
+## Feature→Complexity Matrix
+
+| Feature | Complexity | Notes |
+|---------|-----------|-------|
+| Leaderboard table (basic, no virtualization) | Easy | TanStack table already in stack; filter pattern mirrors v2.0 reviews list |
+| URL-encoded filter + sort state | Easy | nuqs already in stack; same pattern as reviews list |
+| Mobile card layout | Easy | Conditional render on viewport width; no new deps |
+| `N/A` / `—` cell handling | Easy | Null check in render + Tailwind muted text |
+| BPR medal display component | Easy | 4 variants, pill shape, color per tier |
+| Geekbench permalink field | Easy | Schema migration: add `permalink_url` to `tech_benchmark_results` |
+| BPR rollup computation | Medium | Requires both AC and battery rows for same discipline; geometric mean with Drizzle `sql` template; requires `mode` column migration |
+| Evidence attachment table + upload | Medium | New `tech_benchmark_evidence` table; Uploadthing for file storage; admin CRUD extension |
+| Versioned methodology tracking | Medium | `rubric_version` field on `tech_benchmark_results`; methodology changelog on `/tech/methodology` |
+| Inline score contribution breakdown | Medium-Hard | Requires discipline weights config; per-discipline score fetching; bar chart component |
+| Category-dependent score weights | Hard | Per-category weight config in DB; aggregate score changes by category. Defer until multiple products per category |
+| JSONL ingest pipeline | Hard | File format parsing; field-to-schema mapping; idempotent re-run handling |
+| Virtualized table | Hard (but not needed) | Add `@tanstack/react-virtual` only when corpus > 200. Not needed at v3.0 launch |
+
+---
+
+## v3.0 MVP Scope
+
+**Ship in v3.0:**
+1. Leaderboard table at `/tech/leaderboards/[category]` with the 8 default columns above
+2. Category pills + sort dropdown + year/price filters, all in URL via nuqs
+3. Mobile card layout fallback
+4. `—` for untested cells with hover tooltip
+5. BPR medal display (4 tiers, formula-defined)
+6. BPR computation query (AC vs battery pairs, geometric mean)
+7. `mode: 'ac' | 'battery'` field on `tech_benchmark_results` + `rubric_version` field
+8. `permalink_url` field on benchmark results; inline "Geekbench 6 result →" link in review detail
+9. `/tech/methodology` page: rubric v1.1 disciplines, BPR formula, medal tier cutoffs, test bench specs, changelog
+
+**Defer from v3.0:**
+- Category-dependent score weights (meaningless until multiple products per category)
+- Column visibility toggle (corpus is <20 at launch — all columns are always relevant)
+- JSONL raw log viewer (Geekbench permalink + screenshot is sufficient for launch credibility)
+- Virtualization (corpus is <20 at launch)
+- `tech_benchmark_evidence` table (defer to v3.1; screenshot uploads can be inline on review via Uploadthing in the interim)
+
+---
+
+## Dependencies on v2.0 Capabilities
+
+| v3.0 Feature | v2.0 Foundation | Gap |
+|--------------|----------------|-----|
+| Leaderboard table | `tech_products`, `tech_categories`, `tech_reviews`, `tech_benchmark_results` tables | Add `mode`, `rubric_version`, `permalink_url` fields |
+| Filter URL state | nuqs installed; reviews list uses same pattern | Define `useLeaderboardParams()` hook |
+| Category pills | v2.0 categories browse reuses same pill component | Direct reuse |
+| Sort via TanStack Table | `@tanstack/react-table` in stack | Wire initial sort state |
+| BPR medals | Nothing | New computation query + medal component |
+| Methodology page | Nothing | New route `/tech/methodology` |
+| Evidence links | Nothing | `permalink_url` field + inline link in review detail |
+
+---
 
 ## Sources
 
-- [BeatStars features and 2025 updates](https://blog.beatstars.com/posts/beatstars-release-notes-june-2025)
-- [Best Beat Marketplaces Compared 2026](https://www.soundclick.com/guides/best-beat-marketplaces/)
-- [BeatStars vs Airbit comparison](https://producerfury.com/resources/beatstars-vs-airbit)
-- [Airbit beat selling features](https://airbit.com/sell-beats)
-- [Beat licensing and pricing guide 2025](https://baxonbeats.com/blogs/news/how-much-do-beats-cost-a-complete-guide-to-beat-pricing-and-licensing)
-- [Beat license tier comparison](https://currentsound.com/beat-license-type-comparison/)
-- [Music production website design best practices](https://nilead.com/industry/music-production-website-design)
-- [Music producer website showcasing best practices](https://mixprodmasters.com/audio/music-producer-website-best-practices-for-showcasing-your-work/)
-- [Studio booking software features](https://www.booknetic.com/blog/music-studio-booking-software)
-- [Studio scheduling and client portal](https://mysonido.com/platform/)
-- [WaveSurfer.js persistent player in Next.js](https://github.com/katspaugh/wavesurfer.js/discussions/3190)
-- [Beat store audio players for producers](https://thecorporatethiefbeats.com/music-marketing/music-players-websites/)
-- [Soundgine beat selling platform features](https://soundgine.com/)
-- [Which beat marketplace is best in 2026](https://slimegreenbeats.com/blogs/music/which-beat-marketplace-is-the-best-in-2026)
+- PassMark CPU Charts — cpubenchmark.net (3-column default, `NA` for missing price, pagination)
+- PassMark Mega Page — cpubenchmark.net/CPU_mega_page.html (12 columns, range sliders, category pills, compare URL `/compare/6304vs5157/`)
+- Tom's Hardware CPU Hierarchy — tomshardware.com/reviews/cpu-hierarchy (% relative scoring, 7 default columns, inline methodology, `Out of Stock`)
+- NotebookCheck Rating Criteria — notebookcheck.net/Our-Rating-Criteria.16002.0.html (Weighted Sum Model, category-dependent weights, reviewer impression `+/- X%`)
+- RTings methodology + AVS Forum community — rtings.com/research + AVS Forum thread (versioned test benches 2019, performance usages, inline methodology links, paywall backlash 2025)
+- Geekbench Browser — browser.geekbench.com + support.primatelabs.com/kb (permalink `/v6/cpu/[id]`, compare `?baseline=[id]`, search params `?sort=score&dir=desc`)
+- GamersNexus Living Doc — gamersnexus.net/features/living-doc (test bench tables, "Reason" column per benchmark tool, last updated Jan 2025)
+- Laptop Mag methodology — laptopmag.com/articles/how-we-review (1–5 star synthesis, 12 sub-categories, Editor's Choice ≥4)
+- TanStack Table virtualization docs — tanstack.com/table/latest (threshold: virtualization necessary when >50 rows without pagination)
+- nuqs React Advanced 2025 — infoq.com/news/2025/12/nuqs-react-advanced (URL state "teleportation" pattern, used by Vercel/Supabase/Clerk)
+- UXmatters / WebOsmotic mobile tables — (card fallback pattern, above-table filter controls, dismissible active-filter chips)
+- GlitchTech-Bench README v1.1 — ~/workspaces/_scratch/glitchtech-bench-mac/00_README.md (13-discipline rubric, BPR = geometric mean of battery/AC ratios, medal tier thresholds: 90/80/70)
 
 ---
-*Feature research for: Music/Video Production Studio Website + Beat Store*
-*Researched: 2026-03-25*
+
+## Prior Research (v1.0 Studios)
+
+The v1.0 features research for the Glitch Studios music/video production side (beat store, booking, portfolio) is preserved in git history. This file was overwritten at v3.0 research time because the GlitchTek leaderboard research is the active scope. The v1.0 features are all shipped and validated — see `.planning/milestones/v2.0-REQUIREMENTS.md` for the full list with phase traceability.
