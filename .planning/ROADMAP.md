@@ -140,7 +140,7 @@ Plans:
 - [ ] **Phase 7.3: Mobile Menu Overhaul** - INSERTED -- Fix the mobile nav overlay to be usable, clean, and industry-quality
 - [x] **Phase 8: Auth & Navigation** - Role-based redirects, discoverable client accounts (completed 2026-04-18)
 - [ ] **Phase 9: Services & Booking** - Comprehensive service info, clear booking step flow
-- [ ] **Phase 10: Blog** - Consistent cards, engagement hooks, smooth browsing
+- [x] **Phase 10: Blog** - Consistent cards, engagement hooks, smooth browsing (completed 2026-04-21)
 - [ ] **Phase 11: Portfolio** - Detail view navigation, refined carousel animations
 - [ ] **Phase 12: Artists & Team** - Clear sections, rich content, browsing mechanism
 - [ ] **Phase 13: Contact** - WhatsApp, phone, location map, social links
@@ -373,7 +373,7 @@ Plans:
   2. Blog page includes a featured/hero post, category navigation, and reading time estimates that encourage browsing
   3. Pagination or infinite scroll works smoothly -- no jarring page reloads or dead-end states
   4. Blog page renders correctly on mobile with cards stacking cleanly in a single column
-**Plans:** 7 plans
+**Plans:** 7/7 plans complete
 **UI hint**: yes
 
 Plans:
@@ -460,7 +460,7 @@ v2.0: 5 -> 6 -> 6.1 -> 7 -> 7.1 -> 7.2 -> 7.3 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 
 | 7.5 Product reviews data model & admin input | v2.0 | 0/7 | Planned | - |
 | 8. Auth & Navigation | v2.0 | 3/3 | Complete    | 2026-04-18 |
 | 9. Services & Booking | v2.0 | 0/0 | Not started | - |
-| 10. Blog | v2.0 | 0/0 | Not started | - |
+| 10. Blog | v2.0 | 0/0 | Complete    | 2026-04-21 |
 | 11. Portfolio | v2.0 | 0/0 | Not started | - |
 | 12. Artists & Team | v2.0 | 0/0 | Not started | - |
 | 13. Contact | v2.0 | 0/0 | Not started | - |
