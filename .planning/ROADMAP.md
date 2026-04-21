@@ -236,7 +236,7 @@ v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 1
 | 12. Artists & Team | v2.0 | 7/7 | Complete | 2026-04-21 |
 | 13. Contact | v2.0 | 0/0 | Deferred | - |
 | 14. Global Polish | v2.0 | 3/3 | Complete | 2026-04-21 |
-| 15. Methodology Lock + Schema | v3.0 | 3/3 | Complete   | 2026-04-21 |
+| 15. Methodology Lock + Schema | v3.0 | 3/3 | Complete    | 2026-04-21 |
 | 16. JSONL Ingest Pipeline | v3.0 | 0/4 | Not started | - |
 | 17. BPR Medal + Methodology Page | v3.0 | 0/3 | Not started | - |
 | 18. Category Master Leaderboard | v3.0 | 0/4 | Not started | - |
