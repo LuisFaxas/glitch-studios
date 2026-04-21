@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
 import { PostCardPlaceholder } from "./post-card-placeholder"
 import { ReadingTimeBadge } from "./reading-time-badge"
 import type { BlogPost, BlogCategory } from "@/types"
@@ -53,7 +52,7 @@ export function PostCard({ post, minutes }: PostCardProps) {
             </span>
           )}
           <h2 className="font-mono font-bold text-xl text-[#f5f5f0] line-clamp-2 mt-2">
-            <GlitchHeading text={post.title}>{post.title}</GlitchHeading>
+            {post.title}
           </h2>
           {post.excerpt && (
             <p className="line-clamp-3 text-[#888888] font-sans text-[13px] mt-2">

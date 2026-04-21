@@ -5,7 +5,6 @@ import { portfolioItems } from "@/db/schema"
 import { eq, and, asc } from "drizzle-orm"
 import { PortfolioHeroBanner } from "@/components/portfolio/portfolio-hero-banner"
 import { PortfolioGrid } from "@/components/portfolio/portfolio-grid"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -51,7 +50,7 @@ export default async function PortfolioPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-16 md:py-24">
       <h1 className="font-mono font-bold uppercase tracking-wide text-[#f5f5f0] mb-8 text-[clamp(28px,5vw,48px)] leading-[1.1]">
-        <GlitchHeading text="PORTFOLIO">PORTFOLIO</GlitchHeading>
+        PORTFOLIO
       </h1>
       {featured && (
         <div className="mt-8">

@@ -3,7 +3,6 @@
 import { useState } from "react"
 import Link from "next/link"
 import { ArrowLeft, Play } from "lucide-react"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
 import type { PortfolioItem } from "@/types"
 
 function extractYouTubeId(url: string): string | null {
@@ -71,7 +70,7 @@ export function VideoDetailLayout({ item }: { item: PortfolioItem }) {
         </Link>
 
         <h1 className="font-mono font-bold text-4xl md:text-5xl uppercase tracking-tight mb-4 text-[#f5f5f0]">
-          <GlitchHeading text={item.title}>{item.title}</GlitchHeading>
+          {item.title}
         </h1>
 
         {item.category && (

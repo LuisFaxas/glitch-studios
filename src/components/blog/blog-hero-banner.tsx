@@ -1,6 +1,5 @@
 import Link from "next/link"
 import Image from "next/image"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
 import { ReadingTimeBadge } from "./reading-time-badge"
 import { readingTimeCached } from "@/lib/reading-time"
 import type { BlogPost, BlogCategory } from "@/types"
@@ -62,7 +61,7 @@ export function BlogHeroBanner({ post }: BlogHeroBannerProps) {
         )}
 
         <h2 className="font-mono font-bold uppercase tracking-wide text-[#f5f5f0] leading-tight text-[clamp(28px,5vw,48px)]">
-          <GlitchHeading text={post.title}>{post.title}</GlitchHeading>
+          {post.title}
         </h2>
 
         {post.excerpt && (

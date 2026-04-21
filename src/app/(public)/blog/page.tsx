@@ -6,7 +6,6 @@ import { PostCard } from "@/components/blog/post-card"
 import { CategoryFilter } from "@/components/blog/category-filter"
 import { BlogHeroBanner } from "@/components/blog/blog-hero-banner"
 import { LoadMoreButton } from "@/components/blog/load-more-button"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
 import { readingTimeCached } from "@/lib/reading-time"
 import type { Metadata } from "next"
 
@@ -82,7 +81,7 @@ async function BlogContent({
       return (
         <div className="max-w-7xl mx-auto px-4 py-16 md:py-24">
           <h1 className="font-mono font-bold uppercase tracking-wide text-[#f5f5f0] mb-8 text-[clamp(28px,5vw,48px)] leading-[1.1]">
-            <GlitchHeading text="BLOG">BLOG</GlitchHeading>
+            BLOG
           </h1>
           <Suspense fallback={null}>
             <CategoryFilter categories={categories} activeCategory={categorySlug} />
@@ -115,7 +114,7 @@ async function BlogContent({
   return (
     <div className="max-w-7xl mx-auto px-4 py-16 md:py-24">
       <h1 className="font-mono font-bold uppercase tracking-wide text-[#f5f5f0] mb-8 text-[clamp(28px,5vw,48px)] leading-[1.1]">
-        <GlitchHeading text="BLOG">BLOG</GlitchHeading>
+        BLOG
       </h1>
       <Suspense fallback={null}>
         <CategoryFilter categories={categories} activeCategory={categorySlug} />

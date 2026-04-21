@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
 import { VideoCardPlaceholder } from "./video-card-placeholder"
 import type { PortfolioItem } from "@/types"
 
@@ -58,7 +57,7 @@ export function VideoCard({ item }: { item: PortfolioItem }) {
             </span>
           )}
           <h3 className="font-mono font-bold text-lg text-[#f5f5f0] line-clamp-2 mt-2">
-            <GlitchHeading text={item.title}>{item.title}</GlitchHeading>
+            {item.title}
           </h3>
           {item.description && (
             <p className="line-clamp-2 text-[#888888] font-sans text-[13px] mt-2">

@@ -1,6 +1,5 @@
 import Link from "next/link"
 import Image from "next/image"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
 import type { PortfolioItem } from "@/types"
 
 interface PortfolioHeroBannerProps {
@@ -62,7 +61,7 @@ export function PortfolioHeroBanner({ item }: PortfolioHeroBannerProps) {
         )}
 
         <h2 className="font-mono font-bold uppercase tracking-wide text-[#f5f5f0] leading-tight text-[clamp(28px,5vw,48px)]">
-          <GlitchHeading text={item.title}>{item.title}</GlitchHeading>
+          {item.title}
         </h2>
 
         {item.description && (

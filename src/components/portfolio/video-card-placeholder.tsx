@@ -1,5 +1,3 @@
-import { GlitchHeading } from "@/components/ui/glitch-heading"
-
 interface VideoCardPlaceholderProps {
   title: string
 }
@@ -16,7 +14,7 @@ export function VideoCardPlaceholder({ title }: VideoCardPlaceholderProps) {
       }}
     >
       <h3 className="font-mono font-bold uppercase tracking-wide text-[#f5f5f0] text-center line-clamp-3 text-[clamp(18px,3vw,28px)] leading-[1.1]">
-        <GlitchHeading text={title}>{title}</GlitchHeading>
+        {title}
       </h3>
     </div>
   )
