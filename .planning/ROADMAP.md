@@ -393,8 +393,17 @@ Plans:
   1. Portfolio detail view has visible prev/next navigation to browse between items without returning to the grid
   2. Existing carousel animations and category filters work smoothly with no regressions from v1
   3. Portfolio page renders correctly on mobile with appropriate touch interactions
-**Plans**: 7 plans
+**Plans:** 7 plans
 **UI hint**: yes
+
+Plans:
+- [ ] 11-01-detail-nav-PLAN.md — Cached neighbor helper + PrevNextFooter + VideoDetailLayout + PortfolioDetailLayout + detail route branching (PORT-06)
+- [ ] 11-02-video-card-placeholder-PLAN.md — On-brand VideoCardPlaceholder mirroring Phase 10 PostCardPlaceholder (D-12)
+- [ ] 11-03-hero-banner-PLAN.md — PortfolioHeroBanner server component with zero-feature fallback (D-08/D-10)
+- [ ] 11-04-video-card-refactor-PLAN.md — Uniform VideoCard with type chip + year, next/image, whole-card link (D-06/D-11/D-13)
+- [ ] 11-05-category-filter-grid-PLAN.md — PortfolioGrid client wrapper with blog-matched chips + responsive grid (D-14)
+- [ ] 11-06-page-integration-PLAN.md — /portfolio rewrite: h1 + hero + chip filter + grid (D-08/D-09)
+- [ ] 11-07-playwright-verification-PLAN.md — Playwright spec (desktop + mobile), VERIFICATION.md, human checkpoint
 
 ### Phase 12: Artists & Team
 **Goal**: Visitors understand who is behind Glitch Studios and who they might collaborate with
