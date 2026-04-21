@@ -15,6 +15,7 @@ import {
   user,
 } from "@/db/schema"
 import { and, asc, count, desc, eq, ilike, inArray, lt, ne, notInArray, or, sql } from "drizzle-orm"
+import { RUBRIC_V1_1 } from "./rubric-map"
 
 // ========== Types ==========
 
@@ -657,25 +658,71 @@ export async function getProductBySlugWithSpecs(slug: string): Promise<PublicPro
   return results[0] ?? null
 }
 
-export async function getBenchmarkRunsForProducts(productIds: string[]): Promise<PublicBenchmarkRun[]> {
+export async function getBenchmarkRunsForProducts(
+  productIds: string[],
+): Promise<PublicBenchmarkRun[]> {
   if (productIds.length === 0) return []
-  const rows = await db
-    .select({
-      productId: techBenchmarkRuns.productId,
-      testId: techBenchmarkTests.id,
-      testName: techBenchmarkTests.name,
-      unit: techBenchmarkTests.unit,
-      direction: techBenchmarkTests.direction,
-      score: techBenchmarkRuns.score,
-      recordedAt: techBenchmarkRuns.recordedAt,
-      sortOrder: techBenchmarkTests.sortOrder,
-    })
-    .from(techBenchmarkRuns)
-    .innerJoin(techBenchmarkTests, eq(techBenchmarkRuns.testId, techBenchmarkTests.id))
-    .where(inArray(techBenchmarkRuns.productId, productIds))
-    .orderBy(asc(techBenchmarkTests.sortOrder), asc(techBenchmarkTests.name))
 
-  return rows.map((r) => ({
+  // D-16 canonical form: DISTINCT ON (product_id, test_id, mode) filtered to superseded=false,
+  // ordered by recorded_at DESC (newest canonical run wins per (product, test, mode) triple).
+  //
+  // The 3-column key means a (product, test) pair MAY appear twice in the result: once for
+  // mode='ac' and once for mode='battery'. Callers that need only one mode filter the flat
+  // list in-memory (e.g. /tech/compare is AC-only by editorial convention — it filters r.mode
+  // === 'ac' in the caller). Phase 18 leaderboard needs both distinguishable.
+  //
+  // Postgres constraint: DISTINCT ON cols MUST lead ORDER BY in same order; the tie-breaker
+  // (recordedAt DESC) is appended after. Re-ordering breaks with:
+  //   "SELECT DISTINCT ON expressions must match initial ORDER BY expressions"
+  const rows = await db
+    .selectDistinctOn(
+      [
+        techBenchmarkRuns.productId,
+        techBenchmarkRuns.testId,
+        techBenchmarkRuns.mode,
+      ],
+      {
+        productId: techBenchmarkRuns.productId,
+        testId: techBenchmarkTests.id,
+        testName: techBenchmarkTests.name,
+        unit: techBenchmarkTests.unit,
+        direction: techBenchmarkTests.direction,
+        mode: techBenchmarkRuns.mode,
+        score: techBenchmarkRuns.score,
+        recordedAt: techBenchmarkRuns.recordedAt,
+        sortOrder: techBenchmarkTests.sortOrder,
+      },
+    )
+    .from(techBenchmarkRuns)
+    .innerJoin(
+      techBenchmarkTests,
+      eq(techBenchmarkRuns.testId, techBenchmarkTests.id),
+    )
+    .where(and(
+      inArray(techBenchmarkRuns.productId, productIds),
+      eq(techBenchmarkRuns.superseded, false),
+    ))
+    .orderBy(
+      asc(techBenchmarkRuns.productId),
+      asc(techBenchmarkRuns.testId),
+      asc(techBenchmarkRuns.mode),
+      desc(techBenchmarkRuns.recordedAt),
+    )
+
+  // Post-sort by display order. DISTINCT ON requires the specific ORDER BY above,
+  // so re-sort in memory for presentation.
+  const sorted = rows.sort((a, b) => {
+    if (a.sortOrder !== b.sortOrder) return a.sortOrder - b.sortOrder
+    return a.testName.localeCompare(b.testName)
+  })
+
+  // Public interface unchanged — mode is selected internally (for correct DISTINCT ON
+  // semantics) but NOT exposed on PublicBenchmarkRun. Compare consumers that need one
+  // mode must filter on the raw result OR this function can be wrapped in a mode-filtering
+  // helper in a later phase. For /tech/compare today: the sitewide convention is AC-only
+  // editorial runs (ARCHITECTURE.md §compare); once Phase 16 ingest ships battery runs,
+  // compare UI will filter `r.mode === 'ac'` in the page server component (not here).
+  return sorted.map((r) => ({
     productId: r.productId,
     testId: r.testId,
     testName: r.testName,
