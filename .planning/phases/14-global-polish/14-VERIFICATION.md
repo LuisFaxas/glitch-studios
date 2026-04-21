@@ -45,6 +45,17 @@ None blocking.
 
 - Player bar NOW PLAYING label + License Beat CTA are desktop-only (`hidden md:flex` block in player-bar.tsx). Mobile player layout is condensed — licensing happens via a different path on small screens. Test 7 skips at mobile by design.
 
+### Final polish pass (post-checkpoint)
+
+Before closing the milestone, user reported mobile beats-store + player issues. Fixed inline:
+- **Volume slider**: swapped ElasticSlider for the regular shadcn Slider in player-bar. Clean, no stretch/clip. Dedicated mute button added.
+- **Mobile filter scroll**: filter-bar horizontal scroll row now has `touch-pan-x` + `-webkit-overflow-scrolling: touch` so iOS Safari pans through the view toggle and other filter chips.
+- **BPM slider**: live numeric readout ("60–200") so users see the current range. `py-2` wrapper so the thumb doesn't clip at narrow widths. Functional pipeline (URL param → server filter) was already correct.
+
+### Deferred to later milestone
+
+- **Audio stops on /tech navigation (production only)**: AudioPlayerProvider is mounted at the root layout and does not pause on route change — verified in `audio-player-provider.tsx`. The behavior only manifests on the deployed glitchtek.io. Likely a separate Vercel deployment / subdomain boundary triggering a full document reload. Needs production-config investigation (middleware, domain routing), not a component fix.
+
 ## Next Step
 
 Awaiting human checkpoint (Plan 03 Task 4). Reviewer confirms the 7 screenshots and live behavior.
