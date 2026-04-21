@@ -417,6 +417,15 @@ Plans:
 **Plans**: 7 plans
 **UI hint**: yes
 
+Plans:
+- [ ] 12-01-schema-migration-PLAN.md — Add artist_kind enum + specialties[] + isFeatured columns to teamMembers; push migration; update admin server actions (TEAM-01, TEAM-02)
+- [ ] 12-02-admin-form-upgrade-PLAN.md — Extend TeamMemberForm with Kind select, Specialties input, isFeatured checkbox (TEAM-01, TEAM-02)
+- [ ] 12-03-artist-card-refactor-PLAN.md — Rebuild ArtistCard: next/image avatar, role badge, specialty chips, social icon row, bio line-clamp-3, glitch hover (TEAM-02)
+- [ ] 12-04-artist-hero-banner-PLAN.md — ArtistHeroBanner server component mirroring PortfolioHeroBanner, wired to TeamMember (TEAM-02)
+- [ ] 12-05-artists-section-PLAN.md — ArtistsSection client component: section h2 + count, specialty chip filter, responsive grid (TEAM-01, TEAM-03)
+- [ ] 12-06-artists-page-integration-PLAN.md — /artists rewrite: h1 ARTISTS + hero + TEAM section + COLLABORATORS section; ArtistProfile upgraded (TEAM-01, TEAM-02, TEAM-03)
+- [ ] 12-07-playwright-verification-PLAN.md — Playwright spec (desktop + mobile), VERIFICATION.md, human checkpoint (TEAM-01, TEAM-02, TEAM-03)
+
 ### Phase 13: Contact
 **Goal**: Visitors can reach Glitch Studios through their preferred channel -- form, WhatsApp, phone, or social media
 **Depends on**: Phase 12
