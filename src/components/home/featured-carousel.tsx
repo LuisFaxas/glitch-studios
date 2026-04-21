@@ -42,6 +42,7 @@ export function FeaturedCarousel({ beats }: FeaturedCarouselProps) {
     } else {
       play({
         id: beat.id,
+        slug: beat.slug,
         title: beat.title,
         artist: beat.producers[0]?.name ?? "Glitch Studios",
         previewAudioUrl: beat.previewAudioUrl,

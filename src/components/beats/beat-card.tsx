@@ -22,6 +22,7 @@ export function BeatCard({ beat, variant = "compact" }: { beat: BeatSummary; var
     if (!isCurrentBeat) {
       play({
         id: beat.id,
+        slug: beat.slug,
         title: beat.title,
         artist: beat.producers[0]?.name ?? "Glitch Studios",
         previewAudioUrl: beat.previewAudioUrl,
@@ -47,6 +48,7 @@ export function BeatCard({ beat, variant = "compact" }: { beat: BeatSummary; var
     } else {
       play({
         id: beat.id,
+        slug: beat.slug,
         title: beat.title,
         artist: beat.producers[0]?.name ?? "Glitch Studios",
         previewAudioUrl: beat.previewAudioUrl,

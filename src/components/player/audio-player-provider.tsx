@@ -14,6 +14,7 @@ import { PlayerBar } from "@/components/player/player-bar"
 
 export interface PlayerBeat {
   id: string
+  slug: string
   title: string
   artist: string
   previewAudioUrl: string

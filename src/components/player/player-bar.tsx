@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
+import Image from "next/image"
+import Link from "next/link"
 import { motion, AnimatePresence } from "motion/react"
 import {
   Play,
@@ -110,10 +112,13 @@ export function PlayerBar() {
           <div className="hidden md:flex items-center h-full px-4 gap-4">
             {/* Cover art */}
             {currentBeat.coverArtUrl ? (
-              <img
+              <Image
                 src={currentBeat.coverArtUrl}
                 alt={`${currentBeat.title} cover`}
-                className="h-12 w-12 rounded-none object-cover flex-shrink-0"
+                width={48}
+                height={48}
+                className="rounded-none object-cover flex-shrink-0"
+                unoptimized
               />
             ) : (
               <div className="h-12 w-12 rounded-none bg-[#222222] flex-shrink-0" />
@@ -121,6 +126,9 @@ export function PlayerBar() {
 
             {/* Track info */}
             <div className="flex flex-col min-w-0 flex-shrink-0 max-w-[160px]">
+              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#555555] mb-0.5">
+                NOW PLAYING
+              </span>
               <span className="font-mono text-[15px] font-bold text-[#f5f5f0] truncate">
                 {currentBeat.title}
               </span>
@@ -178,12 +186,12 @@ export function PlayerBar() {
             </div>
 
             {/* License Beat CTA */}
-            <button
-              type="button"
+            <Link
+              href="/beats"
               className="flex-shrink-0 px-4 py-2 bg-[#f5f5f0] text-[#000000] font-mono text-[13px] font-bold uppercase tracking-[0.05em] hover:bg-white transition-colors rounded-none"
             >
               License Beat
-            </button>
+            </Link>
 
             {/* Minimize */}
             <button
@@ -199,13 +207,16 @@ export function PlayerBar() {
           {/* Mobile layout */}
           <div className="flex flex-col md:hidden h-full">
             {/* Row 1: Cover art, track info + time, play/pause */}
-            <div className="flex items-center px-3 gap-3" style={{ height: "36px" }}>
+            <div className="flex items-center px-3 gap-3 h-9">
               {/* Cover art */}
               {currentBeat.coverArtUrl ? (
-                <img
+                <Image
                   src={currentBeat.coverArtUrl}
                   alt={`${currentBeat.title} cover`}
-                  className="h-10 w-10 rounded-none object-cover flex-shrink-0"
+                  width={40}
+                  height={40}
+                  className="rounded-none object-cover flex-shrink-0"
+                  unoptimized
                 />
               ) : (
                 <div className="h-10 w-10 rounded-none bg-[#222222] flex-shrink-0" />

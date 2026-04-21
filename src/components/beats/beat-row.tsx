@@ -41,6 +41,7 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
     } else {
       play({
         id: beat.id,
+        slug: beat.slug,
         title: beat.title,
         artist: beat.producers[0]?.name ?? "Glitch Studios",
         previewAudioUrl: beat.previewAudioUrl,
@@ -57,6 +58,7 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
       // Start playback for this beat (seek on fresh load isn't reliable)
       play({
         id: beat.id,
+        slug: beat.slug,
         title: beat.title,
         artist: beat.producers[0]?.name ?? "Glitch Studios",
         previewAudioUrl: beat.previewAudioUrl,
