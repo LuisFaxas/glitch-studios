@@ -15,6 +15,8 @@ export interface BenchmarkRunInput {
   testId: string
   score: number
   notes: string | null
+  /** Power mode for the run. Defaults to 'ac' for manual admin entries. */
+  mode?: "ac" | "battery"
 }
 
 export interface BenchmarkRunRow {
@@ -57,6 +59,8 @@ export async function createRun(data: BenchmarkRunInput): Promise<{ id: string }
     .values({
       productId: data.productId,
       testId: data.testId,
+      mode: data.mode ?? "ac",
+      runUuid: crypto.randomUUID(),
       score: String(data.score),
       notes: data.notes?.trim() || null,
       createdBy: session.user.id,

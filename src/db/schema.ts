@@ -8,9 +8,11 @@ import {
   numeric,
   jsonb,
   pgEnum,
+  uniqueIndex,
+  check,
 } from "drizzle-orm/pg-core"
 import type { AnyPgColumn } from "drizzle-orm/pg-core"
-import { relations } from "drizzle-orm"
+import { relations, sql } from "drizzle-orm"
 
 // Better Auth tables (must match DB schema created by Better Auth migrations)
 export const user = pgTable("user", {
@@ -635,6 +637,40 @@ export const techBenchmarkDirectionEnum = pgEnum("tech_benchmark_direction", [
   "lower_is_better",
 ])
 
+export const techBenchmarkModeEnum = pgEnum("benchmark_mode", [
+  "ac",
+  "battery",
+  "both",
+])
+
+export const techBenchmarkDisciplineEnum = pgEnum("benchmark_discipline", [
+  "cpu",
+  "gpu",
+  "llm",
+  "video",
+  "dev",
+  "python",
+  "games",
+  "memory",
+  "storage",
+  "thermal",
+  "wireless",
+  "display",
+  "battery_life",
+])
+
+export const techBprTierEnum = pgEnum("bpr_tier", [
+  "platinum",
+  "gold",
+  "silver",
+  "bronze",
+])
+
+export const techDisciplineExclusionReasonEnum = pgEnum(
+  "discipline_exclusion_reason",
+  ["no_hardware", "requires_license", "device_class_exempt", "test_failed"],
+)
+
 // --- Categories (3-level adjacency list) ---
 
 export const techCategories = pgTable("tech_categories", {
@@ -741,7 +777,15 @@ export const techReviews = pgTable("tech_reviews", {
   publishedAt: timestamp("published_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-})
+  bprScore: numeric("bpr_score", { precision: 5, scale: 4 }),
+  bprTier: techBprTierEnum("bpr_tier"),
+  rubricVersion: text("rubric_version").notNull().default("1.1"),
+}, (t) => ({
+  publishedAtChk: check(
+    "tech_reviews_published_at_chk",
+    sql`${t.status} != 'published' OR ${t.publishedAt} IS NOT NULL`,
+  ),
+}))
 
 // --- Review pros/cons/gallery ---
 
@@ -796,8 +840,15 @@ export const techBenchmarkTests = pgTable("tech_benchmark_tests", {
     .notNull()
     .default("higher_is_better"),
   sortOrder: integer("sort_order").notNull().default(0),
+  discipline: techBenchmarkDisciplineEnum("discipline"),
+  mode: techBenchmarkModeEnum("mode").notNull().default("both"),
+  bprEligible: boolean("bpr_eligible").notNull().default(false),
+  minRamGb: integer("min_ram_gb"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-})
+}, (t) => ({
+  naturalKey: uniqueIndex("tech_benchmark_tests_natural_key_uniq")
+    .on(t.templateId, t.discipline, t.mode, t.name),
+}))
 
 export const techBenchmarkRuns = pgTable("tech_benchmark_runs", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -807,11 +858,39 @@ export const techBenchmarkRuns = pgTable("tech_benchmark_runs", {
   testId: uuid("test_id")
     .notNull()
     .references(() => techBenchmarkTests.id, { onDelete: "cascade" }),
+  mode: techBenchmarkModeEnum("mode").notNull(),
+  runUuid: uuid("run_uuid").notNull(),
+  rubricVersion: text("rubric_version").notNull().default("1.1"),
+  superseded: boolean("superseded").notNull().default(false),
+  sourceFile: text("source_file"),
+  ingestBatchId: uuid("ingest_batch_id"),
+  ambientTempC: numeric("ambient_temp_c", { precision: 4, scale: 1 }),
+  macosBuild: text("macos_build"),
+  runFlagged: text("run_flagged"),
+  permalinkUrl: text("permalink_url"),
   score: numeric("score", { precision: 14, scale: 4 }).notNull(),
   notes: text("notes"),
   recordedAt: timestamp("recorded_at").defaultNow().notNull(),
   createdBy: text("created_by").references(() => user.id),
-})
+}, (t) => ({
+  liveUniq: uniqueIndex("tech_benchmark_runs_live_uniq")
+    .on(t.productId, t.testId, t.mode, t.runUuid)
+    .where(sql`${t.superseded} = false`),
+}))
+
+export const techReviewDisciplineExclusions = pgTable("tech_review_discipline_exclusions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  reviewId: uuid("review_id")
+    .notNull()
+    .references(() => techReviews.id, { onDelete: "cascade" }),
+  discipline: techBenchmarkDisciplineEnum("discipline").notNull(),
+  reason: techDisciplineExclusionReasonEnum("reason").notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (t) => ({
+  uniqPerReview: uniqueIndex("tech_review_discipline_exclusions_review_discipline_uniq")
+    .on(t.reviewId, t.discipline),
+}))
 
 // --- Relations ---
 
@@ -884,6 +963,7 @@ export const techReviewsRelations = relations(techReviews, ({ one, many }) => ({
   pros: many(techReviewPros),
   cons: many(techReviewCons),
   gallery: many(techReviewGallery),
+  disciplineExclusions: many(techReviewDisciplineExclusions),
 }))
 
 export const techReviewProsRelations = relations(techReviewPros, ({ one }) => ({
@@ -944,3 +1024,13 @@ export const techBenchmarkRunsRelations = relations(techBenchmarkRuns, ({ one })
     references: [user.id],
   }),
 }))
+
+export const techReviewDisciplineExclusionsRelations = relations(
+  techReviewDisciplineExclusions,
+  ({ one }) => ({
+    review: one(techReviews, {
+      fields: [techReviewDisciplineExclusions.reviewId],
+      references: [techReviews.id],
+    }),
+  }),
+)
