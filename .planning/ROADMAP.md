@@ -266,6 +266,7 @@ Plans:
 
 **Observed symptoms (2026-04-22):**
 - Admin context switcher STUDIOS ⇄ TECH takes 3–4 seconds per toggle
+- Navigation from admin edit page → ingest wizard takes ~4 seconds (confirmed twice during UAT)
 - User reports "this is all across the website" — not isolated to admin
 
 **Likely suspects (to investigate, not decisions):**
@@ -284,6 +285,28 @@ Plans:
 
 Plans:
 - [ ] TBD (promote with /gsd:review-backlog when ready — priority: HIGH)
+
+### Phase 999.6: Programmatic Ingest + Admin CLI for AI workflow (BACKLOG — HIGH)
+
+**Goal:** [Captured for future planning] Primary content workflow is Claude Code running in a session ("ingest this bench log for this review," "create a new review for MBP 16 M5 Max," "attach these benchmarks"). The admin wizard is a fallback for human Josh — the CLI/scriptable path is the daily driver. Claude should be able to do every admin operation without opening a browser.
+
+**Scope (sketch):**
+- Script/CLI (e.g., `pnpm admin ingest --review {id} --file path.jsonl --mode ac`) that wraps `ingestBenchmarkRunsDryRun` + `commitBenchmarkIngest` from Phase 16
+- Same for review CRUD, product CRUD, media uploads, publish/unpublish, gallery attachment
+- Auth: service-role token or a signed admin session Claude can pass via env
+- Output: structured JSON so Claude can parse results and follow up (e.g., BPR score, inserted count, revalidate confirmations)
+- Dry-run + confirm mode to match the wizard's safety model
+
+**Why this matters:** The user's stated primary workflow is AI-driven content production. Every minute spent in a browser filling forms is friction. Current state: Phase 16 built the UI but not the scriptable path — so Claude can't actually do the work it's supposed to do.
+
+**Surfaced from:** Phase 16 UAT (2026-04-22) — user interrupted the manual UAT flow to explain the real workflow. "I don't want to copy-paste JSONL into a browser — Claude should do this."
+
+**Requirements:** TBD (likely new CLI-* ids: ingest, review-crud, product-crud, media, publish)
+
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd:review-backlog when ready — priority: HIGH, unblocks AI-driven content)
 
 ### Phase 999.5: Admin Details Overlay — Padding Fix (BACKLOG)
 
