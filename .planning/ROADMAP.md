@@ -245,6 +245,21 @@ v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 1
 | 20. GlitchTek Blog | v3.0 | 0/3 | Not started | - |
 | 21. Deploy Hardening | v3.0 | 0/3 | Not started | - |
 
+## Backlog
+
+### Phase 999.2: Admin Auth UX — Separate Admin Sign-in from Client Sidebar (BACKLOG)
+
+**Goal:** [Captured for future planning] Admin sign-in should not appear inside the client-facing sidebar. Admin and client auth should be visually and architecturally separated so clients never see an admin sign-in surface. Secondary nit: the sign-in link should open in a new tab.
+
+**Surfaced from:** Phase 16 UAT (2026-04-22) — when trying to log in to test the ingest wizard, the admin sign-in entry point was found inside the client sidebar, confusing for both roles.
+
+**Requirements:** TBD (likely new AUTH-UX-* ids)
+
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd:review-backlog when ready)
+
 ## Traceability
 
 | REQ-ID | Description | Phase | Status |
