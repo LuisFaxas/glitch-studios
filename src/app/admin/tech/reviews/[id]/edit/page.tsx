@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic"
 
 import { notFound } from "next/navigation"
 import { headers } from "next/headers"
+import Link from "next/link"
 import { db } from "@/lib/db"
 import { mediaAssets } from "@/db/schema"
 import { inArray } from "drizzle-orm"
@@ -44,7 +45,16 @@ export default async function EditTechReviewPage({
   const initialReviewerId = session?.user.id ?? reviewers[0]?.id ?? ""
 
   return (
-    <ReviewEditor
+    <>
+      <div className="mb-4 flex justify-end">
+        <Link
+          href={`/admin/tech/reviews/${id}/ingest`}
+          className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+        >
+          Import Benchmark Data
+        </Link>
+      </div>
+      <ReviewEditor
       mode="edit"
       reviewId={id}
       initialReviewerId={initialReviewerId}
@@ -74,5 +84,6 @@ export default async function EditTechReviewPage({
         status: review.status,
       }}
     />
+    </>
   )
 }

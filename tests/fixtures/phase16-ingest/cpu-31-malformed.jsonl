@@ -1,0 +1,12 @@
+{"type": "header", "run_uuid": "44444444-4444-4444-a444-444444444444", "ambient_temp_c": 22.0, "macos_build": "25D2128", "lpm_enabled": false, "hostname": "MBP-16-M5", "started_at": "2026-04-25T20:00:00Z"}
+{"discipline": "cpu", "tool": "geekbench6", "field": "multi", "mode": "ac", "score": 24312, "unit": "score", "timestamp": "2026-04-25T20:01:00Z"}
+{"discipline": "neuralengine", "tool": "mlxlm", "field": "tokens_per_sec", "mode": "ac", "score": 142, "unit": "tok/s", "timestamp": "2026-04-25T20:02:00Z"}
+{"discipline": "cpu", "tool": "geekbench6", "field": "single", "mode": "ac", "score": 4018, "unit": "score", "timestamp": "2026-04-25T20:03:00Z"}
+{"discipline": "cpu", "tool": "cinebench2024", "field": "multi", "mode": "ac", "score": 1052, "unit": "score", "timestamp": "2026-04-25T20:04:00Z"}
+{"discipline": "cpu", "tool": "cinebench2024", "field": "single", "mode": "ac", "score": "Infinity", "unit": "score", "timestamp": "2026-04-25T20:05:00Z"}
+{"discipline": "cpu", "tool": "hyperfine", "field": "ripgrep_cargo", "mode": "ac", "score": 2.34, "unit": "seconds", "timestamp": "2026-04-25T20:06:00Z"}
+{"discipline": "cpu", "tool": "geekbench6", "field": "multi", "mode": "battery", "score": 22100, "unit": "score", "timestamp": "2026-04-25T20:07:00Z"}
+{"discipline": "cpu", "tool": "geekbench6", "field": "single", "mode": "battery", "score": 3950, "unit": "score", "timestamp": "2026-04-25T20:08:00Z"}
+{"discipline": "cpu", "tool": "cinebench2024", "field": "multi", "mode": "battery", "score": 890, "unit": "score", "timestamp": "2026-04-25T20:09:00Z"}
+{"discipline": "cpu", "tool": "hyperfine", "field": "ripgrep_cargo", "mode": "battery", "score": 2.89, "unit": "seconds", "timestamp": "2026-04-25T20:10:00Z"}
+{"discipline": "memory", "tool": "stream", "field": "triad", "mode": "ac", "score": 215.4, "unit": "GB/s", "timestamp": "2026-04-25T20:11:00Z"}
