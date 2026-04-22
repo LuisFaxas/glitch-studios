@@ -23,7 +23,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 **Milestone Goal:** Take GlitchTek from "foundation live" to "launched with credibility." Lock the methodology, hydrate rubric v1.1 benchmarks from the Mac bench harness, ship the flagship MBP 16" M5 Max review, add category master leaderboards so readers can rank every reviewed product side-by-side. Templates flow together — every future review slots into the locked structure without ad-hoc reinvention.
 
 - [x] **Phase 15: Methodology Lock + Schema** — migrations, rubric v1.1 seed, query refactors (completed 2026-04-21)
-- [ ] **Phase 16: JSONL Ingest Pipeline** — 3-step wizard (upload → dry-run → commit)
+- [x] **Phase 16: JSONL Ingest Pipeline** — 3-step wizard (upload → dry-run → commit) (completed 2026-04-22)
 - [ ] **Phase 17: BPR Medal UI + Methodology Page** — monochrome medal, /tech/methodology
 - [ ] **Phase 18: Category Master Leaderboard** — sortable/filterable master rankings per category
 - [ ] **Phase 19: Flagship MBP Review Published** — MBP 16 M5 Max 64GB end-to-end
@@ -76,7 +76,7 @@ Plans:
 - [x] 16-01-PLAN.md — bpr.ts: computeBprScore (geometric mean) + bprMedal (tier thresholds) + unit tests
 - [x] 16-02-PLAN.md — admin-tech-ingest.ts: ingestBenchmarkRunsDryRun + commitBenchmarkIngest server actions (Zod validation, transaction, BPR recompute, revalidatePath)
 - [x] 16-03-PLAN.md — ingest wizard UI: 3-step wizard page + discipline accordion + ambient override + supersede confirm
-- [ ] 16-04-PLAN.md — Import Benchmark Data link on edit page + JSONL fixtures + Playwright E2E tests
+- [x] 16-04-PLAN.md — Import Benchmark Data link on edit page + JSONL fixtures + Playwright E2E tests
 
 **UI hint**: no
 
@@ -238,7 +238,7 @@ v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 1
 | 13. Contact | v2.0 | 0/0 | Deferred | - |
 | 14. Global Polish | v2.0 | 3/3 | Complete | 2026-04-21 |
 | 15. Methodology Lock + Schema | v3.0 | 3/3 | Complete    | 2026-04-21 |
-| 16. JSONL Ingest Pipeline | v3.0 | 3/4 | In Progress|  |
+| 16. JSONL Ingest Pipeline | v3.0 | 4/4 | Complete   | 2026-04-22 |
 | 17. BPR Medal + Methodology Page | v3.0 | 0/3 | Not started | - |
 | 18. Category Master Leaderboard | v3.0 | 0/4 | Not started | - |
 | 19. Flagship MBP Review | v3.0 | 0/3 | Not started | - |

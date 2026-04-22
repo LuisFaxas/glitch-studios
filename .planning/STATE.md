@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: GlitchTek Launch
-status: Ready to execute
-stopped_at: Completed 16-03-PLAN.md — JSONL ingest wizard UI shipped
-last_updated: "2026-04-22T13:59:09.690Z"
+status: Phase complete — ready for verification
+stopped_at: Completed 16-04-PLAN.md — Phase 16 JSONL ingest pipeline fully shipped (edit-page link + 4 fixtures + 4 E2E tests)
+last_updated: "2026-04-22T14:37:24.362Z"
 progress:
   total_phases: 7
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # Project State
@@ -75,6 +75,7 @@ Progress: [================----] 24/33 phases complete
 | Phase 16 P01 | 10min | 1 tasks | 4 files |
 | Phase 16 P02 | 4 | 2 tasks | 2 files |
 | Phase 16 P03 | 14 | 1 tasks | 2 files |
+| Phase 16 P04 | 19 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -123,6 +124,8 @@ Recent decisions affecting current work:
 - [Phase 16]: Phase 16 Plan 02: commit transaction passes tx to computeBprScore so BPR recompute sees uncommitted just-inserted rows on the same connection (Postgres READ COMMITTED)
 - [Phase 16]: Phase 16 Plan 02: ingest split into src/actions/admin-tech-ingest.ts (not appended to admin-tech-benchmarks.ts) — keeps ingest logic isolated, file remains ~520 lines vs 84-line benchmarks file
 - [Phase 16]: Phase 16 Plan 03: @base-ui accordion uses multiple boolean (not type='multiple'); Button has no asChild — use Link/anchor + buttonVariants() for styled links
+- [Phase 16]: Phase 16 Plan 04: JSONL fixture 'field' values must match RUBRIC_V1_1 object-key suffix (short form), not the longer RubricTestSpec.field property — pre-existing rubric inconsistency logged to deferred-items.md for rubric v1.2 remediation
+- [Phase 16]: Phase 16 Plan 04: Playwright E2E tests skip gracefully when ADMIN_EMAIL/ADMIN_PASSWORD/TEST_REVIEW_ID env are unset — mirrors tests/07.5-*.spec.ts convention; tests commit-safe even without CI envs
 
 ### Roadmap Evolution
 
@@ -159,6 +162,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-22T13:59:03.414Z
-Stopped at: Completed 16-03-PLAN.md — JSONL ingest wizard UI shipped
+Last session: 2026-04-22T14:37:24.357Z
+Stopped at: Completed 16-04-PLAN.md — Phase 16 JSONL ingest pipeline fully shipped (edit-page link + 4 fixtures + 4 E2E tests)
 Resume file: None
