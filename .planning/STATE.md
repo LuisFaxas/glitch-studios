@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: GlitchTek Launch
 status: Ready to execute
-stopped_at: Completed 16-01-PLAN.md — BPR computation library shipped
-last_updated: "2026-04-22T13:27:07.545Z"
+stopped_at: Completed 16-02-PLAN.md — JSONL ingest server actions shipped
+last_updated: "2026-04-22T13:37:12.956Z"
 progress:
   total_phases: 7
   completed_phases: 1
   total_plans: 7
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 ## Current Position
 
 Phase: 16 (jsonl-ingest-pipeline) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 
 Progress: [================----] 24/33 phases complete
 
@@ -73,6 +73,7 @@ Progress: [================----] 24/33 phases complete
 | Phase 15 P02 | 7min | 2 tasks | 2 files |
 | Phase 15 P03 | 6 | 2 tasks | 2 files |
 | Phase 16 P01 | 10min | 1 tasks | 4 files |
+| Phase 16 P02 | 4 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -117,6 +118,9 @@ Recent decisions affecting current work:
 - [Phase 15]: Phase 15 assertion scripts use standalone postgres.js (not @/lib/db) to avoid server-only guard in queries.ts
 - [Phase 16]: Phase 16 Plan 01: bpr.ts single-module design — pure math + async DB code colocated; vitest uses server-only stub via alias so unit tests run in Node context
 - [Phase 16]: Phase 16 Plan 01: vitest adopted as project unit-test runner (previously Playwright-only); config stubs server-only + maps @/ alias
+- [Phase 16]: Phase 16 Plan 02: Zod v4 .issues (not .errors) — installed zod@4.3.6; plan snippet used legacy API
+- [Phase 16]: Phase 16 Plan 02: commit transaction passes tx to computeBprScore so BPR recompute sees uncommitted just-inserted rows on the same connection (Postgres READ COMMITTED)
+- [Phase 16]: Phase 16 Plan 02: ingest split into src/actions/admin-tech-ingest.ts (not appended to admin-tech-benchmarks.ts) — keeps ingest logic isolated, file remains ~520 lines vs 84-line benchmarks file
 
 ### Roadmap Evolution
 
@@ -153,6 +157,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-22T13:27:07.540Z
-Stopped at: Completed 16-01-PLAN.md — BPR computation library shipped
+Last session: 2026-04-22T13:37:12.951Z
+Stopped at: Completed 16-02-PLAN.md — JSONL ingest server actions shipped
 Resume file: None
