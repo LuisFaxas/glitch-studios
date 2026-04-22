@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: GlitchTek Launch
 status: Ready to execute
-stopped_at: Completed 16-02-PLAN.md — JSONL ingest server actions shipped
-last_updated: "2026-04-22T13:37:12.956Z"
+stopped_at: Completed 16-03-PLAN.md — JSONL ingest wizard UI shipped
+last_updated: "2026-04-22T13:59:09.690Z"
 progress:
   total_phases: 7
   completed_phases: 1
   total_plans: 7
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 ## Current Position
 
 Phase: 16 (jsonl-ingest-pipeline) — EXECUTING
-Plan: 3 of 4
+Plan: 4 of 4
 
 Progress: [================----] 24/33 phases complete
 
@@ -74,6 +74,7 @@ Progress: [================----] 24/33 phases complete
 | Phase 15 P03 | 6 | 2 tasks | 2 files |
 | Phase 16 P01 | 10min | 1 tasks | 4 files |
 | Phase 16 P02 | 4 | 2 tasks | 2 files |
+| Phase 16 P03 | 14 | 1 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -121,6 +122,7 @@ Recent decisions affecting current work:
 - [Phase 16]: Phase 16 Plan 02: Zod v4 .issues (not .errors) — installed zod@4.3.6; plan snippet used legacy API
 - [Phase 16]: Phase 16 Plan 02: commit transaction passes tx to computeBprScore so BPR recompute sees uncommitted just-inserted rows on the same connection (Postgres READ COMMITTED)
 - [Phase 16]: Phase 16 Plan 02: ingest split into src/actions/admin-tech-ingest.ts (not appended to admin-tech-benchmarks.ts) — keeps ingest logic isolated, file remains ~520 lines vs 84-line benchmarks file
+- [Phase 16]: Phase 16 Plan 03: @base-ui accordion uses multiple boolean (not type='multiple'); Button has no asChild — use Link/anchor + buttonVariants() for styled links
 
 ### Roadmap Evolution
 
@@ -157,6 +159,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-22T13:37:12.951Z
-Stopped at: Completed 16-02-PLAN.md — JSONL ingest server actions shipped
+Last session: 2026-04-22T13:59:03.414Z
+Stopped at: Completed 16-03-PLAN.md — JSONL ingest wizard UI shipped
 Resume file: None
