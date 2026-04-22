@@ -10,6 +10,9 @@ import { eq, and } from "drizzle-orm"
 import { requirePermission } from "@/lib/permissions"
 import { z } from "zod"
 import { RUBRIC_V1_1 } from "@/lib/tech/rubric-map"
+import { computeBprScore } from "@/lib/tech/bpr"
+import { revalidatePath } from "next/cache"
+import { randomUUID } from "node:crypto"
 
 // --- Types ---
 
@@ -333,5 +336,188 @@ export async function ingestBenchmarkRunsDryRun(
     duplicateCount,
     unknownCount,
     ambientBlocked,
+  }
+}
+
+// --- commitBenchmarkIngest ---
+
+export async function commitBenchmarkIngest(
+  reviewId: string,
+  validatedSession: ValidatedSession,
+  opts: {
+    confirmSupersede: boolean
+    ambientOverride?: { reason: string }
+    sourceFile?: string
+  },
+): Promise<CommitResult> {
+  const session = await requirePermission("manage_content")
+
+  // D-15 Step 1: Re-validate server-side (defense against client tampering)
+  if (
+    !validatedSession.reviewId ||
+    !validatedSession.productId ||
+    !validatedSession.runUuid
+  ) {
+    return {
+      ok: false,
+      error: "Invalid session — missing required fields.",
+      inserted: 0,
+      superseded: 0,
+      bprScore: null,
+      bprTier: null,
+      batchId: "",
+    }
+  }
+
+  const duplicateRows = validatedSession.rows.filter(
+    (r) => r.status === "duplicate",
+  )
+  if (duplicateRows.length > 0 && !opts.confirmSupersede) {
+    return {
+      ok: false,
+      error: `Supersede not confirmed — ${duplicateRows.length} existing runs would be superseded. Check the confirmation checkbox.`,
+      inserted: 0,
+      superseded: 0,
+      bprScore: null,
+      bprTier: null,
+      batchId: "",
+    }
+  }
+
+  // D-09: ambient override requires reason of >=10 chars when ambientTempC > 26
+  if (validatedSession.ambientTempC > 26 && !opts.ambientOverride?.reason) {
+    return {
+      ok: false,
+      error: `Ambient temperature ${validatedSession.ambientTempC}°C exceeds 26°C threshold. Provide an override reason.`,
+      inserted: 0,
+      superseded: 0,
+      bprScore: null,
+      bprTier: null,
+      batchId: "",
+    }
+  }
+  if (
+    opts.ambientOverride?.reason &&
+    opts.ambientOverride.reason.trim().length < 10
+  ) {
+    return {
+      ok: false,
+      error: "Override reason must be at least 10 characters.",
+      inserted: 0,
+      superseded: 0,
+      bprScore: null,
+      bprTier: null,
+      batchId: "",
+    }
+  }
+
+  const rowsToProcess = validatedSession.rows.filter(
+    (r) =>
+      (r.status === "matched" || r.status === "duplicate") && r.testId !== null,
+  )
+
+  if (rowsToProcess.length === 0) {
+    return {
+      ok: false,
+      error: "No rows to insert — all lines were unknown or invalid.",
+      inserted: 0,
+      superseded: 0,
+      bprScore: null,
+      bprTier: null,
+      batchId: "",
+    }
+  }
+
+  const batchId = randomUUID()
+  // D-09: run_flagged reason applied to EVERY row if ambient override
+  const runFlagged = opts.ambientOverride?.reason?.trim() ?? null
+
+  let insertedCount = 0
+  let supersededCount = 0
+
+  // D-15 Step 2: Open transaction (D-08: supersede + insert + BPR update atomic)
+  await db.transaction(async (tx) => {
+    // D-15 Step 3: Mark duplicate rows superseded
+    for (const row of duplicateRows) {
+      if (!row.existingRunId) continue
+      await tx
+        .update(techBenchmarkRuns)
+        .set({ superseded: true })
+        .where(eq(techBenchmarkRuns.id, row.existingRunId))
+      supersededCount++
+    }
+
+    // D-15 Step 4: Insert all new rows
+    for (const row of rowsToProcess) {
+      if (!row.testId) continue
+      await tx.insert(techBenchmarkRuns).values({
+        productId: validatedSession.productId,
+        testId: row.testId,
+        mode: row.mode,
+        runUuid: validatedSession.runUuid,
+        rubricVersion: validatedSession.rubricVersion,
+        ingestBatchId: batchId,
+        score: String(row.score),
+        ambientTempC:
+          validatedSession.ambientTempC !== undefined &&
+          validatedSession.ambientTempC !== null
+            ? String(validatedSession.ambientTempC)
+            : null,
+        macosBuild: validatedSession.macosBuild,
+        runFlagged, // D-09: set on EVERY row if ambient override, null otherwise
+        sourceFile: opts.sourceFile ?? validatedSession.sourceFile ?? null,
+        createdBy: session.user.id,
+      })
+      insertedCount++
+    }
+
+    // D-15 Step 5: Recompute BPR within the same transaction. Pass `tx` so
+    // computeBprScore queries run on the same connection and can see the
+    // uncommitted rows just inserted above. Without tx, a new pool connection
+    // would use READ COMMITTED and miss the uncommitted inserts.
+    const bprResult = await computeBprScore(
+      validatedSession.productId,
+      { rubricVersion: validatedSession.rubricVersion },
+      tx,
+    )
+
+    // Update tech_reviews.bpr_score + bpr_tier atomically within the same transaction
+    await tx
+      .update(techReviews)
+      .set({
+        bprScore: bprResult.score !== null ? String(bprResult.score) : null,
+        bprTier: bprResult.tier ?? null,
+      })
+      .where(eq(techReviews.id, validatedSession.reviewId))
+  })
+
+  // Fetch final BPR values + slug to return to UI + revalidate review detail
+  const updatedReview = await db.query.techReviews.findFirst({
+    where: eq(techReviews.id, validatedSession.reviewId),
+    columns: { bprScore: true, bprTier: true, slug: true },
+  })
+
+  // D-15 Step 6: revalidatePath after commit
+  if (updatedReview?.slug) {
+    revalidatePath(`/tech/reviews/${updatedReview.slug}`)
+  }
+  revalidatePath("/tech/reviews") // reviews list
+  revalidatePath("/tech") // homepage spotlight
+  revalidatePath("/admin/tech/reviews") // admin list
+  revalidatePath(`/admin/tech/reviews/${reviewId}/edit`) // admin edit page
+  // Leaderboard placeholder — no-op on non-existent route, safe per D-15 note
+  revalidatePath("/tech/categories/laptops/rankings")
+
+  return {
+    ok: true,
+    error: null,
+    inserted: insertedCount,
+    superseded: supersededCount,
+    bprScore:
+      updatedReview?.bprScore !== null && updatedReview?.bprScore !== undefined
+        ? parseFloat(updatedReview.bprScore)
+        : null,
+    bprTier: updatedReview?.bprTier ?? null,
+    batchId,
   }
 }
