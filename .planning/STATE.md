@@ -142,12 +142,15 @@ Recent decisions affecting current work:
 - Phase 15 plan-phase needed before any v3.0 code is written
 - Medal color approval from Josh required before Phase 17 ships (current proposal: monochrome intensity — Platinum white/black, Gold #888/black, Silver outlined, Bronze dashed)
 - Rubric map completeness: CPU discipline confirmed from §3.1; extend rubric-map.ts as remaining 12 disciplines are benchmarked when Mac returns 2026-04-25
+- **Clean up UAT owner account** `uat-admin@glitchstudios.local` (id `4SiXiidcECIpu7XgJ9JjBLyimUVQvrzj`, role=owner, password `UatAdmin!2026`) — created 2026-04-22 during Phase 16 UAT because the real admin password was unknown. Delete this account before prod deploy OR rotate password + audit it as a real owner. Tracked because it bypasses the normal provisioning path.
+- **Wire up Resend + transactional email** — Resend SDK is not integrated. Currently broken: password reset / forgot-password flow, booking confirmation emails, contact form notifications, newsletter broadcasts, any Better Auth email verification. This affected Phase 16 UAT: the only path to recover `admin@glitchstudios.com` was a manual DB account creation because the forgot-password email would not send. Needs its own phase before launch.
 
 ### Blockers/Concerns
 
 - Review Mac (MBP 16" M5 Max 64GB) returns 2026-04-25 — only CPU §3.1 benchmarks captured; 12 disciplines remaining. Ingest wizard must be ready by then.
 - `blog_categories` UNIQUE(slug) constraint — check schema.ts before writing Phase 15 migration to confirm whether to change to UNIQUE(slug, brand)
 - Phase 4.1 Plan 03 (smoke test) still marked incomplete from v1 -- site may have untested routes
+- Resend / email delivery is not functional anywhere in the app — any feature that relies on email (auth recovery, booking confirmations, contact replies) will silently fail until the integration phase runs.
 
 ### Quick Tasks Completed
 

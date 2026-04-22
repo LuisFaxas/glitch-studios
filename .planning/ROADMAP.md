@@ -260,6 +260,26 @@ v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 1
 Plans:
 - [ ] TBD (promote with /gsd:review-backlog when ready)
 
+### Phase 999.3: Resend + Transactional Email Integration (BACKLOG)
+
+**Goal:** [Captured for future planning] Wire up Resend SDK + React Email templates so every email-sending feature actually delivers mail. Currently nothing email-related works.
+
+**What's broken right now:**
+- Better Auth password reset / forgot-password flow (no recovery path for locked-out admins — surfaced during Phase 16 UAT)
+- Booking confirmation / reminder emails
+- Contact form submission replies
+- Newsletter broadcasts
+- Any email verification the auth layer expects
+
+**Surfaced from:** Phase 16 UAT (2026-04-22) — during UAT we needed to sign in as admin but had no way to recover the `admin@glitchstudios.com` password because the forgot-password email would not deliver. Had to create a new UAT account + promote directly via SQL. This same dead-end will hit any real user.
+
+**Requirements:** TBD (likely new EMAIL-* ids — account recovery, transactional templates, delivery tracking)
+
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd:review-backlog when ready — likely needs to ship before public launch / Phase 21)
+
 ## Traceability
 
 | REQ-ID | Description | Phase | Status |
