@@ -260,6 +260,49 @@ v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 1
 Plans:
 - [ ] TBD (promote with /gsd:review-backlog when ready)
 
+### Phase 999.4: Site-Wide Performance Audit (BACKLOG — CRITICAL)
+
+**Goal:** [Captured for future planning] Diagnose and fix site-wide performance regressions. Several interactions take multiple seconds when they should feel instant.
+
+**Observed symptoms (2026-04-22):**
+- Admin context switcher STUDIOS ⇄ TECH takes 3–4 seconds per toggle
+- User reports "this is all across the website" — not isolated to admin
+
+**Likely suspects (to investigate, not decisions):**
+- Hard navigation instead of `router.push` / soft transitions on the context switcher
+- Server components making serial data-fetching waterfalls on every route change
+- Middleware / proxy.ts running expensive work on every request
+- `force-dynamic` on pages that could be statically rendered or cached
+- Large client bundles forcing re-hydration
+- Unindexed DB queries on hot paths (tech_products / tech_benchmark_runs lookups)
+
+**Surfaced from:** Phase 16 UAT (2026-04-22) — flagged as CRITICAL by user. Should be audited before public launch / Phase 21 deploy hardening.
+
+**Requirements:** TBD (likely new PERF-* ids)
+
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd:review-backlog when ready — priority: HIGH)
+
+### Phase 999.5: Admin Details Overlay — Padding Fix (BACKLOG)
+
+**Goal:** [Captured for future planning] The Details drawer on the admin review editor (and likely other admin overlays) has no side padding — the DETAILS title, close X, rating rows, pros/cons controls, and media fields all sit flush against the left and right borders. Needs consistent inset padding.
+
+**Scope (small):**
+- Audit the admin drawer/sheet component wrapper padding tokens
+- Likely a single className fix on the Sheet/Drawer container (e.g., add `px-6` or design-token equivalent)
+- Check other admin overlays share the same wrapper and benefit
+
+**Surfaced from:** Phase 16 UAT (2026-04-22) — screenshot shows cramped Details panel on the MBP review edit page.
+
+**Requirements:** TBD (cosmetic, no new REQ-IDs expected)
+
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd:review-backlog when ready — may merge into 999.2 admin UX polish pass)
+
 ### Phase 999.3: Resend + Transactional Email Integration (BACKLOG)
 
 **Goal:** [Captured for future planning] Wire up Resend SDK + React Email templates so every email-sending feature actually delivers mail. Currently nothing email-related works.
