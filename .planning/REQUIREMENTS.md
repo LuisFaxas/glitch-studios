@@ -29,8 +29,8 @@
 - [ ] **ING-02** Zod validation for every JSONL line — discipline, tool, score, unit, timestamp required. Malformed line blocks the whole upload with a clear error pointing to the line number (no partial writes).
 - [ ] **ING-03** Source attribution captured — admin wizard has required fields for `ambient_temp_c`, `macos_build` (read from JSONL if present, else manual entry), and an auto-generated `run_uuid` per session. Ambient temp > 26 °C blocks ingest with override checkbox + reason text.
 - [ ] **ING-04** Duplicate / re-run handling — ingesting a second run for the same `(product, test, mode)` marks the older row `superseded = true` and inserts the new one. Surfaces the history on the admin detail page.
-- [ ] **ING-05** Rubric map — `src/lib/tech/rubric-map.ts` defines the allowed `(discipline, tool, field)` → `tech_benchmark_tests.id` translation. Lines with unknown discipline / tool get skipped and listed in the preview, not silently dropped.
-- [ ] **ING-06** BPR recompute on commit — after a transaction commits, BPR score + tier are computed for the review and saved to `tech_reviews.bpr_score` / `bpr_tier`. `revalidatePath` fires for the review detail page + every affected leaderboard + the tech homepage.
+- [x] **ING-05** Rubric map — `src/lib/tech/rubric-map.ts` defines the allowed `(discipline, tool, field)` → `tech_benchmark_tests.id` translation. Lines with unknown discipline / tool get skipped and listed in the preview, not silently dropped.
+- [x] **ING-06** BPR recompute on commit — after a transaction commits, BPR score + tier are computed for the review and saved to `tech_reviews.bpr_score` / `bpr_tier`. `revalidatePath` fires for the review detail page + every affected leaderboard + the tech homepage.
 
 ### BPR Medal UI (MEDAL-*)
 

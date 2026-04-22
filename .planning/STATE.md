@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v3.0
 milestone_name: GlitchTek Launch
-status: Ready to plan
-stopped_at: Phase 16 context gathered
-last_updated: "2026-04-21T10:07:30.762Z"
+status: Ready to execute
+stopped_at: Completed 16-01-PLAN.md — BPR computation library shipped
+last_updated: "2026-04-22T13:27:07.545Z"
 progress:
   total_phases: 7
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 7
+  completed_plans: 4
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-21)
 
 **Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience. Tech readers trust GlitchTek's hardware scorecards.
-**Current focus:** Phase 15 — methodology-lock-schema
+**Current focus:** Phase 16 — jsonl-ingest-pipeline
 
 ## Current Position
 
-Phase: 16
-Plan: Not started
+Phase: 16 (jsonl-ingest-pipeline) — EXECUTING
+Plan: 2 of 4
 
 Progress: [================----] 24/33 phases complete
 
@@ -72,6 +72,7 @@ Progress: [================----] 24/33 phases complete
 | Phase 15 P01 | 15min | 2 tasks | 4 files |
 | Phase 15 P02 | 7min | 2 tasks | 2 files |
 | Phase 15 P03 | 6 | 2 tasks | 2 files |
+| Phase 16 P01 | 10min | 1 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -114,6 +115,8 @@ Recent decisions affecting current work:
 - [Phase 15]: D-16 3-column DISTINCT ON (productId, testId, mode) in getBenchmarkRunsForProducts — no mode='ac' WHERE filter; callers filter downstream
 - [Phase 15]: getBenchmarkSpotlight resolves Geekbench 6 Multi via RUBRIC_V1_1 id lookup, not ilike name match (D-17) — rename-safe
 - [Phase 15]: Phase 15 assertion scripts use standalone postgres.js (not @/lib/db) to avoid server-only guard in queries.ts
+- [Phase 16]: Phase 16 Plan 01: bpr.ts single-module design — pure math + async DB code colocated; vitest uses server-only stub via alias so unit tests run in Node context
+- [Phase 16]: Phase 16 Plan 01: vitest adopted as project unit-test runner (previously Playwright-only); config stubs server-only + maps @/ alias
 
 ### Roadmap Evolution
 
@@ -150,6 +153,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-21T10:07:30.757Z
-Stopped at: Phase 16 context gathered
-Resume file: .planning/phases/16-jsonl-ingest-pipeline/16-CONTEXT.md
+Last session: 2026-04-22T13:27:07.540Z
+Stopped at: Completed 16-01-PLAN.md — BPR computation library shipped
+Resume file: None
