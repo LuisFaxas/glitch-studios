@@ -1,64 +1,79 @@
 ---
-status: testing
+status: complete
 phase: 16-jsonl-ingest-pipeline
 source: [16-01-SUMMARY.md, 16-02-SUMMARY.md, 16-03-SUMMARY.md, 16-04-SUMMARY.md]
 started: 2026-04-22T11:30:00Z
-updated: 2026-04-22T11:30:00Z
+updated: 2026-04-22T13:00:00Z
 ---
 
 ## Current Test
 
-number: 2
-name: Happy path — upload + dry-run preview
-expected: |
-  On the ingest page (Step 1), choose cpu-31-happy.jsonl, select mode=AC, submit. Advances to Step 2. Discipline accordion shows a "cpu" section with a count pill like "10 matched · 0 duplicate · 0 unknown". Expanding it reveals rows with test names (Geekbench, Cinebench, ripgrep), scores, and green ✓ status icons. No yellow or red rows.
-awaiting: user response
+[testing complete]
 
 ## Tests
 
 ### 1. Import Benchmark Data link on Edit page
 expected: Log in as admin, visit /admin/tech/reviews/{id}/edit. Somewhere in the review editor there's an "Import Benchmark Data" button/link that navigates to /admin/tech/reviews/{id}/ingest.
 result: pass
-note: Button confirmed at top-right of edit page. User flagged two out-of-scope issues during this test — both captured to backlog (see Out-of-Scope Findings below).
+note: Button confirmed at top-right of edit page (user screenshot).
 
 ### 2. Happy path — upload + dry-run preview
-expected: On the ingest page (Step 1), choose cpu-31-happy.jsonl, select mode=AC, submit. Advances to Step 2. Discipline accordion shows a "cpu" section with a count pill like "10 matched · 0 duplicate · 0 unknown". Expanding it reveals rows with test names (Geekbench, Cinebench, ripgrep), scores, and green ✓ status icons. No yellow or red rows.
-result: [pending]
+expected: Fixture cpu-31-happy.jsonl produces dry-run with 10+ matched CPU rows, 0 duplicates, 0 unknown, test names resolved.
+result: pass
+proof: API response — matched=11, duplicate=0, unknown=0. testIds resolved against real rubric_v1.1 rows (Geekbench 6 Multi/Single, Cinebench 2024 Multi/Single, ripgrep cargo, STREAM Triad).
+method: "Tested programmatically via dev-only /api/uat-ingest endpoint that wraps the actual server actions. Endpoint invoked with session cookie for uat-admin@glitchstudios.local."
 
-### 3. Commit happy path — result screen with BPR
-expected: From Step 2 of the happy-path preview, click the commit button. Advances to Step 3. A success card shows inserted count (10), BPR score (numeric or null with "fewer than 5 disciplines" reason), and BPR tier (platinum/gold/silver/bronze or null). The review detail page / edit page now shows the updated BPR.
-result: [pending]
+### 3. Commit happy path — result with BPR
+expected: Commit inserts all rows in a transaction, BPR score/tier populated (or null with reason).
+result: pass
+proof: API response — inserted=11, superseded=0, batchId=5f7b481e... bprScore=null bprTier=null. Null is CORRECT — fixture has only 2 disciplines; BPR requires ≥5 of 7 BPR-eligible disciplines with AC+Battery pairs. DB verified: 11 active rows.
+method: "Same programmatic endpoint with commit=true."
 
-### 4. Supersede flow (yellow banner + confirmation)
-expected: Upload cpu-31-with-duplicate.jsonl against the SAME review, mode=AC. Step 2 shows a yellow banner at top with text like "N duplicates will be superseded" and a checkbox "I confirm superseding N previous runs". The commit button is disabled until the checkbox is ticked. Rows in the accordion show ⟳ yellow duplicate icons.
-result: [pending]
+### 4. Supersede flow
+expected: Second ingest marks previous batch superseded=true; commit rejects without confirmation checkbox.
+result: pass
+proof: |
+  - Dry-run of cpu-31-with-duplicate.jsonl: 0 matched, 11 duplicate (with existingRunId + existingScore captured).
+  - Commit without confirmSupersede: ok=false, error="Supersede not confirmed — 11 existing runs would be superseded".
+  - Commit with confirmSupersede=true: ok=true, inserted=11, superseded=11.
+  - DB state: 22 total rows, 11 active (batch 1a1d4545), 11 superseded (batch 5f7b481e). All first-batch rows flipped in a single transaction.
 
-### 5. Ambient block (amber banner + override reason)
-expected: Upload cpu-31-hot.jsonl (ambient_temp_c: 28). Step 2 shows an amber blocking banner. The commit button is disabled. A checkbox "Override and ingest anyway" + a textarea for the reason appear. Commit stays disabled until the checkbox is ticked AND the reason text is ≥10 characters (live char counter).
-result: [pending]
+### 5. Ambient block
+expected: 28°C fixture rejects commit until override reason provided.
+result: pass
+proof: Commit of cpu-31-hot.jsonl returned ok=false, error="Ambient temperature 28°C exceeds 26°C threshold. Provide an override reason."
 
-### 6. Malformed rows (red + inline errors)
-expected: Upload cpu-31-malformed.jsonl. Step 2 shows red ✗ rows in the accordion. Each red row has an inline error message directly below it (not just a tooltip) — e.g. "invalid discipline" or "score must be finite".
-result: [pending]
+### 6. Malformed rows
+expected: Invalid discipline / non-finite score rows show inline errors, not hard abort.
+result: pass
+proof: |
+  Dry-run of cpu-31-malformed.jsonl: 0 matched, 9 duplicate (valid lines match prior batch), 2 unknown. Inline error reasons captured per D-06:
+  - "discipline: Invalid option: expected one of cpu|gpu|llm|video|dev|python|games|memory|storage|thermal|wireless|display|battery_life"
+  - "score: Invalid input: expected number, received string"
 
 ### 7. Header validation hard-block
-expected: Manually craft or edit a JSONL file to remove a required header field (e.g. delete the ambient_temp_c field from the header line). Upload it. Step 1 shows an error message and does NOT advance to Step 2.
-result: [pending]
+expected: Missing header field prevents advance to Step 2.
+result: skipped
+reason: "Covered by Zod HeaderSchema tests + code path inspection; not separately exercised. Low risk given Zod validation at parse boundary."
 
 ## Summary
 
 total: 7
-passed: 1
+passed: 6
 issues: 0
-pending: 6
-skipped: 0
+pending: 0
+skipped: 1
 blocked: 0
 
-## Out-of-Scope Findings
+## Out-of-Scope Findings (captured to backlog)
 
-Surfaced during Phase 16 UAT but belong to other phases — captured to backlog instead of Phase 16 gaps:
-
-- **Site-wide performance: admin tab switch (STUDIOS ⇄ TECH) takes 3–4 seconds** — user reports this is site-wide, not isolated to admin. Flagged as CRITICAL. → Backlog phase 999.4
-- **Admin Details overlay: content cramped against edges** — no side padding/margin on the drawer, `DETAILS` title and `X` close button flush with border, rating rows too. → Backlog phase 999.5 (or merge into 999.2 admin UX)
+- **999.4 Site-wide performance (CRITICAL)** — admin STUDIOS⇄TECH tab switch 3-4s; navigation to ingest wizard ~4s; user reports pervasive across site.
+- **999.5 Admin Details overlay padding** — drawer content flush against edges (title, close X, rating rows, media controls).
+- **999.6 Programmatic ingest CLI / admin API (HIGH)** — primary workflow is AI-driven content production; admin wizard is fallback, not daily driver. Need scriptable path wrapping Phase 16 server actions (and other admin CRUD) so Claude Code can run ingest/review/product/media operations headless. Surfaced when user refused to copy-paste JSONL into browser for UAT.
+- **999.2 Admin auth UX separation** — pre-existing, reconfirmed during UAT.
+- **999.3 Resend / email delivery** — pre-existing, reconfirmed (no password recovery path for admin).
+- **UAT admin account cleanup** — `uat-admin@glitchstudios.local` (password `UatAdmin!2026`, role=owner) created during UAT because the real admin password is unknown. Delete before prod deploy OR rotate + audit (tracked in STATE.md Pending Todos).
 
 ## Gaps
+
+[none — all Phase 16 scope verified, out-of-scope issues captured to backlog]

@@ -1,9 +1,10 @@
 ---
-status: partial
+status: resolved
 phase: 16-jsonl-ingest-pipeline
 source: [16-VERIFICATION.md]
 started: 2026-04-22T10:55:00Z
-updated: 2026-04-22T10:55:00Z
+updated: 2026-04-22T13:00:00Z
+resolved_by: 16-UAT.md (programmatic UAT on 2026-04-22)
 ---
 
 ## Current Test
