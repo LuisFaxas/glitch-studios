@@ -110,7 +110,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
       <HomepageScrollWatcher />
-      <SplashOverlay mode={splashMode}>
+      <SplashOverlay mode={splashMode} brand="studios">
         {useDynamicLayout ? (
           <>
             {homepageSections.map((section, idx) => {

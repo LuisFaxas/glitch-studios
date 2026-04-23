@@ -5,7 +5,6 @@ import {
   LogIn,
   LogOut,
   ChevronsRight,
-  ShoppingCart,
 } from "lucide-react"
 import { motion } from "motion/react"
 import { Tile } from "@/components/tiles/tile"
@@ -97,9 +96,14 @@ export function TileNav({
             })}
           </nav>
 
-          {/* Cart icon */}
-          <div className="mt-2 flex items-center justify-center border border-[#222] bg-[#111] text-[#f5f5f0] p-3 w-full">
-            <ShoppingCart className="h-5 w-5" />
+          {/* D-07/D-08 (Phase 16.1): full-box CartIcon matching expanded
+              state, with site-wide hover-glitch per feedback_glitch_headers.md */}
+          <div className="group relative mt-2 w-full overflow-hidden border border-[#222] bg-[#111] hover:bg-[#1a1a1a] text-[#f5f5f0] transition-colors duration-200">
+            <span
+              className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 transition-opacity duration-150 group-hover:animate-glitch-hover group-hover:opacity-100 motion-reduce:hidden"
+              aria-hidden="true"
+            />
+            <CartIcon className="relative z-10 w-full flex items-center justify-center p-3" />
           </div>
 
           {/* Auth icon — right under cart */}
@@ -111,20 +115,28 @@ export function TileNav({
                     ? "/admin"
                     : "/dashboard"
                 }
-                className="flex items-center justify-center p-3 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] text-[#f5f5f0] w-full transition-colors duration-200"
+                className="group relative flex items-center justify-center overflow-hidden p-3 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] text-[#f5f5f0] w-full transition-colors duration-200"
                 aria-label="My Account"
               >
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#222222] text-[#f5f5f0] font-mono text-[10px] font-bold uppercase shrink-0">
+                <span
+                  className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 transition-opacity duration-150 group-hover:animate-glitch-hover group-hover:opacity-100 motion-reduce:hidden"
+                  aria-hidden="true"
+                />
+                <span className="relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-[#222222] text-[#f5f5f0] font-mono text-[10px] font-bold uppercase shrink-0">
                   {getInitials(session.user.name, session.user.email ?? "")}
                 </span>
               </Link>
             ) : (
               <Link
                 href="/login"
-                className="flex items-center justify-center p-3 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] text-[#f5f5f0] w-full transition-colors duration-200"
+                className="group relative flex items-center justify-center overflow-hidden p-3 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] text-[#f5f5f0] w-full transition-colors duration-200"
                 aria-label="Sign In"
               >
-                <LogIn className="h-5 w-5" />
+                <span
+                  className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 transition-opacity duration-150 group-hover:animate-glitch-hover group-hover:opacity-100 motion-reduce:hidden"
+                  aria-hidden="true"
+                />
+                <LogIn className="relative z-10 h-5 w-5" />
               </Link>
             )}
           </div>
@@ -177,9 +189,15 @@ export function TileNav({
             </div>
           </nav>
 
-          {/* Cart */}
-          <div className="mt-2 flex items-center justify-center border border-[#222222] bg-[#111111] text-[#f5f5f0] py-2">
-            <CartIcon />
+          {/* D-07/D-08 (Phase 16.1): expanded cart wraps CartIcon with the
+              site-wide hover-glitch group pattern for visual parity with the
+              collapsed state and other header buttons. */}
+          <div className="group relative mt-2 flex items-center justify-center overflow-hidden border border-[#222222] bg-[#111111] text-[#f5f5f0] py-2">
+            <span
+              className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 transition-opacity duration-150 group-hover:animate-glitch-hover group-hover:opacity-100 motion-reduce:hidden"
+              aria-hidden="true"
+            />
+            <CartIcon className="relative z-10 p-2" />
           </div>
 
           {/* Auth — same width as cart */}
@@ -192,12 +210,16 @@ export function TileNav({
                       ? "/admin"
                       : "/dashboard"
                   }
-                  className="flex flex-1 items-center gap-2 py-2 pl-3 hover:bg-[#1a1a1a] transition-colors duration-200"
+                  className="group relative flex flex-1 items-center gap-2 overflow-hidden py-2 pl-3 hover:bg-[#1a1a1a] transition-colors duration-200"
                 >
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#222222] text-[#f5f5f0] font-mono text-[10px] font-bold uppercase shrink-0">
+                  <span
+                    className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 transition-opacity duration-150 group-hover:animate-glitch-hover group-hover:opacity-100 motion-reduce:hidden"
+                    aria-hidden="true"
+                  />
+                  <span className="relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-[#222222] text-[#f5f5f0] font-mono text-[10px] font-bold uppercase shrink-0">
                     {getInitials(session.user.name, session.user.email ?? "")}
                   </span>
-                  <span className="font-mono text-[11px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0]">
+                  <span className="relative z-10 font-mono text-[11px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0]">
                     My Account
                   </span>
                 </Link>
@@ -217,10 +239,14 @@ export function TileNav({
             ) : (
               <Link
                 href="/login"
-                className="flex w-full items-center justify-center gap-2 border border-[#222222] bg-[#111111] py-2 text-[#f5f5f0] hover:bg-[#1a1a1a] transition-colors duration-200"
+                className="group relative flex w-full items-center justify-center gap-2 overflow-hidden border border-[#222222] bg-[#111111] py-2 text-[#f5f5f0] hover:bg-[#1a1a1a] transition-colors duration-200"
               >
-                <LogIn className="h-4 w-4" />
-                <span className="font-mono text-[11px] font-bold uppercase tracking-[0.05em]">Sign In</span>
+                <span
+                  className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 transition-opacity duration-150 group-hover:animate-glitch-hover group-hover:opacity-100 motion-reduce:hidden"
+                  aria-hidden="true"
+                />
+                <LogIn className="relative z-10 h-4 w-4" />
+                <span className="relative z-10 font-mono text-[11px] font-bold uppercase tracking-[0.05em]">Sign In</span>
               </Link>
             )}
           </div>

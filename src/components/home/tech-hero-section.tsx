@@ -5,6 +5,12 @@ import { HeroSection } from "@/components/home/hero-section"
 import { TechPulseLine } from "@/components/home/tech-pulse-line"
 import styles from "@/components/tiles/logo-tile.module.css"
 
+// D-06 (Phase 16.1): parity with Studios hero — the underlying HeroSection is
+// shared, so heartbeat + motion timing + layout rhythm are identical between
+// the two brands. Only the wordmark (GlitchTech + TECH beam glitch), subtitle,
+// CTAs, and tagline are substituted for tech. Do not fork HeroSection — keep
+// the shared component so future motion/layout changes ship to both brands
+// simultaneously.
 export function TechHeroSection() {
   return (
     <HeroSection

@@ -11,6 +11,8 @@ import { TechBenchmarkSpotlight } from "@/components/home/tech-benchmark-spotlig
 import { TechCompareCta } from "@/components/home/tech-compare-cta"
 import { TechNewsletter } from "@/components/home/tech-newsletter"
 import { HomepageScrollWatcher } from "@/components/home/homepage-scroll-watcher"
+import { SplashOverlay } from "@/components/home/splash-overlay"
+import { getSplashMode } from "@/lib/get-splash-mode"
 
 export const metadata: Metadata = {
   title: "Glitch Tech",
@@ -21,21 +23,24 @@ export const metadata: Metadata = {
 export const revalidate = 300
 
 export default async function TechHomePage() {
-  const [featuredReviews, categories, spotlight] = await Promise.all([
+  const [featuredReviews, categories, spotlight, splashMode] = await Promise.all([
     getLatestPublishedReviews(3),
     listTopLevelCategoriesWithCounts(),
     getBenchmarkSpotlight(),
+    getSplashMode(),
   ])
 
   return (
     <>
       <HomepageScrollWatcher />
-      <TechHeroSection />
-      <TechFeaturedReviewsCarousel reviews={featuredReviews} />
-      <TechCategoryTiles categories={categories} />
-      <TechBenchmarkSpotlight spotlight={spotlight} />
-      <TechCompareCta />
-      <TechNewsletter />
+      <SplashOverlay mode={splashMode} brand="tech">
+        <TechHeroSection />
+        <TechFeaturedReviewsCarousel reviews={featuredReviews} />
+        <TechCategoryTiles categories={categories} />
+        <TechBenchmarkSpotlight spotlight={spotlight} />
+        <TechCompareCta />
+        <TechNewsletter />
+      </SplashOverlay>
     </>
   )
 }
