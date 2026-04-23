@@ -126,7 +126,15 @@ export function HeroSection({
         <p className="font-mono text-sm md:text-4xl text-[#f5f5f0] tracking-tight mb-6 md:mb-8 px-4 text-center">
           {subtitle}
         </p>
-        <div className="w-[60vw] max-w-[280px] md:w-[80vw] md:max-w-[600px] pointer-events-auto flex justify-center">
+        {/* D-16 (Phase 16.1): fluid logo wrapper — `w-full` + `max-w-[600px]`
+            caps logo size on wide screens, while the parent's `inset-x-0`
+            keeps it centered. `min-w-0` prevents a flex parent from being
+            forced wider by the logo's aspect ratio. `data-testid="glitch-logo"`
+            is a regression anchor for the breakpoint spec. */}
+        <div
+          data-testid="glitch-logo"
+          className="w-[60vw] max-w-[280px] md:w-[80vw] md:max-w-[600px] min-w-0 pointer-events-auto flex justify-center"
+        >
           {wordmark ?? (
             <div className={styles.glitchWrapper}>
               <div className={styles.glitchImg} />
