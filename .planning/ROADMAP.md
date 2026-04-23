@@ -396,6 +396,46 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd:review-backlog when ready — likely needs to ship before public launch / Phase 21)
 
+### Phase 999.7: Seed Representative Tech Catalog for Dev (BACKLOG)
+
+**Goal:** [Captured for future planning] Seed one full MacBook Pro 16" M5 Max review + product + category breadcrumbs + gallery + benchmark run so `/tech/reviews/[slug]` renders against live data during dev. Driven by `project_placeholder_first_build` — the plan is to design the whole launch surface against ONE real record before building a fleet.
+
+**What's broken right now:**
+- `/tech/reviews/macbook-pro-m4` returns 404 (Phase 16.1 Plan 04 audit finding F-1). The `WidgetLatestReview` widget's hardcoded href was rerouted to `/tech/reviews` so the click target resolves, but the dynamic-route detail surface still can't be viewed with real data.
+
+**Scope:**
+- Add `src/db/seed-tech-catalog.ts` that inserts: 1 category (Laptops, already exists), 1 product (MacBook Pro 16" M5 Max), 1 published review (title, verdict, bodyHtml, ratings, pros, cons, gallery), and 1 benchmark run against rubric v1.1
+- Add `pnpm db:seed-tech` script
+- Update `WidgetLatestReview` to take a `review` prop and accept a server-rendered href, not a hardcoded string
+- Swap placeholder image URLs to real uploads OR keep `placehold.co` for the seed-only review and document
+
+**Surfaced from:** Phase 16.1 Plan 04 audit sweep (2026-04-23) — 3 blocker findings across viewports for the same 404 slug.
+
+**Requirements:** TBD (new CATALOG-* ids)
+
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd:review-backlog when ready — unblocks design review on tech detail surface)
+
+### Phase 999.8: Replace Placeholder Imagery with Real Uploads (BACKLOG)
+
+**Goal:** [Captured for future planning] Swap every `placehold.co` URL in the tech catalog + widgets for real Uploadthing/R2 images once product photography exists.
+
+**Scope (small):**
+- Grep `placehold.co` across `src/`, replace with real asset URLs or Uploadthing references
+- Remove `placehold.co` from `next.config.ts` `images.remotePatterns`
+- Clear the `_next/image` 400 Bad Request console errors flagged in Phase 16.1 Plan 04 audit finding F-5
+
+**Surfaced from:** Phase 16.1 Plan 04 audit sweep (2026-04-23).
+
+**Requirements:** TBD (cosmetic, no new REQ-IDs expected)
+
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd:review-backlog when ready — pair with 999.7)
+
 ## Traceability
 
 | REQ-ID | Description | Phase | Status |

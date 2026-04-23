@@ -1,0 +1,65 @@
+[
+  {
+    "route": "/tech/reviews/macbook-pro-m4",
+    "viewport": "mobile-375",
+    "kind": "http-error",
+    "severity": "blocker",
+    "detail": "HTTP 404"
+  },
+  {
+    "route": "/tech/reviews/macbook-pro-m4",
+    "viewport": "mobile-375",
+    "kind": "console-error",
+    "severity": "info",
+    "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  },
+  {
+    "route": "/tech/reviews/macbook-pro-m4",
+    "viewport": "laptop-1280",
+    "kind": "http-error",
+    "severity": "blocker",
+    "detail": "HTTP 404"
+  },
+  {
+    "route": "/tech/reviews/macbook-pro-m4",
+    "viewport": "laptop-1280",
+    "kind": "console-error",
+    "severity": "info",
+    "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  },
+  {
+    "route": "/tech/reviews/macbook-pro-m4",
+    "viewport": "desktop-1920",
+    "kind": "http-error",
+    "severity": "blocker",
+    "detail": "HTTP 404"
+  },
+  {
+    "route": "/tech/reviews/macbook-pro-m4",
+    "viewport": "desktop-1920",
+    "kind": "console-error",
+    "severity": "info",
+    "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  },
+  {
+    "route": "/tech/categories/laptops",
+    "viewport": "mobile-375",
+    "kind": "console-error",
+    "severity": "info",
+    "detail": "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+  },
+  {
+    "route": "/tech/categories/laptops",
+    "viewport": "laptop-1280",
+    "kind": "console-error",
+    "severity": "info",
+    "detail": "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+  },
+  {
+    "route": "/tech/categories/laptops",
+    "viewport": "desktop-1920",
+    "kind": "console-error",
+    "severity": "info",
+    "detail": "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+  }
+]
