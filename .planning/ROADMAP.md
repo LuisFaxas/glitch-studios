@@ -18,16 +18,19 @@ See `.planning/milestones/v1.0-ROADMAP.md`
 See `.planning/milestones/v2.0-ROADMAP.md`
 </details>
 
-### 🚧 v3.0 GlitchTek Launch (In Progress)
+### 🚧 v3.0 GlitchTech Launch (In Progress)
 
-**Milestone Goal:** Take GlitchTek from "foundation live" to "launched with credibility." Lock the methodology, hydrate rubric v1.1 benchmarks from the Mac bench harness, ship the flagship MBP 16" M5 Max review, add category master leaderboards so readers can rank every reviewed product side-by-side. Templates flow together — every future review slots into the locked structure without ad-hoc reinvention.
+**Milestone Goal:** Take GlitchTech from "foundation live" to "launched with credibility." Lock the methodology, hydrate rubric v1.1 benchmarks from the Mac bench harness, ship the flagship MBP 16" M5 Max review, add category master leaderboards so readers can rank every reviewed product side-by-side. Templates flow together — every future review slots into the locked structure without ad-hoc reinvention.
 
 - [x] **Phase 15: Methodology Lock + Schema** — migrations, rubric v1.1 seed, query refactors (completed 2026-04-21)
 - [x] **Phase 16: JSONL Ingest Pipeline** — 3-step wizard (upload → dry-run → commit) (completed 2026-04-22)
+- [ ] **Phase 16.1: Public Site Maintenance + Bug Sweep (INSERTED)** — sub-brand SPA nav, visual parity, wiring, audit sweep
 - [ ] **Phase 17: BPR Medal UI + Methodology Page** — monochrome medal, /tech/methodology
-- [ ] **Phase 18: Category Master Leaderboard** — sortable/filterable master rankings per category
-- [ ] **Phase 19: Flagship MBP Review Published** — MBP 16 M5 Max 64GB end-to-end
-- [ ] **Phase 20: GlitchTek Blog** — /tech/blog via brand discriminator
+- [ ] **Phase 17.5: Trailer Video Surface (NEW)** — surface for the two finished trailer videos
+- [ ] **Phase 18: Category Master Leaderboard** — sortable/filterable master rankings per category (placeholder data, one laptop)
+- [ ] **Phase 19: Flagship MBP Review Published** — MBP 16 M5 Max 64GB shell with placeholder data; content swap in parallel
+- [ ] **Phase 20: GlitchTech Blog** — /tech/blog via brand discriminator (placeholder posts)
+- [ ] **Phase 20.5: Launch Blockers Bundle (NEW)** — perf audit (999.4), email/Resend (999.3), admin auth UX (999.2), UAT admin cleanup
 - [ ] **Phase 21: Deploy Hardening** — glitchtech.io domain, per-brand sitemap, OG tags
 
 ## Phase Details
@@ -79,6 +82,49 @@ Plans:
 - [x] 16-04-PLAN.md — Import Benchmark Data link on edit page + JSONL fixtures + Playwright E2E tests
 
 **UI hint**: no
+
+---
+
+### Phase 16.1: Public Site Maintenance + Bug Sweep (INSERTED)
+
+**Goal**: Fix accumulated public-facing papercuts noticed on the deployed site before building new v3.0 surfaces (17+) on top. No new features — only existing behavior brought to "actually works" state, so upcoming design review reflects finished components rather than broken ones.
+
+**Depends on**: Phase 16 (complete). No other dependencies.
+
+**Scope — bugs called out from the deployed version (2026-04-23):**
+
+1. **Sub-brand navigation opens a new tab** — Studios ↔ GlitchTech nav breaks SPA continuity. Audio player bar disappears when switching because a fresh page loads. Expected: same-tab `router.push`, player state preserved.
+2. **Cart + sign-in buttons** — only the logo hit area is clickable (not the full button); missing site-wide hover-glitch that other buttons have.
+3. **Intro logo glitch animation** — the splash from Phase 06.1 doesn't appear on deployed site. Regression or render condition gate.
+4. **GlitchTech hero** — should mirror the Studios heartbeat design (adapted copy for the tech brand).
+5. **No blog link in GlitchTech sidebar** — sidebar nav omits /tech/blog entry.
+6. **Social media buttons broken/hidden** — both Studios and GlitchTech footers/sidebars. Real handles: YT `glitchtech_io`, IG `glitchtech.io`, TikTok `glitchtech.io` for Tech; Studios handles TBD with user.
+7. **Stale "phase 7.6" copy on benchmarks page** — placeholder text references an old phase label; replace with current-phase stub or proper empty state.
+8. **Full public-site audit sweep** — walk every route from prior phases, catalog regressions, triage into this phase vs 999.x backlog.
+
+**Not in scope:**
+- GlitchTech homepage carousels — per user direction, content modules populate naturally in Phase 17–19; homepage "feels plain" is expected until then.
+- Admin-side issues — already tracked in 999.2 / 999.4 / 999.5.
+- Email / Resend — 999.3.
+- Programmatic CLI for AI workflow — 999.6.
+
+**Success Criteria** (what must be TRUE):
+1. Clicking the sub-brand switcher stays in the same tab, current route transitions via client navigation, and the audio player bar (if playing) continues without interruption.
+2. Cart and sign-in buttons accept clicks across their full bounding box and exhibit the site-wide hover-glitch effect consistent with other header buttons.
+3. Intro logo glitch animation renders on site load (or whatever the designed condition is) on both Studios and GlitchTech public routes.
+4. GlitchTech `/tech` hero matches Studios hero visual rhythm (same heartbeat pattern + motion timing), with tech-adapted copy.
+5. `/tech` sidebar has a Blog entry pointing at `/tech/blog`.
+6. Social media icons render on both brand footers/sidebars, link to correct handles, open in a new tab.
+7. `/tech/benchmarks` stale "phase 7.6" copy is replaced with a current-phase placeholder or proper empty state.
+8. Audit sweep report committed: every existing public route listed with pass/fail/deferred status.
+
+**Plans**: 4 plans (to be detailed in /gsd:plan-phase)
+- [ ] 16.1-01 — Sub-brand SPA navigation + audio player persistence
+- [ ] 16.1-02 — Visual parity pass (hero heartbeat, button glitch effects, intro logo animation)
+- [ ] 16.1-03 — Wiring & stale content (social buttons, sidebar blog link, benchmarks placeholder)
+- [ ] 16.1-04 — Public-site audit sweep + triage report
+
+**UI hint**: yes
 
 ---
 
@@ -239,6 +285,7 @@ v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 1
 | 14. Global Polish | v2.0 | 3/3 | Complete | 2026-04-21 |
 | 15. Methodology Lock + Schema | v3.0 | 3/3 | Complete    | 2026-04-21 |
 | 16. JSONL Ingest Pipeline | v3.0 | 4/4 | Complete   | 2026-04-22 |
+| 16.1. Public Site Maintenance + Bug Sweep | v3.0 | 0/4 | Not started | - |
 | 17. BPR Medal + Methodology Page | v3.0 | 0/3 | Not started | - |
 | 18. Category Master Leaderboard | v3.0 | 0/4 | Not started | - |
 | 19. Flagship MBP Review | v3.0 | 0/3 | Not started | - |
