@@ -4,7 +4,7 @@ import { db } from "@/lib/db"
 import { services, testimonials, portfolioItems, blogPosts } from "@/db/schema"
 import { eq, asc, desc } from "drizzle-orm"
 import { getPublishedBeats } from "@/actions/beats"
-import { HeroSection } from "@/components/home/hero-section"
+import { StudiosHeroSection } from "@/components/home/studios-hero-section"
 import { ServicesOverview } from "@/components/home/services-overview"
 import { FeaturedCarousel } from "@/components/home/featured-carousel"
 import { VideoPortfolioCarousel } from "@/components/home/video-portfolio-carousel"
@@ -82,7 +82,7 @@ export default async function HomePage() {
   // Section renderer map
   const sectionRenderers: Record<string, (config: Record<string, unknown>) => React.ReactNode> = {
     hero: (config) => (
-      <HeroSection
+      <StudiosHeroSection
         title={config.title as string | undefined}
         subtitle={config.subtitle as string | undefined}
         ctaText={config.ctaText as string | undefined}
@@ -137,7 +137,7 @@ export default async function HomePage() {
           </>
         ) : (
           <>
-            <HeroSection />
+            <StudiosHeroSection />
             <ServicesOverview services={servicesList} />
             <FeaturedCarousel beats={beatsList} />
             <VideoPortfolioCarousel portfolioItems={portfolioList} />

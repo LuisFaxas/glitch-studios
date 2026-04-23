@@ -126,14 +126,23 @@ export function HeroSection({
         <p className="font-mono text-sm md:text-4xl text-[#f5f5f0] tracking-tight mb-6 md:mb-8 px-4 text-center">
           {subtitle}
         </p>
-        {/* D-16 (Phase 16.1): fluid logo wrapper — `w-full` + `max-w-[600px]`
-            caps logo size on wide screens, while the parent's `inset-x-0`
-            keeps it centered. `min-w-0` prevents a flex parent from being
-            forced wider by the logo's aspect ratio. `data-testid="glitch-logo"`
-            is a regression anchor for the breakpoint spec. */}
+        {/* D-16 (Phase 16.1, post-UAT revision): stepped max-width ladder
+            so the logo doesn't clip at the 1280–1440 "13-inch laptop" range
+            once the splash overlay's `scale: 1.5` + the sidebar (280px
+            expanded) + any Windows scaling is accounted for. User reports
+            horizontal clipping on ROG 13 — a 600px wordmark at 1.5× scale
+            is 900px wide, which overshoots a 1280-1366 viewport minus the
+            sidebar once the heartbeat pulse-line row is added. The ladder:
+              mobile: 280px cap
+              ≥md (768): 400px
+              ≥lg (1024): 460px
+              ≥xl (1280): 520px (13" laptop target — fits under splash 1.5×)
+              ≥2xl (1536): 600px (proper desktop)
+            `min-w-0` keeps the logo's 4.5:1 aspect ratio from stretching
+            flex parents. `data-testid` is the regression anchor. */}
         <div
           data-testid="glitch-logo"
-          className="w-[60vw] max-w-[280px] md:w-[80vw] md:max-w-[600px] min-w-0 pointer-events-auto flex justify-center"
+          className="w-[60vw] max-w-[280px] md:w-[70vw] md:max-w-[400px] lg:w-[60vw] lg:max-w-[460px] xl:max-w-[520px] 2xl:max-w-[600px] min-w-0 pointer-events-auto flex justify-center"
         >
           {wordmark ?? (
             <div className={styles.glitchWrapper}>

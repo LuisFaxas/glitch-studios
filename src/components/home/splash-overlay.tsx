@@ -103,9 +103,15 @@ export function SplashOverlay({
             if (splashState === "exiting") handleExitComplete()
           }}
         >
+          {/* D-05/D-16 (Phase 16.1, post-UAT revision): splash logo ladder
+              matches the hero logo ladder so the initial 1.2× scale never
+              overshoots the viewport at 13" widths (ROG 13 user report).
+              Reduced initial scale from 1.5 → 1.2 and dropped the md cap
+              from 600 → 420 to stay inside even 1280px viewports after
+              scaling. max-w restores to 600 at 2xl. */}
           <motion.div
-            className="w-[80vw] max-w-[600px]"
-            initial={{ opacity: 0, scale: 1.5 }}
+            className="w-[70vw] max-w-[280px] md:max-w-[420px] lg:max-w-[480px] xl:max-w-[540px] 2xl:max-w-[600px]"
+            initial={{ opacity: 0, scale: 1.2 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{
               duration: 1.2,
