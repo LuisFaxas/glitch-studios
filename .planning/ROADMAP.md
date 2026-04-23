@@ -101,6 +101,7 @@ Plans:
 6. **Social media buttons broken/hidden** — both Studios and GlitchTech footers/sidebars. Real handles: YT `glitchtech_io`, IG `glitchtech.io`, TikTok `glitchtech.io` for Tech; Studios handles TBD with user.
 7. **Stale "phase 7.6" copy on benchmarks page** — placeholder text references an old phase label; replace with current-phase stub or proper empty state.
 8. **Full public-site audit sweep** — walk every route from prior phases, catalog regressions, triage into this phase vs 999.x backlog.
+9. **Responsive breakpoint regressions** — homepage (and likely other routes) "total mess" at 13" laptop viewport (≈1280–1440px); glitch logo clips severely. Need Playwright-based coverage across mobile (iPhone SE 375, iPhone 14 Pro 393, iPad 768/1024) + laptop (1280, 1366, 1440) + desktop (1920) with regression fixes per route.
 
 **Not in scope:**
 - GlitchTech homepage carousels — per user direction, content modules populate naturally in Phase 17–19; homepage "feels plain" is expected until then.
@@ -117,12 +118,14 @@ Plans:
 6. Social media icons render on both brand footers/sidebars, link to correct handles, open in a new tab.
 7. `/tech/benchmarks` stale "phase 7.6" copy is replaced with a current-phase placeholder or proper empty state.
 8. Audit sweep report committed: every existing public route listed with pass/fail/deferred status.
+9. Every public route renders without layout breakage across the defined breakpoint matrix (375 / 393 / 768 / 1024 / 1280 / 1366 / 1440 / 1920); Playwright viewport screenshots committed as visual regression baseline.
 
-**Plans**: 4 plans (to be detailed in /gsd:plan-phase)
+**Plans**: 5 plans (to be detailed in /gsd:plan-phase)
 - [ ] 16.1-01 — Sub-brand SPA navigation + audio player persistence
 - [ ] 16.1-02 — Visual parity pass (hero heartbeat, button glitch effects, intro logo animation)
 - [ ] 16.1-03 — Wiring & stale content (social buttons, sidebar blog link, benchmarks placeholder)
 - [ ] 16.1-04 — Public-site audit sweep + triage report
+- [ ] 16.1-05 — Responsive breakpoint audit + fixes (13" laptop priority, plus mobile/tablet/desktop coverage)
 
 **UI hint**: yes
 
@@ -285,7 +288,7 @@ v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 1
 | 14. Global Polish | v2.0 | 3/3 | Complete | 2026-04-21 |
 | 15. Methodology Lock + Schema | v3.0 | 3/3 | Complete    | 2026-04-21 |
 | 16. JSONL Ingest Pipeline | v3.0 | 4/4 | Complete   | 2026-04-22 |
-| 16.1. Public Site Maintenance + Bug Sweep | v3.0 | 0/4 | Not started | - |
+| 16.1. Public Site Maintenance + Bug Sweep | v3.0 | 0/5 | Not started | - |
 | 17. BPR Medal + Methodology Page | v3.0 | 0/3 | Not started | - |
 | 18. Category Master Leaderboard | v3.0 | 0/4 | Not started | - |
 | 19. Flagship MBP Review | v3.0 | 0/3 | Not started | - |
