@@ -127,6 +127,29 @@ Out of scope: BPR medal UI (Phase 17), `/tech/methodology` page (Phase 17), cate
   - `cpu-31-hot.jsonl` — happy fixture with `ambient_temp_c: 28` in header (used to test override flow).
   - `cpu-31-malformed.jsonl` — line 12 has `score: "Infinity"` and one line has `discipline: "neuralengine"` (used to test red-row error UX).
 
+### JSONL Field Naming Contract (Quick 260423-rfu, resolved 2026-04-23)
+
+- **D-18:** **JSONL per-line `field` values MUST match the RUBRIC_V1_1 object-key suffix (short form), NOT the `RubricTestSpec.field` property value.**
+
+  Ingest lookup at `src/actions/admin-tech-ingest.ts:230` computes
+  `` `${line.discipline}:${line.tool}:${line.field}` `` and indexes `RUBRIC_V1_1` by that composite string. The object key uses the short form (e.g. `"cpu:hyperfine:ripgrep_cargo"`), while the value's internal `RubricTestSpec.field` property carries the unit-suffixed long form (e.g. `"ripgrep_cargo_mean_s"`). These diverge on purpose — the short form is the wire contract; the long form is an internal DB column hint.
+
+  **The Mac harness JSONL producer MUST emit the short form.** Every Phase 16 fixture already follows this rule; this decision locks it for real bench runs.
+
+  | Discipline | Tool | JSONL `field` (short) | RubricTestSpec.field (long, internal) |
+  |------------|------|-----------------------|----------------------------------------|
+  | `cpu` | `hyperfine` | `ripgrep_cargo` | `ripgrep_cargo_mean_s` |
+  | `memory` | `stream` | `triad` | `triad_gb_s` |
+  | `memory` | `stream` | `copy` | `copy_gb_s` |
+  | `storage` | `amorphous` | `seq_read` | `seq_read_mb_s` |
+  | `storage` | `amorphous` | `rnd4k_read` | `rnd4k_read_mb_s` |
+  | `video` | `handbrake` | `h264_1080p` | `h264_1080p_fps` |
+  | `video` | `handbrake` | `hevc_4k` | `hevc_4k_fps` |
+
+  **Full list of affected entries:** `deferred-items.md § RUBRIC_V1_1 object-key / field-property inconsistency`.
+
+  **Chosen over code change:** Option B from the 2026-04-23 UAT audit. A v1.2 rubric bump that canonicalizes keys (Option A) is forward-compatible but introduces breaking changes for external harness producers that already follow the short-form convention. Contract-level documentation is the zero-risk path to unblock the 2026-04-25 Mac harness run. If future review shows the long form is more defensible, revisit as rubric v1.2.
+
 ### Claude's Discretion
 - File organization within `src/actions/admin-tech-benchmarks.ts` vs splitting into a new `src/actions/admin-tech-ingest.ts` (planner picks based on file size after Phase 15 changes).
 - Type names for `DryRunResult`, `ValidatedSession`, `CommitResult` (follow existing camelCase + project type-naming conventions).

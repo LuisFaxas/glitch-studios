@@ -21,6 +21,8 @@ Recommendation: triage these in a dedicated quick-fix pass (e.g. `/gsd:quick`), 
 
 ## RUBRIC_V1_1 object-key / field-property inconsistency (Plan 04 discovery)
 
+**Status: RESOLVED 2026-04-23** — see `16-CONTEXT.md` D-18 (JSONL Field Naming Contract). Resolution path was documentation-only (Option B): the short-form contract was locked in 16-CONTEXT.md with a copy-referenceable example table, no rubric v1.2 bump was needed. Quick task: `260423-rfu`. Historical analysis below retained for posterity.
+
 Discovered while authoring JSONL fixtures (Plan 04 Task 1). `src/lib/tech/rubric-map.ts`
 has several entries where the object key and the `RubricTestSpec.field` property
 diverge, violating the implicit contract that the key is `${discipline}:${tool}:${field}`.

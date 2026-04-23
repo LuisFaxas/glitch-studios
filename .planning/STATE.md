@@ -162,9 +162,12 @@ Recent decisions affecting current work:
 | 260401-lbs | Compact cards view + localStorage persistence — 3-mode toggle (compact/large/list) | 2026-04-01 | 3d9fc76 | [260401-lbs-compact-cards-view-persistence](./quick/260401-lbs-compact-cards-view-persistence/) |
 | 260401-m19 | ElasticSlider volume control + BPM range slider jumpiness fix | 2026-04-01 | 708e323 | [260401-m19-elastic-slider-integration](./quick/260401-m19-elastic-slider-integration/) |
 | 260416-wav | Research animation libraries for React/Next.js ECG heartbeat pulse and cyberpunk motion effects | 2026-04-17 | — | [260416-wav-research-animation-libraries-for-react-n](./quick/260416-wav-research-animation-libraries-for-react-n/) |
+| 260423-rfu | Document rubric-map key/field short-form contract before 2026-04-25 Mac harness use | 2026-04-23 | 75eae76 | [260423-rfu-document-rubric-map-key-field-short-form](./quick/260423-rfu-document-rubric-map-key-field-short-form/) |
 
 ## Session Continuity
 
-Last session: 2026-04-23T06:52:47.239Z
-Stopped at: Phase 16.1 context gathered
-Resume file: .planning/phases/16.1-public-site-maintenance/16.1-CONTEXT.md
+Last session: 2026-04-23T23:45:25.439Z
+Stopped at: Quick 260423-rfu — rubric-map contract documented as D-18
+Resume file: .planning/phases/16-jsonl-ingest-pipeline/16-CONTEXT.md
+
+Last activity: 2026-04-23 - Completed quick task 260423-rfu: Document rubric-map key/field short-form contract before 2026-04-25 Mac harness use
