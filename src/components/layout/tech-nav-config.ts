@@ -40,8 +40,10 @@ export const techNavItems: readonly NavItem[] = [
     desktopSize: "medium",
     mobileSpan: "col-span-4",
   },
-  // D-09 (Phase 16.1): Blog entry matching Studios public-nav-config.ts
-  // convention (BookOpen icon, small desktop tile).
+  // D-09 (Phase 16.1): Blog + About as paired small tiles on the final row,
+  // mirroring the Studios Blog+Contact ending pattern in public-nav-config.ts.
+  // small=col-span-1 (half width), so two smalls fill a row together — a
+  // lone small tile would leave an empty half-row slot next to it.
   {
     label: "Blog",
     href: "/tech/blog",
@@ -53,8 +55,8 @@ export const techNavItems: readonly NavItem[] = [
     label: "About",
     href: "/tech/about",
     icon: Info,
-    desktopSize: "wide",
-    mobileSpan: "col-span-6",
+    desktopSize: "small",
+    mobileSpan: "col-span-3",
   },
 ] as const
 
@@ -89,7 +91,10 @@ export const techMobileTabItems: readonly NavItem[] = [
   },
 ] as const
 
+// D-09 (Phase 16.1): Blog available on mobile overlay too so it's reachable
+// across every surface (desktop sidebar + mobile overlay menu).
 export const techMobileMenuItems = [
   { label: "Benchmarks", href: "/tech/benchmarks", icon: BarChart3 },
+  { label: "Blog", href: "/tech/blog", icon: BookOpen },
   { label: "About", href: "/tech/about", icon: Info },
 ] as const
