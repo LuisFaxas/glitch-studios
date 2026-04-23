@@ -1,10 +1,11 @@
 ---
 phase: 17
 slug: bpr-medal-ui-methodology-page
-status: draft
+status: approved
 shadcn_initialized: true
 preset: base-nova
 created: 2026-04-23
+reviewed_at: 2026-04-23T00:00:00Z
 ---
 
 # Phase 17 — UI Design Contract
@@ -70,6 +71,8 @@ Inherited from 07.4 / 07.6. **No new sizes, no new weights.**
 - "%" unit after score: `font-mono text-xs text-current opacity-80` — rendered as separate span so it can tonally recede from the number without breaking monochrome rule
 - Tier label: `font-mono text-[11px] font-bold uppercase tracking-[0.1em]` — always rendered below or beside the number; always spelled out (no abbreviations)
 - "RUBRIC v1.1" badge: `font-mono text-[10px] font-bold uppercase tracking-[0.1em]` — slightly smaller than medal tier label to sit visually subordinate
+
+> **Scope note on `text-2xl` / `text-lg` / `text-xs` / `text-sm` usage:** These Tailwind utility classes are **component-scoped implementation tokens** for the BPR medal score numbers and the methodology formula code block only. They are **not** additions to the 4-step site type scale (64 / 28 / 15 / 11px) and must not be used for general prose, headings, or chrome outside the `BPRMedal`, `BPRMedalPlaceholder`, and formula-block components. Any new surface needing a type size outside the 4-step scale requires a spec amendment.
 
 **Methodology body overrides:**
 - Numbered lists inside sections use `list-decimal pl-6 space-y-2` — 8px gap between items
