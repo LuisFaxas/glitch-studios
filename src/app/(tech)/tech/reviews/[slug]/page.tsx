@@ -94,9 +94,17 @@ export default async function ReviewDetailPage({ params }: Props) {
   const review = await getPublishedReviewBySlug(slug)
   if (!review) notFound()
 
+  // Phase 16.1 Plan 04: category is now nullable on PublicReviewDetail since
+  // the underlying query uses leftJoin for category resilience. If the review's
+  // product has no category, skip breadcrumb + related-reviews — both require
+  // a category id — and render an empty list for the carousel.
   const [breadcrumbs, related, specs, benchmarks] = await Promise.all([
-    getCategoryBreadcrumb(review.product.categoryId),
-    getRelatedReviews(review.id, review.product.categoryId, review.product.parentCategoryId),
+    review.product.categoryId
+      ? getCategoryBreadcrumb(review.product.categoryId)
+      : Promise.resolve([]),
+    review.product.categoryId
+      ? getRelatedReviews(review.id, review.product.categoryId, review.product.parentCategoryId)
+      : Promise.resolve([]),
     getProductSpecs(review.product.id),
     getBenchmarkRunsForProducts([review.product.id]),
   ])

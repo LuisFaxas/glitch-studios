@@ -62,9 +62,11 @@ export interface PublicReviewDetail {
     priceUsd: number | null
     affiliateUrl: string | null
     releaseDate: string | null
-    categoryId: string
-    categoryName: string
-    categorySlug: string
+    // Category fields are nullable when the optional leftJoin doesn't match
+    // (Phase 16.1 Plan 04 — partial seed resilience).
+    categoryId: string | null
+    categoryName: string | null
+    categorySlug: string | null
     parentCategoryId: string | null
   }
   pros: string[]
@@ -129,6 +131,12 @@ export async function getAllPublishedReviewSlugs(): Promise<{ slug: string }[]> 
 }
 
 export async function getPublishedReviewBySlug(slug: string): Promise<PublicReviewDetail | null> {
+  // D-13/Plan 04 (Phase 16.1): use leftJoin for category + reviewer so a
+  // published review with a missing optional relation (partially seeded
+  // fixture, soft-deleted reviewer) still renders instead of 404-ing. The
+  // listing query (fetchCardRows) already uses leftJoin on category; this
+  // keeps the two queries consistent. heroImage + product remain innerJoin
+  // because the detail page hero/title cannot render without them.
   const rows = await db
     .select({
       review: techReviews,
@@ -139,9 +147,9 @@ export async function getPublishedReviewBySlug(slug: string): Promise<PublicRevi
     })
     .from(techReviews)
     .innerJoin(techProducts, eq(techReviews.productId, techProducts.id))
-    .innerJoin(techCategories, eq(techProducts.categoryId, techCategories.id))
+    .leftJoin(techCategories, eq(techProducts.categoryId, techCategories.id))
     .innerJoin(mediaAssets, eq(techReviews.heroImageId, mediaAssets.id))
-    .innerJoin(user, eq(techReviews.reviewerId, user.id))
+    .leftJoin(user, eq(techReviews.reviewerId, user.id))
     .where(and(eq(techReviews.slug, slug), eq(techReviews.status, "published")))
     .limit(1)
 
@@ -211,10 +219,10 @@ export async function getPublishedReviewBySlug(slug: string): Promise<PublicRevi
       priceUsd: r.product.priceUsd !== null ? Number(r.product.priceUsd) : null,
       affiliateUrl: r.product.affiliateUrl,
       releaseDate: r.product.releaseDate,
-      categoryId: r.category.id,
-      categoryName: r.category.name,
-      categorySlug: r.category.slug,
-      parentCategoryId: r.category.parentId,
+      categoryId: r.category?.id ?? null,
+      categoryName: r.category?.name ?? null,
+      categorySlug: r.category?.slug ?? null,
+      parentCategoryId: r.category?.parentId ?? null,
     },
     pros: prosRows.map((p) => p.text),
     cons: consRows.map((c) => c.text),

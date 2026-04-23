@@ -21,6 +21,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*.r2.cloudflarestorage.com",
       },
+      // Placeholder images for seeded tech catalog (laptop review + category
+      // thumbnails) until real product imagery ships. Driven by the
+      // "placeholder-first" build pattern documented in memory
+      // project_placeholder_first_build. Swap once real uploads land.
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+      },
     ],
   },
 }

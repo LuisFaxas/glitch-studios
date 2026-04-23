@@ -1,10 +1,15 @@
 import Link from "next/link"
 import { Star } from "lucide-react"
 
+// Phase 16.1 Plan 04: placeholder widget (per project_placeholder_first_build)
+// points at the reviews index instead of a specific fake review detail URL,
+// so the click target always resolves even before the "MacBook Pro M4 Max"
+// stub review is seeded. Swap to a dynamic `href={latestReview.url}` once
+// the widget takes a real data prop.
 export function WidgetLatestReview() {
   return (
     <Link
-      href="/tech/reviews/macbook-pro-m4"
+      href="/tech/reviews"
       aria-label="Latest Review: MacBook Pro 14 (M4 Max)"
       className="group col-span-2 flex flex-col gap-2 border border-[#222222] bg-[#111111] p-3 transition-colors duration-200 hover:border-[#444444] hover:bg-[#1a1a1a]"
     >
