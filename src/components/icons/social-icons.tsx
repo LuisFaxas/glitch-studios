@@ -33,3 +33,49 @@ export function XIcon(props: IconProps) {
     </svg>
   )
 }
+
+export function TikTokIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M19.321 5.562a5.122 5.122 0 01-3.414-1.267 5.123 5.123 0 01-1.537-2.775V1h-3.343v13.67a2.95 2.95 0 01-5.297 1.763 2.95 2.95 0 012.954-4.583V8.5a6.3 6.3 0 00-1.213-.118 6.327 6.327 0 00-6.327 6.327A6.327 6.327 0 0011.47 21.04a6.328 6.328 0 006.329-6.327V8.588a8.44 8.44 0 004.925 1.58V6.82a5.117 5.117 0 01-3.403-1.258z" />
+    </svg>
+  )
+}
+
+/**
+ * D-11 (Phase 16.1): unified social handles rendered across both brands
+ * (Studios footer/sidebar + GlitchTech footer/sidebar + mobile overlay).
+ *
+ * - Active links use `target="_blank" rel="noopener noreferrer"` (D-12).
+ * - `href: null` entries render as MUTED placeholders (no anchor, no click)
+ *   — X account does not exist yet and should not navigate anywhere.
+ *
+ * Handle suffix matters: IG + TikTok both use `@glitchtech.io` (with `.io`
+ * suffix — the domain doubles as the handle). YouTube uses `@glitchtech_io`
+ * (underscore, no `.io`). Do NOT mix.
+ */
+import type { SocialLink } from "@/components/layout/nav-config-types"
+
+export const socialLinks: readonly SocialLink[] = [
+  {
+    label: "Instagram",
+    Icon: InstagramIcon,
+    href: "https://instagram.com/glitchtech.io",
+  },
+  {
+    label: "TikTok",
+    Icon: TikTokIcon,
+    href: "https://tiktok.com/@glitchtech.io",
+  },
+  {
+    label: "YouTube",
+    Icon: YouTubeIcon,
+    href: "https://youtube.com/@glitchtech_io",
+  },
+  {
+    label: "X",
+    Icon: XIcon,
+    // Placeholder per user direction — no X account exists yet.
+    href: null,
+  },
+] as const

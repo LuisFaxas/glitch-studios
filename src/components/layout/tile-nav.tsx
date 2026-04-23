@@ -5,6 +5,7 @@ import {
   LogIn,
   LogOut,
   ChevronsRight,
+  ShoppingCart,
 } from "lucide-react"
 import { motion } from "motion/react"
 import { Tile } from "@/components/tiles/tile"
@@ -14,7 +15,7 @@ import { WidgetStudioStatus } from "@/components/tiles/widget-studio-status"
 import { WidgetSocial } from "@/components/tiles/widget-social"
 import { signOut, useSession } from "@/lib/auth-client"
 import type { ReactNode } from "react"
-import { CartIcon } from "@/components/cart/cart-icon"
+import { useCart } from "@/components/cart/cart-provider"
 import { useSidebar } from "@/components/layout/sidebar-context"
 import Link from "next/link"
 import type { NavItem } from "@/components/layout/nav-config-types"
@@ -56,6 +57,19 @@ export function TileNav({
   const router = useRouter()
   const { data: session } = useSession()
   const { collapsed, setCollapsed } = useSidebar()
+  const { itemCount, isMounted, toggleCart } = useCart()
+  // D-07 (Phase 16.1): the cart tile is a native <button> (not a div wrapping
+  // CartIcon) so the ENTIRE tile bounding box is a click target — previously
+  // only the inner icon-button area took clicks.
+  const cartAriaLabel =
+    isMounted && itemCount > 0
+      ? `Shopping cart, ${itemCount} items`
+      : "Shopping cart, empty"
+  const cartBadge = isMounted && itemCount > 0 && (
+    <span className="absolute -top-1 -right-1 flex min-w-[18px] h-[18px] items-center justify-center bg-[#333] text-[#f5f5f0] text-[10px] font-mono font-bold">
+      {itemCount}
+    </span>
+  )
 
   const targetWidth = collapsed ? 64 : 280
 
@@ -96,15 +110,23 @@ export function TileNav({
             })}
           </nav>
 
-          {/* D-07/D-08 (Phase 16.1): full-box CartIcon matching expanded
-              state, with site-wide hover-glitch per feedback_glitch_headers.md */}
-          <div className="group relative mt-2 w-full overflow-hidden border border-[#222] bg-[#111] hover:bg-[#1a1a1a] text-[#f5f5f0] transition-colors duration-200">
+          {/* D-07/D-08 (Phase 16.1): native <button> — full-tile click target,
+              matches sibling nav tile heights, hover-glitch via group pattern. */}
+          <button
+            type="button"
+            onClick={toggleCart}
+            aria-label={cartAriaLabel}
+            className="group relative mt-2 flex items-center justify-center overflow-hidden p-3 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] text-[#f5f5f0] w-full transition-colors duration-200 cursor-pointer"
+          >
             <span
               className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 transition-opacity duration-150 group-hover:animate-glitch-hover group-hover:opacity-100 motion-reduce:hidden"
               aria-hidden="true"
             />
-            <CartIcon className="relative z-10 w-full flex items-center justify-center p-3" />
-          </div>
+            <span className="relative z-10 inline-flex">
+              <ShoppingCart className="h-5 w-5" />
+              {cartBadge}
+            </span>
+          </button>
 
           {/* Auth icon — right under cart */}
           <div className="mt-1 w-full">
@@ -189,16 +211,23 @@ export function TileNav({
             </div>
           </nav>
 
-          {/* D-07/D-08 (Phase 16.1): expanded cart wraps CartIcon with the
-              site-wide hover-glitch group pattern for visual parity with the
-              collapsed state and other header buttons. */}
-          <div className="group relative mt-2 flex items-center justify-center overflow-hidden border border-[#222222] bg-[#111111] text-[#f5f5f0] py-2">
+          {/* D-07/D-08 (Phase 16.1): native <button> — full-tile click target,
+              hover-glitch via group pattern. */}
+          <button
+            type="button"
+            onClick={toggleCart}
+            aria-label={cartAriaLabel}
+            className="group relative mt-2 flex w-full items-center justify-center overflow-hidden border border-[#222222] bg-[#111111] text-[#f5f5f0] hover:bg-[#1a1a1a] py-2 transition-colors duration-200 cursor-pointer"
+          >
             <span
               className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 transition-opacity duration-150 group-hover:animate-glitch-hover group-hover:opacity-100 motion-reduce:hidden"
               aria-hidden="true"
             />
-            <CartIcon className="relative z-10 p-2" />
-          </div>
+            <span className="relative z-10 inline-flex p-2">
+              <ShoppingCart className="h-6 w-6" />
+              {cartBadge}
+            </span>
+          </button>
 
           {/* Auth — same width as cart */}
           <div className="mt-1">

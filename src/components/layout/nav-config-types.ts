@@ -17,6 +17,8 @@ export interface MobileMenuItem {
 
 export interface SocialLink {
   label: string
-  href: string
+  /** Absolute URL. `null` marks a placeholder (e.g., account does not exist
+   *  yet — render as a muted icon, no anchor, no click). See D-11 (Phase 16.1). */
+  href: string | null
   Icon: ComponentType<{ className?: string }>
 }

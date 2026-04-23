@@ -32,12 +32,7 @@ import { Tile } from "@/components/tiles/tile"
 import { LogoTile } from "@/components/tiles/logo-tile"
 import { WidgetNowPlaying } from "@/components/tiles/widget-now-playing"
 import { WidgetStudioStatus } from "@/components/tiles/widget-studio-status"
-import {
-  InstagramIcon,
-  YouTubeIcon,
-  SoundCloudIcon,
-  XIcon,
-} from "@/components/icons/social-icons"
+import { socialLinks as unifiedSocialLinks } from "@/components/icons/social-icons"
 import { useSession } from "@/lib/auth-client"
 import type { SocialLink } from "@/components/layout/nav-config-types"
 
@@ -59,12 +54,11 @@ export const defaultStudiosOverlayNavItems: readonly { label: string; href: stri
   { label: "Contact", href: "/contact", icon: Mail },
 ] as const
 
-export const defaultStudiosOverlaySocialLinks: readonly SocialLink[] = [
-  { label: "Instagram", href: "https://instagram.com/glitchstudios", Icon: InstagramIcon },
-  { label: "YouTube", href: "https://youtube.com/@glitchstudios", Icon: YouTubeIcon },
-  { label: "SoundCloud", href: "https://soundcloud.com/glitchstudios", Icon: SoundCloudIcon },
-  { label: "X", href: "https://x.com/glitchstudios", Icon: XIcon },
-]
+// D-11 (Phase 16.1): mobile overlay uses the unified social set shared with
+// footer + sidebar widgets. Both Studios and Tech sides render the same four
+// handles — IG/TikTok/YT active, X muted placeholder.
+export const defaultStudiosOverlaySocialLinks: readonly SocialLink[] =
+  unifiedSocialLinks
 
 const EASE_OUT_CUBIC = [0.215, 0.61, 0.355, 1] as const
 
@@ -312,18 +306,28 @@ export function MobileNavOverlay({
               className="relative z-[2] mt-1 grid grid-cols-4 gap-1"
               {...stagger(3)}
             >
-              {socialLinks.map(({ label, href, Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="flex aspect-square items-center justify-center border border-[#222222] bg-[#111111] text-[#f5f5f0] transition-colors hover:bg-[#1a1a1a] hover:border-[#444444] active:bg-[#0a0a0a]"
-                >
-                  <Icon className={label === "SoundCloud" ? "h-9 w-9" : "h-8 w-8"} />
-                </a>
-              ))}
+              {socialLinks.map(({ label, href, Icon }) =>
+                href ? (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="flex aspect-square items-center justify-center border border-[#222222] bg-[#111111] text-[#f5f5f0] transition-colors hover:bg-[#1a1a1a] hover:border-[#444444] active:bg-[#0a0a0a]"
+                  >
+                    <Icon className="h-8 w-8" />
+                  </a>
+                ) : (
+                  <div
+                    key={label}
+                    aria-label={`${label} — coming soon`}
+                    className="flex aspect-square items-center justify-center border border-[#222222] bg-[#0a0a0a] text-[#444444]"
+                  >
+                    <Icon className="h-8 w-8" />
+                  </div>
+                ),
+              )}
             </motion.div>
 
             {/* Sign In/Out + Close — thumb zone */}

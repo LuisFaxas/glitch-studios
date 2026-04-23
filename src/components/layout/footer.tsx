@@ -1,25 +1,16 @@
 import Link from "next/link"
 import styles from "@/components/tiles/logo-tile.module.css"
 import { NewsletterForm } from "@/components/forms/newsletter-form"
-import {
-  InstagramIcon,
-  YouTubeIcon,
-  SoundCloudIcon,
-  XIcon,
-} from "@/components/icons/social-icons"
+// D-11 (Phase 16.1): unified social config shared across widgets + footer +
+// mobile overlay. No per-brand overrides — both brands point at the same
+// handles. X renders muted (no account yet, no navigation).
+import { socialLinks } from "@/components/icons/social-icons"
 
 const navLinks = [
   { label: "Services", href: "/services" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "Artists", href: "/artists" },
   { label: "Blog", href: "/blog" },
-]
-
-const socialLinks = [
-  { label: "Instagram", href: "https://instagram.com/glitchstudios", icon: InstagramIcon },
-  { label: "YouTube", href: "https://youtube.com/@glitchstudios", icon: YouTubeIcon },
-  { label: "SoundCloud", href: "https://soundcloud.com/glitchstudios", icon: SoundCloudIcon },
-  { label: "X", href: "https://x.com/glitchstudios", icon: XIcon },
 ]
 
 export function Footer() {
@@ -53,18 +44,28 @@ export function Footer() {
             </nav>
             <span className="hidden text-[#333333] md:inline">|</span>
             <div className="flex items-center gap-3">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#555555] hover:text-[#f5f5f0] transition-colors"
-                  aria-label={social.label}
-                >
-                  <social.icon className={social.label === "SoundCloud" ? "size-5" : "size-3.5"} />
-                </a>
-              ))}
+              {socialLinks.map((social) =>
+                social.href ? (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#555555] hover:text-[#f5f5f0] transition-colors"
+                    aria-label={social.label}
+                  >
+                    <social.Icon className="size-3.5" />
+                  </a>
+                ) : (
+                  <span
+                    key={social.label}
+                    className="text-[#333333]"
+                    aria-label={`${social.label} — coming soon`}
+                  >
+                    <social.Icon className="size-3.5" />
+                  </span>
+                ),
+              )}
             </div>
           </div>
 
