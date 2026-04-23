@@ -60,16 +60,12 @@ export function TileNav({
   const { itemCount, isMounted, toggleCart } = useCart()
   // D-07 (Phase 16.1): the cart tile is a native <button> (not a div wrapping
   // CartIcon) so the ENTIRE tile bounding box is a click target — previously
-  // only the inner icon-button area took clicks.
+  // only the inner icon-button area took clicks. The badge is rendered inline
+  // in each tile so its padding/positioning matches that tile's dimensions.
   const cartAriaLabel =
     isMounted && itemCount > 0
       ? `Shopping cart, ${itemCount} items`
       : "Shopping cart, empty"
-  const cartBadge = isMounted && itemCount > 0 && (
-    <span className="absolute -top-1 -right-1 flex min-w-[18px] h-[18px] items-center justify-center bg-[#333] text-[#f5f5f0] text-[10px] font-mono font-bold">
-      {itemCount}
-    </span>
-  )
 
   const targetWidth = collapsed ? 64 : 280
 
@@ -116,16 +112,18 @@ export function TileNav({
             type="button"
             onClick={toggleCart}
             aria-label={cartAriaLabel}
-            className="group relative mt-2 flex items-center justify-center overflow-hidden p-3 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] text-[#f5f5f0] w-full transition-colors duration-200 cursor-pointer"
+            className="group relative mt-2 flex min-h-[44px] items-center justify-center overflow-hidden p-3 border border-[#222] bg-[#111] hover:bg-[#1a1a1a] text-[#f5f5f0] w-full transition-colors duration-200 cursor-pointer"
           >
             <span
               className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 transition-opacity duration-150 group-hover:animate-glitch-hover group-hover:opacity-100 motion-reduce:hidden"
               aria-hidden="true"
             />
-            <span className="relative z-10 inline-flex">
-              <ShoppingCart className="h-5 w-5" />
-              {cartBadge}
-            </span>
+            <ShoppingCart className="relative z-10 h-5 w-5" />
+            {isMounted && itemCount > 0 && (
+              <span className="absolute top-0.5 right-0.5 z-10 flex min-w-[18px] h-[18px] items-center justify-center bg-[#333] text-[#f5f5f0] text-[10px] font-mono font-bold">
+                {itemCount}
+              </span>
+            )}
           </button>
 
           {/* Auth icon — right under cart */}
@@ -212,21 +210,27 @@ export function TileNav({
           </nav>
 
           {/* D-07/D-08 (Phase 16.1): native <button> — full-tile click target,
-              hover-glitch via group pattern. */}
+              hover-glitch via group pattern. Structure mirrors the sign-in
+              <Link> below so both tiles render at the same height — an
+              intermediate wrapper span on the flex child was previously
+              collapsing the button to 18px. Badge sits absolute-positioned
+              relative to the button itself (top-right of the tile). */}
           <button
             type="button"
             onClick={toggleCart}
             aria-label={cartAriaLabel}
-            className="group relative mt-2 flex w-full items-center justify-center overflow-hidden border border-[#222222] bg-[#111111] text-[#f5f5f0] hover:bg-[#1a1a1a] py-2 transition-colors duration-200 cursor-pointer"
+            className="group relative mt-2 flex w-full min-h-[40px] items-center justify-center overflow-hidden border border-[#222222] bg-[#111111] py-2 text-[#f5f5f0] hover:bg-[#1a1a1a] transition-colors duration-200 cursor-pointer"
           >
             <span
               className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 transition-opacity duration-150 group-hover:animate-glitch-hover group-hover:opacity-100 motion-reduce:hidden"
               aria-hidden="true"
             />
-            <span className="relative z-10 inline-flex p-2">
-              <ShoppingCart className="h-6 w-6" />
-              {cartBadge}
-            </span>
+            <ShoppingCart className="relative z-10 h-6 w-6" />
+            {isMounted && itemCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 z-10 flex min-w-[18px] h-[18px] items-center justify-center bg-[#333] text-[#f5f5f0] text-[10px] font-mono font-bold">
+                {itemCount}
+              </span>
+            )}
           </button>
 
           {/* Auth — same width as cart */}
