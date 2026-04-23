@@ -5,6 +5,7 @@ import {
   Grid,
   ArrowLeftRight,
   BarChart3,
+  BookOpen,
   Info,
   Home,
 } from "lucide-react"
@@ -38,6 +39,15 @@ export const techNavItems: readonly NavItem[] = [
     icon: BarChart3,
     desktopSize: "medium",
     mobileSpan: "col-span-4",
+  },
+  // D-09 (Phase 16.1): Blog entry matching Studios public-nav-config.ts
+  // convention (BookOpen icon, small desktop tile).
+  {
+    label: "Blog",
+    href: "/tech/blog",
+    icon: BookOpen,
+    desktopSize: "small",
+    mobileSpan: "col-span-3",
   },
   {
     label: "About",
