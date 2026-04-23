@@ -8,18 +8,21 @@ import Link from "next/link"
 // Studios URL so the click actually crosses domains. Locally and in
 // Vercel previews the same deployment serves both brands, so a relative
 // "/" works there.
+//
+// D-01/D-02 (Phase 16.1): Cross-brand navigation MUST stay in the same tab.
+// Known limitation: `<audio>` elements cannot persist across origins,
+// so any currently-playing beat will stop mid-song when this link is clicked.
+// Do NOT re-introduce target="_blank" — revisit only if brands unify origins
+// (tracked as "audio continuity across brands" in deferred ideas).
 export function StudiosCrossLinkTile() {
   const [href, setHref] = useState("/")
-  const [crossOrigin, setCrossOrigin] = useState(false)
 
   useEffect(() => {
     const h = window.location.hostname.toLowerCase()
     if (h === "glitchtech.io" || h === "www.glitchtech.io") {
       setHref("https://glitchstudios.io/")
-      setCrossOrigin(true)
     } else {
       setHref("/")
-      setCrossOrigin(false)
     }
   }, [])
 
@@ -31,7 +34,7 @@ export function StudiosCrossLinkTile() {
   return (
     <Link
       href={href}
-      {...(crossOrigin && { target: "_blank", rel: "noopener noreferrer" })}
+      data-testid="studios-cross-link-tile"
       aria-label="Glitch Studios — sister site"
       className={`group relative col-span-2 flex items-center justify-center overflow-hidden border px-4 py-5 font-mono font-bold uppercase tracking-[0.05em] outline-none transition-colors duration-200 focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2 ${
         isActive
