@@ -1,33 +1,33 @@
 ---
 gsd_state_version: 1.0
-milestone: v3.0
-milestone_name: GlitchTek Launch
-status: Ready to plan
-stopped_at: Phase 17 UI-SPEC approved
-last_updated: "2026-04-24T02:06:03.649Z"
+milestone: v4.0
+milestone_name: Production Launch
+status: Audit-driven discovery
+stopped_at: v4.0 initialized — Phase 22 visual audit about to start
+last_updated: "2026-04-24T00:00:00.000Z"
 last_activity: 2026-04-24
 progress:
-  total_phases: 15
-  completed_phases: 4
-  total_plans: 16
-  completed_plans: 16
+  total_phases: 1
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-21)
+See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 
-**Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience. Tech readers trust GlitchTek's hardware scorecards.
-**Current focus:** Phase 17.5 — trailer-video-surface (next incomplete phase after 17 shipped; 999.2 closed as not-a-bug 2026-04-24)
+**Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience. Tech readers trust GlitchTech's hardware scorecards.
+**Current focus:** Phase 22 — Visual Audit & Discovery (audit drives v4.0 phase structure; remaining phases derived from audit output)
 
 ## Current Position
 
-Phase: 17.5
-Plan: Not started
+Phase: 22
+Plan: Not started (audit is conversational, not plan-gated)
 
-Progress: [================----] 24/33 phases complete
+Progress: v3.0 closed partial (4/10 phases shipped) → v4.0 active, Phase 22 starting
 
 ## Performance Metrics
 

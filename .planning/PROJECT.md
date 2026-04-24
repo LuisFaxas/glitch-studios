@@ -13,22 +13,35 @@ Both brands share a single Next.js app, root layout, auth, cart, audio player, a
 
 One platform that makes Glitch Studios' work discoverable and Glitch Tech's hardware reviews credible — clients book/buy, tech readers trust the scorecards.
 
-## Current Milestone: v3.0 GlitchTek Launch
+## Current Milestone: v4.0 Production Launch
 
-**Goal:** Take GlitchTek from "foundation live" to "launched with credibility." Lock the methodology, hydrate rubric v1.1 benchmarks from the Mac harness, ship the flagship MBP 16" M5 Max review, and add category leaderboards so readers can rank every reviewed product side-by-side. Templates flow together; every future review slots into the locked structure without ad-hoc reinvention.
+**Status:** Active (started 2026-04-24)
+**Predecessor:** v3.0 closed partial — Phases 15, 16, 16.1, 17 shipped; remaining work carried over. See [MILESTONES.md](MILESTONES.md).
 
-**Target features (in priority order):**
-1. Methodology lock-in — rubric v1.1 schema + review template spec + `/tech/methodology` page
-2. JSONL log ingestion from the Mac bench harness
-3. BPR rollup + medal UI (Platinum / Gold / Silver / Bronze)
-4. Category master leaderboard — sortable/filterable ranked tables per category (the headline feature)
-5. Flagship review: MBP 16" M5 Max 64GB
-6. GlitchTek blog at `/tech/blog`
-7. glitchtech.io deployment hardening
+**Goal:** Get the site to production — polished, performant, content-complete, and credible. Visual audit drives direction; every surface gets held to a launchable standard. GlitchMark ships as a distinct scoring system (not a rebrand of BPR). Remaining v3.0 launch work (master leaderboard, flagship review, blog, deploy hardening) completes inside this milestone.
 
-**Process commitment:** Phase 1 locks the methodology. Subsequent phases reference it — if data doesn't fit, we fix the template, not hack the review.
+**Process commitment:**
+- Phase 22 is a visual audit — the audit determines what phases 23+ actually are. No speculative phase-planning before the audit runs.
+- Every surface audited gets triaged: `[BLOCK]` (blocks launch), `[POLISH]` (launch-nice-to-have), `[BACKLOG]` (post-launch), `[OK]` (fine as-is).
+- GSD gap fix: "parked for future phase" agreements during conversation must be captured to ROADMAP, REQUIREMENTS, or memory in the same turn — no verbal-only handshakes (GlitchMark was lost this way).
 
-**Explicitly NOT in scope:** 2-way `/tech/compare` stays as-is. Studios contact page still deferred. Only one flagship review.
+**Target features (high-level — concrete phases derived from visual audit):**
+1. Visual audit & discovery — catalog every surface, triage every issue (Phase 22)
+2. Email delivery end-to-end (Resend + React Email) — launch blocker
+3. Site-wide performance audit + fixes — launch blocker (3-4s admin switcher today)
+4. **GlitchMark system** — formula, schema, UI surface, methodology page — NEW, never roadmapped
+5. Category master leaderboard (v3.0 carry-over — headline feature, never shipped)
+6. Flagship MBP 16 M5 Max review published (v3.0 carry-over)
+7. GlitchTek blog (v3.0 carry-over)
+8. Trailer video surface (v3.0 carry-over)
+9. Per-page quality fixes derived from the audit (homepage, beats, services, booking, portfolio, artists, blog, contact, admin surfaces, global components)
+10. Production deploy hardening — glitchtech.io domain, per-brand sitemap, OG tags, UAT admin cleanup, env/secret audit
+
+**Explicitly NOT in scope (yet):**
+- Feature work beyond audit-surfaced items (new capabilities belong in v4.1+)
+- 2-way `/tech/compare` redesign stays as-is unless audit flags it
+- Programmatic CLI (999.6) — defer post-launch
+- Studios contact page redesign still deferred unless audit flags it
 
 ## Requirements
 
@@ -56,15 +69,26 @@ One platform that makes Glitch Studios' work discoverable and Glitch Tech's hard
 - [x] Artists & Team (internal + collaborators sections, rich cards, chip filter) — v2.0 Phase 12
 - [x] Global polish (brand social icons, footer newsletter, player widget) — v2.0 Phase 14
 
-### Active (v3.0)
+**v3.0 GlitchTek Launch (Phases 15–17 shipped, closed partial 2026-04-24):**
+- [x] Rubric v1.1 locked in schema (Phase 15)
+- [x] JSONL ingest pipeline (Mac → DB) (Phase 16)
+- [x] Public site maintenance pass — sub-brand nav, splash, hero parity, responsive audit (Phase 16.1)
+- [x] BPR rollup + medal UI + `/tech/methodology` page (Phase 17)
 
-- [x] Rubric v1.1 locked in schema (Phase 15) — methodology page deferred to Phase 17
-- [ ] JSONL ingest pipeline (Mac → DB)
-- [ ] BPR rollup + medal UI
-- [ ] Category master leaderboards (sortable/filterable ranked tables)
-- [ ] MBP 16" M5 Max 64GB flagship review published
-- [ ] `/tech/blog` live
-- [ ] glitchtech.io deploy hardened
+### Active (v4.0 Production Launch)
+
+Derived from audit — placeholder list pending Phase 22 output.
+
+- [ ] Visual audit & discovery (Phase 22 — seeds phases 23+)
+- [ ] Email delivery end-to-end (Resend + React Email) — launch blocker
+- [ ] Site-wide performance audit + fixes — launch blocker
+- [ ] **GlitchMark system** — aggregate-all-benchmarks composite score, distinct from BPR
+- [ ] Category master leaderboard (carry-over from v3.0)
+- [ ] Flagship MBP 16 M5 Max review published (carry-over from v3.0)
+- [ ] GlitchTek blog (carry-over from v3.0)
+- [ ] Trailer video surface (carry-over from v3.0)
+- [ ] Per-page quality fixes (populated from Phase 22 findings)
+- [ ] Production deploy hardening — glitchtech.io domain, sitemaps, OG, UAT admin cleanup, env audit
 
 ### Out of Scope
 
@@ -132,4 +156,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 — Phase 15 (Methodology Lock + Schema) complete. Rubric v1.1 schema landed (4 enums, 17 cols, partial UNIQUE on runs, CHECK on reviews, new exclusions table) + 43-entry RUBRIC_V1_1 seeded + pre-ingest queries refactored to DISTINCT ON. Phase 16 (JSONL ingest) is now unblocked.*
+*Last updated: 2026-04-24 — v4.0 Production Launch milestone started. v3.0 closed partial with Phases 15-17 shipped; remaining launch work (17.5, 18, 19, 20, 20.5, 21) carried over. New scope: GlitchMark scoring system (distinct from BPR, captured in memory after being lost from the planning record), email delivery, performance, and production polish. Phase 22 is a visual audit that determines the rest of the milestone phases.*

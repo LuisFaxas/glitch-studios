@@ -1,145 +1,179 @@
-# Requirements — v3.0 GlitchTek Launch
+# Requirements — v4.0 Production Launch
 
-**Milestone goal:** Take GlitchTek from "foundation live" to "launched with credibility." Lock the methodology, hydrate rubric v1.1 benchmarks, ship the flagship MBP 16" M5 Max review, and add category master leaderboards. Every future review slots into the locked template without reinvention.
+**Milestone goal:** Get the site to production — polished, performant, content-complete, credible. Visual audit drives direction; GlitchMark ships as a new scoring system distinct from BPR; remaining v3.0 launch work completes. Every surface held to a launchable standard.
 
----
-
-## v1 Requirements
-
-### Methodology & Schema (METH-*)
-
-- [x] **METH-01** Rubric v1.1 seeded into `tech_benchmark_templates` — 13 disciplines with their exact tool set (Geekbench 6, Cinebench 2024, ripgrep cargo, 3DMark Wild Life / Steel Nomad / Solar Bay, Blender, STREAM, AmorphousDiskMark, llama-bench, MLX-LM, HandBrakeCLI, FFmpeg, pyperformance, PyTorch MPS, BG3, Cyberpunk/GPTK, Cinebench loop, video loop, Safari YouTube, web rotation, Cinebench drain, standby drain, iperf3, TB5, DisplayCAL, Lagom).
-- [x] **METH-02** Schema additions — all migrations land together in Phase 1 before any ingest code:
-  - `tech_benchmark_tests` adds: `mode` enum (`ac` | `battery` | `both`), `discipline` text, `direction` enum (`higher_is_better` | `lower_is_better`), `unit` text.
-  - `tech_benchmark_runs` adds: `mode` enum (`ac` | `battery`), `rubric_version` text, `run_uuid` text (session ID, one per reviewer session), `source_file` text, `ingest_batch_id` uuid, `superseded` boolean default false, `ambient_temp_c` numeric nullable, `macos_build` text nullable, `run_flagged` text nullable (reason), `permalink_url` text nullable (Geekbench etc.).
-  - `tech_benchmark_runs` gets `UNIQUE(product_id, test_id, mode, run_uuid) WHERE superseded = false` constraint.
-  - `tech_reviews` adds: `bpr_score` numeric nullable, `bpr_tier` enum (`platinum` | `gold` | `silver` | `bronze` | null), `rubric_version` text.
-  - New enum `artist_kind`-style `bpr_tier_enum`.
-  - New enum `discipline_exclusion_reason` (`no_hardware` | `requires_license` | `device_class_exempt` | `test_failed`).
-  - New table `tech_review_discipline_exclusions` — `(review_id, discipline, reason, notes)`.
-- [x] **METH-03** BPR formula locked — geometric mean of `battery_score_d / ac_score_d` across the **7 eligible disciplines**: CPU, GPU, LLM, Video, Dev, Python, Games. Wireless / Display / Memory / Storage / Thermal are AC-only and excluded from BPR by design. `tech_review_discipline_exclusions` with reason `device_class_exempt` is the only valid way to drop a discipline from BPR (e.g. no GPU on Mac mini).
-- [x] **METH-04** Medal thresholds locked — Platinum ≥ 90%, Gold ≥ 80%, Silver ≥ 70%, Bronze ≥ 60%. Below 60% = no medal displayed. Tier computed once on ingest commit and stored on `tech_reviews.bpr_tier`.
-- [ ] **METH-05** `/tech/methodology` page live — explains the rubric, BPR formula, the 7 eligible disciplines, medal thresholds, exclusion policy, and rubric versioning. Public-facing credibility layer. Linked from every review's scorecard and every leaderboard column header.
-- [ ] **METH-06** Rubric version visibility — every review detail page shows `Rubric v1.1` badge in the scorecard. Leaderboards filter to a single rubric version by default (latest) with a toggle to show older.
-- [x] **METH-07** Pre-ingest query refactors — `getBenchmarkRunsForProducts` uses `DISTINCT ON (product_id, test_id, mode) … ORDER BY created_at DESC` so the compare tool and leaderboard always show the latest non-superseded run. `getBenchmarkSpotlight` uses test id lookup via rubric map, not a fragile `ilike` name match.
-
-### Ingest Pipeline (ING-*)
-
-- [x] **ING-01** Admin JSONL upload at `/admin/tech/reviews/[id]/ingest` — 3-step wizard: **(1)** Upload + pick AC/Battery + pick rubric version (defaults to latest), **(2)** Dry-run preview showing which rows will insert / skip / fail with explanations, **(3)** Commit within a single DB transaction.
-- [x] **ING-02** Zod validation for every JSONL line — discipline, tool, score, unit, timestamp required. Malformed line blocks the whole upload with a clear error pointing to the line number (no partial writes).
-- [x] **ING-03** Source attribution captured — admin wizard has required fields for `ambient_temp_c`, `macos_build` (read from JSONL if present, else manual entry), and an auto-generated `run_uuid` per session. Ambient temp > 26 °C blocks ingest with override checkbox + reason text.
-- [x] **ING-04** Duplicate / re-run handling — ingesting a second run for the same `(product, test, mode)` marks the older row `superseded = true` and inserts the new one. Surfaces the history on the admin detail page.
-- [x] **ING-05** Rubric map — `src/lib/tech/rubric-map.ts` defines the allowed `(discipline, tool, field)` → `tech_benchmark_tests.id` translation. Lines with unknown discipline / tool get skipped and listed in the preview, not silently dropped.
-- [x] **ING-06** BPR recompute on commit — after a transaction commits, BPR score + tier are computed for the review and saved to `tech_reviews.bpr_score` / `bpr_tier`. `revalidatePath` fires for the review detail page + every affected leaderboard + the tech homepage.
-
-### BPR Medal UI (MEDAL-*)
-
-- [ ] **MEDAL-01** `<BPRMedal tier={…} score={…} />` component — monochrome intensity (Platinum `bg-[#f5f5f0] text-[#000]`, Gold `bg-[#888] text-[#000]`, Silver `border-[#555] text-[#f5f5f0]` outlined, Bronze `border-dashed border-[#444] text-[#888]` outlined-dashed). Tier label spelled out (`PLATINUM` / `GOLD` / `SILVER` / `BRONZE`) under the medal. Colorblind-safe.
-- [ ] **MEDAL-02** Medal surfaces on: review detail page scorecard, review card (inline in list + carousel + related), category leaderboard (dedicated column), tech homepage spotlight.
-- [ ] **MEDAL-03** "Not enough data" state — reviews with < 5 of the 7 eligible disciplines scored show no medal (instead of a misleading low-data one). `/tech/methodology` explains why.
-
-### Category Leaderboards (RANK-*)
-
-- [ ] **RANK-01** `/tech/categories/[slug]/rankings` route — server-rendered table, one row per published review in the category, columns: `#` rank, product name (link), BPR medal, BPR % score, Geekbench 6 Multi (AC), Cinebench 2024 Multi (AC), SSD Sequential Read, Battery Video Loop, Year, Price. Default sort: BPR score descending. Default column set is per-category (configurable in admin settings — laptops surface battery, desktops surface thermal).
-- [ ] **RANK-02** Sort on every column — URL state via `nuqs` (e.g. `?sort=cpu_mt&dir=desc`). Null cells sort to the bottom regardless of direction. Column headers show arrow indicator.
-- [ ] **RANK-03** Filter sidebar — price range, year, CPU kind (Apple Silicon / x86), RAM tier, storage tier, medal tier. URL-encoded via `nuqs`. Mobile opens as a shadcn `Sheet` from the right, matching the v2.0 reviews filter pattern.
-- [ ] **RANK-04** "Not tested" cells render `—` with a `title` tooltip explaining ("Not included in this review" or "Excluded — {reason}" pulling from `tech_review_discipline_exclusions`).
-- [ ] **RANK-05** Mobile layout — `< 768px` switches from table to per-product cards showing rank + medal + name + top 3 metrics + link to detail. No horizontal scroll on tables ever.
-- [ ] **RANK-06** Empty state — when category has no published reviews, show "No reviews published yet" with a CTA to the methodology page.
-- [ ] **RANK-07** Column header → test methodology anchor — clicking a column header name (not the sort arrow) jumps to `/tech/methodology#test-{slug}` in a new tab.
-
-### Flagship Review (FLAG-*)
-
-- [ ] **FLAG-01** Product `mbp-16-m5max-64gb` exists in `tech_products` under the Laptops category with complete spec sheet (CPU, GPU cores, RAM, storage, display, weight, price, year).
-- [ ] **FLAG-02** Benchmark runs ingested for all 13 disciplines (or legitimately excluded via `tech_review_discipline_exclusions` with reason). Minimum 7 of 7 BPR-eligible disciplines captured AC + Battery.
-- [ ] **FLAG-03** Review article published — verdict, body (Tiptap), pros/cons, rating, gallery, video embed if applicable, audience tags. Rubric v1.1 badge displayed. BPR medal visible.
-- [ ] **FLAG-04** Review appears on: `/tech/reviews/[slug]`, `/tech/reviews` list, `/tech/categories/laptops/rankings` with BPR medal, tech homepage featured carousel, `/tech/compare` picker.
-
-### GlitchTek Blog (BLOG-*)
-
-- [ ] **BLOG-01** `brand` column added to `blog_posts` (`studios` | `tech`, default `studios`) — all existing rows backfill to `studios`. `blog_categories` `UNIQUE(slug)` relaxed to `UNIQUE(slug, brand)`.
-- [ ] **BLOG-02** Studios blog code stays functional — listings, detail, category filter, admin CRUD — every query adds `WHERE brand = 'studios'`.
-- [ ] **BLOG-03** `/tech/blog` routes mirror `/blog` — list page with category filter + search + pagination, detail page at `/tech/blog/[slug]`, category filter page at `/tech/blog?category=...`.
-- [ ] **BLOG-04** Admin blog editor supports brand selection — the context switcher's brand (Studios vs Tech) auto-selects the blog brand on new posts.
-- [ ] **BLOG-05** Tech blog uses the same `PostCard` / `BlogHeroBanner` / `CategoryFilter` components (no fork) — brand-neutral styling already applies.
-
-### Deploy Hardening (DEPLOY-*)
-
-- [ ] **DEPLOY-01** `glitchtech.io` custom domain attached to Vercel project, DNS on Cloudflare, 301 from `www` to apex.
-- [ ] **DEPLOY-02** Per-brand sitemap.xml — `glitchstudios.io/sitemap.xml` lists only studios routes, `glitchtech.io/sitemap.xml` lists only tech routes. robots.txt disallows admin + dashboard + auth on both.
-- [ ] **DEPLOY-03** OG tags per brand — tech pages use `og:site_name = "GlitchTek"`, studios pages use `"Glitch Studios"`.
-- [ ] **DEPLOY-04** `/tech` serves at glitchtech.io root in production (middleware rewrite already handles this in dev — verify in prod).
+**Process note:** This requirements list is **seed-only**. Concrete per-page requirements (POLISH-*) are populated from Phase 22's visual audit. REQ-IDs get allocated as the audit captures issues.
 
 ---
 
-## Traceability
+## v4.0 Requirements (Active)
 
-| REQ-ID | Category | Depends on | Planned phase |
-|--------|----------|------------|---------------|
-| METH-01 | Schema seed | — | Phase 1 |
-| METH-02 | Schema migration | — | Phase 1 |
-| METH-03 | BPR formula | METH-02 | Phase 1 |
-| METH-04 | Medal thresholds | METH-03 | Phase 1 |
-| METH-05 | `/tech/methodology` page | METH-01, METH-03, METH-04 | Phase 3 |
-| METH-06 | Rubric version badge | METH-02 | Phase 3 |
-| METH-07 | Query refactors | METH-02 | Phase 1 |
-| ING-01 | Ingest wizard | METH-02, METH-07 | Phase 2 |
-| ING-02 | Zod validation | ING-01 | Phase 2 |
-| ING-03 | Source attribution | ING-01, METH-02 | Phase 2 |
-| ING-04 | Duplicate handling | METH-02 | Phase 2 |
-| ING-05 | Rubric map | METH-01 | Phase 2 |
-| ING-06 | BPR recompute | ING-01, METH-03, METH-04 | Phase 2 |
-| MEDAL-01 | Medal component | METH-04 | Phase 3 |
-| MEDAL-02 | Medal surfaces | MEDAL-01 | Phase 3 |
-| MEDAL-03 | Low-data state | MEDAL-01 | Phase 3 |
-| RANK-01 | Leaderboard route | METH-02, ING-06 | Phase 4 |
-| RANK-02 | Sort + URL state | RANK-01 | Phase 4 |
-| RANK-03 | Filter sidebar | RANK-01 | Phase 4 |
-| RANK-04 | Null cell tooltip | RANK-01, METH-02 | Phase 4 |
-| RANK-05 | Mobile card layout | RANK-01 | Phase 4 |
-| RANK-06 | Empty state | RANK-01 | Phase 4 |
-| RANK-07 | Methodology anchor | RANK-01, METH-05 | Phase 4 |
-| FLAG-01 | Product record | METH-01 | Phase 5 |
-| FLAG-02 | Benchmarks ingested | ING-01…ING-06 | Phase 5 |
-| FLAG-03 | Review article | FLAG-01, FLAG-02 | Phase 5 |
-| FLAG-04 | Review surfaces | FLAG-03, RANK-01 | Phase 5 |
-| BLOG-01 | `brand` schema | — | Phase 6 |
-| BLOG-02 | Studios preservation | BLOG-01 | Phase 6 |
-| BLOG-03 | `/tech/blog` routes | BLOG-01 | Phase 6 |
-| BLOG-04 | Admin brand selector | BLOG-01 | Phase 6 |
-| BLOG-05 | Component reuse | BLOG-01 | Phase 6 |
-| DEPLOY-01 | DNS + Vercel domain | — | Phase 7 |
-| DEPLOY-02 | Per-brand sitemap | DEPLOY-01 | Phase 7 |
-| DEPLOY-03 | OG tags | DEPLOY-01 | Phase 7 |
-| DEPLOY-04 | Production verify | DEPLOY-01 | Phase 7 |
+### Audit & Discovery (AUDIT-*)
+
+- [ ] **AUDIT-01** Phase 22 produces a populated `.planning/phases/22-visual-audit-discovery/22-AUDIT.md` with user feedback on every public route, admin surface, global component, and cross-page flow; each item tagged `[BLOCK]`, `[POLISH]`, `[BACKLOG]`, or `[OK]`.
+- [ ] **AUDIT-02** Phase 22 output triages every v3.0 carry-over item — each pending phase/backlog entry assigned to `[IN v4.0]`, `[BACKLOG]`, or `[DROP]` with rationale.
+- [ ] **AUDIT-03** GlitchMark design decisions captured in audit Section I — formula, scope (per-device/category), relationship to BPR, UI surfaces, methodology transparency, versioning strategy.
+- [ ] **AUDIT-04** Post-audit, ROADMAP.md phases 23+ are derived from audit findings and re-presented to user for approval before execution starts.
+
+### Email Delivery (EMAIL-*) — Launch Blocker
+
+- [ ] **EMAIL-01** Resend SDK integrated and sending mail end-to-end from Server Actions.
+- [ ] **EMAIL-02** React Email templates for: account verification, password reset, booking confirmation, booking modification/cancellation, order receipt (beat/bundle purchase), contact form auto-reply, newsletter broadcast.
+- [ ] **EMAIL-03** Password reset flow functional end-to-end (user enters email → receives link → resets password → can log in).
+- [ ] **EMAIL-04** Booking confirmation fires on successful deposit; includes booking ID, service, date/time, deposit amount, cancellation policy.
+- [ ] **EMAIL-05** Order receipt fires on Stripe success webhook; includes items, license tier per beat, total, download links.
+- [ ] **EMAIL-06** Newsletter compose + send from `/admin/newsletter/compose` delivers to active subscribers; unsubscribe link honors token.
+- [ ] **EMAIL-07** Admin inbox triggers notification email to a configured admin address when a new contact submission arrives.
+- [ ] **EMAIL-08** Email deliverability baseline — SPF/DKIM/DMARC records documented in deploy hardening; Resend domain verified.
+
+### Performance (PERF-*) — Launch Blocker
+
+- [ ] **PERF-01** Admin Studios ⇄ Tech context switcher completes in < 500 ms (currently 3–4 s).
+- [ ] **PERF-02** Admin edit-page → ingest-wizard navigation completes in < 500 ms (currently ~4 s).
+- [ ] **PERF-03** Public route cold-nav p95 < 1.5 s TTFB on Vercel.
+- [ ] **PERF-04** Mobile LCP on `/` and `/tech` < 2.5 s on mid-tier device.
+- [ ] **PERF-05** Image pipeline audit — every `<img>` uses `<Image>` with correct `sizes`; no 2 MB hero art served unoptimized.
+- [ ] **PERF-06** Bundle audit — identify + remove any client-only bundles > 200 KB gzipped that aren't route-critical.
+- [ ] **PERF-07** Database query audit for the 5 slowest pages; add indexes or rework queries.
+
+### GlitchMark (GLITCHMARK-*) — New Feature
+
+- [ ] **GLITCHMARK-01** Formula locked — exact math for combining all benchmark scores into a single GlitchMark number. Decision captured in a phase CONTEXT doc. Likely: normalized per benchmark (z-score or range-scale) → geometric mean across all measured tests. TBD in phase discussion.
+- [ ] **GLITCHMARK-02** Schema additions — likely one numeric column on `tech_reviews` (`glitchmark_score`) or a dedicated `tech_glitchmark_scores` table if per-category scoring matters. Decision inside phase.
+- [ ] **GLITCHMARK-03** GlitchMark computed on ingest commit — same transaction as BPR recompute; result stored on the review row.
+- [ ] **GLITCHMARK-04** GlitchMark surfaces on master leaderboard as its own sortable column.
+- [ ] **GLITCHMARK-05** GlitchMark surfaces on review detail card alongside BPR medal (both, not replace).
+- [ ] **GLITCHMARK-06** Methodology transparency — GlitchMark section on `/tech/methodology` page or dedicated `/tech/glitchmark` page explaining the formula.
+- [ ] **GLITCHMARK-07** Versioning — GlitchMark v1 locked; future versions preserve historical scores per review.
+- [ ] **GLITCHMARK-08** Relationship to BPR is DOCUMENTED — BPR = editorial rubric quality grade; GlitchMark = raw aggregate score. Different purposes, both visible.
+
+### Carry-over from v3.0 — Category Leaderboards (RANK-*)
+
+*Status: carried over from v3.0 unchanged; execution re-planned inside v4.0.*
+
+- [ ] **RANK-01** `/tech/categories/[slug]/rankings` route — server-rendered table, one row per published review; columns: rank, product name, BPR medal, BPR score, GlitchMark, key benchmarks, year, price. Default sort: GlitchMark descending (CHANGED — was BPR descending; audit may revise).
+- [ ] **RANK-02** Sort on every column — `nuqs` URL state.
+- [ ] **RANK-03** Filter sidebar — price, year, CPU kind, RAM, storage, medal tier; mobile `Sheet`.
+- [ ] **RANK-04** "Not tested" cells render `—` with tooltip (from `tech_review_discipline_exclusions`).
+- [ ] **RANK-05** Mobile `< 768px` card layout.
+- [ ] **RANK-06** Empty state with methodology CTA.
+- [ ] **RANK-07** Column header → methodology anchor in new tab.
+
+### Carry-over from v3.0 — Flagship Review (FLAG-*)
+
+- [ ] **FLAG-01** `mbp-16-m5max-64gb` product record with complete spec sheet.
+- [ ] **FLAG-02** All 13 disciplines ingested or legitimately excluded; 7 BPR-eligible captured AC + Battery.
+- [ ] **FLAG-03** Review article published — verdict, body, pros/cons, rating, gallery, video, rubric badge, BPR medal, GlitchMark score.
+- [ ] **FLAG-04** Appears on detail, list, rankings, homepage carousel, compare picker.
+
+### Carry-over from v3.0 — GlitchTek Blog (BLOG-*)
+
+- [ ] **BLOG-01** `brand` column on `blog_posts`; `UNIQUE(slug, brand)` on `blog_categories`.
+- [ ] **BLOG-02** Studios blog unaffected (every query adds `WHERE brand = 'studios'`).
+- [ ] **BLOG-03** `/tech/blog` mirrors Studios blog routes.
+- [ ] **BLOG-04** Admin brand selector auto-picks current brand context.
+- [ ] **BLOG-05** Components shared, no fork.
+
+### Trailer Video Surface (VIDEO-*) — Carry-over from v3.0 17.5
+
+- [ ] **VIDEO-01** Two existing trailer videos surfaced on a public-facing page. Location + treatment determined in audit (homepage hero rotator? dedicated `/trailers`? integrated into reviews?).
+- [ ] **VIDEO-02** Video player component handles both trailers with consistent UX.
+
+### Production Hardening (DEPLOY-*) — Carry-over + Enhanced
+
+- [ ] **DEPLOY-01** `glitchtech.io` custom domain on Vercel, Cloudflare DNS, 301 from www to apex.
+- [ ] **DEPLOY-02** Per-brand sitemap.xml — Studios sitemap / Tech sitemap; `robots.txt` disallows admin/dashboard/auth on both.
+- [ ] **DEPLOY-03** OG tags per brand — `og:site_name`, `og:image`, `twitter:card` all brand-specific.
+- [ ] **DEPLOY-04** `/tech` serves at `glitchtech.io` root in production (middleware rewrite verified in prod).
+- [ ] **DEPLOY-05** UAT admin cleanup — `uat-admin@glitchstudios.local` deleted or rotated to real owner before prod deploy.
+- [ ] **DEPLOY-06** Production env audit — Resend keys, Neon prod DB URL, Stripe live keys, Better Auth secret, Uploadthing token all present in Vercel project env.
+- [ ] **DEPLOY-07** Error tracking wired (Sentry or equivalent) to capture production exceptions.
+- [ ] **DEPLOY-08** Basic analytics (Vercel Analytics or alternative) — page views per brand.
+- [ ] **DEPLOY-09** Backup verification — Neon auto-backup retention confirmed; admin content export path exists.
+
+### Per-page polish (POLISH-*)
+
+*Populated from Phase 22 visual audit output. REQ-IDs allocated as issues are captured.*
+
+- [ ] **POLISH-00** Placeholder — specific items TBD from audit. Examples expected from memory: homepage 4/10 (density/CTAs/tags), beats 4/10 (search UX), services 6/10 (admin verification), booking 5/10 (flow clarity), contact 4/10 (channels beyond email), social icons (platform icons instead of current), credential flow (admin vs client sign-in clarity).
 
 ---
 
-## Anti-scope
+## v4.0 Out of Scope (Unless Audit Promotes)
 
-- **Second review** beyond MBP M5 Max — one flagship is the template; additional products follow v3.0.
-- **`/tech/compare`** (2-way pick-two) — stays exactly as shipped in v2.0. Leaderboard is the ALL-vs-ALL surface.
-- **Harness v1.2** — Mac pack stays at v1.1. Website compensates with metadata entry at ingest time.
-- **Virtualized leaderboard tables** (`@tanstack/react-virtual`) — corpus < 20 reviews; not needed until > 200.
-- **MDX methodology** — methodology page uses the existing Tiptap editor in admin, DB-driven.
-- **Affiliate links in tables** — credibility over monetization.
-- **Paywalled scores** — full transparency, everything public.
-- **Contact page for Studios** — still deferred; requires business info not yet finalized.
-- **Same-origin cross-brand audio fix** — deferred to a future infra milestone. v3.0 keeps the "open in new tab" workaround from v2.0 Phase 14.
+- Real-time chat/messaging
+- Mobile app
+- Streaming/subscription model
+- Multi-language support
+- Programmatic CLI for AI content workflow (999.6) — post-launch investment
+- Audio continuity across brand domains — requires collapsing origins; future infra milestone
+- Harness v1.2 (Mac pack stays at v1.1)
+- Affiliate links in tables
+- Paywalled scores
 
 ---
 
 ## Launch Readiness Checklist
 
-- [ ] All METH-* land in Phase 1 (schema debt can't survive past Phase 2).
-- [ ] Query refactors (METH-07) verified — `/tech/compare` still works after changes.
-- [ ] ING-01 wizard can ingest the MBP M5 Max CPU §3.1 data end-to-end in dry-run.
-- [ ] BPR score visible on MBP review detail + laptop leaderboard.
-- [ ] `/tech/methodology` linked from every review scorecard.
-- [ ] Flagship review (FLAG-03) reads like a template — any reviewer could slot in #2 without new scaffolding.
-- [ ] glitchtech.io resolves in production with valid cert.
-- [ ] Playwright spec covering all major v3.0 routes.
+- [ ] Phase 22 audit complete; user signed off on phase structure
+- [ ] All EMAIL-* green — password reset verified in staging
+- [ ] All PERF-* green — admin switcher < 500 ms confirmed
+- [ ] GlitchMark formula locked in a phase CONTEXT doc; methodology page updated
+- [ ] GlitchMark + BPR medal both surface on flagship review detail
+- [ ] Master leaderboard live with at least one real published review (MBP)
+- [ ] UAT admin account deleted
+- [ ] glitchtech.io resolves with valid cert
+- [ ] Per-brand sitemaps + OG tags verified
+- [ ] Playwright smoke covering major v4.0 routes
 
 ---
 
-*Last updated: 2026-04-21 — v3.0 GlitchTek Launch requirements defined. Research synthesized in `.planning/research/SUMMARY.md`.*
+## Traceability
+
+*Traceability table populated after Phase 22 produces phase structure. Phases 23+ are TBD at seed time; will link REQ-IDs to phases once roadmap is drafted.*
+
+| REQ-ID | Category | Phase (TBD) |
+|--------|----------|-------------|
+| AUDIT-01 through AUDIT-04 | Audit | Phase 22 |
+| EMAIL-01 through EMAIL-08 | Email | TBD |
+| PERF-01 through PERF-07 | Performance | TBD |
+| GLITCHMARK-01 through GLITCHMARK-08 | GlitchMark | TBD |
+| RANK-01 through RANK-07 | Leaderboard | TBD (carry-over from v3.0) |
+| FLAG-01 through FLAG-04 | Flagship review | TBD (carry-over from v3.0) |
+| BLOG-01 through BLOG-05 | Tech blog | TBD (carry-over from v3.0) |
+| VIDEO-01 through VIDEO-02 | Trailers | TBD (carry-over from v3.0 17.5) |
+| DEPLOY-01 through DEPLOY-09 | Production hardening | TBD |
+| POLISH-* | Page polish | TBD — populated from audit |
+
+---
+
+## v3.0 Validated (Reference — Shipped 2026-04-24)
+
+### Methodology & Schema (METH-*) ✓
+
+- [x] **METH-01** Rubric v1.1 seeded (43 entries, 13 disciplines). Shipped Phase 15.
+- [x] **METH-02** Schema additions — new enums, columns on benchmark_tests / benchmark_runs / reviews, exclusions table, UNIQUE constraint. Shipped Phase 15.
+- [x] **METH-03** BPR formula locked — geometric mean battery/AC across 7 eligible disciplines. Shipped Phase 15.
+- [x] **METH-04** Medal thresholds — Platinum ≥ 90, Gold ≥ 80, Silver ≥ 70, Bronze ≥ 60. Shipped Phase 15.
+- [x] **METH-05** `/tech/methodology` page live. Shipped Phase 17.
+- [x] **METH-06** Rubric version badge on reviews. Shipped Phase 17.
+- [x] **METH-07** Pre-ingest query refactors (DISTINCT ON, id-lookup). Shipped Phase 15.
+
+### Ingest Pipeline (ING-*) ✓
+
+- [x] **ING-01** Admin JSONL upload wizard with dry-run + commit. Shipped Phase 16.
+- [x] **ING-02** Zod validation per line; malformed blocks upload. Shipped Phase 16.
+- [x] **ING-03** Source attribution — ambient temp, macOS build, run_uuid. Shipped Phase 16.
+- [x] **ING-04** Duplicate handling — supersede + history. Shipped Phase 16.
+- [x] **ING-05** Rubric map translation. Shipped Phase 15.
+- [x] **ING-06** BPR recompute on commit + revalidate. Shipped Phase 16.
+
+### BPR Medal UI (MEDAL-*) ✓
+
+- [x] **MEDAL-01** `<BPRMedal>` component — monochrome tier palette. Shipped Phase 17.
+- [x] **MEDAL-02** Medal surfaces — review detail, review cards, homepage spotlight (all 4 surfaces via Plans 17-01/02/03/04). Shipped Phase 17.
+- [x] **MEDAL-03** "Not enough data" placeholder. Shipped Phase 17.
+
+---
+
+*Last updated: 2026-04-24 — v4.0 Production Launch milestone seeded. Concrete requirements land after Phase 22 visual audit runs.*

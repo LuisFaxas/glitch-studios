@@ -4,7 +4,8 @@
 
 - ✅ **v1.0 Full Scaffold** — Phases 1-4.1 (shipped 2026-03-28)
 - ✅ **v2.0 Quality Overhaul** — Phases 5-14 (shipped 2026-04-21)
-- 🚧 **v3.0 GlitchTek Launch** — Phases 15-21 (in progress)
+- ⚠️ **v3.0 GlitchTek Launch** — Phases 15-17 shipped; 17.5, 18, 19, 20, 20.5, 21 carried over (closed partial 2026-04-24)
+- 🚧 **v4.0 Production Launch** — Phase 22 active (audit-driven; phases 23+ derived from audit output)
 
 ## Phases
 
@@ -18,22 +19,75 @@ See `.planning/milestones/v1.0-ROADMAP.md`
 See `.planning/milestones/v2.0-ROADMAP.md`
 </details>
 
-### 🚧 v3.0 GlitchTech Launch (In Progress)
+### 🚧 v4.0 Production Launch (Active)
 
-**Milestone Goal:** Take GlitchTech from "foundation live" to "launched with credibility." Lock the methodology, hydrate rubric v1.1 benchmarks from the Mac bench harness, ship the flagship MBP 16" M5 Max review, add category master leaderboards so readers can rank every reviewed product side-by-side. Templates flow together — every future review slots into the locked structure without ad-hoc reinvention.
+**Milestone Goal:** Get the site to production — polished, performant, content-complete, credible. Phase 22 is a visual audit that determines what phases 23+ actually are. GlitchMark ships as a distinct scoring system (not a rebrand of BPR). Remaining v3.0 launch work completes inside this milestone.
 
+**Process:** Audit-driven. No speculative phase-planning before Phase 22 runs. Phases 23+ allocated after audit output is reviewed.
+
+- [ ] **Phase 22: Visual Audit & Discovery** — walk the live site page by page, edge cases, v3.0 carry-over triage, GlitchMark formula design. Output: populated `.planning/phases/22-visual-audit-discovery/22-AUDIT.md` + derived phase list for 23+. Covers REQ-IDs AUDIT-01 to AUDIT-04.
+- [ ] **Phase 23+:** TBD — derived from Phase 22 audit. Known-needed themes below (each becomes 1+ phases based on audit):
+  - **Email delivery** (EMAIL-*, launch blocker) — Resend + React Email templates end-to-end
+  - **Performance** (PERF-*, launch blocker) — admin context switcher 3-4s, edit→ingest 4s, public cold-nav p95, mobile LCP, image/bundle/query audits
+  - **GlitchMark system** (GLITCHMARK-*, new feature) — formula + schema + UI + methodology — distinct from BPR
+  - **Category master leaderboard** (RANK-*, v3.0 carry) — `/tech/categories/[slug]/rankings` with GlitchMark + BPR columns
+  - **Flagship MBP review** (FLAG-*, v3.0 carry) — real content publish across all 5 surfaces
+  - **GlitchTek blog** (BLOG-*, v3.0 carry) — `/tech/blog` brand discriminator
+  - **Trailer video surface** (VIDEO-*, v3.0 17.5 carry) — two finished trailers surfaced
+  - **Per-page polish** (POLISH-*) — specific items from audit (homepage 4/10, beats 4/10, services, booking, contact, admin surfaces)
+  - **Production hardening** (DEPLOY-*) — glitchtech.io domain, sitemaps, OG, UAT admin delete, env audit, error tracking, analytics
+
+### ⚠️ v3.0 GlitchTech Launch (Closed Partial 2026-04-24)
+
+**Shipped in v3.0:**
 - [x] **Phase 15: Methodology Lock + Schema** — migrations, rubric v1.1 seed, query refactors (completed 2026-04-21)
 - [x] **Phase 16: JSONL Ingest Pipeline** — 3-step wizard (upload → dry-run → commit) (completed 2026-04-22)
-- [ ] **Phase 16.1: Public Site Maintenance + Bug Sweep (INSERTED)** — sub-brand SPA nav, visual parity, wiring, audit sweep
+- [x] **Phase 16.1: Public Site Maintenance + Bug Sweep** — sub-brand SPA nav, visual parity, wiring, audit sweep (completed 2026-04-23)
 - [x] **Phase 17: BPR Medal UI + Methodology Page** — monochrome medal, /tech/methodology (completed 2026-04-24)
-- [ ] **Phase 17.5: Trailer Video Surface (NEW)** — surface for the two finished trailer videos
-- [ ] **Phase 18: Category Master Leaderboard** — sortable/filterable master rankings per category (placeholder data, one laptop)
-- [ ] **Phase 19: Flagship MBP Review Published** — MBP 16 M5 Max 64GB shell with placeholder data; content swap in parallel
-- [ ] **Phase 20: GlitchTech Blog** — /tech/blog via brand discriminator (placeholder posts)
-- [ ] **Phase 20.5: Launch Blockers Bundle (NEW)** — perf audit (999.4), email/Resend (999.3), UAT admin cleanup
-- [ ] **Phase 21: Deploy Hardening** — glitchtech.io domain, per-brand sitemap, OG tags
+
+**Carried over to v4.0 (work preserved, re-framed under v4.0 scope):**
+- ⤴ Phase 17.5 Trailer Video Surface → v4.0 VIDEO-*
+- ⤴ Phase 18 Category Master Leaderboard → v4.0 RANK-*
+- ⤴ Phase 19 Flagship MBP Review → v4.0 FLAG-*
+- ⤴ Phase 20 GlitchTek Blog → v4.0 BLOG-*
+- ⤴ Phase 20.5 Launch Blockers Bundle → split into v4.0 EMAIL-* / PERF-* / DEPLOY-*
+- ⤴ Phase 21 Deploy Hardening → v4.0 DEPLOY-*
+- ⤴ Backlog 999.3 (Resend) → v4.0 EMAIL-*
+- ⤴ Backlog 999.4 (Perf) → v4.0 PERF-*
+- ⤴ Backlog 999.5 (Admin cosmetic) → v4.0 POLISH-* (audit-scoped)
+- ⤴ Backlog 999.6 (Programmatic CLI) → post-launch, not in v4.0
+- ⤴ **GlitchMark** (never roadmapped, parked 2026-04-23) → v4.0 GLITCHMARK-*
 
 ## Phase Details
+
+### Phase 22: Visual Audit & Discovery (v4.0)
+
+**Goal:** Walk the live site together, capture every issue, edge case, and idea from the user's head. Triage every v3.0 carry-over. Design GlitchMark. Output a populated `.planning/phases/22-visual-audit-discovery/22-AUDIT.md` whose findings derive the phase structure for 23+.
+
+**Depends on:** v3.0 closed partial; `phases/22-visual-audit-discovery/22-AUDIT.md` scaffold exists; dev server on `localhost:3004`.
+
+**Requirements:** AUDIT-01, AUDIT-02, AUDIT-03, AUDIT-04
+
+**Success Criteria** (what must be TRUE):
+1. Every section A–J of AUDIT.md has user feedback inline (or explicit `[OK]` if nothing to say). Blank sections are blockers.
+2. Every v3.0 carry-over item (17.5, 18, 19, 20, 20.5, 21, 999.3, 999.4, 999.5, 999.6, HUMAN-UAT pending) is triaged `[IN v4.0]` / `[BACKLOG]` / `[DROP]` with a one-line rationale.
+3. GlitchMark Section I has answers on: formula approach, per-what (device/category), relationship to BPR, UI surfaces, methodology transparency, versioning. "TBD — decide in phase" is a valid answer for the formula specifically.
+4. AUDIT.md Section K populated with the proposed phase 23+ structure, derived from sections A–J findings, and presented to the user for approval.
+5. User approval recorded — PROJECT.md and REQUIREMENTS.md updated to reflect the derived phase list; ROADMAP.md has phases 23+ defined with goals and REQ-ID maps.
+
+**Plans:** No traditional plans — this phase is conversational. One "plan" per audit section completed, committed as we go. Roughly:
+- 22-01 Sections A–B (public Studios + GlitchTech walk)
+- 22-02 Sections C–D (auth, dashboard, admin walk)
+- 22-03 Sections E–F (global components + cross-page flows)
+- 22-04 Section G (edge cases)
+- 22-05 Section H (v3.0 carry-over triage)
+- 22-06 Section I (GlitchMark design session)
+- 22-07 Section J (brain dump capture)
+- 22-08 Section K (derive phases 23+ + user approval + update PROJECT/REQUIREMENTS/ROADMAP)
+
+**UI hint:** no (this phase doesn't ship UI, it scopes what UI ships next)
+
+---
 
 ### Phase 15: Methodology Lock + Schema
 
@@ -256,7 +310,8 @@ Plans:
 **Execution Order:**
 v1.0: 1 → 1.1 → 1.2 → 1.3 → 1.4 → 2 → 3 → 4 → 4.1
 v2.0: 5 → 6 → 6.1 → 7 → 7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 7.6 → 8 → 9 → 10 → 11 → 12 → 14 (13 deferred)
-v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 15) → 21
+v3.0: 15 → 16 → 16.1 → 17 (shipped); 17.5, 18, 19, 20, 20.5, 21 carried over to v4.0
+v4.0: 22 (audit) → 23+ (derived from audit)
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -288,12 +343,15 @@ v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 1
 | 14. Global Polish | v2.0 | 3/3 | Complete | 2026-04-21 |
 | 15. Methodology Lock + Schema | v3.0 | 3/3 | Complete    | 2026-04-21 |
 | 16. JSONL Ingest Pipeline | v3.0 | 4/4 | Complete   | 2026-04-22 |
-| 16.1. Public Site Maintenance + Bug Sweep | v3.0 | 0/5 | Not started | - |
+| 16.1. Public Site Maintenance + Bug Sweep | v3.0 | 5/5 | Complete | 2026-04-23 |
 | 17. BPR Medal + Methodology Page | v3.0 | 4/4 | Complete    | 2026-04-24 |
-| 18. Category Master Leaderboard | v3.0 | 0/4 | Not started | - |
-| 19. Flagship MBP Review | v3.0 | 0/3 | Not started | - |
-| 20. GlitchTek Blog | v3.0 | 0/3 | Not started | - |
-| 21. Deploy Hardening | v3.0 | 0/3 | Not started | - |
+| 17.5. Trailer Video Surface | v3.0 | 0/0 | Carried over → v4.0 VIDEO-* | - |
+| 18. Category Master Leaderboard | v3.0 | 0/4 | Carried over → v4.0 RANK-* | - |
+| 19. Flagship MBP Review | v3.0 | 0/3 | Carried over → v4.0 FLAG-* | - |
+| 20. GlitchTek Blog | v3.0 | 0/3 | Carried over → v4.0 BLOG-* | - |
+| 20.5. Launch Blockers Bundle | v3.0 | 0/0 | Carried over → v4.0 EMAIL-/PERF-/DEPLOY-* | - |
+| 21. Deploy Hardening | v3.0 | 0/3 | Carried over → v4.0 DEPLOY-* | - |
+| **22. Visual Audit & Discovery** | **v4.0** | **0/8** | **Active** | - |
 
 ## Backlog
 

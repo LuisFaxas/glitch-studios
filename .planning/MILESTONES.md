@@ -1,5 +1,34 @@
 # Milestones
 
+## v3.0 GlitchTek Launch (Closed partial: 2026-04-24)
+
+**Shipped:** Phases 15, 16, 16.1, 17 (4 phases, ~17 plans)
+
+**Key accomplishments:**
+
+- **Phase 15 — Methodology Lock + Schema:** rubric v1.1 seeded (43 entries across 13 disciplines), `tech_benchmark_runs`/`tech_reviews`/`tech_review_discipline_exclusions` columns added, `getBenchmarkRunsForProducts` DISTINCT ON refactor, `getBenchmarkSpotlight` RUBRIC_V1_1 id-lookup fix
+- **Phase 16 — JSONL Ingest Pipeline:** pure-math `computeBprScore()` + admin ingest server action with dry-run + commit in one transaction, Zod v4 validation, Playwright E2E with env-guarded skip, vitest adopted as unit runner
+- **Phase 16.1 — Public Site Maintenance:** sub-brand same-tab nav, splash per-brand sessionStorage, GlitchTech hero visual parity, cart/sign-in hover-glitch, social icons, `/tech/benchmarks` empty state, 8-breakpoint Playwright audit
+- **Phase 17 — BPR Medal UI + Methodology Page:** `<BPRMedal>` component family with monochrome tier palette, `/tech/methodology` force-static ISR page with formula + 7 disciplines + thresholds + changelog, medal wired into review detail scorecard + review cards + homepage spotlight (all 4 MEDAL-02 surfaces)
+
+**Closed with carry-over (moved to v4.0):**
+
+- **Phase 17.5** Trailer Video Surface (one-liner, not specced)
+- **Phase 18** Category Master Leaderboard (headline v3.0 feature — never shipped)
+- **Phase 19** Flagship MBP Review Published (content work, waiting on Mac benchmarks 2026-04-25)
+- **Phase 20** GlitchTek Blog
+- **Phase 20.5** Launch Blockers Bundle (rolled into v4.0 individual phases)
+- **Phase 21** Deploy Hardening (domain, per-brand sitemap, OG tags)
+- **Backlog:** 999.3 (Resend/email — launch blocker), 999.4 (perf audit — launch blocker), 999.5 (admin cosmetic cleanup), 999.6 (programmatic CLI)
+- **GlitchMark:** industry-standard aspiration — parked 2026-04-23, never roadmapped, captured in memory [project_glitchmark.md](../../.claude/projects/-home-faxas-workspaces-projects-personal-glitch-studios/memory/project_glitchmark.md), becomes a real phase in v4.0
+- **HUMAN-UAT pending:** 17 (live review with populated BPR, compact medal on list — both blocked on published review)
+- **Deferred items:** rubric v1.2 remediation (field-vs-key), audio continuity cross-brands, deep flow audit, social coming-soon→live workflow
+- **Phase 999.2** admin auth UX closed as not-a-bug (2026-04-24)
+
+**Why partial close:** v4.0 reframes remaining work as a cohesive "production launch + polish" milestone rather than executing v3.0's original phase-by-phase plan. Audit-driven discovery determines v4.0 phase structure.
+
+---
+
 ## v2.0 Quality Overhaul (Shipped: 2026-04-21)
 
 **Phases completed:** 17 phases, 70 plans, 93 tasks
