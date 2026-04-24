@@ -7,7 +7,7 @@
 | Section | Status | Your last entry |
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
-| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.7 done 2026-04-24) | B.7 compare — placeholder product tension flagged |
+| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.8 done 2026-04-24) | B.8 methodology — nav gap + medal visual redesign |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
@@ -869,8 +869,40 @@ Middle path is my recommendation if the user wants testability without polluting
 
 **Question for you:** Does GlitchMark methodology live here too, or gets its own page?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchtech.io/tech/methodology`
+
+### Nav discoverability
+
+- **No way to reach this page from the sidebar.** User couldn't find it.
+- There's an "About" link in the sidebar that is **completely empty** — dead link / missing page. `[BUG]`
+- **Two possible fixes:**
+  - (a) Add a "Methodology" link to the GlitchTech sidebar nav
+  - (b) Merge: "About" becomes "Methodology" (likely better — "about" for a review site IS the methodology; it's what makes the reviews credible)
+- Decision to resolve in GlitchTech brand-polish phase (pivot #13).
+
+### Content
+
+- **Information quality is good.** Well-positioned, readable, "looks cool" `[OK]`
+- **No hero section, no images** — same pattern as every GlitchTech surface. `[POLISH — pivot #13]`
+- Current design is "very, very safe and boring" — inherits the GlitchTech visual weakness theme.
+
+### 🚨 BPR Medal visuals — user wants a rethink
+
+Memory says user approved the monochrome intensity palette (Platinum white/black, Gold #888/black, Silver outlined, Bronze dashed) during Phase 17 planning. Now inspecting the rendered output in context, user is rejecting the visual:
+
+- **"The actual metals themselves are crap"** — the monochrome geometric treatment isn't carrying weight.
+- **Different sizes between tiers** — inconsistent rendering. Could be a CSS bug (fix + audit) OR an inherent issue with the current design approach. Either way, all tier medals must be the same size.
+- **Don't represent anything at first view** — user's point is that a flat colored circle doesn't evoke "medal" intuitively. Needs to look like a real medal (circular medal shape, ribbon, numeral, laurel, actual imagery — not just a tinted rectangle).
+- **User's ask:** "a metal system with real, like, good actual metals." Interpretation: replace the geometric monochrome treatment with realistic medal visuals (SVG illustrations, or photographic-style renders) that read as Platinum/Gold/Silver/Bronze at a glance.
+
+This **overrides MEDAL-01's original "monochrome intensity" design decision.** Captured as pivot #15 below. The medal component family stays (the data layer is fine — Phase 17 MEDAL-01 work isn't wasted), but the VISUAL treatment gets redesigned in a dedicated phase.
+
+### GlitchMark
+
+- **Missing from methodology** — user called this out explicitly.
+- Already covered by GLITCHMARK-06 requirement. The methodology page picks up a GlitchMark section (or its own page `/tech/glitchmark`) when the GlitchMark phase ships.
+
+
 
 ---
 
@@ -1632,6 +1664,11 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 > - **Link rotation / cloaking:** proxy links through `/go/[product]/[program]` so the real destination is managed server-side — survives affiliate program URL changes without breaking historical content.
 >
 > Phase lives AFTER the leaderboard + flagship review ship, because it needs real surfaces to attach to. High revenue leverage — even modest traffic with good affiliate placement can be meaningful recurring income. Tag: `[IN v4.0 — own phase, ideally late in sequence]`.
+>
+> **Surfaced during B.8 Methodology audit (2026-04-24):**
+>
+> **15. BPR MEDAL VISUAL REDESIGN (overrides MEDAL-01 monochrome decision)**
+> User previously approved monochrome intensity palette (Platinum white, Gold #888, Silver outlined, Bronze dashed) during Phase 17 planning. After seeing it rendered in context on prod, user rejected it: "the actual metals themselves are crap." Issues: sizes inconsistent between tiers (possible CSS bug), flat geometric treatment doesn't evoke "medal" at a glance, doesn't carry visual weight expected of an awards/ranking badge. User's ask: "a metal system with real, like, good actual metals" — realistic medal illustrations (SVG or photographic-style render) that read as Platinum/Gold/Silver/Bronze intuitively, all tiers same size. Data layer is fine (Phase 17 MEDAL-01 work kept); only the visual component gets redesigned. Own small phase, likely bundled with GlitchTech brand-polish (pivot #13). Updates `src/components/tech/bpr-medal.tsx` and any associated CSS.
 
 
 ---
