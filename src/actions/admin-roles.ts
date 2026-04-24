@@ -157,10 +157,10 @@ export async function getAdminMembers(): Promise<AdminMember[]> {
   await requirePermission("manage_roles")
 
   const rows = await db.execute(sql`
-    SELECT id, name, email, role, created_at
+    SELECT id, name, email, role, "createdAt" as created_at
     FROM "user"
     WHERE role != 'user'
-    ORDER BY created_at ASC
+    ORDER BY "createdAt" ASC
   `)
 
   return (rows as any[]).map((r) => ({

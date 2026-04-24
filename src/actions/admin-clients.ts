@@ -42,7 +42,7 @@ export async function getClients(filters?: {
       u.name,
       u.email,
       'registered' as type,
-      u.created_at as created_at,
+      u."createdAt" as created_at,
       COALESCE(o.purchase_count, 0)::int as purchase_count,
       COALESCE(o.total_spend, 0)::numeric as total_spend,
       COALESCE(b.booking_count, 0)::int as booking_count
@@ -257,7 +257,7 @@ export async function getClientDetail(
   } else {
     // Registered user
     const userRows = await db.execute(sql`
-      SELECT id, name, email, created_at FROM "user" WHERE id = ${clientId}
+      SELECT id, name, email, "createdAt" as created_at FROM "user" WHERE id = ${clientId}
     `)
     const uRow = (userRows as any[])[0]
     if (!uRow) return null
