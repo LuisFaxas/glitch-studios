@@ -421,6 +421,35 @@ v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 →
 
 ## Backlog
 
+### Phase 999.5: Email Template Visual Redesign (BACKLOG)
+
+**Goal:** Redesign all 8 production email templates to match the Glitch Studios cyberpunk aesthetic — not just functional minimalism.
+
+**Scope:**
+- `password-reset.tsx`, `account-verification.tsx`, `booking-confirmation.tsx`, `booking-modification.tsx`, `booking-reminder.tsx`, `purchase-receipt.tsx`, `admin-contact-notification.tsx`, `newsletter-broadcast.tsx`
+- Apply hero imagery, glitch-effect typography (safe subset email clients support), brand colors, wordmark header, per-flow iconography.
+- Extract shared `<EmailLayout>` primitive during the redesign (deferred from Phase 24 CONTEXT.md D-09).
+- Brand-split consideration: Studios vs GlitchTech mail visual variants if Phase 38 brand-split is active.
+
+**Originally surfaced from:** Phase 24 completion (user feedback — "we definitely need a phase later to create the email templates to match the super cool of the website").
+
+**Depends on:** Resend Pro upgrade if brand-split (one domain per brand).
+
+### Phase 999.6: Newsletter Strategy + Campaign System (BACKLOG)
+
+**Goal:** Design the newsletter beyond the transactional broadcast shell — content strategy, campaign templates, segmentation, growth hooks.
+
+**Scope:**
+- Campaign template variants (beat drop, studio tour, review embargo, monthly wrap, artist spotlight).
+- Content calendar + cadence policy.
+- Segment-aware sends using existing `newsletterSubscribers.tags` (beat_buyer, studio_client).
+- Growth CTAs: inline beat previews, booking widgets, review teasers.
+- Analytics on open rate / click rate (Resend webhook → admin dashboard).
+
+**Builds on:** existing `newsletter-broadcast.tsx` template + `src/actions/admin-newsletter.ts` compose flow.
+
+**Originally surfaced from:** Phase 24 completion (user feedback — "we need to create the newsletters and all that stuff later").
+
 ### Phase 999.2: Admin Auth UX — Separate Admin Sign-in from Client Sidebar (CLOSED — NOT A BUG)
 
 **Status:** Closed 2026-04-24 during `/gsd:discuss-phase 999.2`. Keep as-is.
