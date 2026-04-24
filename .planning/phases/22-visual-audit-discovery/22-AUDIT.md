@@ -7,7 +7,7 @@
 | Section | Status | Your last entry |
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
-| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.6 done 2026-04-24) | B.6 rankings — affiliate marketing pivot surfaced |
+| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.7 done 2026-04-24) | B.7 compare — placeholder product tension flagged |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
@@ -825,8 +825,39 @@ Deferred to the leaderboard phase's own `/gsd:discuss-phase` step. Too much deta
 - Products in different categories: comparable or blocked?
 - Missing spec for one product: dash, blank, "N/A"?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchtech.io/tech/compare`
+
+### Feedback
+
+- **Same pattern as rest of GlitchTech** — no hero, no explanation, very basic `[POLISH — falls under pivot #13]`
+- **Cannot test functionality** — only 1 product (MBP M5 Max) exists in DB. Picker has nothing to compare against.
+- **Needs design overhaul** to match editorial quality expected of "industry-leading" positioning.
+
+### Open question — Compare vs. Leaderboard redundancy
+
+v3.0 anti-scope explicitly kept Compare as-is with the framing: "`/tech/compare` is 2-way pick-two, leaderboard is the ALL-vs-ALL surface." After B.6 leaderboard vision got clarified today, worth revisiting:
+
+- **Option A (status quo):** Compare stays for intentional head-to-head picks (e.g., "I've narrowed it to these 2-4 — which wins?"). Leaderboard handles "which is best overall in the category."
+- **Option B (merge):** Compare gets absorbed into the leaderboard as a multi-select-and-compare feature. One surface, two modes.
+- **Option C (redesign):** Compare becomes a deeper surface — e.g., the master leaderboard lets you "pin" rows into a compare panel; compare page itself gets editorial framing, charts, price history, affiliate prompts.
+
+Deferred to the leaderboard phase's discuss-step. Compare's redesign may or may not be its own phase depending on that answer.
+
+### Tension flagged — placeholder products
+
+User suggestion during audit: "we might need to inject some placeholder products so we can test all these things."
+
+**This contradicts a captured memory:** [project_placeholder_first_build.md](../../../../.claude/projects/-home-faxas-workspaces-projects-personal-glitch-studios/memory/project_placeholder_first_build.md) explicitly says: "**One laptop only:** MacBook Pro 16" M5 Max 64GB. Do NOT seed additional laptops as placeholders — user said 'I don't want a bunch bunch of stuff and then like I just get confused.'"
+
+Decision to resolve (in a v4.0 early phase):
+
+- Stay with one-laptop placeholder → Compare + Leaderboard stay untestable end-to-end until FLAG-* + second review ship
+- Seed 2-5 placeholder laptops with plausible fake data → Compare + Leaderboard testable; accept the "bunch of stuff" cost
+- Middle path: seed 2-3 placeholder laptops behind a `NEXT_PUBLIC_DEMO_MODE` flag that's off in production — only visible in preview/staging environments. Testable in preview, clean in prod.
+
+Middle path is my recommendation if the user wants testability without polluting prod. Flag in Section K decisions.
+
+
 
 ---
 
