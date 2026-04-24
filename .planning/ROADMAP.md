@@ -395,7 +395,7 @@ v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 →
 | 21. Deploy Hardening | v3.0 | 0/3 | Carried over → v4.0 DEPLOY-* | - |
 | 22. Visual Audit & Discovery | v4.0 | 8/8 | Complete | 2026-04-24 |
 | **23. Debug Broken Pages & Missing Routes** | **v4.0** | **0/tbd** | **Up next 🚨** | - |
-| 24. Email Delivery End-to-End | v4.0 | 0/tbd | Not started 🚨 | - |
+| 24. Email Delivery End-to-End | v4.0 | 1/3 | In Progress|  |
 | 25. Performance Audit + Fixes | v4.0 | 0/tbd | Not started 🚨 | - |
 | 26. Brand-Aware Auth UI Redesign | v4.0 | 0/tbd | Not started | - |
 | 27. Media/Video Strategy Foundation | v4.0 | 0/tbd | Not started | - |
