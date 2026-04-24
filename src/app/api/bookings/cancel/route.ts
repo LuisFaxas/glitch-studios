@@ -6,6 +6,7 @@ import { db } from "@/lib/db"
 import { bookings, serviceBookingConfig } from "@/db/schema"
 import { stripe } from "@/lib/stripe"
 import { canCancel, getRefundAmount } from "@/lib/booking/policy"
+import { sendBookingModificationEmail } from "@/lib/email/send-booking-modification"
 import { NextResponse } from "next/server"
 
 const cancelSchema = z.object({
@@ -92,6 +93,11 @@ export async function POST(request: Request) {
       })
       .where(eq(bookings.id, bookingId))
 
+    await sendBookingModificationEmail(booking, {
+      newDate: null,
+      reason: reason ?? null,
+    })
+
     return NextResponse.json({ success: true, refundAmount })
   }
 
@@ -152,6 +158,11 @@ export async function POST(request: Request) {
       updatedAt: new Date(),
     })
     .where(eq(bookings.id, bookingId))
+
+  await sendBookingModificationEmail(booking, {
+    newDate: null,
+    reason: reason ?? null,
+  })
 
   return NextResponse.json({ success: true, refundAmount })
 }

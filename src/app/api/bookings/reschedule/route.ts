@@ -6,6 +6,7 @@ import { db } from "@/lib/db"
 import { bookings, serviceBookingConfig } from "@/db/schema"
 import { getAvailableSlots } from "@/lib/booking/slots"
 import { canReschedule } from "@/lib/booking/policy"
+import { sendBookingModificationEmail } from "@/lib/email/send-booking-modification"
 import { NextResponse } from "next/server"
 
 const rescheduleSchema = z.object({
@@ -109,6 +110,10 @@ export async function POST(request: Request) {
     )
   }
 
+  // Only fire the email if date or time actually changed.
+  const dateChanged =
+    booking.date !== newDate || booking.startTime !== newStartTime
+
   // Update booking with new date/time/room
   const [updated] = await db
     .update(bookings)
@@ -121,6 +126,14 @@ export async function POST(request: Request) {
     })
     .where(eq(bookings.id, bookingId))
     .returning()
+
+  if (dateChanged) {
+    await sendBookingModificationEmail(booking, {
+      newDate,
+      newStartTime,
+      reason: null,
+    })
+  }
 
   return NextResponse.json({ success: true, booking: updated })
 }
