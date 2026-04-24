@@ -158,12 +158,18 @@ export function MediaUploadZone({ onUploadComplete }: MediaUploadZoneProps) {
   return (
     <div>
       <div
+        data-testid="media-drop-zone"
+        data-dragging={dragOver ? "true" : "false"}
         className={`border border-dashed ${
           dragOver
             ? "border-[#f5f5f0] bg-[#1a1a1a]"
             : "border-[#333333] bg-[#111111]"
         } p-6 text-center cursor-pointer transition-colors`}
         onDragOver={(e) => {
+          e.preventDefault()
+          setDragOver(true)
+        }}
+        onDragEnter={(e) => {
           e.preventDefault()
           setDragOver(true)
         }}
