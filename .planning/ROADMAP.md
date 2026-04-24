@@ -25,7 +25,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 15: Methodology Lock + Schema** — migrations, rubric v1.1 seed, query refactors (completed 2026-04-21)
 - [x] **Phase 16: JSONL Ingest Pipeline** — 3-step wizard (upload → dry-run → commit) (completed 2026-04-22)
 - [ ] **Phase 16.1: Public Site Maintenance + Bug Sweep (INSERTED)** — sub-brand SPA nav, visual parity, wiring, audit sweep
-- [ ] **Phase 17: BPR Medal UI + Methodology Page** — monochrome medal, /tech/methodology
+- [x] **Phase 17: BPR Medal UI + Methodology Page** — monochrome medal, /tech/methodology (completed 2026-04-24)
 - [ ] **Phase 17.5: Trailer Video Surface (NEW)** — surface for the two finished trailer videos
 - [ ] **Phase 18: Category Master Leaderboard** — sortable/filterable master rankings per category (placeholder data, one laptop)
 - [ ] **Phase 19: Flagship MBP Review Published** — MBP 16 M5 Max 64GB shell with placeholder data; content swap in parallel
@@ -147,9 +147,9 @@ Plans:
 5. A review with fewer than 5 of the 7 BPR-eligible disciplines scored renders no medal badge — the "Not enough data" state is visible and links to the methodology page explanation
 
 **Plans**: 3 plans
-- [ ] 17-01-PLAN.md — BPRMedal + BPRMedalPlaceholder + RubricVersionBadge components, bpr_discipline_count schema column + migration, query type extensions
-- [ ] 17-02-PLAN.md — getMethodologyData() pure function + /tech/methodology force-static ISR page (formula, disciplines, thresholds, exclusion, changelog)
-- [ ] 17-03-PLAN.md — Wire medal + rubric badge into ReviewRatingCard + ReviewCard; Playwright visual baselines for 4 tiers + placeholder + methodology page
+- [x] 17-01-PLAN.md — BPRMedal + BPRMedalPlaceholder + RubricVersionBadge components, bpr_discipline_count schema column + migration, query type extensions
+- [x] 17-02-PLAN.md — getMethodologyData() pure function + /tech/methodology force-static ISR page (formula, disciplines, thresholds, exclusion, changelog)
+- [x] 17-03-PLAN.md — Wire medal + rubric badge into ReviewRatingCard + ReviewCard; Playwright visual baselines for 4 tiers + placeholder + methodology page
 
 **UI hint**: yes
 
@@ -289,7 +289,7 @@ v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 1
 | 15. Methodology Lock + Schema | v3.0 | 3/3 | Complete    | 2026-04-21 |
 | 16. JSONL Ingest Pipeline | v3.0 | 4/4 | Complete   | 2026-04-22 |
 | 16.1. Public Site Maintenance + Bug Sweep | v3.0 | 0/5 | Not started | - |
-| 17. BPR Medal + Methodology Page | v3.0 | 0/3 | Not started | - |
+| 17. BPR Medal + Methodology Page | v3.0 | 4/4 | Complete   | 2026-04-24 |
 | 18. Category Master Leaderboard | v3.0 | 0/4 | Not started | - |
 | 19. Flagship MBP Review | v3.0 | 0/3 | Not started | - |
 | 20. GlitchTek Blog | v3.0 | 0/3 | Not started | - |
@@ -305,7 +305,7 @@ v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 1
 
 **Requirements:** TBD (likely new AUTH-UX-* ids)
 
-**Plans:** 0 plans
+**Plans:** 4/4 plans complete
 
 Plans:
 - [ ] TBD (promote with /gsd:review-backlog when ready)
