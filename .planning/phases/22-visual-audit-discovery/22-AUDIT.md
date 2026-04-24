@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | 🟡 in-progress (A.1 done 2026-04-24) | A.1 homepage audited on prod |
+| A. Public Studios pages | 🟡 in-progress (A.1-A.2 done 2026-04-24) | A.2 beats catalog audited on prod |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -103,8 +103,40 @@ One-by-one walk the public Studios site. URL base: `http://localhost:3004`.
 - Audio play state persistence across pages: working? broken?
 - Out-of-stock / unpublished beats: visible in admin, hidden on public?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchstudios.io/beats`
+
+### Performance observation
+- **Mobile load time: ~3–4 s.** Too slow; target is sub-2s. Feeds directly into PERF-* launch blocker. `[BLOCK]`
+- **Desktop load time: sub-2s.** `[OK]`
+
+### Mobile
+
+- **Hero** — moves smoothly, looks good `[OK]`
+- **Search bar** — works `[OK]`
+- **View toggle (card/list)** — works `[OK]`
+- **Filter scrolling** — works `[OK]`
+- **Tap image → beat starts playing** — works, feels cool `[OK]`
+- **UX confusion — play vs buy affordance:**
+  - Tapping the image plays the beat (good).
+  - But there's nothing that tells users how to reach the purchase/license modal. Users have to guess that tapping the **title** opens the license modal — they won't discover this.
+  - User's preference: tapping the card/title should open the purchase modal; a separate dedicated control (button/icon) on the card handles play/pause.
+  - Don't want to clutter with an obvious indicator; want to preserve the clean look. This is a UX puzzle, not a clear fix. `[POLISH — needs design decision]`
+- **Audio scrubbing in-card while playing** — works, user likes it `[OK]`
+- **Persistent play bar at bottom — missing "minimize" gesture.**
+  - User wants: swipe down to minimize/dismiss, swipe up to restore. Mobile-native affordance.
+  - Today: bar is always visible once audio starts. `[POLISH — new gesture]`
+
+### Desktop
+
+- **Load speed** — sub-2s, feels faster than mobile `[OK]`
+- **Hover state on card** — shows play button, which is the correct affordance `[OK]` (this is the desktop equivalent of the mobile tap-to-play confusion — desktop does it better)
+- **Same play-vs-buy confusion** — no indicator that clicking the title opens the license modal (beyond just playing). Same UX puzzle as mobile. `[POLISH — same decision as mobile]`
+- **Beat page (card + play experience) overall** — "gorgeous, I love it" `[OK]`
+
+### New feature idea surfaced here (elevated to Section J)
+
+**FEATURE: "Made by hand" videos on beat detail**
+User has been recording artist Trap Snyder making beats in red-raw high quality. Goal: reinforce that beats are made by hand, NOT AI. When a beat has an associated making-of YouTube video, embed it on the beat detail / license modal. Makes the product more real, community-based, desirable. Ties into the YouTube-first pivot from A.1 — one canonical video, embedded on beat page + portfolio. Not all beats will have a video; surface conditionally. `[IN v4.0 — new phase]`
 
 ---
 
@@ -1082,6 +1114,17 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **3. Trap Snyder beat-making video**
 > Artist Trap Snyder has footage of him making a beat. This should replace placeholders in Our Work + Portfolio. Drops in once YouTube-host pattern is decided.
+>
+> **Surfaced during A.2 Beats audit (2026-04-24):**
+>
+> **4. "Made by hand" videos embedded on beat detail pages**
+> Trap has been recorded in red-raw high quality while making beats. For beats that have a making-of video, embed the YouTube video on the beat's detail/license modal. Reinforces "made by hand, NOT AI" — real, community-based, more desirable. Conditional surface (not all beats will have video). Ties to pivot #2 (YouTube-first). Likely its own phase in v4.0.
+>
+> **5. Persistent play bar needs swipe-to-minimize on mobile**
+> Users should be able to swipe the bottom player bar down to dismiss / swipe up to restore. Native-feeling gesture. Small but meaningful mobile UX improvement.
+>
+> **6. Beat card: play vs buy affordance — unresolved UX puzzle**
+> Today, tapping image = play; tapping title = license modal. Users won't discover the title-tap. User wants the card/title tap to open the modal, with a dedicated control for play/pause. Needs a design decision that doesn't clutter the clean aesthetic.
 
 
 ---
