@@ -7,7 +7,7 @@
 | Section | Status | Your last entry |
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
-| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.9 done 2026-04-24) | B.9 benchmarks — IA architecture locked |
+| B. Public GlitchTech pages | ✅ done 2026-04-24 | All 10 GlitchTech surfaces audited + IA + media/SEO pivots |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
@@ -976,8 +976,35 @@ Elevated to pivot #16 — cross-cutting.
 
 **Question for you:** Is Tech blog a separate content stream, or just category-filtered Studios blog? If separate, does it have distinct categories/authors/tone?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 — vision captured (page not yet built)
+
+### Content vision
+
+- Blog surface is **rich and powerful**, inherently different from reviews
+- **Predetermined blog TYPES** (taxonomy we design, not ad-hoc tagging):
+  - **Comparison pieces** (e.g., "MacBook Pro M4 Max vs M5 Max")
+  - **Buyer guides** ("Best laptop for creators under $2000")
+  - **News/commentary** (industry moves, announcements)
+  - **Making-of / behind-the-scenes** (how we test, what we saw)
+  - **Tutorials / how-tos**
+  - Each type gets its own template/treatment — different visual language per type
+- **Every blog is video-first.** User makes the video on YouTube (long-form) or Instagram (short-form), then writes the blog around it with the video embedded inline. The blog post IS the SEO-capturing text layer + the video embed.
+- **Cohesive ecosystem:** reviews ↔ blogs ↔ videos all link to each other. A comparison blog links to each product's full review; a review links back to related comparisons.
+
+### Strategic goals stated
+
+- **Virality** — content designed to spread. YouTube long-form + Instagram short-form + website blog all rolled together per piece of content.
+- **SEO / discoverability** — blog is a growth engine. Text content on-site captures search traffic; video stays on YouTube (where views consolidate); website benefits from both.
+- **"Big player from day one"** — user's explicit ambition. Justifies investment in blog as a first-class surface, not an afterthought.
+
+### This page inherits from pivots
+
+- Pivot #11 (blog redesign, research-driven, cross-brand) — now gets the predetermined-type taxonomy requirement layered on top.
+- Pivot #2 (YouTube canonical host) + pivot #9 (media strategy) — video-embedded blog is a concrete pattern of these.
+- Pivot #16 (one data model, many views) — blog posts reference reviews/products via foreign keys; cohesive ecosystem is ONE graph, not duplicated content.
+- **New: pivot #17 (SEO / growth infrastructure)** — see below.
+
+
 
 ---
 
@@ -1641,8 +1668,12 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 > **1. Custom Beats replaces Studio Sessions as primary offering (for now)**
 > No physical studio yet — "Book a Session" CTA is dead today. Replace hero primary CTA with "Custom Beat" and build a real custom-beat request/booking flow. Studio session code stays for the future. Needs its own phase(s) in v4.0 — hero CTAs, `/services`, `/book`, new custom-beat surface all touched.
 >
-> **2. YouTube as canonical video host (discovery over self-host)**
-> Every video — Our Work carousel, trailer video surface (17.5 carry-over), artist content, future review videos — lives on YouTube as a single canonical video. The site embeds it. Goal: consolidate views + virality instead of splitting between "website video" and "YouTube video". Architecture decision for v4.0 content pipeline.
+> **2. YouTube + Instagram as canonical media hosts (viral-first, SEO-aware)**
+> Every piece of video content has ONE canonical home on the internet so views consolidate:
+> - **Long-form** → YouTube (reviews, comparisons, ASMR, making-of, beat-making videos)
+> - **Short-form** → Instagram (reels, quick hits, teasers)
+> - **Website embeds from those canonical sources** — no self-hosting, no view splitting
+> Goal is virality + discoverability. Every video has potential for viral reach on its native platform; website captures the SEO text layer that wraps around the video. Rich media is a core feature across the site — the brutalist aesthetic is designed to frame media, not compete with it. Ambition is "big player from day one" — content strategy justifies building for multi-platform distribution from the start, not retrofitted later.
 >
 > **3. Trap Snyder beat-making video**
 > Artist Trap Snyder has footage of him making a beat. This should replace placeholders in Our Work + Portfolio. Drops in once YouTube-host pattern is decided.
@@ -1680,8 +1711,14 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **Surfaced during A.8+A.9 Blog audit (2026-04-24):**
 >
-> **11. BLOG REDESIGN — research-driven, cross-brand (Studios + GlitchTech together)**
+> **11. BLOG REDESIGN — research-driven, cross-brand, predetermined-type taxonomy**
 > Blog list is visually flat — no hero, no featured treatment, no category carousels, whole-card tap doesn't open posts. Blog detail needs rich content support (inline images + YouTube video embeds per pivot #2). User wants a **research-driven phase**: study best blog pages in the world (editorial, magazine, creator, tech), extract patterns, implement industry-leading. Because Studios and GlitchTech blogs share components (Phase 10 architecture + existing BLOG-* carry-over requirements), this phase covers BOTH brands in one go — redesigning twice would be waste. Absorbs BLOG-01 through BLOG-05 carry-over work (brand column, routes, admin brand-selector).
+>
+> **Additions from B.10 Tech blog dialogue (2026-04-24):**
+> - **Predetermined blog TYPES** (taxonomy we design, not ad-hoc): comparison pieces, buyer guides, news/commentary, making-of, tutorials. Each type has its own template/visual language — a comparison article looks different from a tutorial. Admin picks type on post creation.
+> - **Video-first pattern**: every blog embeds a canonical video from YouTube (long) or Instagram (short) per pivot #2. The blog post = SEO text layer + video embed + affiliate opportunities.
+> - **Cohesive-ecosystem linking**: comparison blog auto-links to each product's full review; reviews link back to relevant comparisons; blog → affiliate purchase path via pivot #14.
+> - Phase absorbs this taxonomy + template work on top of the redesign.
 >
 > **Surfaced during A.11 Cart audit (2026-04-24):**
 >
@@ -1732,6 +1769,24 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 > - Cross-linking sweep — every surface links to its siblings based on user intent (review → rankings + compare + affiliate; rankings row → review + compare + affiliate; etc.)
 >
 > Not a phase of its own — an architectural principle that every GlitchTech phase follows.
+>
+> **Surfaced during B.10 Tech blog dialogue (2026-04-24):**
+>
+> **17. SEO + GROWTH INFRASTRUCTURE (cross-cutting, launch blocker-adjacent)**
+> User's stated ambition: "be a big player from day one." SEO is how strangers find the site. Not the job of any single phase — an infrastructure sweep that touches every public surface:
+>
+> - **Structured data / JSON-LD:** Article schema on blog + review posts, Product schema on tech products + categories, BreadcrumbList, Organization, WebSite with SearchAction. Phase 7.6 shipped Review JSON-LD on `/tech/reviews/[slug]` — expand to other surfaces.
+> - **Meta + OG per route:** per-surface titles/descriptions, per-post OG images (auto-generated or manually-uploaded), Twitter card metadata. Audit which routes have meta today vs. inherit the root default.
+> - **Per-brand sitemaps** (already in DEPLOY-02) — extend to include blog posts, review slugs, product slugs, categories with lastmod dates.
+> - **Internal linking sweep:** every review mentions related products → link to them; every blog post cross-references reviews/comparisons; rankings rows link to review detail; category detail editorial links to rankings.
+> - **Canonical URLs:** Studios blog vs Tech blog must not compete for the same post; category filter URLs (`?sort=x&filter=y`) should canonical back to the filter-free version to avoid duplicate content penalties.
+> - **Core Web Vitals:** LCP/FID/CLS audit on public routes — ties into pivot Perf (EMAIL-/PERF- stubs). Google ranks by this.
+> - **Crawlability:** `robots.txt` allows public, blocks admin/dashboard/auth/internal paths. Check that `next/script` async/defer doesn't block parsing.
+> - **Rich results eligibility:** validate via Google Search Console + Rich Results Test for Review, Article, BreadcrumbList schemas.
+>
+> NOT a launch blocker in the sense that checkout is — the site can launch without full SEO and retrofit later. But: launch WITH SEO baked in means organic traffic starts from week 1 instead of month 6. High-leverage if done as part of launch; expensive to retrofit if skipped.
+>
+> Own phase, ships alongside or right after DEPLOY-* hardening. Tag: `[IN v4.0 — own phase, near end of sequence]`.
 
 
 ---
