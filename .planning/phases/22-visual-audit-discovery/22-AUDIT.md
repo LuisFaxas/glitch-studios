@@ -9,7 +9,7 @@
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
 | B. Public GlitchTech pages | ✅ done 2026-04-24 | All 10 GlitchTech surfaces audited + IA + media/SEO pivots |
 | C. Auth + client dashboard | 🟡 in-progress (C.1-C.4 done 2026-04-24) | C.4 login blocker fixed mid-audit; client dashboard visual pending |
-| D. Admin dashboard | ⬜ pending | — |
+| D. Admin dashboard | ✅ done 2026-04-24 | All 18 admin surfaces audited; 4 broken; pattern + 3 pivots surfaced |
 | E. Global components | ⬜ pending | — |
 | F. Cross-page flows | ⬜ pending | — |
 | G. Edge cases | ⬜ pending | — |
@@ -1227,8 +1227,149 @@ Audit questions when this gets revisited:
 
 **Look for:** dashboard information value (vanity numbers vs actionable), activity feed signal/noise, empty states, first-run experience.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production (user walked whole admin dashboard end-to-end)
+
+### Dashboard home
+
+- Finally loads — **slow**. Studios/Tech context switcher takes 2-3 seconds per toggle — ties directly to PERF-02 launch blocker. `[BLOCK]`
+- Studios dashboard (after switch): super basic, barely anything, needs overhaul
+- Needs better widgets (actionable, not vanity)
+- Own phase for admin home redesign
+
+### Cross-cutting admin issue — 🐛 Cart floating button visible
+
+- The public-site floating cart button renders inside `/admin/*` too. Admin users don't shop. Doesn't make sense. `[POLISH — small bug fix]`
+- Probably a layout that doesn't gate the cart button by role/route.
+
+### Mobile admin UX
+
+- **Not mobile-friendly** — not a simple responsive issue, a whole category of polish work.
+- If keeping a sidebar: must be dismissible (swipe out / swipe in)
+- OR: move to a bottom nav bar on mobile like the public site
+- Otherwise the admin feels like a website squeezed into mobile, not an app
+- Absorbed into pivot #12 (mobile-native-feel sweep) — but admin gets its own pass.
+
+---
+
+## D.2–D.12 — Per-page admin findings
+
+### D.2 Admin — Tech products (`/admin/tech/products`)
+
+- Super barren `[OVERHAUL]`
+- No search, no filtering, no view switching
+- Important page — needs full love
+- Product detail page (tested MBP M5 Max): works, shows info, affiliate link visible — OK for now, detail gets love as part of products overhaul
+
+### D.3 Admin — Tech reviews (`/admin/tech/reviews`)
+
+- Same pattern as products — full overhaul `[OVERHAUL]`
+
+### D.4 Admin — Tech categories (`/admin/tech/categories`)
+
+- User can't understand what's happening `[OVERHAUL — with clarifying UX + instructions]`
+- Needs: better UX/UI, inline instructions, clear hierarchy display
+
+### D.5 Admin — Tech benchmarks (`/admin/tech/benchmarks`)
+
+- **"A mess — terrible, terrible, terrible"** `[OVERHAUL — critical]`
+- Repeats same product over and over (each benchmark run per product shown flat, not grouped)
+- No search, no organization, no product-level grouping, no test-level grouping
+- Complete overhaul
+
+### D.6 Admin — Beats (`/admin/beats`)
+
+- **One of the most important pages** — construction should reflect that `[OVERHAUL]`
+- Missing: filters, categories, search bar, thumbnail view
+- Thumbnail view critical — admin should see how the beat card looks in public beats catalog
+
+### D.7 Admin — Bundles (`/admin/bundles`)
+
+- Same pattern as beats `[OVERHAUL]`
+- Verify wiring is correct (untested)
+
+### D.8 Admin — Bookings (`/admin/bookings`)
+
+- Calendar looks nice `[OK visual]`
+- Missing: manual-book capability (admin should be able to create a booking from admin side)
+- Overhaul + own phase
+
+### D.9 Admin — Services + booking config
+
+- Looks OK
+- Booking toggle UI visible, not tested
+- Can add services
+- Overall fine, needs deeper test but no major overhaul
+
+### D.10 Admin — Blog posts
+
+- Looks OK — drafts, scheduled, published tabs are useful `[OK overall]`
+- Enhancement: tag system with tag-filter
+- Enhancement: **thumbnail preview** — admin sees how the post will look on the public site without leaving admin
+
+### D.11 Admin — Team
+
+- Simple, clean, OK visually
+- Functionality unclear — untested
+- `[OK pending functional test]`
+
+### D.12 Admin — Contact inbox
+
+- Looks OK, nothing much to review here `[OK]`
+- Minor observation from user
+
+### D.13 Admin — Newsletter compose/subscribers
+
+- **Needs its own phase** `[OWN PHASE — important]`
+- Rich HTML emails matching Glitch aesthetic (brutalist design in email format)
+- **Automation integration** — user mentioned n8n or similar (ties to pivot #19 AI automations)
+- Beautiful templates with graphics
+- Goal: flex the brand, deliver real information
+
+### D.14 Admin — Media library
+
+- Looks cool visually
+- **🐛 Drag-and-drop image upload FAILED** when user tried `[BLOCK — broken feature]`
+- Needs debug + own phase
+
+### D.15 Admin — Homepage editor
+
+- **🐛 404 error** — page broken or missing `[BLOCK — broken feature]`
+- Either the route is missing or redirect is failing
+
+### D.16 Admin — Clients
+
+- **🐛 "This page couldn't load" error** — broken `[BLOCK — broken feature]`
+
+### D.17 Admin — Roles & permissions
+
+- **🐛 "This page couldn't load" error** — broken `[BLOCK — broken feature]`
+
+### D.18 Admin — Settings
+
+- Looks OK
+- Needs own "improvement pass" phase — wire up all settings correctly, verify everything works
+
+### 🎯 Patterns surfacing — elevated to pivot #21
+
+**Every admin list page** (products, reviews, beats, bundles, categories, benchmarks, blog, maybe others) shares the SAME weaknesses:
+- No search
+- No filters
+- No view switcher (list / card / thumbnail)
+- No public-appearance preview
+- No consistent visual-density treatment
+
+This is a **shared "admin list page pattern" phase** — don't redesign 10 surfaces 10 times. Design the pattern once, apply everywhere.
+
+### 🔴 Four broken admin surfaces confirmed (all LAUNCH-BLOCKERS)
+
+1. `/admin` homepage editor — 404
+2. `/admin/clients` — page couldn't load error
+3. `/admin/roles` — page couldn't load error
+4. `/admin/media` drag-and-drop upload — failure on drop
+
+All need debug investigation. Same debug phase as the A.12 Checkout and mobile-nav bugs from Section A.
+
+
 
 ---
 
@@ -1988,6 +2129,20 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **20. TWILIO / SMS INTEGRATION (parked — unclear use case, needs justification)**
 > User flagged Twilio as something to introduce but admitted unclear use case. NOT captured as a commitment. Re-evaluate with specific justification (SMS 2FA for admin security? Booking reminders? Beat-drop opt-in marketing?). If a concrete use case emerges, add as a requirement; otherwise stays parked.
+>
+> **Surfaced during D.1-D.18 Admin dashboard walk (2026-04-24):**
+>
+> **21. ADMIN LIST-PAGE PATTERN — shared component treatment (one phase, many surfaces)**
+> Every admin list page today (beats, bundles, products, reviews, tech categories, tech benchmarks, blog) shares the same weaknesses: no search, no filters, no view switcher, no public-appearance preview, inconsistent visual density. User's verdict across all of them: "same pattern, same overhaul needed." Don't redesign 10 surfaces 10 times. Build a shared `AdminListPage` component pattern (search bar, filter rail, view switcher — list / card / thumbnail-preview — pagination, action buttons) and apply uniformly across every admin list surface. Per-page customization only where justified (e.g., benchmarks needs product-level grouping). Pattern lives in `src/components/admin/list-page/*` and gets adopted surface by surface.
+>
+> **22. ADMIN MOBILE SWEEP (absorbed into mobile-native-feel pivot #12)**
+> Admin dashboard is not mobile-friendly today. Options: (a) sidebar must be swipe-dismissible or (b) bottom-nav pattern like public site. Whole category of polish — every admin surface needs mobile audit + fix. Gets its own pass inside pivot #12.
+>
+> **23. ADMIN BROKEN-PAGES DEBUG PHASE (launch-blocking)**
+> Four admin surfaces confirmed broken: homepage editor (404), clients (500), roles (500), media library drag-drop upload (fails). Bundle with the other debug-needed bugs (A.12 mobile checkout, mobile nav double-tap, /forgot-password missing routes, /about dead link) into ONE debug phase — probably the first thing to ship after PERF-*/EMAIL- since these are simple bug-fixes compared to redesign work. Tag: `[LAUNCH-BLOCKER — own phase, ships early]`.
+>
+> **24. NEWSLETTER AUTOMATION + RICH HTML TEMPLATES (own phase)**
+> User wants newsletter to flex the brand, not be plain text. Rich HTML templates matching brutalist Glitch aesthetic. Automation integration — user mentioned n8n (workflow automation platform, similar to Zapier/Make) to orchestrate: new beat drops trigger newsletter, published review triggers newsletter, scheduled digests, etc. Pairs with pivot #19 (AI automations). React Email templates + Resend delivery + n8n (or equivalent) orchestration. Own phase.
 
 
 ---
