@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | 🟡 in-progress (A.1-A.3 done 2026-04-24) | A.3 license modal audited on prod |
+| A. Public Studios pages | 🟡 in-progress (A.1-A.4 done 2026-04-24) | A.4 services — full redesign flagged |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -196,8 +196,45 @@ Any current code that enforces stream limits / license-tier gating is now scope-
 - Logged-in vs guest: same view?
 - Price variable-by-engagement services: clear, or confusing?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchstudios.io/services`
+
+### Overall verdict
+
+**"Weakest page in the whole site."** Full redesign needed. Not a polish pass — a ground-up rework. `[IN v4.0 — own phase, full redesign]`
+
+### Mobile
+
+- One long scrolling list of cards — boring, monotonous
+- No clear "book a session" call-out
+- Doesn't sell the product
+
+### Desktop
+
+- Big cards with very little content on them
+- Same fundamental weakness as mobile
+- Lacks the visual density and polish other pages have
+
+### Strategic direction for the redesign
+
+1. **Pivot to modular services structure.** Custom Beats becomes the primary offering today (ties to Section J pivot #1). Studio Sessions stays — the physical studio IS being built, don't regress, but it's secondary until the studio exists.
+
+2. **Two-tab structure proposal** (user's idea): services page has its own hero section + two tabs — **Custom Beats (or Custom Music)** and **Studio Sessions**. User can toggle between the two offerings; each gets its own rich content treatment.
+
+3. **Custom Beats tab must be rich.** Well-designed, sells the offering, explains the process, pricing, turnaround, samples. This is the primary revenue surface right now.
+
+4. **Studio Sessions tab** — present but clearly "coming when studio opens" (or fully live if/when the studio is online).
+
+5. **Borrow UI/UX patterns from other pages** — Services is too flat; bring density, motion, visual hierarchy from stronger pages (homepage, beats catalog).
+
+6. **Identity** — services page needs its own visual identity. Not just a stripped-down version of other pages.
+
+### Scope note
+
+This phase should also fold in A.5 (booking wizard) because the flow changes — custom beats requires a different request/intake flow than studio sessions (beat brief, reference tracks, delivery expectations vs. calendar/deposit). One phase covers:
+- `/services` redesign with tabbed Custom Beats / Studio Sessions structure
+- Custom beats intake/request flow (new surface, likely replaces or supplements `/book`)
+- Admin surface for managing custom-beat requests (may need new admin screens)
+- Existing studio session booking preserved behind the Studio Sessions tab
 
 ---
 
@@ -1163,6 +1200,11 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **7. BEAT LICENSING MODEL — fundamental redesign**
 > Current tier system (MP3 Lite / WAV / stream-count limits) is industry-standard but confusing — even to the site owner. Stream limits are honor-system, not technically enforced. User asked: maybe just sell the beat unlimited. This needs: research on current beat-licensing landscape (BeatStars/Airbit tiered model vs. flat-rate/unlimited trend), decision on GlitchStudios positioning, artist-side input (what do YOUR producers want to sell), legal/contractual review, then schema + UI redesign. Likely its own phase with discuss-phase gating before implementation. Affects: `/beats` cards, license modal, checkout, orders schema, admin beat-create flow, download/rights tracking.
+>
+> **Surfaced during A.4 Services audit (2026-04-24):**
+>
+> **8. SERVICES PAGE — full redesign ("weakest page in the whole site")**
+> Services is flat, boring, doesn't sell. Needs a ground-up rebuild with its own identity. Proposed structure: own hero + two tabs (Custom Beats / Studio Sessions). Custom Beats tab = primary revenue surface, needs to be rich. Studio Sessions tab = present but clearly "coming when studio opens". This phase should also absorb the booking wizard changes (A.5) because custom beats needs a different intake flow than studio sessions (beat brief + references vs. calendar + deposit). Likely folds pivot #1 (Custom Beats CTA pivot) into its execution. Affects: `/services`, `/book`, admin custom-beat request management.
 
 
 ---
