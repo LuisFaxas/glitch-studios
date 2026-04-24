@@ -8,7 +8,7 @@
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
 | B. Public GlitchTech pages | ✅ done 2026-04-24 | All 10 GlitchTech surfaces audited + IA + media/SEO pivots |
-| C. Auth + client dashboard | 🟡 in-progress (C.1-C.2 done 2026-04-24) | C.2 register — split by role + social login + 3 new pivots |
+| C. Auth + client dashboard | 🟡 in-progress (C.1-C.3 done 2026-04-24) | C.3 forgot-password routes missing — LAUNCH-BLOCKER |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
 | F. Cross-page flows | ⬜ pending | — |
@@ -1105,8 +1105,26 @@ NOT capturing as a v4.0 commitment. Needs a use-case decision before it earns a 
 
 **Status:** Routes may or may not exist; **Resend is not wired** (999.3) — so even if routes exist, the email never sends. Explicit launch blocker.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production
+
+### Verdict
+
+**🔴 Routes don't exist — 404 today.** `[LAUNCH-BLOCKER]`
+
+### Scope
+
+- `/forgot-password` page missing — user enters email → triggers reset link
+- `/reset-password` page missing — user lands via tokenized link → sets new password
+- Both pages + their server actions + React Email template + Resend integration all need to ship together
+- Blocks: UAT admin password was originally unrecoverable because of this gap (forced manual DB account creation on 2026-04-22)
+
+### Phase ownership
+
+- **Auth redesign phase** (from C.1 + C.2) builds the page shells and brand-aware UI
+- **Email phase** (EMAIL-*, launch blocker) wires Resend + React Email templates
+- **Both must ship for the flow to work** — can't go live without either
+
+
 
 ---
 
