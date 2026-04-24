@@ -37,7 +37,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
     - [x] 23-05-PLAN.md — Mobile checkout Stripe (route hardening + Vercel log diagnosis + real-device verify)
     - [x] 23-06-PLAN.md — /forgot-password + /reset-password scaffolds (Better Auth stub, Phase 24 handoff)
     - [x] 23-07-PLAN.md — /admin/media drag-drop (R2 CORS + env diagnosis, code-change only if diagnosis demands)
-- [ ] **Phase 24: Email Delivery End-to-End** — Resend wired + React Email templates (verify, reset, booking confirm, order receipt, newsletter, contact auto-reply, admin invite) — EMAIL-01..08
+- [x] **Phase 24: Email Delivery End-to-End** — Resend wired + React Email templates (verify, reset, booking confirm, order receipt, newsletter, contact auto-reply, admin invite) — EMAIL-01..08 (completed 2026-04-24)
 - [ ] **Phase 25: Performance Audit + Fixes** — admin context switcher 2-3s → <500ms, admin edit→ingest 4s, public cold-nav p95, mobile LCP, image/bundle/query audits — PERF-01..07
 
 **🔐 Auth + UX:**
@@ -395,7 +395,7 @@ v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 →
 | 21. Deploy Hardening | v3.0 | 0/3 | Carried over → v4.0 DEPLOY-* | - |
 | 22. Visual Audit & Discovery | v4.0 | 8/8 | Complete | 2026-04-24 |
 | **23. Debug Broken Pages & Missing Routes** | **v4.0** | **0/tbd** | **Up next 🚨** | - |
-| 24. Email Delivery End-to-End | v4.0 | 2/3 | In Progress|  |
+| 24. Email Delivery End-to-End | v4.0 | 3/3 | Complete   | 2026-04-24 |
 | 25. Performance Audit + Fixes | v4.0 | 0/tbd | Not started 🚨 | - |
 | 26. Brand-Aware Auth UI Redesign | v4.0 | 0/tbd | Not started | - |
 | 27. Media/Video Strategy Foundation | v4.0 | 0/tbd | Not started | - |
