@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | 🟡 in-progress (A.1-A.9 done 2026-04-24) | A.8+A.9 blog — research-driven redesign, cross-brand |
+| A. Public Studios pages | 🟡 in-progress (A.1-A.10 done 2026-04-24) | A.10 contact deferred |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -471,8 +471,25 @@ The Studios blog and the GlitchTech blog (BLOG-* carry-over requirements) share 
 - Spam volume: is there protection?
 - Attachments: file type restrictions?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchstudios.io/contact`
+
+### Verdict
+
+**Defer — keep as-is.** `[BACKLOG]`
+
+### Rationale
+
+- Email-only is fine for now
+- User wants to AVOID additional channels (WhatsApp/phone/etc.) — no spam, no random crap
+- Nobody needs to contact Glitch for anything critical right now
+- Contact page was already deferred in v2.0 (Phase 13 Contact — "business info not finalized")
+- Memory rating of 4/10 from 2026-03-28 acknowledged but not acted on — intentional deferral, not neglect
+
+### When to revisit
+
+Re-audit after launch traction when: (a) real contact volume justifies channel expansion, (b) spam becomes a real issue, (c) business info is ready for public display (map, phone, studio address).
+
+
 
 ---
 
