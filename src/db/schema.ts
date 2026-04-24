@@ -9,6 +9,7 @@ import {
   jsonb,
   pgEnum,
   uniqueIndex,
+  index,
   check,
 } from "drizzle-orm/pg-core"
 import type { AnyPgColumn } from "drizzle-orm/pg-core"
@@ -29,37 +30,45 @@ export const user = pgTable("user", {
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 })
 
-export const account = pgTable("account", {
-  id: text("id").primaryKey(),
-  accountId: text("accountId").notNull(),
-  providerId: text("providerId").notNull(),
-  userId: text("userId")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  accessToken: text("accessToken"),
-  refreshToken: text("refreshToken"),
-  idToken: text("idToken"),
-  accessTokenExpiresAt: timestamp("accessTokenExpiresAt"),
-  refreshTokenExpiresAt: timestamp("refreshTokenExpiresAt"),
-  scope: text("scope"),
-  password: text("password"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
-})
+export const account = pgTable(
+  "account",
+  {
+    id: text("id").primaryKey(),
+    accountId: text("accountId").notNull(),
+    providerId: text("providerId").notNull(),
+    userId: text("userId")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    accessToken: text("accessToken"),
+    refreshToken: text("refreshToken"),
+    idToken: text("idToken"),
+    accessTokenExpiresAt: timestamp("accessTokenExpiresAt"),
+    refreshTokenExpiresAt: timestamp("refreshTokenExpiresAt"),
+    scope: text("scope"),
+    password: text("password"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+  },
+  (t) => [index("idx_account_user").on(t.userId)],
+)
 
-export const session = pgTable("session", {
-  id: text("id").primaryKey(),
-  expiresAt: timestamp("expiresAt").notNull(),
-  token: text("token").notNull().unique(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
-  ipAddress: text("ipAddress"),
-  userAgent: text("userAgent"),
-  userId: text("userId")
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  impersonatedBy: text("impersonatedBy"),
-})
+export const session = pgTable(
+  "session",
+  {
+    id: text("id").primaryKey(),
+    expiresAt: timestamp("expiresAt").notNull(),
+    token: text("token").notNull().unique(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+    ipAddress: text("ipAddress"),
+    userAgent: text("userAgent"),
+    userId: text("userId")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    impersonatedBy: text("impersonatedBy"),
+  },
+  (t) => [index("idx_session_user").on(t.userId)],
+)
 
 export const verification = pgTable("verification", {
   id: text("id").primaryKey(),
@@ -155,22 +164,30 @@ export const blogCategories = pgTable("blog_categories", {
 })
 
 // Blog posts (CONT-01)
-export const blogPosts = pgTable("blog_posts", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  title: text("title").notNull(),
-  slug: text("slug").notNull().unique(),
-  excerpt: text("excerpt"),
-  content: text("content").notNull(),
-  coverImageUrl: text("cover_image_url"),
-  categoryId: uuid("category_id").references(() => blogCategories.id),
-  authorId: text("author_id"),
-  status: postStatusEnum("status").default("draft"),
-  publishedAt: timestamp("published_at"),
-  scheduledAt: timestamp("scheduled_at"),
-  isFeatured: boolean("is_featured").default(false).notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-})
+export const blogPosts = pgTable(
+  "blog_posts",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    title: text("title").notNull(),
+    slug: text("slug").notNull().unique(),
+    excerpt: text("excerpt"),
+    content: text("content").notNull(),
+    coverImageUrl: text("cover_image_url"),
+    categoryId: uuid("category_id").references(() => blogCategories.id),
+    authorId: text("author_id"),
+    status: postStatusEnum("status").default("draft"),
+    publishedAt: timestamp("published_at"),
+    scheduledAt: timestamp("scheduled_at"),
+    isFeatured: boolean("is_featured").default(false).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_blog_posts_category").on(t.categoryId),
+    index("idx_blog_posts_status").on(t.status),
+    index("idx_blog_posts_published_at").on(t.publishedAt),
+  ],
+)
 
 // Testimonials (BOOK-06)
 export const testimonials = pgTable("testimonials", {
@@ -275,40 +292,61 @@ export const bundles = pgTable("bundles", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 })
 
-export const bundleBeats = pgTable("bundle_beats", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  bundleId: uuid("bundle_id")
-    .references(() => bundles.id, { onDelete: "cascade" })
-    .notNull(),
-  beatId: uuid("beat_id")
-    .references(() => beats.id, { onDelete: "cascade" })
-    .notNull(),
-})
+export const bundleBeats = pgTable(
+  "bundle_beats",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    bundleId: uuid("bundle_id")
+      .references(() => bundles.id, { onDelete: "cascade" })
+      .notNull(),
+    beatId: uuid("beat_id")
+      .references(() => beats.id, { onDelete: "cascade" })
+      .notNull(),
+  },
+  (t) => [
+    index("idx_bundle_beats_bundle").on(t.bundleId),
+    index("idx_bundle_beats_beat").on(t.beatId),
+  ],
+)
 
-export const orders = pgTable("orders", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  userId: text("user_id"),
-  guestEmail: text("guest_email"),
-  stripeSessionId: text("stripe_session_id").unique(),
-  status: orderStatusEnum("status").default("pending"),
-  totalCents: integer("total_cents").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-})
+export const orders = pgTable(
+  "orders",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id"),
+    guestEmail: text("guest_email"),
+    stripeSessionId: text("stripe_session_id").unique(),
+    status: orderStatusEnum("status").default("pending"),
+    totalCents: integer("total_cents").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_orders_user").on(t.userId),
+    index("idx_orders_guest_email").on(t.guestEmail),
+  ],
+)
 
-export const orderItems = pgTable("order_items", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  orderId: uuid("order_id")
-    .references(() => orders.id, { onDelete: "cascade" })
-    .notNull(),
-  beatId: uuid("beat_id")
-    .references(() => beats.id)
-    .notNull(),
-  licenseTier: licenseTierEnum("license_tier").notNull(),
-  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
-  licensePdfKey: text("license_pdf_key"),
-  downloadCount: integer("download_count").default(0),
-})
+export const orderItems = pgTable(
+  "order_items",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    orderId: uuid("order_id")
+      .references(() => orders.id, { onDelete: "cascade" })
+      .notNull(),
+    beatId: uuid("beat_id")
+      .references(() => beats.id)
+      .notNull(),
+    licenseTier: licenseTierEnum("license_tier").notNull(),
+    price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+    licensePdfKey: text("license_pdf_key"),
+    downloadCount: integer("download_count").default(0),
+  },
+  (t) => [
+    index("idx_order_items_order").on(t.orderId),
+    index("idx_order_items_beat").on(t.beatId),
+  ],
+)
 
 export const licenseTierDefs = pgTable("license_tier_defs", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -431,40 +469,49 @@ export const bookingSeries = pgTable("booking_series", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 })
 
-export const bookings = pgTable("bookings", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  seriesId: uuid("series_id").references(() => bookingSeries.id, {
-    onDelete: "set null",
-  }),
-  serviceId: uuid("service_id")
-    .references(() => services.id)
-    .notNull(),
-  roomId: uuid("room_id")
-    .references(() => rooms.id)
-    .notNull(),
-  userId: text("user_id"),
-  guestName: text("guest_name").notNull(),
-  guestEmail: text("guest_email").notNull(),
-  guestPhone: text("guest_phone").notNull(),
-  notes: text("notes"),
-  date: text("date").notNull(),
-  startTime: text("start_time").notNull(),
-  endTime: text("end_time").notNull(),
-  status: bookingStatusEnum("status").default("pending"),
-  depositAmount: numeric("deposit_amount", {
-    precision: 10,
-    scale: 2,
-  }).notNull(),
-  totalPrice: numeric("total_price", { precision: 10, scale: 2 }).notNull(),
-  stripeSessionId: text("stripe_session_id"),
-  stripePaymentIntentId: text("stripe_payment_intent_id"),
-  cancelledAt: timestamp("cancelled_at"),
-  cancelledBy: text("cancelled_by"),
-  cancellationReason: text("cancellation_reason"),
-  reminderSent: boolean("reminder_sent").default(false),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-})
+export const bookings = pgTable(
+  "bookings",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    seriesId: uuid("series_id").references(() => bookingSeries.id, {
+      onDelete: "set null",
+    }),
+    serviceId: uuid("service_id")
+      .references(() => services.id)
+      .notNull(),
+    roomId: uuid("room_id")
+      .references(() => rooms.id)
+      .notNull(),
+    userId: text("user_id"),
+    guestName: text("guest_name").notNull(),
+    guestEmail: text("guest_email").notNull(),
+    guestPhone: text("guest_phone").notNull(),
+    notes: text("notes"),
+    date: text("date").notNull(),
+    startTime: text("start_time").notNull(),
+    endTime: text("end_time").notNull(),
+    status: bookingStatusEnum("status").default("pending"),
+    depositAmount: numeric("deposit_amount", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
+    totalPrice: numeric("total_price", { precision: 10, scale: 2 }).notNull(),
+    stripeSessionId: text("stripe_session_id"),
+    stripePaymentIntentId: text("stripe_payment_intent_id"),
+    cancelledAt: timestamp("cancelled_at"),
+    cancelledBy: text("cancelled_by"),
+    cancellationReason: text("cancellation_reason"),
+    reminderSent: boolean("reminder_sent").default(false),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_bookings_user").on(t.userId),
+    index("idx_bookings_service").on(t.serviceId),
+    index("idx_bookings_guest_email").on(t.guestEmail),
+    index("idx_bookings_date").on(t.date),
+  ],
+)
 
 // === Admin Dashboard & Email (Phase 4) ===
 
@@ -786,6 +833,9 @@ export const techReviews = pgTable("tech_reviews", {
     "tech_reviews_published_at_chk",
     sql`${t.status} != 'published' OR ${t.publishedAt} IS NOT NULL`,
   ),
+  productIdx: index("idx_tech_reviews_product").on(t.productId),
+  reviewerIdx: index("idx_tech_reviews_reviewer").on(t.reviewerId),
+  statusIdx: index("idx_tech_reviews_status").on(t.status),
 }))
 
 // --- Review pros/cons/gallery ---
@@ -877,6 +927,8 @@ export const techBenchmarkRuns = pgTable("tech_benchmark_runs", {
   liveUniq: uniqueIndex("tech_benchmark_runs_live_uniq")
     .on(t.productId, t.testId, t.mode, t.runUuid)
     .where(sql`${t.superseded} = false`),
+  productIdx: index("idx_tech_benchmark_runs_product").on(t.productId),
+  testIdx: index("idx_tech_benchmark_runs_test").on(t.testId),
 }))
 
 export const techReviewDisciplineExclusions = pgTable("tech_review_discipline_exclusions", {
