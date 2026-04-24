@@ -2217,19 +2217,34 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **Surfaced during C.2 Register audit (2026-04-24):**
 >
-> **19. AI AUTOMATIONS / WORKFLOWS (own discuss-phase, defer scope until discussed)**
-> User's ask: "It would be nice to discuss at some point in this milestone automations, different AI automations, different AI workflows for me and blogging, et cetera. But let's get to that when we get to that."
+> **19. AI AGENTS — DISCOVERY, SELECTION, IMPLEMENTATION (promoted from "discuss later" to real phase cluster)**
 >
-> Deliberately parked. Discussion worth having mid-milestone when more groundwork is in place. Candidate use cases to explore in that discussion:
-> - AI-assisted blog post drafting (long-form text + video summarization)
-> - Auto-generated review scaffolds from JSONL benchmark data (structural skeleton, user writes the voice)
-> - Content pipeline automations (review publish → auto-draft Instagram caption, YouTube chapter markers, blog teaser)
-> - Multi-surface asset pipeline (one review → long-form YT + short-form IG reel + blog post + newsletter + social cards)
-> - AI moderation helpers (for future artist-platform signup review queue)
-> - Chatbot / assistant for site visitors (product recommender trained on reviews)
-> - Admin-side AI helpers (auto-tag beats by listening, detect BPM/key, auto-transcribe review video to captions)
+> **User amplified 2026-04-24 Section K review: this is a real priority, not a parking lot item.**
 >
-> Each of these could be its own phase. Worth a dedicated `/gsd:discuss-phase` session mid-v4.0 when we can see what's shipped and what's a natural fit. Flagged as [IN v4.0 — discuss mid-milestone].
+> Scope: evaluate AI platforms + agent stacks, pick the best, build agents for concrete use cases. Discovery phase determines WHAT agents we build and WHAT platform we build them on.
+>
+> **Platform evaluation candidates:**
+> - **Anthropic Claude** (API, SDK, Agents SDK, MCP ecosystem) — strong for long-form text, analysis, structured outputs
+> - **OpenAI** (GPT-5, Assistants API, function-calling) — broad ecosystem, strong tooling
+> - **OpenRouter** — multi-model aggregation, cost optimization across providers
+> - **Local / self-hosted** (Ollama, LM Studio, llama.cpp) — privacy, cost control, specific tasks
+> - **Vendor-specific** (n8n for workflow orchestration, Zapier for integrations, Make for visual automations)
+> - Hybrid: Claude for reasoning, local for BPM detection, OpenAI for function-calling, n8n for orchestration
+>
+> **Candidate agent use cases to implement:**
+> - **Review writing assistant** — JSONL benchmark data + product specs → structural review scaffold, user supplies voice/polish
+> - **Benchmark organization** — auto-categorize benchmark runs, flag outliers, suggest GlitchMark scores, validate ambient conditions
+> - **Blog creation helper** — from a YouTube video URL, draft blog post with embeds, structure, SEO metadata
+> - **Multi-surface asset pipeline** — one review → YT chapters + IG carousel + blog teaser + newsletter blurb + social cards
+> - **Admin helpers** — auto-BPM/key detection for beats, auto-transcribe review videos, auto-tag blog posts
+> - **Moderation helpers** — future artist-platform signup review queue
+> - **Conversational site assistant** — product recommender trained on reviews (ties to pivot #25 Glitchy character)
+>
+> **Phase structure:**
+> - **Phase 42 — AI Agents Discovery + Selection:** own `/gsd:discuss-phase`, evaluate platforms (Claude vs OpenAI vs OpenRouter vs hybrid), evaluate orchestration (n8n vs custom), pick stack, document decisions. Research-driven, decision-making only — no code.
+> - **Phase 43 — AI Agents Implementation:** build the agents for the chosen use cases on the chosen platform. Individual agents may split into sub-phases based on complexity.
+>
+> Tag: `[IN v4.0 — two phases, discovery then implementation]`
 >
 > **Surfaced during C.2 Register (parked, low-priority):**
 >
@@ -2249,6 +2264,40 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **24. NEWSLETTER AUTOMATION + RICH HTML TEMPLATES (own phase)**
 > User wants newsletter to flex the brand, not be plain text. Rich HTML templates matching brutalist Glitch aesthetic. Automation integration — user mentioned n8n (workflow automation platform, similar to Zapier/Make) to orchestrate: new beat drops trigger newsletter, published review triggers newsletter, scheduled digests, etc. Pairs with pivot #19 (AI automations). React Email templates + Resend delivery + n8n (or equivalent) orchestration. Own phase.
+>
+> **Surfaced during Section K review (2026-04-24):**
+>
+> **25. GLITCHY — 3D RACCOON MASCOT / SITE CHARACTER**
+>
+> User has built a working 3D disembodied raccoon-head character with full conversational capability (Orpheus TTS + Whisper ASR + LLM backend). Runs on a server today, fully functional conversation. The character is the Glitch brand mascot — "Glitchy."
+>
+> **v4.0 scope (demo version only):**
+> - Surface Glitchy on the website as a VISUAL presence + demo
+> - Not conversational yet — just showcase what the character is and what we can do
+> - Animation loops, idle states, hover reactions, maybe demo clips of conversational capability
+> - Brings LIFE to the brutalist site — a character mascot is a huge differentiator
+>
+> **v5.0+ scope (future):**
+> - Full conversational integration on site — users can TALK to Glitchy about beats, reviews, GlitchMark, etc.
+> - Glitchy becomes the UI for AI agents from pivot #19 (conversational site assistant)
+> - Voice + text both supported
+> - Context-aware (knows what page the user is on, what they've been browsing)
+>
+> **Where Glitchy could surface in v4.0:**
+> - **Homepage hero** — Glitchy speaks a tagline or does an ambient idle loop
+> - **Tech brand side** — Glitchy as the mascot of benchmarks/reviews (hover on medals, floating commentary)
+> - **Dedicated `/about` page** — "Meet Glitchy" character introduction, demo clips, behind-the-scenes of how he's built (ties to brand authenticity per "red raw handmade")
+> - **Floating widget** (sitewide) — Glitchy in a corner, minimizable, reacts to page context
+> - **Admin dashboard** — Glitchy as assistant presence (even if non-conversational yet)
+>
+> **Open questions for the Glitchy phase's discuss-step:**
+> - Where specifically does he appear in v4.0? (Homepage only? Floating widget? Tech-brand only?)
+> - How is the 3D model delivered to the browser? (Three.js / React Three Fiber? glTF export? Video loops fallback for low-end devices?)
+> - Performance budget? (3D models are heavy — fallback to static image + canvas animation on mobile?)
+> - Design: keep raccoon theme or pivot variants per brand (Studios Glitchy vs Tech Glitchy)?
+> - Connection to pivot #19 AI agents — architect the demo so full conversational integration in v5.0 is just a wire-up, not a rebuild
+>
+> **Own phase in v4.0**, likely late-stage (after launch blockers, parallel with SEO or brand polish). Tag: `[IN v4.0 — own phase, late stage demo version]`. Full conversational version → v5.0+.
 
 
 ---
@@ -2261,7 +2310,7 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 
 **Milestone target:** Get the site to production — polished, performant, content-complete, credible. Artist platform (admin-invite BETA), GlitchMark new scoring system, master leaderboard (never shipped in v3.0), email, performance, affiliate revenue, SEO, deploy hardening.
 
-**23 phases** (Phase 22 is the current audit; 23-45 derive from it).
+**25 phases** (Phase 22 is the current audit; 23-46 derive from it, including AI agents split into 2 phases + Glitchy character added).
 
 **~10 launch blockers** → ship first. Content (flagship review) + polish → ship in parallel. Revenue (affiliate) + growth (SEO) → near end. Deploy hardening → last.
 
@@ -2331,14 +2380,16 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 | # | Name | Goal | Requirements |
 |---|---|---|---|
 | **41** | Affiliate marketing infrastructure | Schema (`product_affiliate_links`), render logic on every product surface, tracking, cloaking via `/go/[...]`, FTC disclosure, admin analytics dashboard | Pivot #14 |
-| **42** | AI automations + newsletter rich HTML | Dedicated mid-milestone discuss-phase. Newsletter rich HTML templates. n8n orchestration. Content pipeline helpers | Pivots #19, #24 |
+| **42** | AI Agents — Discovery + Selection (discuss-only phase) | Evaluate platforms (Claude / OpenAI / OpenRouter / hybrid), evaluate orchestration (n8n vs custom), pick stack, document decisions. Research-driven, no code | Pivot #19 |
+| **43** | AI Agents — Implementation | Build agents for chosen use cases on chosen platform: review writing assistant, benchmark organization, blog creation helper, multi-surface asset pipeline, admin helpers (auto-BPM, transcription, tagging). Newsletter automation (pivot #24) plugs in here | Pivots #19, #24 |
+| **44** | Glitchy 3D mascot integration (demo version) | Bring the Glitchy raccoon character on-site as visual presence + demo. No conversational integration yet — that's v5.0+. Three.js/React Three Fiber rendering with mobile fallback, idle loops, hover reactions, maybe `/about` introduction page | Pivot #25 |
 
 ### 🚀 Launch readiness (ships last)
 
 | # | Name | Goal | Requirements |
 |---|---|---|---|
-| **43** | SEO + growth infrastructure | Structured data on all surfaces, meta/OG per route, per-brand sitemaps, canonical URLs, internal linking sweep, Core Web Vitals, rich results validation | Pivot #17 |
-| **44** | Production deploy hardening | glitchtech.io domain + SSL, UAT admin delete (DEPLOY-05), env audit, error tracking (Sentry), analytics, backup verification, 301 www→apex | DEPLOY-01..09 |
+| **45** | SEO + growth infrastructure | Structured data on all surfaces, meta/OG per route, per-brand sitemaps, canonical URLs, internal linking sweep, Core Web Vitals, rich results validation | Pivot #17 |
+| **46** | Production deploy hardening | glitchtech.io domain + SSL, UAT admin delete (DEPLOY-05), env audit, error tracking (Sentry), analytics, backup verification, 301 www→apex | DEPLOY-01..09 |
 
 ---
 
@@ -2381,17 +2432,18 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 ```
 Week 1-2:   Phase 23, 24, 25 (launch blockers, parallel)
 Week 3:     Phase 26 (auth UI)
-Week 4:     Phase 27 (media foundation)
+Week 4:     Phase 27 (media foundation) + Phase 42 (AI Discovery — can start early, research only)
 Week 5-6:   Phase 28 (GlitchMark) + 33 (licensing) + 35 (blog) [parallel tracks]
 Week 7:     Phase 29 (leaderboard) — the headline
 Week 8:     Phase 30 (per-benchmark) + 31 (category reframe) + 32 (artist BETA)
 Week 9:     Phase 34 (custom beats) + 36 (flagship content)
 Week 10-11: Phase 37/38/39/40 (polish sweeps)
-Week 12:    Phase 41 (affiliate) + 42 (AI automations)
-Week 13:    Phase 43 (SEO) + 44 (deploy hardening) + launch
+Week 12:    Phase 41 (affiliate) + 43 (AI implementation)
+Week 13:    Phase 44 (Glitchy) + 45 (SEO)
+Week 14:    Phase 46 (deploy hardening) + launch
 ```
 
-This is ambitious (~13 weeks if sequential) but realistic with parallelism. Some weeks compress if AI-accelerated.
+~14 weeks with parallelism. Some weeks compress if AI-accelerated OR if Glitchy has lower surface complexity than expected.
 
 ---
 
