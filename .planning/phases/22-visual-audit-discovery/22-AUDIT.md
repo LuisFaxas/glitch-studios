@@ -1154,6 +1154,21 @@ User tried to sign in with credentials in `.env.local` but couldn't reach dashbo
 
 This is a real production bug — login was never going to work on prod domain without this fix, regardless of password correctness. Logged as a `[BLOCK]` bug that shipped in a prior phase undetected because Phase 8 auth testing was local-only.
 
+### 🐛 Full auth bug cascade caught during Phase 22 audit (all fixed 2026-04-24)
+
+Six separate production auth defects discovered + fixed in ~20 minutes:
+
+1. **`trustedOrigins` missing prod domains** (`src/lib/auth.ts`) — Better Auth rejected auth requests from `glitchstudios.io` and `glitchtech.io`. Commit `825abf1`.
+2. **`BETTER_AUTH_URL` Vercel env wrong** — pointed to old `glitch-studios.vercel.app` preview URL. Session cookies scoped to wrong origin. Changed to `https://glitchstudios.io` in Vercel dashboard + redeploy.
+3. **Tailscale IP missing from `trustedOrigins`** — dev server accessed via `100.123.116.23:3004` from phone was rejected. Commit `9860864`.
+4. **Middleware rewriting `/login` → `/tech/login` on glitchtech.io** — `/tech/login` doesn't exist, returned 404. Added `SHARED_AUTH_PATHS` skip list. Commit `9860864`.
+5. **Role redirect reading `data.user.role` that wasn't populated** — `signIn.email()` response omits admin-plugin additional fields. Changed to fetch full session after sign-in. Commit `98723fe`.
+6. **Middleware only checking unprefixed session cookie** — on HTTPS prod, Better Auth uses `__Secure-better-auth.session_token`. Middleware checked only `better-auth.session_token`. Fixed to check both. Commit `e994e85`.
+
+**Why all six went undetected:** Phase 8 auth testing was local-only (HTTP + one domain + one IP). None of these surfaced until prod multi-domain + HTTPS. Lesson captured for future phases — **any auth/session/cookie change must be verified against prod parity (HTTPS, real domains, multi-host)** before shipping.
+
+
+
 ### Process gap to capture
 
 - **No documented password-recovery path for owner/admin if credentials forgotten today.** Must know the password or re-run the seed.
