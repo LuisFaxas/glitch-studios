@@ -35,7 +35,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
     - [x] 23-03-PLAN.md — /admin/clients + /admin/roles 500s (shared local-repro diagnosis + targeted fix)
     - [x] 23-04-PLAN.md — Mobile nav double-tap (overlay useDragControls refactor + bottom-tab prefetch)
     - [x] 23-05-PLAN.md — Mobile checkout Stripe (route hardening + Vercel log diagnosis + real-device verify)
-    - [ ] 23-06-PLAN.md — /forgot-password + /reset-password scaffolds (Better Auth stub, Phase 24 handoff)
+    - [x] 23-06-PLAN.md — /forgot-password + /reset-password scaffolds (Better Auth stub, Phase 24 handoff)
     - [ ] 23-07-PLAN.md — /admin/media drag-drop (R2 CORS + env diagnosis, code-change only if diagnosis demands)
 - [ ] **Phase 24: Email Delivery End-to-End** — Resend wired + React Email templates (verify, reset, booking confirm, order receipt, newsletter, contact auto-reply, admin invite) — EMAIL-01..08
 - [ ] **Phase 25: Performance Audit + Fixes** — admin context switcher 2-3s → <500ms, admin edit→ingest 4s, public cold-nav p95, mobile LCP, image/bundle/query audits — PERF-01..07
