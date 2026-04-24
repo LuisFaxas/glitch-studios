@@ -33,6 +33,21 @@ export const auth = betterAuth({
   ],
   emailAndPassword: {
     enabled: true,
+    // Phase 23 stub — Phase 24 (Email Delivery End-to-End) replaces this body with
+    // a Resend call. CONTRACT (LOCKED for Phase 24 handoff): signature is
+    //   sendResetPassword({ user, url, token }, request) => Promise<void>
+    // - `user` contains the full DB user (email + name)
+    // - `url` is fully constructed by Better Auth (includes callbackURL)
+    // - `token` is the raw token (already embedded in `url`)
+    // Phase 24: replace the console.log below with
+    //   await resend.emails.send({ from, to: user.email, subject,
+    //     react: <ResetPasswordEmail url={url} name={user.name} /> })
+    // DO NOT CHANGE the function signature or surrounding config.
+    sendResetPassword: async ({ user, url }) => {
+      console.log(
+        `[Phase 23 stub] Password reset requested for ${user.email}. Reset URL: ${url}`,
+      )
+    },
   },
   plugins: [
     admin({
