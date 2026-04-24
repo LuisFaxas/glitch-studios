@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useTransition, useMemo } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { ArrowLeft, Settings as SettingsIcon, X, Plus } from "lucide-react"
 import { toast } from "sonner"
 import { TiptapEditor, type TiptapEditorRef } from "@/components/admin/tiptap-editor"
@@ -372,7 +373,15 @@ export function ReviewEditor({
                   {heroImageUrl ? (
                     <div className="flex items-start gap-3">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={heroImageUrl} alt="Hero" className="max-h-24 border border-[#222222]" />
+                      <Image
+                        src={heroImageUrl}
+                        alt="Hero preview"
+                        width={400}
+                        height={96}
+                        className="max-h-24 border border-[#222222]"
+                        sizes="400px"
+                        unoptimized
+                      />
                       <button
                         type="button"
                         onClick={() => setHeroPickerOpen(true)}
@@ -398,8 +407,15 @@ export function ReviewEditor({
                   <div className="flex flex-wrap gap-2">
                     {gallery.map((g) => (
                       <div key={g.id} className="relative group">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={g.url} alt="" className="h-16 w-16 object-cover border border-[#222222]" />
+                        <Image
+                          src={g.url}
+                          alt=""
+                          width={64}
+                          height={64}
+                          className="h-16 w-16 object-cover border border-[#222222]"
+                          sizes="64px"
+                          unoptimized
+                        />
                         <button
                           type="button"
                           onClick={() => setGallery((prev) => prev.filter((x) => x.id !== g.id))}

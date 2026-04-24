@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useTransition } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { ImageIcon } from "lucide-react"
 import { toast } from "sonner"
 import {
@@ -231,8 +232,15 @@ export function ProductForm({ mode, productId, tree, initial }: ProductFormProps
             </label>
             {heroImageUrl ? (
               <div className="flex items-start gap-4">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={heroImageUrl} alt="Hero" className="max-h-40 border border-[#222222]" />
+                <Image
+                  src={heroImageUrl}
+                  alt="Hero preview"
+                  width={800}
+                  height={160}
+                  className="max-h-40 border border-[#222222]"
+                  sizes="800px"
+                  unoptimized
+                />
                 <div className="flex flex-col gap-2">
                   <button
                     type="button"
