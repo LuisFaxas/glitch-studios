@@ -11,9 +11,9 @@
 | C. Auth + client dashboard | 🟡 in-progress (C.1-C.4 done 2026-04-24) | C.4 login blocker fixed mid-audit; client dashboard visual pending |
 | D. Admin dashboard | ✅ done 2026-04-24 | All 18 admin surfaces audited; 4 broken; pattern + 3 pivots surfaced |
 | E. Global components | ✅ done 2026-04-24 | All 6 global components audited; GlitchTech mobile menu content bleed found |
-| F. Cross-page flows | ⬜ pending | — |
-| G. Edge cases | ⬜ pending | — |
-| H. v3.0 carry-over triage | ⬜ pending | — |
+| F. Cross-page flows | ✅ done 2026-04-24 | Skipped — fully covered across A-E |
+| G. Edge cases | ✅ done 2026-04-24 | Skipped — fully covered across A-E |
+| H. v3.0 carry-over triage | ✅ done 2026-04-24 | All items triaged; nothing dropped; 999.6 CLI deferred post-launch |
 | I. GlitchMark design | ⬜ pending | — |
 | J. Brain dump (catch-all) | ⬜ pending | — |
 
@@ -1598,6 +1598,10 @@ Feedback captured across other sections — no new items here. Consolidated:
 
 # SECTION F — Cross-Page Flows
 
+**Status: SKIPPED (2026-04-24).** All 6 flows are either fully captured in earlier sections or blocked on bugs already logged. Walking them again would surface nothing new. Individual flow notes retained below for reference.
+
+
+
 Walk each flow end-to-end. Note what breaks, what's awkward, what's missing.
 
 ## F.1 Beat purchase flow
@@ -1685,6 +1689,10 @@ Footer signup → Email (stub — Resend not wired) → Unsubscribe link → Con
 ---
 
 # SECTION G — Edge Cases
+
+**Status: SKIPPED (2026-04-24).** Edge cases were surfaced naturally across Section A-E audits — auth edges captured via the 6 auth bugs, payment edges via A.12 checkout bug, booking edges via A.4/A.5 Services redesign phase, content edges via the per-surface captures, perf edges via PERF-02 admin switcher + A.2 mobile beats load. Production-readiness edges (UAT admin cleanup, env audit, error tracking, backups) already in DEPLOY-* requirements. Walking this section would not surface new items. Edge-case prompts retained below for reference.
+
+
 
 Triage each with `[BLOCK]` / `[POLISH]` / `[BACKLOG]` / `[OK]`.
 
@@ -1813,8 +1821,20 @@ Every pending v3.0 item. Tag each `[IN v4.0]` / `[BACKLOG]` / `[DROP]`.
 - **20.5 Launch Blockers Bundle** (999.3 email + 999.4 perf + UAT admin cleanup)
 - **21 Deploy Hardening** (glitchtech.io domain, per-brand sitemap, OG tags)
 
-> FEEDBACK (triage each):
-> 
+### Triage verdict (2026-04-24)
+
+| Item | Verdict | Notes |
+|---|---|---|
+| **17.5 Trailer videos** | `[IN v4.0]` | Absorbed into pivot #9 Media strategy phase — trailers become YouTube embeds on a dedicated homepage surface. VIDEO-* requirements. |
+| **18 Master leaderboard** | `[IN v4.0]` | The headline v3.0 feature that never shipped. RANK-* requirements. Pairs with GlitchMark phase. Strongest product framing per B.6. |
+| **19 Flagship MBP review** | `[IN v4.0]` | Content delivery — happens in parallel with dev, drops in once Mac benchmarks are back. FLAG-* requirements. |
+| **20 Tech blog** | `[IN v4.0]` | Part of pivot #11 blog redesign (research-driven, cross-brand, predetermined types). BLOG-* requirements. |
+| **20.5 Launch Blockers Bundle** | `[SPLIT]` | Decomposed into discrete phases: Email (EMAIL-*), Perf (PERF-*), Debug-broken-pages (pivot #23), Deploy (DEPLOY-*). |
+| **21 Deploy Hardening** | `[IN v4.0]` | DEPLOY-* requirements. Ships near end of milestone alongside SEO sweep (pivot #17). |
+
+**All v3.0 unfinished phase work is preserved in v4.0 scope. No drops.**
+
+
 
 ---
 
@@ -1825,8 +1845,16 @@ Every pending v3.0 item. Tag each `[IN v4.0]` / `[BACKLOG]` / `[DROP]`.
 - **999.5 Admin cosmetic cleanup** — details panel cramped on MBP review edit.
 - **999.6 Programmatic CLI** (AI workflow path) — lower priority.
 
-> FEEDBACK:
-> 
+### Triage verdict
+
+| Item | Verdict | Notes |
+|---|---|---|
+| **999.3 Resend/Email** | `[IN v4.0 — launch blocker]` | EMAIL-* requirements. Unblocks /forgot-password, booking confirms, contact replies, newsletter, artist invites. Ships early in sequence. |
+| **999.4 Perf audit** | `[IN v4.0 — launch blocker]` | PERF-* requirements. Admin context switcher (confirmed 2-3s in D.1), admin edit→ingest (4s). Ships early. |
+| **999.5 Admin cosmetic cleanup** | `[ABSORBED]` | Rolls into the broader admin list-page pattern phase (pivot #21) + admin mobile sweep (pivot #22). Don't need a standalone phase. |
+| **999.6 Programmatic CLI** | `[BACKLOG — post-launch]` | Workflow automation for AI content pipeline. Related to pivot #19 (AI automations) but can ship post-launch without blocking. |
+
+
 
 ---
 
@@ -1835,8 +1863,14 @@ Every pending v3.0 item. Tag each `[IN v4.0]` / `[BACKLOG]` / `[DROP]`.
 - **17-HUMAN-UAT.md** — live review detail render with populated BPR (blocked on published review), compact medal on review cards list (blocked same)
 - **16-UAT** — may have outstanding items; will audit if you want
 
-> FEEDBACK:
-> 
+### Triage verdict
+
+| Item | Verdict | Notes |
+|---|---|---|
+| **17 BPR live render + compact medal list** | `[RESOLVED by FLAG-* + pivot #15]` | Both unblock when flagship review ships (FLAG-*). Plus pivot #15 BPR medal visual redesign replaces the current monochrome treatment anyway, so re-audit happens naturally with the new medals. |
+| **16 UAT outstanding** | `[DEFERRED AUDIT]` | Not surfaced as a problem today. Will audit if/when user flags something specific. Low priority. |
+
+
 
 ---
 
@@ -1847,8 +1881,17 @@ Every pending v3.0 item. Tag each `[IN v4.0]` / `[BACKLOG]` / `[DROP]`.
 - Phase 7.6 deferred — ??? (will check if you want)
 - Phase 15 deferred — rubric-map completeness for disciplines beyond CPU (populates as Mac benchmarks roll in)
 
-> FEEDBACK:
-> 
+### Triage verdict
+
+| Item | Verdict | Notes |
+|---|---|---|
+| **Phase 16 rubric v1.2 field/key remediation** | `[BACKLOG]` | Technical debt in rubric-map short-form contract. Can ship v4.0 without resolving; schedule rubric v1.2 milestone post-launch. |
+| **Phase 16.1 audio continuity across brands** | `[BACKLOG]` | Requires collapsing origins (different domains). Addressed longer-term when/if brands consolidate. |
+| **Phase 16.1 social "coming soon" → live workflow** | `[ABSORBED]` | Will ship naturally when FB/X/Threads accounts go live. Small admin setting — drops into settings phase (D.18). |
+| **Phase 15 rubric map 12 disciplines beyond CPU** | `[CONTENT]` | Populates as Mac benchmarks come back. Not an engineering task. |
+| **Phase 7.6 deferred** | `[REVIEW IF NEEDED]` | Not blocking today. Will audit if user flags something specific. |
+
+
 
 ---
 
@@ -1860,8 +1903,16 @@ Every pending v3.0 item. Tag each `[IN v4.0]` / `[BACKLOG]` / `[DROP]`.
 - UAT admin account cleanup (`uat-admin@glitchstudios.local`)
 - Resend integration
 
-> FEEDBACK:
-> 
+### Triage verdict
+
+| Item | Verdict | Notes |
+|---|---|---|
+| **Medal color approval** | `[OBSOLETE]` | Monochrome approach was rejected in B.8 audit (pivot #15). Whole medal visual gets redesigned; color approval on the old design is moot. |
+| **Rubric map 12 disciplines** | `[CONTENT]` | Same as H.4 — content work, not eng. |
+| **UAT admin cleanup** | `[IN v4.0 — launch blocker]` | DEPLOY-05. `uat-admin@glitchstudios.local` must be deleted OR rotated before prod deploy. Covered in production hardening phase. |
+| **Resend integration** | `[IN v4.0 — launch blocker]` | EMAIL-*. Covered. |
+
+
 
 ---
 
