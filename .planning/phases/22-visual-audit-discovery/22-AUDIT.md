@@ -7,7 +7,7 @@
 | Section | Status | Your last entry |
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
-| B. Public GlitchTech pages | 🟡 in-progress (B.1 done 2026-04-24) | B.1 tech home — mobile nav bug + pattern repeats |
+| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.2 done 2026-04-24) | B.2 reviews list — mobile nav bug 3rd instance |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
@@ -670,8 +670,28 @@ URL base same (`http://localhost:3004`), routes under `/tech`.
 
 **Look for:** list density, card treatment (desktop vs mobile), filter design, empty state honesty.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchtech.io/tech/reviews`
+
+### 🔴 Mobile nav bug — 3rd instance now (pattern confirmed)
+
+- Tapping "Reviews" on the sidebar/nav required 2 taps again. First tap: nothing. Second tap: navigated.
+- This is the **third confirmed instance** (A.12 Beats icon, B.1 cross-brand tile, B.2 Reviews link). No longer a one-off — it's a systemic mobile nav bug affecting the whole site.
+- Escalated to: `[LAUNCH-BLOCKER]` — users won't double-tap; they'll assume the site is broken and leave.
+- Debug phase owns all instances.
+
+### Design
+
+- **Looks good overall** but very simple, almost sparse
+- **No hero section** — no imagery, no headline calling attention to the content. `[POLISH]`
+- **No CTA to methodology** — `/tech/methodology` was shipped in Phase 17 but reviews list doesn't surface it. Readers land here without context for how reviews are evaluated. `[POLISH]`
+- **Not calling for "a nice review"** — nothing entices the reader into a review. Missing visual weight, editorial treatment, featured-review highlight.
+
+### Content
+
+- MBP M5 Max flagship not populated yet (FLAG-* v3.0 carry-over). Empty-looking state is content-blocked, not a design defect.
+- Re-audit after FLAG-* ships to see if the simple structure holds up with real content, or if the design actually needs the hero + editorial polish regardless.
+
+
 
 ---
 
