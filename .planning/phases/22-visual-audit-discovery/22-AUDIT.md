@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | 🟡 in-progress (A.1-A.10 done 2026-04-24) | A.10 contact deferred |
+| A. Public Studios pages | 🟡 in-progress (A.1-A.11 done 2026-04-24) | A.11 cart — mobile-native-feel pattern surfacing |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -500,8 +500,23 @@ Re-audit after launch traction when: (a) real contact volume justifies channel e
 
 **Look for:** empty state, quantity controls, bundle display inside cart, remove-item affordance, subtotal clarity, continue-shopping vs checkout CTAs.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production
+
+### Desktop
+
+- **Looks great** `[OK]`
+
+### Mobile
+
+- **Looks good** overall `[OK]`
+- **Sticky cart button in top corner** — present at all times, not intrusive `[OK]`
+- **Missing gesture — swipe-to-dismiss.** Currently the only way to close the drawer is tapping the X button. Should be closable by swiping right. Include a visible swipe indicator so the affordance is discoverable. `[POLISH]`
+
+### Broader pattern surfacing (elevated to pivot #12)
+
+User's ask: **"the whole site should be more friendly and feel like an app when using it from your phone."** Two instances of the same pattern now: A.2 (swipe-to-minimize player bar) and A.11 (swipe-to-dismiss cart). Worth treating as a **mobile-native-feel phase** that sweeps every touch surface.
+
+
 
 ---
 
@@ -1392,6 +1407,15 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **11. BLOG REDESIGN — research-driven, cross-brand (Studios + GlitchTech together)**
 > Blog list is visually flat — no hero, no featured treatment, no category carousels, whole-card tap doesn't open posts. Blog detail needs rich content support (inline images + YouTube video embeds per pivot #2). User wants a **research-driven phase**: study best blog pages in the world (editorial, magazine, creator, tech), extract patterns, implement industry-leading. Because Studios and GlitchTech blogs share components (Phase 10 architecture + existing BLOG-* carry-over requirements), this phase covers BOTH brands in one go — redesigning twice would be waste. Absorbs BLOG-01 through BLOG-05 carry-over work (brand column, routes, admin brand-selector).
+>
+> **Surfaced during A.11 Cart audit (2026-04-24):**
+>
+> **12. MOBILE-NATIVE-FEEL SWEEP**
+> User's framing: "the whole site should be more friendly and feel like an app when using it from your phone." Consistent pattern across audit surfaces — same kind of gesture missing:
+> - A.2 Beats: persistent play bar should swipe-down to minimize / swipe-up to restore
+> - A.11 Cart drawer: should swipe-right to dismiss (with visible indicator)
+> - Likely more instances will surface as we continue (mobile menu overlay, modals, sheets)
+> This phase sweeps every mobile touch surface and adds the expected native gestures: swipe-to-dismiss on drawers/sheets/modals, swipe-to-minimize on persistent surfaces, pull-to-refresh on list views where relevant, swipe indicators so affordances are discoverable. Small effort per surface, huge cumulative UX quality gain — makes the site feel like an app, not a website-with-mobile-CSS.
 
 
 ---
