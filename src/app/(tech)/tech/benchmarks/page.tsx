@@ -24,7 +24,7 @@ export default function TechBenchmarksPage() {
         <p className="mt-4 font-sans text-sm leading-relaxed text-[#888]">
           Until then, read{" "}
           <Link
-            href="/tech/about"
+            href="/tech/methodology"
             className="border-b border-[#555] text-[#ccc] transition-colors hover:border-[#f5f5f0] hover:text-[#f5f5f0]"
           >
             how the GlitchTech scoring methodology works

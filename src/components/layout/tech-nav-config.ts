@@ -6,7 +6,6 @@ import {
   ArrowLeftRight,
   BarChart3,
   BookOpen,
-  Info,
   Home,
 } from "lucide-react"
 import type { NavItem } from "@/components/layout/nav-config-types"
@@ -40,21 +39,10 @@ export const techNavItems: readonly NavItem[] = [
     desktopSize: "medium",
     mobileSpan: "col-span-4",
   },
-  // D-09 (Phase 16.1): Blog + About as paired small tiles on the final row,
-  // mirroring the Studios Blog+Contact ending pattern in public-nav-config.ts.
-  // small=col-span-1 (half width), so two smalls fill a row together — a
-  // lone small tile would leave an empty half-row slot next to it.
   {
     label: "Blog",
     href: "/tech/blog",
     icon: BookOpen,
-    desktopSize: "small",
-    mobileSpan: "col-span-3",
-  },
-  {
-    label: "About",
-    href: "/tech/about",
-    icon: Info,
     desktopSize: "small",
     mobileSpan: "col-span-3",
   },
@@ -96,5 +84,4 @@ export const techMobileTabItems: readonly NavItem[] = [
 export const techMobileMenuItems = [
   { label: "Benchmarks", href: "/tech/benchmarks", icon: BarChart3 },
   { label: "Blog", href: "/tech/blog", icon: BookOpen },
-  { label: "About", href: "/tech/about", icon: Info },
 ] as const

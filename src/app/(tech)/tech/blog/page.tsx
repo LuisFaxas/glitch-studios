@@ -33,7 +33,7 @@ export default function TechBlogPage() {
           </Link>{" "}
           or the{" "}
           <Link
-            href="/tech/about"
+            href="/tech/methodology"
             className="border-b border-[#555] text-[#ccc] transition-colors hover:border-[#f5f5f0] hover:text-[#f5f5f0]"
           >
             methodology page
