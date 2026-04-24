@@ -8,7 +8,7 @@
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
 | B. Public GlitchTech pages | ✅ done 2026-04-24 | All 10 GlitchTech surfaces audited + IA + media/SEO pivots |
-| C. Auth + client dashboard | 🟡 in-progress (C.1 done 2026-04-24) | C.1 login — brand-aware redesign + artist platform escalated |
+| C. Auth + client dashboard | 🟡 in-progress (C.1-C.2 done 2026-04-24) | C.2 register — split by role + social login + 3 new pivots |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
 | F. Cross-page flows | ⬜ pending | — |
@@ -1054,8 +1054,50 @@ Elevated to pivot #16 — cross-cutting.
 - Password requirements: visible upfront?
 - Did email verification ever ship? (Better Auth supports it — configured?)
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production
+
+### Feedback
+
+- **Ugly, same as login** — pairs with C.1 POLISH verdict `[POLISH]`
+- **Major structural ask: split the flow by role.**
+  - **Customer registration wizard** — own flow, own fields (name, email, password, preferences, optional newsletter opt-in)
+  - **Artist registration flow** — different wizard entirely (profile info, genre/role tags, bio, upload first content, accept artist T&Cs) — but in v4.0 this is **admin-invited only** per pivot #10, so the public flow is "Request to join as an artist" (application form → admin approves → invite email). True public artist self-serve comes in v5.0.
+  - **No admin registration** — correct today, keep it that way (admins are provisioned by other admins, never self-serve).
+- **Entry point on the register page:** "Register as customer" vs "Request to join as artist" — two CTAs, each leading to its own flow.
+
+### Social login — broad OAuth support
+
+User's ask: beyond email/password, register via:
+- **Google** (OAuth 2.0)
+- **Meta** (Facebook + Instagram — both are Meta platforms)
+- **GitHub** (OAuth)
+- **"Literally anything"** — posture is add-providers-as-useful
+
+Better Auth (the existing stack) supports OAuth provider plugins out of the box. This is config + UI work, not a new auth system. Phase includes provider-setup checklist: create OAuth apps with each vendor, add redirect URIs, store client IDs/secrets in Vercel env, wire UI buttons.
+
+### Auth phase scope consolidated (from C.1 + C.2)
+
+One phase covers:
+1. Brand-aware visual redesign (Studios vs GlitchTech themed) — all auth surfaces
+2. Split register flow: customer wizard + artist request flow
+3. Social login providers (Google + Meta + GitHub minimum; extensible)
+4. Post-register: email verification (via Resend — depends on EMAIL-*), brand-appropriate welcome flow
+5. Forgot/reset password flow (also depends on EMAIL-*)
+6. Error messaging polish (enumeration-safe, clear copy)
+
+### Twilio SMS — user-flagged, unclear use case
+
+User said: "I would like to set up Twilio as well. Twilio will be nice. You know, opting in for people, etc. I don't know how Twilio would actually help us as much, but I just want to introduce as much things as possible."
+
+**Parked with caution.** Use cases worth considering:
+- SMS 2FA for admin accounts (real security value)
+- Booking reminder SMS for studio sessions (once studio is live)
+- SMS marketing opt-in for beat drops (TCPA-compliant, consented)
+- Order shipping notifications (if physical apparel ships in the future)
+
+NOT capturing as a v4.0 commitment. Needs a use-case decision before it earns a phase. Flagged in Section J pivot for future discussion.
+
+
 
 ---
 
@@ -1755,6 +1797,28 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **Depends on:** Email phase (artist invites need Resend) + Media phase (pivot #9, so video uploads use the canonical YT/IG embed pattern) + ideally licensing-model phase (pivot #7, so artists have clean license options to select from). Artist platform ships AFTER these.
 >
+> **Additions from C.2 dialogue (2026-04-24):**
+>
+> - **Cross-display with Glitch Studios store:** when an artist uploads a beat/song, it appears in BOTH places — the artist's own hub page (proprietary feel) AND the main Glitch Studios beats catalog (store distribution). Attribution "produced by [artist]" visible everywhere. Each content item stored once (pivot #16 one-data-model) but surfaced in both UI contexts. Artist benefits from Glitch discovery + Glitch benefits from artist content.
+> - **Revenue share:** Glitch takes a cut from artist sales. Percentage TBD in phase discuss-step (industry norm is 10-30% for platforms like BeatStars). Drives `artist_revenue_shares` table (artist_id, percent, effective_from/to) and orders-layer accounting.
+> - **v4.0 Wave 1 scope clarification:** artist role + dashboard + upload + basic customization (accent color, cover image) + custom T&Cs + cross-display to Studios store + revenue share ledger. Trap Snyder beta-tests with real song releases.
+> - **v5.0 Wave 2:** public signup, moderation, onboarding, discovery surfaces, DMs, collab invites, deeper customization.
+>
+> **Surfaced during C.2 as future-state vision:**
+>
+> **18. CUSTOM DOMAIN PER ARTIST — "Powered by Glitch Studios" (future, v5.0+ or infra phase)**
+> User's vision: an artist can attach their OWN domain to their Glitch artist page. `trapsnyder.com` resolves to their Glitch-hosted artist hub, with "Powered by Glitch Studios" footer attribution. Artist shares `trapsnyder.com` the way they'd share a Bandcamp URL — but richer because it's a full hub with uploads, sales, customization. HUGE differentiator if we ship it.
+>
+> **Scope reality check:** this is infrastructure-level work, not app-level:
+> - Domain verification + DNS instructions per artist
+> - Vercel custom domains API integration (per-artist) — Vercel's platform supports multi-tenant custom domains via their Domains API and wildcard approaches
+> - Multi-tenant rendering: app reads the host header, looks up artist, renders their page at root (not at `/artists/[slug]`)
+> - SSL/TLS auto-provisioning per domain (Vercel handles via ACME, but we wire it up)
+> - Routing precedence: `glitchstudios.io` / `glitchtech.io` stay as primary brand hosts; custom artist domains resolve to artist hub at root
+> - Billing implications: custom domain support may be a paid feature (tiered revenue share or flat fee)
+>
+> **NOT v4.0.** Captured as a v5.0+ ambition or its own dedicated infrastructure phase post-launch. If user wants earlier, it's a real scope conversation. Worth keeping this vision visible so every earlier architectural decision (especially pivot #16 data model, artist page routing) stays compatible with it.
+>
 > **Surfaced during A.8+A.9 Blog audit (2026-04-24):**
 >
 > **11. BLOG REDESIGN — research-driven, cross-brand, predetermined-type taxonomy**
@@ -1833,6 +1897,27 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 > NOT a launch blocker in the sense that checkout is — the site can launch without full SEO and retrofit later. But: launch WITH SEO baked in means organic traffic starts from week 1 instead of month 6. High-leverage if done as part of launch; expensive to retrofit if skipped.
 >
 > Own phase, ships alongside or right after DEPLOY-* hardening. Tag: `[IN v4.0 — own phase, near end of sequence]`.
+>
+> **Surfaced during C.2 Register audit (2026-04-24):**
+>
+> **19. AI AUTOMATIONS / WORKFLOWS (own discuss-phase, defer scope until discussed)**
+> User's ask: "It would be nice to discuss at some point in this milestone automations, different AI automations, different AI workflows for me and blogging, et cetera. But let's get to that when we get to that."
+>
+> Deliberately parked. Discussion worth having mid-milestone when more groundwork is in place. Candidate use cases to explore in that discussion:
+> - AI-assisted blog post drafting (long-form text + video summarization)
+> - Auto-generated review scaffolds from JSONL benchmark data (structural skeleton, user writes the voice)
+> - Content pipeline automations (review publish → auto-draft Instagram caption, YouTube chapter markers, blog teaser)
+> - Multi-surface asset pipeline (one review → long-form YT + short-form IG reel + blog post + newsletter + social cards)
+> - AI moderation helpers (for future artist-platform signup review queue)
+> - Chatbot / assistant for site visitors (product recommender trained on reviews)
+> - Admin-side AI helpers (auto-tag beats by listening, detect BPM/key, auto-transcribe review video to captions)
+>
+> Each of these could be its own phase. Worth a dedicated `/gsd:discuss-phase` session mid-v4.0 when we can see what's shipped and what's a natural fit. Flagged as [IN v4.0 — discuss mid-milestone].
+>
+> **Surfaced during C.2 Register (parked, low-priority):**
+>
+> **20. TWILIO / SMS INTEGRATION (parked — unclear use case, needs justification)**
+> User flagged Twilio as something to introduce but admitted unclear use case. NOT captured as a commitment. Re-evaluate with specific justification (SMS 2FA for admin security? Booking reminders? Beat-drop opt-in marketing?). If a concrete use case emerges, add as a requirement; otherwise stays parked.
 
 
 ---
