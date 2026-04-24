@@ -7,7 +7,7 @@
 | Section | Status | Your last entry |
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
-| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.3 done 2026-04-24, B.3 skipped) | B.3 skipped — content-blocked, re-audit post-FLAG-* |
+| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.5 done 2026-04-24) | B.4+B.5 categories — GlitchTech-wide polish pattern |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
@@ -733,8 +733,14 @@ URL base same (`http://localhost:3004`), routes under `/tech`.
 
 **Look for:** tile visual weight, category hierarchy communication, counts meaningfulness.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchtech.io/tech/categories`
+
+### Feedback
+
+- **No hero section** — page just says "Categories" with no visual weight `[POLISH]`
+- **Only one category** (Laptops) renders — that's content, not a defect
+- **Card design is flat** — doesn't invite, doesn't differentiate categories
+- **Needs design love** — overall treatment doesn't match the "industry-leading" positioning
 
 ---
 
@@ -744,8 +750,17 @@ URL base same (`http://localhost:3004`), routes under `/tech`.
 
 **Look for:** sub-category display, reviewed vs unreviewed distinction, CTA to request a review.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchtech.io/tech/categories/laptops`
+
+### Feedback
+
+- **No hero section** — same pattern repeating across GlitchTech `[POLISH]`
+- **"Products" heading** with "No reviews yet" empty state — readable but plain
+- **No list/card view toggle** — Studios has view-toggle on /beats, GlitchTech could use the same treatment for products
+- **Basic cards only** — needs industry-leading treatment
+- **Missing:** CTA to request a review of a product, something interesting in the empty state
+
+
 
 ---
 
@@ -1522,6 +1537,11 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 > - A.11 Cart drawer: should swipe-right to dismiss (with visible indicator)
 > - Likely more instances will surface as we continue (mobile menu overlay, modals, sheets)
 > This phase sweeps every mobile touch surface and adds the expected native gestures: swipe-to-dismiss on drawers/sheets/modals, swipe-to-minimize on persistent surfaces, pull-to-refresh on list views where relevant, swipe indicators so affordances are discoverable. Small effort per surface, huge cumulative UX quality gain — makes the site feel like an app, not a website-with-mobile-CSS.
+>
+> **Surfaced during B.1, B.2, B.4, B.5 (2026-04-24):**
+>
+> **13. GLITCHTECH BRAND-WIDE EDITORIAL / VISUAL POLISH PHASE**
+> Every GlitchTech public surface audited so far (tech home, reviews list, categories list, category detail) shares the same weakness: no hero sections, no editorial weight, generic tiles, flat cards, missing view toggles, missing CTAs. GlitchTech as a brand positions itself as "industry-leading hardware reviews with a rigorous 13-discipline rubric" but the current visuals don't carry that authority. This isn't per-page fixes — it's a brand-wide visual polish phase that establishes: editorial hero treatments per surface, review-card hierarchy, category tile visual weight, methodology CTAs where relevant, view-toggle parity with Studios. Shared with Blog phase (pivot #11) — both are editorial surfaces.
 
 
 ---
