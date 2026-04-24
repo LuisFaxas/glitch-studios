@@ -7,7 +7,7 @@
 | Section | Status | Your last entry |
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
-| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.5 done 2026-04-24) | B.4+B.5 categories — GlitchTech-wide polish pattern |
+| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.6 done 2026-04-24) | B.6 rankings — affiliate marketing pivot surfaced |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
@@ -770,8 +770,47 @@ URL base same (`http://localhost:3004`), routes under `/tech`.
 
 **Question for you:** This is where GlitchMark likely lives. Does the leaderboard show BPR medal AND GlitchMark number? Or does GlitchMark replace BPR here? Dedicated GlitchMark column separate from the medal column?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 — vision captured (page not yet built)
+
+### WHY this exists (user's personal pain-point)
+
+User was trying to buy a laptop and couldn't find **a single place** that compared all laptops across CPU, GPU, and other benchmarks. The rankings page IS the solution to that pain. **This is the single strongest product framing in the whole site** — clear job-to-be-done.
+
+### Product vision
+
+- **Master list per category.** Start with Laptops + mobile devices, expand to more categories later.
+- **Every reviewed device auto-appears on the master list** (driven by the review publishing + rubric — no manual curation).
+- **Multi-column sortable:** rank by GlitchMark OR by any individual benchmark (Cinebench, 3DMark, Geekbench, etc.). Every benchmark column is a valid sort dimension.
+- **Compare across brands freely:** MBP vs. ROG vs. anything else in the same category.
+- **Rubric-driven consistency:** every device gets the SAME 15-18 tests, producing apples-to-apples numbers. That consistency is what makes the aggregate (GlitchMark) meaningful.
+
+### GlitchMark's role (clarified — answers Section I question)
+
+**GlitchMark is the scan-by number.** When a buyer doesn't want to pick a single benchmark to sort by, GlitchMark is the single aggregate sort-key that says "these are the best overall per our rubric." It sits alongside individual benchmark columns, not instead of them. BPR medal + GlitchMark score both visible — BPR = editorial tier grade, GlitchMark = raw aggregate sortable number.
+
+### Goal
+
+Client leaves the page confident about which device is right for them. Conversion happens on the leaderboard row → affiliate link / review CTA (see pivot #14 below).
+
+### Exact columns / sort / filter spec
+
+Deferred to the leaderboard phase's own `/gsd:discuss-phase` step. Too much detail to nail down now. What the phase needs to research-and-decide:
+
+- Column set per category (laptops surface battery + portability; desktops surface thermal + PSU; phones surface display + battery + cameras)
+- Default sort (GlitchMark desc? BPR tier? User's category-specific preference?)
+- Filter sidebar (price, year, CPU kind, RAM, storage, medal tier, sub-category)
+- Mobile fallback (table → cards)
+- Empty state / single-row state (when only the MBP exists)
+- Column-header → methodology deep link behavior
+- Affiliate-link column (new — see pivot #14)
+
+### Phase structure note
+
+- Research-driven phase (like Blog pivot #11): look at leading benchmark-comparison tools (Tom's Hardware charts, AnandTech Bench, Notebookcheck, PassMark, PCMark, UserBenchmark) and extract the patterns that work.
+- Depends on GlitchMark formula being locked first (Section I → pivot capture).
+- Pairs tightly with FLAG-* (flagship review) — one needs the other to feel alive.
+
+
 
 ---
 
@@ -1542,6 +1581,26 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **13. GLITCHTECH BRAND-WIDE EDITORIAL / VISUAL POLISH PHASE**
 > Every GlitchTech public surface audited so far (tech home, reviews list, categories list, category detail) shares the same weakness: no hero sections, no editorial weight, generic tiles, flat cards, missing view toggles, missing CTAs. GlitchTech as a brand positions itself as "industry-leading hardware reviews with a rigorous 13-discipline rubric" but the current visuals don't carry that authority. This isn't per-page fixes — it's a brand-wide visual polish phase that establishes: editorial hero treatments per surface, review-card hierarchy, category tile visual weight, methodology CTAs where relevant, view-toggle parity with Studios. Shared with Blog phase (pivot #11) — both are editorial surfaces.
+>
+> **Surfaced during B.6 Rankings vision (2026-04-24):**
+>
+> **14. AFFILIATE MARKETING AS CORE REVENUE INFRASTRUCTURE (cross-cutting)**
+> User's explicit ask: "Affiliate marketing should be a core part of all our website. We are trying to make money too, so reviews and everything should have affiliate marketing." Not a per-feature add-on — a cross-cutting infrastructure phase with its own scope:
+>
+> - **Business setup:** sign up for affiliate programs (Amazon Associates, manufacturer-direct programs like Apple, Asus, Dell, Lenovo, Razer, B&H, Best Buy, Newegg, Microsoft, etc.), get unique tracking links per program.
+> - **Schema:** `product_affiliate_links` table keyed on (product_id, program) with URL + program name + custom tracking ID. Multiple programs per product so we pick the best one at render time (by commission % or availability).
+> - **Render logic:** every surface that shows a product gets affiliate-aware CTAs:
+>   - Review detail: "Check price on [Amazon/Best Buy/Manufacturer]" buttons (replaces or augments the existing compare CTA)
+>   - Master leaderboard: dedicated affiliate-link cell per row
+>   - Compare tool: affiliate link per product in the comparison
+>   - Blog posts: inline affiliate recommendations in editorial content (research via Tiptap embedded)
+>   - Categories / product pages: affiliate CTAs visible
+> - **Tracking:** click events captured (destination, source surface, product, program) so we can measure which surfaces convert and which programs pay best.
+> - **Analytics:** dashboard in admin showing clicks, estimated revenue, top-performing products + programs.
+> - **Legal (non-negotiable):** FTC affiliate disclosure on every page that has affiliate links (US-required); update privacy policy; per-program T&C compliance; `rel="sponsored"` on affiliate `<a>` tags.
+> - **Link rotation / cloaking:** proxy links through `/go/[product]/[program]` so the real destination is managed server-side — survives affiliate program URL changes without breaking historical content.
+>
+> Phase lives AFTER the leaderboard + flagship review ship, because it needs real surfaces to attach to. High revenue leverage — even modest traffic with good affiliate placement can be meaningful recurring income. Tag: `[IN v4.0 — own phase, ideally late in sequence]`.
 
 
 ---
