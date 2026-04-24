@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | 🟡 in-progress (A.1-A.11 done 2026-04-24) | A.11 cart — mobile-native-feel pattern surfacing |
+| A. Public Studios pages | 🟡 in-progress (A.1-A.12 done 2026-04-24) | A.12 checkout — 2 prod bugs found, BLOCKS launch |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -532,8 +532,31 @@ User's ask: **"the whole site should be more friendly and feel like an app when 
 - Stripe webhook never fires: does DB stay in "pending"?
 - 0% tax states, international states: handled?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production (mobile)
+
+### 🔴 TWO PRODUCTION BUGS FOUND
+
+**BUG #1 — Navigation hang when tapping Beats icon on mobile**
+- Tapped Beats icon; page didn't respond for too long; had to refresh the browser to continue.
+- Unclear if perf (slow route transition blocking on data) or a broken click handler on mobile.
+- `[BLOCK]` — blocks audit flow. Feeds into PERF-* launch blocker.
+
+**BUG #2 — Checkout is BROKEN on mobile**
+- Flow: Added beat → cart shows correctly → navigated to `/checkout` → spinner loads indefinitely → error: *"Something went wrong, please try again or contact the merchant."*
+- Checkout is not functional on mobile right now.
+- `[BLOCK] [LAUNCH-BLOCKER]` — cannot ship a site where checkout doesn't work.
+
+### Required next step (NOT during this audit)
+
+Both bugs need an investigation phase — separate from this audit. Likely candidates:
+- **Bug #1:** Slow RSC / route segment boundary, or client nav handler bug on mobile Safari. Check `next-server` logs, use real mobile Network profile.
+- **Bug #2:** Stripe Embedded Checkout client session fetch failing (check Vercel runtime logs for the `/api/checkout/session` or equivalent endpoint). Possible causes: missing/invalid `STRIPE_SECRET_KEY` in prod env, empty cart payload being sent, missing `NEXT_PUBLIC_SITE_URL` for redirect config, Stripe account in test mode while the client SDK expects live.
+
+### Audit verdict
+
+**Cannot continue deeper A.12 audit** — the checkout flow itself doesn't render far enough to evaluate. Bug must be fixed, then re-audit.
+
+
 
 ---
 
