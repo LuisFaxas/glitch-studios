@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { z } from "zod/v4"
 import { toast } from "sonner"
-import { signIn } from "@/lib/auth-client"
+import { signIn, authClient } from "@/lib/auth-client"
 import { GlitchLogo } from "@/components/layout/glitch-logo"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -44,12 +44,15 @@ export default function LoginPage() {
 
     setIsLoading(true)
     try {
-      const { error, data } = await signIn.email({ email, password })
+      const { error } = await signIn.email({ email, password })
       if (error) {
         console.error("Sign-in error:", error)
         toast.error("Invalid email or password. Please try again.")
       } else {
-        const role = data?.user?.role
+        // Fetch full session — signIn response omits additional fields
+        // (role is added by Better Auth admin plugin and not in default payload)
+        const session = await authClient.getSession()
+        const role = session.data?.user?.role
         router.push(role === "admin" || role === "owner" ? "/admin" : "/dashboard")
         router.refresh()
       }
