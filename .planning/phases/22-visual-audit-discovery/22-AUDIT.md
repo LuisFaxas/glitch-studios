@@ -7,7 +7,7 @@
 | Section | Status | Your last entry |
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
-| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.2 done 2026-04-24) | B.2 reviews list — mobile nav bug 3rd instance |
+| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.3 done 2026-04-24, B.3 skipped) | B.3 skipped — content-blocked, re-audit post-FLAG-* |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
@@ -709,8 +709,21 @@ URL base same (`http://localhost:3004`), routes under `/tech`.
 - Rubric v1.1 badge: clickable → methodology page?
 - Print version: needed? Or is this a save-for-later thing?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 — **SKIPPED, content-blocked**
+
+### State at audit time
+
+- Only 1 review exists in DB: `mbp-16-m5-max-uat` (status: draft, bpr_score: null)
+- Detail route filters `status='published'` only (confirmed via `getPublishedReviewBySlug` in `src/lib/tech/queries.ts:141`)
+- Direct URL to draft 404s
+- No placeholder review exists that could be visually audited
+
+### Action
+
+- **Deferred to post-FLAG-* re-audit.** When the flagship MBP review publishes (Phase 19 carry-over), re-audit this surface with real content. Auto-Playwright snapshot covered the basic structure during Phase 17 — the layout renders correctly, but the user hasn't visually walked it yet.
+- Audit questions above remain valid and should be re-applied at that point.
+
+
 
 ---
 
