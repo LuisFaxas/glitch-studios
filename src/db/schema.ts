@@ -779,6 +779,7 @@ export const techReviews = pgTable("tech_reviews", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   bprScore: numeric("bpr_score", { precision: 5, scale: 4 }),
   bprTier: techBprTierEnum("bpr_tier"),
+  bprDisciplineCount: integer("bpr_discipline_count").notNull().default(0),
   rubricVersion: text("rubric_version").notNull().default("1.1"),
 }, (t) => ({
   publishedAtChk: check(

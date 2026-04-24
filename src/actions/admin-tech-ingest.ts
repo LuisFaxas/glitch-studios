@@ -481,12 +481,17 @@ export async function commitBenchmarkIngest(
       tx,
     )
 
+    const bprDisciplineCount = Object.values(bprResult.perDiscipline).filter(
+      (v) => v !== null,
+    ).length
+
     // Update tech_reviews.bpr_score + bpr_tier atomically within the same transaction
     await tx
       .update(techReviews)
       .set({
         bprScore: bprResult.score !== null ? String(bprResult.score) : null,
         bprTier: bprResult.tier ?? null,
+        bprDisciplineCount,
       })
       .where(eq(techReviews.id, validatedSession.reviewId))
   })
