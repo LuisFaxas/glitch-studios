@@ -1143,7 +1143,16 @@ User tried to sign in with credentials in `.env.local` but couldn't reach dashbo
 - Password hash was from an OLDER seed run — user had since updated passwords in `.env.local`
 - Better Auth rejected login because hash didn't match current input
 
-**Resolved mid-audit by running `pnpm db:seed-users`** to re-sync password hashes. Upsert — deletes the old credential row and inserts a fresh one with the new hash. Both accounts now log in with the passwords currently in `.env.local`.
+**Resolved mid-audit by running `pnpm db:seed-users`** to re-sync password hashes. Upsert — deletes the old credential row and inserts a fresh one with the new hash.
+
+**Password fix was necessary but NOT SUFFICIENT.** After the re-seed, user still got "invalid email or password" on prod. Deeper diagnosis:
+
+- Hash-verify roundtrip confirmed valid: the DB hash verifies correctly with the `.env.local` password via Better Auth's `verifyPassword`
+- So server-side credential validation was passing — the issue was elsewhere
+- **Root cause found:** `src/lib/auth.ts` `trustedOrigins` array only listed local/LAN/Caddy hosts. Production domains `glitchstudios.io` and `glitchtech.io` were missing. Better Auth rejects requests from untrusted origins for CSRF defense, surfacing as a generic "invalid email or password" error.
+- **Fix:** added all four prod domains (with/without www for each brand) to `trustedOrigins` in commit `825abf1`. Deploy triggered.
+
+This is a real production bug — login was never going to work on prod domain without this fix, regardless of password correctness. Logged as a `[BLOCK]` bug that shipped in a prior phase undetected because Phase 8 auth testing was local-only.
 
 ### Process gap to capture
 
