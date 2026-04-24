@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | 🟡 in-progress (A.1-A.4 done 2026-04-24) | A.4 services — full redesign flagged |
+| A. Public Studios pages | 🟡 in-progress (A.1-A.5 done 2026-04-24) | A.5 book merged into Services redesign |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -252,8 +252,38 @@ This phase should also fold in A.5 (booking wizard) because the flow changes —
 - Admin hasn't set availability for a service: does the service show at all?
 - Timezone handling: user in LA books Miami studio — whose TZ displays?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchstudios.io/book`
+
+### Verdict
+
+**Merged into A.4 Services full-redesign phase.** Cannot meaningfully deep-audit the flow because the page is too weak to evaluate yet — needs the redesign first. `[IN v4.0 — merged into Services redesign phase]`
+
+### Feedback
+
+1. **Services → Book Session pipeline structure is liked** in principle. The concept of a services landing → pick one → intake wizard makes sense.
+
+2. **Visual redesign needed** — same verdict as Services. Weak visually, doesn't carry the brand weight.
+
+3. **IA confusion — Services vs. Book as two separate pages.** User (the site owner) can't distinguish what each page is for. If the owner is confused, visitors definitely are. This is the single biggest issue here.
+
+4. **Edge-case prompts cannot be answered yet** — user fair-pointed that the flow isn't developed enough to evaluate conflict handling, refund policies, timezone behavior, etc. These become real questions once the redesign exists.
+
+### Design direction (for the Services phase that absorbs this)
+
+The IA question to resolve in that phase's discussion:
+
+- **Option A: ONE page, two tabs.** `/services` is the one entry point. Tabs toggle Custom Beats vs. Studio Sessions. Intake form expands inline in the selected tab. `/book` is deleted or becomes a deep-link alias that pops the right tab.
+- **Option B: TWO pages but cleaner separation.** `/services` = landing/marketing/pricing. `/book` = the actual intake wizard once user clicks a CTA. Each offering has a distinct intake (custom beat brief vs. studio calendar).
+- **Option C: separate custom-beat surface entirely.** e.g., `/custom-beat` for the beat intake, `/book` for studio session booking, `/services` as overview. Three pages, clearer separation but more surfaces to build.
+
+This decision lives in the Services phase's discuss-phase step, not now.
+
+### What the Services phase must preserve when it redesigns
+
+- **Studio Sessions booking is not dead** — the physical studio is being built. The calendar-based wizard (deposit, TZ, cancellation-window logic) should not be deleted; it should live behind the Studio Sessions tab/path.
+- **Custom Beat intake is new** — different fields (brief, reference tracks, delivery expectations, turnaround) need a fresh flow designed.
+
+
 
 ---
 
