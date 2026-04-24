@@ -25,6 +25,10 @@ export const auth = betterAuth({
     "http://localhost:3004",
     "http://192.168.1.122:3004",
     "https://glitch-studios.codebox.local",
+    "https://glitchstudios.io",
+    "https://www.glitchstudios.io",
+    "https://glitchtech.io",
+    "https://www.glitchtech.io",
   ],
   emailAndPassword: {
     enabled: true,
