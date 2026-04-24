@@ -35,7 +35,7 @@ requirements_checked:
 - **METH-05** — `/tech/methodology` page live. ✓ Force-static ISR route at `src/app/(tech)/tech/methodology/page.tsx`.
 - **METH-06** — Rubric version visible on scorecard. ✓ `RubricVersionBadge` in ReviewRatingCard (`/tech/methodology#rubric-changelog` link).
 - **MEDAL-01** — Monochrome medal component. ✓ `BPRMedal` in `src/components/tech/bpr-medal.tsx` with locked tier palette, colorblind-safe.
-- **MEDAL-02** — Medal surfaces on review detail + review card (list/carousel/related). ✓ Wired via Plan 03. **Gap:** tech homepage spotlight (`src/components/home/tech-benchmark-spotlight.tsx`) is a benchmark-score surface and was NOT covered by Phase 17 plans 01-03; `BenchmarkSpotlight` type carries no BPR fields. Category leaderboard column is Phase 18 (RANK-01) scope.
+- **MEDAL-02** — Medal surfaces on review detail + review card (list/carousel/related) + tech homepage spotlight. ✓ Review detail + review card surfaces wired via Plan 03. Tech homepage spotlight gap-closed via Plan 04 (`src/components/home/tech-benchmark-spotlight.tsx` renders BPRMedal/Placeholder; `BenchmarkSpotlight` type extended with `bprScore`, `bprTier`, `bprDisciplineCount`, `reviewSlug`; `getBenchmarkSpotlight()` populates them from the existing techReviews inner-join — no new round-trip). Category leaderboard column remains Phase 18 (RANK-01) scope.
 - **MEDAL-03** — "Not enough data" placeholder. ✓ `BPRMedalPlaceholder` in `src/components/tech/bpr-medal.tsx`.
 
 ## Automated Checks
@@ -72,13 +72,9 @@ The code path is wired end-to-end, but no published review in the current DB has
 
 **Expected:** The scorecard renders `<BPRMedal tier="platinum" score={...} />` (or placeholder) on the left, `RUBRIC v1.1` chip on the right, divider, then the four rating bars unchanged.
 
-### 2. MEDAL-02 gap — tech homepage spotlight
+### 2. MEDAL-02 gap — tech homepage spotlight ✓ RESOLVED 2026-04-23
 
-`MEDAL-02` lists "tech homepage spotlight" as one of the four medal surfaces. Phase 17 plans 01-03 only planned review detail + review card surfaces; the current `TechBenchmarkSpotlight` is a benchmark-score surface with no BPR fields on its `BenchmarkSpotlight` type.
-
-**Options:**
-- Treat as Phase 17 complete (plans delivered their stated scope) and capture homepage spotlight as a follow-up (Phase 17.1 or absorbed into Phase 18 when leaderboard introduces the BPR column).
-- Gap-close now: extend `BenchmarkSpotlight` type + `getBenchmarkSpotlight()` to return BPR + wire BPRMedal into TechBenchmarkSpotlight.
+Gap-closed via Plan 17-04 (commits `1ecb9b7`, `ef37b80`). `BenchmarkSpotlight` type now carries `bprScore`, `bprTier`, `bprDisciplineCount`, `reviewSlug`; `getBenchmarkSpotlight()` populates them from the existing `techReviews` inner-join; `TechBenchmarkSpotlight` renders `BPRMedal` (full variant, tooltip + link) or `BPRMedalPlaceholder` between the "Editor's Choice" label and the product title. `pnpm tsc --noEmit` clean, `/tech` returns 200. Live render requires a published review with populated `bpr_score` — tracked under Open Item 1.
 
 ### 3. Phase 16 scale-fix (pre-existing, not a Phase 17 gap)
 
@@ -86,4 +82,4 @@ The code path is wired end-to-end, but no published review in the current DB has
 
 ## Summary
 
-**Phase 17 delivered its goal: monochrome BPR medal family + `/tech/methodology` page.** All 5 plan must-haves pass automated verification. The plan scope (review detail scorecard + review card list/carousel/related) is wired correctly and covered by Playwright functional + visual tests. Human verification is needed to confirm the live scorecard render once a review with populated `bpr_score` exists, and to decide whether to gap-close the MEDAL-02 homepage-spotlight surface now or defer.
+**Phase 17 delivered its goal: monochrome BPR medal family + `/tech/methodology` page + all four MEDAL-02 surfaces (review detail scorecard, review card list/carousel/related, tech homepage spotlight).** All 5 plan must-haves pass automated verification. Plan 04 closed the MEDAL-02 homepage-spotlight gap inline (2 files, no new round-trip, tsc clean, /tech returns 200). Remaining human verification is to confirm the live render path once a review with populated `bpr_score` exists (Open Item 1).
