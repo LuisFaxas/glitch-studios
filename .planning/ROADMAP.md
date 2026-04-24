@@ -146,10 +146,10 @@ Plans:
 4. `/tech/methodology` page is publicly accessible, loads under 2 seconds, and contains: the exact BPR formula (geomean expression), the 7 BPR-eligible disciplines listed by name, medal threshold table (90/80/70%), the exclusion policy, and a rubric version changelog entry for v1.1
 5. A review with fewer than 5 of the 7 BPR-eligible disciplines scored renders no medal badge — the "Not enough data" state is visible and links to the methodology page explanation
 
-**Plans**: ~3 plans
-- 01 — `src/components/tech/bpr-medal.tsx`: monochrome variant CSS, tier/score props, methodology anchor link, discipline-count tooltip, null/not-enough-data states; get Josh color approval before merge
-- 02 — `getMethodologyData()` query in `src/lib/tech/queries.ts`; `src/app/(tech)/tech/methodology/page.tsx` (force-static ISR): BPR formula section, discipline table, medal tier table, exclusion policy, rubric changelog
-- 03 — Wire `<BPRMedal>` into review detail scorecard (`src/app/(tech)/tech/reviews/[slug]/page.tsx`) + add Rubric v1.1 badge; wire medal onto review cards (list + carousel + related); Playwright verification: medal renders on review detail + methodology page loads with correct sections
+**Plans**: 3 plans
+- [ ] 17-01-PLAN.md — BPRMedal + BPRMedalPlaceholder + RubricVersionBadge components, bpr_discipline_count schema column + migration, query type extensions
+- [ ] 17-02-PLAN.md — getMethodologyData() pure function + /tech/methodology force-static ISR page (formula, disciplines, thresholds, exclusion, changelog)
+- [ ] 17-03-PLAN.md — Wire medal + rubric badge into ReviewRatingCard + ReviewCard; Playwright visual baselines for 4 tiers + placeholder + methodology page
 
 **UI hint**: yes
 
