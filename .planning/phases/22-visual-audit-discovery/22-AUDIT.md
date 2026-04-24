@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | 🟡 in-progress (A.1-A.7 done 2026-04-24) | A.7 artists — platform pivot, split v4.0/v5.0 |
+| A. Public Studios pages | 🟡 in-progress (A.1-A.9 done 2026-04-24) | A.8+A.9 blog — research-driven redesign, cross-brand |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -405,8 +405,39 @@ Portfolio, homepage Our Work, artists, trailer video surface (17.5 carry-over), 
 
 **Look for:** card layout consistency, category filter design, pagination behavior, empty state, featured post treatment.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchstudios.io/blog`
+
+### Mobile + Desktop verdict
+
+**Same story:** visually basic, a flat list, no hero, no featured carousel, no differentiation between newest / featured / by category. Memory rating of 5/10 still holds. `[IN v4.0 — own phase, research-driven]`
+
+### Specific issues
+
+- **No hero section** on the blog list — needs one (featured post or carousel of featured posts).
+- **No visual differentiation** between featured, new, and regular posts. Everything gets the same card treatment.
+- **No category carousels** — current model is one flat list with a filter. User wants category carousels or similar segmentation.
+- **Card tap doesn't open the post** — user must tap the "Read post" button specifically. Whole-card tap should open. `[POLISH — small fix]`
+- **Overall visual overhaul needed** — both mobile and desktop need a complete redesign.
+
+### Blog post detail (tested welcome-to-glitch-studios)
+
+- Looks good, nice `[OK]`
+- Needs support for richer content: images and videos inline.
+- Video embeds should use YouTube (ties to pivot #2).
+
+### Phase structure request from user
+
+User wants this to be a **research-driven phase**:
+- Research best blog pages in the world (editorial, magazine, creator-focused, tech-focused)
+- Identify patterns that work: hero treatment, category navigation, post card hierarchy, post detail reading experience
+- Implement the best the industry has to offer
+- This is a `gsd-phase-researcher` + `gsd-planner` territory, not a gut-redesign.
+
+### Cross-brand implication
+
+The Studios blog and the GlitchTech blog (BLOG-* carry-over requirements) share components per the existing architecture (Phase 10 + BLOG-05). **This redesign benefits BOTH blogs** — `/blog` and `/tech/blog` should get the same treatment in one phase to avoid redesigning twice. The phase should also fold BLOG-01 through BLOG-05 carry-over work (brand column, schema, routes) if not already done.
+
+
 
 ---
 
@@ -416,8 +447,15 @@ Portfolio, homepage Our Work, artists, trailer video surface (17.5 carry-over), 
 
 **Look for:** typography, reading rhythm, code/quote blocks, image handling, share buttons (exist?), comments (exist?), author bio, related-posts recommendation logic.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production (read the `welcome-to-glitch-studios` test post)
+
+### Feedback
+
+- **Looks good, nice** overall `[OK]`
+- **Needs rich content support** — images + videos inline in the post body. Video embeds via YouTube per pivot #2. `[POLISH]`
+- **Otherwise merged with A.8 Blog redesign phase** — the detail page deserves the same redesign-with-research treatment as the list.
+
+
 
 ---
 
@@ -1332,6 +1370,11 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **10. ARTIST PLATFORM VISION — potential MySpace/Bandcamp-style creator platform (split v4.0 / v5.0)**
 > User wants Glitch to be more than a studio — also an artist platform where creators have their own Glitch page they'd share like a Bandcamp URL. Self-serve signup, media upload, portfolio editor, discovery. STRONG differentiated vision but milestone-level scope. Recommended split: **v4.0 Wave 1** ships rich "read-only" artist detail pages (Trap Snyder's profile shows his beats/videos/portfolio via artist attribution on existing content) + artist hero on /artists. Proves the concept with real data, validates the framing. **v5.0 Wave 2** adds self-serve signup, artist dashboard, media upload moderation, discovery, revenue share. Schema changes needed in v4.0 Wave 1: `primary_artist_id` / `produced_by_artist_id` on beats, artist attribution on videos + portfolio items. Admin flow to assign artists to existing content.
+>
+> **Surfaced during A.8+A.9 Blog audit (2026-04-24):**
+>
+> **11. BLOG REDESIGN — research-driven, cross-brand (Studios + GlitchTech together)**
+> Blog list is visually flat — no hero, no featured treatment, no category carousels, whole-card tap doesn't open posts. Blog detail needs rich content support (inline images + YouTube video embeds per pivot #2). User wants a **research-driven phase**: study best blog pages in the world (editorial, magazine, creator, tech), extract patterns, implement industry-leading. Because Studios and GlitchTech blogs share components (Phase 10 architecture + existing BLOG-* carry-over requirements), this phase covers BOTH brands in one go — redesigning twice would be waste. Absorbs BLOG-01 through BLOG-05 carry-over work (brand column, routes, admin brand-selector).
 
 
 ---
