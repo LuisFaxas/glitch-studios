@@ -13,6 +13,7 @@ import {
   animate,
   AnimatePresence,
   motion,
+  useDragControls,
   useMotionValue,
   useReducedMotion,
   useTransform,
@@ -86,6 +87,7 @@ export function MobileNavOverlay({
   const shouldReduceMotion = useReducedMotion()
   const dragY = useMotionValue(0)
   const panelOpacity = useTransform(dragY, [0, 400], [1, 0.2])
+  const dragControls = useDragControls()
 
   // Reset drag position when menu opens
   useEffect(() => {
@@ -195,6 +197,8 @@ export function MobileNavOverlay({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             drag="y"
+            dragListener={false}
+            dragControls={dragControls}
             dragConstraints={{ top: 0 }}
             dragElastic={{ top: 0 }}
             dragMomentum={false}
@@ -211,7 +215,7 @@ export function MobileNavOverlay({
                 })
               }
             }}
-            style={{ y: dragY, opacity: panelOpacity, touchAction: "none" }}
+            style={{ y: dragY, opacity: panelOpacity }}
             className="fixed inset-x-0 bottom-0 z-[60] flex flex-col justify-end md:hidden"
           >
 
@@ -245,8 +249,15 @@ export function MobileNavOverlay({
               aria-hidden="true"
             />
 
-            {/* Swipe hint — grab handle */}
-            <div className="relative z-[2] flex justify-center pb-2 pt-3">
+            {/* Swipe hint — grab handle.
+                Phase 23-04: drag starts ONLY from this handle (dragListener={false}
+                on the panel + dragControls.start here). Lets children receive first tap. */}
+            <div
+              onPointerDown={(e) => dragControls.start(e)}
+              style={{ touchAction: "none" }}
+              data-testid="mobile-nav-drag-handle"
+              className="relative z-[2] flex cursor-grab justify-center pb-2 pt-3"
+            >
               <div className="h-1 w-10 rounded-full bg-[#444444]" />
             </div>
 

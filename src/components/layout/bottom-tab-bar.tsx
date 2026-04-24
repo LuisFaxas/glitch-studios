@@ -1,8 +1,8 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { LayoutGrid, type LucideIcon } from "lucide-react"
 import clsx from "clsx"
 import {
@@ -29,8 +29,18 @@ export function BottomTabBar({
   bookingLive = true,
 }: BottomTabBarProps) {
   const pathname = usePathname()
+  const router = useRouter()
   const [overlayOpen, setOverlayOpen] = useState(false)
   const menuTriggerRef = useRef<HTMLButtonElement>(null)
+
+  // Phase 23-04 router.prefetch mitigation for audit §A.12 (Beats-icon cold-nav).
+  // Full perf fix lives in Phase 25 (Performance Audit + Fixes).
+  useEffect(() => {
+    for (const item of items) {
+      const href = !bookingLive && item.href === "/book" ? "/services" : item.href
+      router.prefetch(href)
+    }
+  }, [items, bookingLive, router])
 
   return (
     <>
