@@ -8,7 +8,7 @@
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
 | B. Public GlitchTech pages | ✅ done 2026-04-24 | All 10 GlitchTech surfaces audited + IA + media/SEO pivots |
-| C. Auth + client dashboard | ⬜ pending | — |
+| C. Auth + client dashboard | 🟡 in-progress (C.1 done 2026-04-24) | C.1 login — brand-aware redesign + artist platform escalated |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
 | F. Cross-page flows | ⬜ pending | — |
@@ -1022,8 +1022,24 @@ Elevated to pivot #16 — cross-cutting.
 - Email doesn't exist: same generic message (enumeration defense)?
 - Locked account / too many attempts: handled?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production (both brands)
+
+### Feedback
+
+- **Too basic** on both Studios and Tech — same form, no brand differentiation `[POLISH]`
+- **No brand indicator** — user has no idea which brand they're logging into (Studios vs GlitchTech)
+- **No real logo** — missing brand imagery `[POLISH]`
+- **Ugly / not production-grade** — doesn't feel like a real product login
+- **User wants:** richer treatment, images, brand-specific differentiation, industry-leading feel
+
+### Design direction for the auth redesign phase
+
+- **Brand-aware login page:** when accessed via `glitchstudios.io/login`, shows Studios branding (logo, tagline, maybe hero image). Via `glitchtech.io/login`, shows GlitchTech branding. Middleware already routes by host — login page reads the host and themes accordingly.
+- **Rich side treatment:** split-layout desktop with form on one side, brand imagery / tagline / "Why sign in" copy on the other. Mobile stacks.
+- **Production polish:** proper error messaging, forgot-password link, social login placeholders (future), brand-voice copy ("Welcome back" / "Let's get you back in").
+- **Applies across all auth surfaces** — login, register, forgot password, reset password, verify email — all get the same brand-aware rich treatment.
+
+
 
 ---
 
@@ -1706,8 +1722,38 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **Surfaced during A.7 Artists audit (2026-04-24):**
 >
-> **10. ARTIST PLATFORM VISION — potential MySpace/Bandcamp-style creator platform (split v4.0 / v5.0)**
-> User wants Glitch to be more than a studio — also an artist platform where creators have their own Glitch page they'd share like a Bandcamp URL. Self-serve signup, media upload, portfolio editor, discovery. STRONG differentiated vision but milestone-level scope. Recommended split: **v4.0 Wave 1** ships rich "read-only" artist detail pages (Trap Snyder's profile shows his beats/videos/portfolio via artist attribution on existing content) + artist hero on /artists. Proves the concept with real data, validates the framing. **v5.0 Wave 2** adds self-serve signup, artist dashboard, media upload moderation, discovery, revenue share. Schema changes needed in v4.0 Wave 1: `primary_artist_id` / `produced_by_artist_id` on beats, artist attribution on videos + portfolio items. Admin flow to assign artists to existing content.
+> **10. ARTIST PLATFORM VISION — creator hub, revised scope (v4.0 via admin-invite beta, v5.0 public self-serve)**
+>
+> **Original recommendation was too conservative — user escalated 2026-04-24 during C.1 audit.**
+>
+> User's amplified vision: the artist page should FEEL like the artist's OWN website / hub / home. They log in to their own dashboard, control their profile, upload beats + songs, set their own terms/conditions, lightly customize (like Bandcamp/MySpace). Artists SHARE their Glitch URL the way they'd share a Bandcamp link — "less glitch more **dam right** (the artist)." Must test with Trap Snyder's upcoming song releases immediately.
+>
+> **Revised phase structure:**
+>
+> **v4.0 — Admin-invite BETA (ships with launch, powers real Trap releases):**
+> - Schema: `artist` role + `artist_id` ownership on beats / songs / videos / portfolio items. New `songs` entity if not present (songs ≠ beats; finished vocal tracks).
+> - Artist dashboard at `/dashboard/artist/*` (or similar route): separate experience from client dashboard.
+>   - Profile editor (bio, photo, social links, genre, role tags, cover image)
+>   - Upload form for beats, songs, videos (YouTube/IG URL embeds), portfolio items
+>   - Light customization: accent color? cover image? featured section order? (NOT full theme override — stays inside Glitch design system)
+>   - Terms & conditions editor for their own sales (license terms, delivery expectations)
+> - Admin gates signup: admin creates artist accounts, invites via email link. No public "Sign up as artist" button yet. This is HUGE scope-saver — no moderation queue, no anti-spam, no onboarding flow complexity.
+> - Public artist page (`/artists/[slug]`) renders their curated content: beats for sale, songs for listen/buy, videos embedded, portfolio, bio, custom accent.
+> - Trap Snyder uses this to release new songs as the beta test user.
+>
+> **v5.0 — Public self-serve (post-launch, when beta proves the model):**
+> - Public "Sign up as artist" flow with application / review queue
+> - Onboarding tutorials
+> - Moderation tooling for admin
+> - Revenue share + royalty tracking
+> - Discovery surfaces ("browse artists by role / genre")
+> - Multi-artist collab features, DMs, collab invites
+>
+> **Why this revised split:** admin-invite beta in v4.0 delivers the real product experience to real artists (Trap + whoever else is in the pipeline) WITHOUT the complexity of public signup/moderation. It's also faster — building a gated BETA is weeks of work; building a bulletproof public platform with moderation is months. User learns from real artists on the beta before committing to the self-serve infrastructure.
+>
+> **Schema migrations (v4.0):** artist role enum; `artist_id` FKs on beats/songs/videos/portfolio; new `songs` table if it doesn't exist; `artist_customization` table (accent_color, cover_image_id, featured_order jsonb, custom_terms_md, etc.); artist dashboard routes; admin "invite artist" flow (email + preset credentials or magic-link signup).
+>
+> **Depends on:** Email phase (artist invites need Resend) + Media phase (pivot #9, so video uploads use the canonical YT/IG embed pattern) + ideally licensing-model phase (pivot #7, so artists have clean license options to select from). Artist platform ships AFTER these.
 >
 > **Surfaced during A.8+A.9 Blog audit (2026-04-24):**
 >
