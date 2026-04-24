@@ -16,6 +16,7 @@ import {
 } from "@/db/schema"
 import { and, asc, count, desc, eq, ilike, inArray, lt, ne, notInArray, or, sql } from "drizzle-orm"
 import { RUBRIC_V1_1 } from "./rubric-map"
+import type { BprTier } from "@/lib/tech/bpr"
 
 // ========== Types ==========
 
@@ -32,6 +33,9 @@ export interface PublicReviewCard {
   categorySlug: string | null
   publishedAt: Date
   excerpt: string
+  bprScore: number | null
+  bprTier: BprTier | null
+  bprDisciplineCount: number
 }
 
 export interface PublicReviewDetail {
@@ -72,6 +76,10 @@ export interface PublicReviewDetail {
   pros: string[]
   cons: string[]
   gallery: Array<{ url: string; alt: string | null; width: number | null; height: number | null }>
+  bprScore: number | null
+  bprTier: BprTier | null
+  bprDisciplineCount: number
+  rubricVersion: string
 }
 
 export interface PublicProductSpec {
@@ -226,6 +234,11 @@ export async function getPublishedReviewBySlug(slug: string): Promise<PublicRevi
     },
     pros: prosRows.map((p) => p.text),
     cons: consRows.map((c) => c.text),
+    // bprScore stored as numeric string; returned on 0–100 scale per Phase 16 compute.
+    bprScore: r.review.bprScore !== null ? parseFloat(r.review.bprScore) : null,
+    bprTier: r.review.bprTier as BprTier | null,
+    bprDisciplineCount: r.review.bprDisciplineCount,
+    rubricVersion: r.review.rubricVersion,
     gallery: galleryRows,
   }
 }
@@ -362,6 +375,9 @@ async function fetchCardRows(
       productSlug: techProducts.slug,
       categoryName: techCategories.name,
       categorySlug: techCategories.slug,
+      bprScore: techReviews.bprScore,
+      bprTier: techReviews.bprTier,
+      bprDisciplineCount: techReviews.bprDisciplineCount,
     })
     .from(techReviews)
     .innerJoin(techProducts, eq(techReviews.productId, techProducts.id))
@@ -390,6 +406,10 @@ async function fetchCardRows(
     categorySlug: r.categorySlug,
     publishedAt: r.publishedAt!,
     excerpt: r.verdict.slice(0, 140),
+    // bprScore stored as numeric string; returned on 0–100 scale per Phase 16 compute.
+    bprScore: r.bprScore !== null ? parseFloat(r.bprScore) : null,
+    bprTier: r.bprTier as BprTier | null,
+    bprDisciplineCount: r.bprDisciplineCount,
   }))
 }
 

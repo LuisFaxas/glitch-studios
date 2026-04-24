@@ -122,6 +122,9 @@ export default async function CategoryDetailPage({ params }: Props) {
                   categorySlug: category.slug,
                   publishedAt: new Date(),
                   excerpt: p.manufacturer ?? "",
+                  bprScore: null,
+                  bprTier: null,
+                  bprDisciplineCount: 0,
                 }}
               />
             ))}
