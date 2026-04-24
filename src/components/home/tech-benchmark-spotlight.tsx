@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react"
 import { ScrollSection } from "@/components/home/scroll-section"
 import { GlitchHeading } from "@/components/ui/glitch-heading"
 import type { BenchmarkSpotlight } from "@/lib/tech/queries"
+import { BPRMedal, BPRMedalPlaceholder } from "@/components/tech/bpr-medal"
 
 interface TechBenchmarkSpotlightProps {
   spotlight: BenchmarkSpotlight | null
@@ -28,6 +29,17 @@ export function TechBenchmarkSpotlight({ spotlight }: TechBenchmarkSpotlightProp
               <span className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-[#888]">
                 Editor&apos;s Choice
               </span>
+              <div className="mt-2">
+                {spotlight.bprScore !== null && spotlight.bprTier !== null ? (
+                  <BPRMedal
+                    tier={spotlight.bprTier}
+                    score={spotlight.bprScore}
+                    disciplineCount={spotlight.bprDisciplineCount}
+                  />
+                ) : (
+                  <BPRMedalPlaceholder disciplineCount={spotlight.bprDisciplineCount} />
+                )}
+              </div>
               <h3 className="font-mono text-2xl font-bold uppercase tracking-tight text-[#f5f5f0] md:text-3xl">
                 {spotlight.productName}
               </h3>
