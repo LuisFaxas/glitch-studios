@@ -32,7 +32,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
   - **Plans:** 7 plans (all Wave 1 — all files disjoint, fully parallelizable)
     - [x] 23-01-PLAN.md — Admin homepage editor 404 (sidebar href fix + Quick Action tile)
     - [x] 23-02-PLAN.md — /about dead-link removal (GlitchTech nav + stray anchors → /tech/methodology)
-    - [ ] 23-03-PLAN.md — /admin/clients + /admin/roles 500s (shared local-repro diagnosis + targeted fix)
+    - [x] 23-03-PLAN.md — /admin/clients + /admin/roles 500s (shared local-repro diagnosis + targeted fix)
     - [ ] 23-04-PLAN.md — Mobile nav double-tap (overlay useDragControls refactor + bottom-tab prefetch)
     - [ ] 23-05-PLAN.md — Mobile checkout Stripe (route hardening + Vercel log diagnosis + real-device verify)
     - [ ] 23-06-PLAN.md — /forgot-password + /reset-password scaffolds (Better Auth stub, Phase 24 handoff)
