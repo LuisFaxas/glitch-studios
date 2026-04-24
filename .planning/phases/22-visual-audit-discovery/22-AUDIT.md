@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | 🟡 in-progress (A.1-A.2 done 2026-04-24) | A.2 beats catalog audited on prod |
+| A. Public Studios pages | 🟡 in-progress (A.1-A.3 done 2026-04-24) | A.3 license modal audited on prod |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -146,8 +146,41 @@ User has been recording artist Trap Snyder making beats in red-raw high quality.
 
 **Look for:** license-tier explanations, pricing clarity, preview quality, modal dismiss behavior, add-to-cart feedback.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchstudios.io/beats` (license modal)
+
+### Visual / Format
+
+- **Modal formatting** — looks good, understandable structure `[OK]`
+- **Tier display** — "MP3 Lite Lease" and "WAV Lease" shown with inclusions `[OK]`
+
+### STRATEGIC: the licensing model itself is unclear — needs its own phase
+
+This is NOT a visual fix. The audit surfaced a fundamental product question that the user doesn't have a locked answer to.
+
+**What's confusing (from user perspective):**
+
+- Two lease tiers (MP3 Lite, WAV) with stream-count limits ("up to 5,000 streams", "up to 10,000 streams")
+- **Enforcement question:** "anybody control that?" — the honest answer is no, stream limits are industry-standard honor-system, not technically enforced
+- **Comprehension question:** user (the site owner) doesn't fully understand the lease model himself — if HE is confused, consumers will be too
+- **Alternative:** "just sell the beat, unlimited" — simpler, less friction, less tier cognitive load
+
+**What this actually needs:**
+
+1. **Research** — current beat-licensing landscape. Industry standard is 4-6 tiers (BeatStars, Airbit, Traktrain patterns): Basic Lease (MP3, limited streams) → Premium Lease (WAV, more streams) → Unlimited Lease → Trackout Lease (stems) → Exclusive Rights. Newer platforms / independent producers are moving toward flat-rate or unlimited-only to reduce purchase friction.
+2. **Decision** on GlitchStudios' positioning: tiered (status quo, industry-standard, max revenue per power-user) vs. flat-rate (simpler, higher conversion, smaller ceiling) vs. hybrid (e.g., one "standard" tier + an "exclusive" upgrade). Consider the artist side too — what do YOUR artists want to sell.
+3. **Legal/contractual** — actual license terms need a lawyer review or template (BeatStars provides theirs; can be referenced).
+4. **Redesign** the modal and the purchase flow around the chosen model. Current tier list + stream-limit language may go away entirely.
+
+**Scope:** The goal per user: "best all-around solution for the artist and the consumer". Needs research, needs discussion, needs redesign. `[IN v4.0 — own phase]` covering: licensing model research → decision → schema adjustments → UI redesign → legal terms update.
+
+### Note for downstream phase
+
+Any current code that enforces stream limits / license-tier gating is now scope-pending. The licensing phase's output determines whether:
+- Existing tier-based code stays and gets refined
+- Tiers collapse to a single "own the beat" model
+- A hybrid model requires schema changes to `licenses` / `beats` / `orders`
+
+
 
 ---
 
@@ -1125,6 +1158,11 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **6. Beat card: play vs buy affordance — unresolved UX puzzle**
 > Today, tapping image = play; tapping title = license modal. Users won't discover the title-tap. User wants the card/title tap to open the modal, with a dedicated control for play/pause. Needs a design decision that doesn't clutter the clean aesthetic.
+>
+> **Surfaced during A.3 License modal audit (2026-04-24):**
+>
+> **7. BEAT LICENSING MODEL — fundamental redesign**
+> Current tier system (MP3 Lite / WAV / stream-count limits) is industry-standard but confusing — even to the site owner. Stream limits are honor-system, not technically enforced. User asked: maybe just sell the beat unlimited. This needs: research on current beat-licensing landscape (BeatStars/Airbit tiered model vs. flat-rate/unlimited trend), decision on GlitchStudios positioning, artist-side input (what do YOUR producers want to sell), legal/contractual review, then schema + UI redesign. Likely its own phase with discuss-phase gating before implementation. Affects: `/beats` cards, license modal, checkout, orders schema, admin beat-create flow, download/rights tracking.
 
 
 ---
