@@ -4,8 +4,14 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { admin } from "better-auth/plugins"
 import { createAccessControl } from "better-auth/plugins/access"
 import { adminAc, defaultStatements } from "better-auth/plugins/admin/access"
+import { Resend } from "resend"
 import { db } from "./db"
 import * as schema from "@/db/schema"
+import { PasswordResetEmail } from "@/lib/email/password-reset"
+import { AccountVerificationEmail } from "@/lib/email/account-verification"
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+const EMAIL_FROM = "Glitch Studios <noreply@glitchstudios.io>"
 
 const ac = createAccessControl(defaultStatements)
 const ownerAc = ac.newRole({
@@ -33,20 +39,39 @@ export const auth = betterAuth({
   ],
   emailAndPassword: {
     enabled: true,
-    // Phase 23 stub — Phase 24 (Email Delivery End-to-End) replaces this body with
-    // a Resend call. CONTRACT (LOCKED for Phase 24 handoff): signature is
-    //   sendResetPassword({ user, url, token }, request) => Promise<void>
-    // - `user` contains the full DB user (email + name)
-    // - `url` is fully constructed by Better Auth (includes callbackURL)
-    // - `token` is the raw token (already embedded in `url`)
-    // Phase 24: replace the console.log below with
-    //   await resend.emails.send({ from, to: user.email, subject,
-    //     react: <ResetPasswordEmail url={url} name={user.name} /> })
-    // DO NOT CHANGE the function signature or surrounding config.
     sendResetPassword: async ({ user, url }) => {
-      console.log(
-        `[Phase 23 stub] Password reset requested for ${user.email}. Reset URL: ${url}`,
-      )
+      try {
+        const { error } = await resend.emails.send({
+          from: EMAIL_FROM,
+          to: user.email,
+          subject: "Reset your Glitch Studios password",
+          react: PasswordResetEmail({ name: user.name, url }),
+        })
+        if (error) {
+          console.error("[email:reset] Resend send failed:", error)
+        }
+      } catch (err) {
+        console.error("[email:reset] Unexpected error:", err)
+      }
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      try {
+        const { error } = await resend.emails.send({
+          from: EMAIL_FROM,
+          to: user.email,
+          subject: "Verify your Glitch Studios email",
+          react: AccountVerificationEmail({ name: user.name, url }),
+        })
+        if (error) {
+          console.error("[email:verify] Resend send failed:", error)
+        }
+      } catch (err) {
+        console.error("[email:verify] Unexpected error:", err)
+      }
     },
   },
   plugins: [
