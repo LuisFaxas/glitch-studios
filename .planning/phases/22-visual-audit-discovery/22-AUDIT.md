@@ -2255,10 +2255,157 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 
 # SECTION K — Proposed v4.0 Phase Structure
 
-*[I'll populate this after sections A-J have meaningful content. Placeholder.]*
+**Drafted 2026-04-24 from Sections A-J findings. Pending user approval before landing in ROADMAP.md.**
+
+## Overview
+
+**Milestone target:** Get the site to production — polished, performant, content-complete, credible. Artist platform (admin-invite BETA), GlitchMark new scoring system, master leaderboard (never shipped in v3.0), email, performance, affiliate revenue, SEO, deploy hardening.
+
+**23 phases** (Phase 22 is the current audit; 23-45 derive from it).
+
+**~10 launch blockers** → ship first. Content (flagship review) + polish → ship in parallel. Revenue (affiliate) + growth (SEO) → near end. Deploy hardening → last.
+
+## Phase Map
+
+### 🚨 Launch-blocker cluster (ship first, parallelizable)
+
+| # | Name | Goal | Requirements |
+|---|---|---|---|
+| **22** | Visual Audit & Discovery | Current phase — produces this document | AUDIT-01..04 |
+| **23** | Debug broken pages & missing routes | Fix every broken surface the audit found: /admin homepage, /admin/clients, /admin/roles, /admin/media drag-drop, /forgot-password + /reset-password routes, /about empty link, mobile checkout Stripe failure, mobile nav double-tap bug | Pivot #23 |
+| **24** | Email delivery end-to-end | Resend wired + React Email templates for verify, reset, booking, order, newsletter, contact, admin invite | EMAIL-01..08 |
+| **25** | Site-wide performance audit + fixes | Admin context switcher 2-3s → <500ms, public TTFB p95, mobile LCP, image/bundle/query audits | PERF-01..07 |
+
+### 🔐 Auth + user experience
+
+| # | Name | Goal | Requirements |
+|---|---|---|---|
+| **26** | Brand-aware auth UI redesign | Rich brand-themed login/register/forgot/reset/verify surfaces. Split register: customer wizard vs artist request flow. Social login: Google + Meta + GitHub | Pivot C.1+C.2 consolidated |
+
+### 🎬 Foundation — media + data architecture
+
+| # | Name | Goal | Requirements |
+|---|---|---|---|
+| **27** | Media/video strategy foundation | Canonical YouTube (long) + Instagram (short) embed pattern. Schema: `media_item` with external_url + entity attachments. Admin add-video flow. Reusable components (embed, carousel, hero) | Pivot #2, #9 |
+
+### 🏆 Tech product core (the headline)
+
+| # | Name | Goal | Requirements |
+|---|---|---|---|
+| **28** | GlitchMark system | Research + lock formula, schema, compute on ingest, methodology page section. Distinct from BPR | GLITCHMARK-01..08 |
+| **29** | Master leaderboard | `/tech/categories/[slug]/rankings` — sortable, filterable, URL-state, mobile card fallback, BPR medal + GlitchMark columns | RANK-01..07 |
+| **30** | Per-benchmark pages | `/tech/benchmarks` index + `/tech/benchmarks/[slug]` cross-category leaderboard per benchmark. Repurposes current empty state | New (derived from B.9 IA) |
+| **31** | Category detail reframe (editorial hub) | Pivot `/tech/categories/[slug]` from ranked product list to editorial featured picks + "best for" cards. Avoid redundancy with rankings | New (derived from B.5) |
+
+### 🎨 Artists platform BETA
+
+| # | Name | Goal | Requirements |
+|---|---|---|---|
+| **32** | Artist platform v4.0 admin-invite BETA | Artist role + dashboard + upload (beats/songs/videos/portfolio) + light customization + custom T&Cs + cross-display with Studios store + revenue share ledger. Admin-invite only (no public signup). Trap beta-tests | Pivot #10 Wave 1 |
+
+### 💰 Beats commerce overhaul
+
+| # | Name | Goal | Requirements |
+|---|---|---|---|
+| **33** | Beat licensing model research + redesign | Research landscape, decide tiered vs flat-rate, schema updates, license modal + card + checkout UI | Pivot #7 |
+| **34** | Custom Beats offering + Services redesign | Services page 2-tab (Custom Beats / Studio Sessions), custom beat intake flow, admin custom-beat requests, home hero CTA pivots to Custom Beats | Pivots #1, #8 |
+
+### 📝 Content surfaces
+
+| # | Name | Goal | Requirements |
+|---|---|---|---|
+| **35** | Blog redesign — cross-brand, research-driven, typed | Research best blogs, predetermined type taxonomy (comparison / buyer guide / news / making-of / tutorial), template per type, video-first embed pattern, covers Studios + GlitchTech | Pivot #11, BLOG-01..05 |
+| **36** | Flagship MBP review + trailer video surface | Publish MBP 16 M5 Max review (real content swap from placeholder) + surface two trailer videos | FLAG-01..04, VIDEO-01..02 |
+
+### 📱 Polish sweeps
+
+| # | Name | Goal | Requirements |
+|---|---|---|---|
+| **37** | Mobile-native-feel sweep | Swipe-dismiss drawers/sheets/modals, swipe-minimize player bar, pull-to-refresh lists, admin mobile (dismissible sidebar or bottom-nav) | Pivots #12, #22 |
+| **38** | GlitchTech brand-wide editorial polish | Hero sections, review card hierarchy, category tile polish, cross-link sweep (per pivot #16), BPR medal visual redesign bundled in, missing nav item (methodology link), mobile menu content bleed fix | Pivots #13, #15, #16 |
+| **39** | Admin list-page pattern rollout | Shared `AdminListPage` component (search/filter/view-switch/thumbnail preview), apply across beats/bundles/products/reviews/categories/benchmarks/blog. Absorbs 999.5 admin cosmetic cleanup | Pivot #21 |
+| **40** | Public per-page polish | Home scroll arrow clickable (site-wide), mobile hero proportion fixes, "What We Do" section overhaul, GlitchTech cross-link image, GlitchTech intro mobile | POLISH-* |
+
+### 💸 Revenue + growth
+
+| # | Name | Goal | Requirements |
+|---|---|---|---|
+| **41** | Affiliate marketing infrastructure | Schema (`product_affiliate_links`), render logic on every product surface, tracking, cloaking via `/go/[...]`, FTC disclosure, admin analytics dashboard | Pivot #14 |
+| **42** | AI automations + newsletter rich HTML | Dedicated mid-milestone discuss-phase. Newsletter rich HTML templates. n8n orchestration. Content pipeline helpers | Pivots #19, #24 |
+
+### 🚀 Launch readiness (ships last)
+
+| # | Name | Goal | Requirements |
+|---|---|---|---|
+| **43** | SEO + growth infrastructure | Structured data on all surfaces, meta/OG per route, per-brand sitemaps, canonical URLs, internal linking sweep, Core Web Vitals, rich results validation | Pivot #17 |
+| **44** | Production deploy hardening | glitchtech.io domain + SSL, UAT admin delete (DEPLOY-05), env audit, error tracking (Sentry), analytics, backup verification, 301 www→apex | DEPLOY-01..09 |
 
 ---
 
-*Audit started: 2026-04-24*
+## Deferred to v5.0 (post-launch)
+
+- **Artist platform Wave 2** (public self-serve signup, moderation queue, discovery surfaces, DMs, collab invites, deeper customization) — Pivot #10 Wave 2
+- **Custom domain per artist** ("Powered by Glitch Studios") — Pivot #18, infrastructure-heavy, v5.0+
+- **999.6 Programmatic CLI** — post-launch workflow investment
+
+## Parked (need use-case justification)
+
+- **Twilio / SMS** — Pivot #20. No clear use case yet. Re-evaluate if SMS 2FA, booking reminders, or drop alerts emerge as priorities.
+
+## Dependency & ordering principles
+
+- **Launch blockers (23/24/25) ship first** — nothing else matters if auth recovery is broken, checkout fails, or perf is unacceptable.
+- **Auth UI redesign (26) depends on Email (24)** — can't redesign /forgot-password without working email.
+- **Media foundation (27) before any video surface** — blog, artist platform, portfolio, flagship review, trailers all depend on the canonical embed pattern.
+- **GlitchMark (28) before Leaderboard (29)** — leaderboard sorts by GlitchMark.
+- **Leaderboard (29) before Flagship (36)** — flagship needs the leaderboard to appear on.
+- **Artist platform (32) depends on Email (24) + Media (27) + Licensing (33)** — invites, video embeds, license T&C templates.
+- **Affiliate (41) depends on Leaderboard (29) + Flagship (36) + Blog (35)** — needs real surfaces to attach to.
+- **SEO (43) near end** — wraps every shipped surface.
+- **Deploy hardening (44) last** — production cutover.
+
+## What's parallelizable
+
+- 23 (debug) ‖ 24 (email) ‖ 25 (perf) — three separate concerns, different systems
+- 26 (auth UI) after 24 (email)
+- 27 (media) after 23/24/25 — parallel with 26
+- 28 (GlitchMark) after 27 — can parallel with 32 (artist platform) + 33 (licensing)
+- 29 (leaderboard) after 28
+- 35 (blog) independent of product-tech phases
+- 36 (flagship content) CAN happen in parallel with eng once Mac benchmarks are back — content work, not engineering blocked
+- 37–40 (polish sweeps) late stage, can overlap
+- 41–44 launch readiness sequential at the end
+
+## Rough sequencing (not set in stone)
+
+```
+Week 1-2:   Phase 23, 24, 25 (launch blockers, parallel)
+Week 3:     Phase 26 (auth UI)
+Week 4:     Phase 27 (media foundation)
+Week 5-6:   Phase 28 (GlitchMark) + 33 (licensing) + 35 (blog) [parallel tracks]
+Week 7:     Phase 29 (leaderboard) — the headline
+Week 8:     Phase 30 (per-benchmark) + 31 (category reframe) + 32 (artist BETA)
+Week 9:     Phase 34 (custom beats) + 36 (flagship content)
+Week 10-11: Phase 37/38/39/40 (polish sweeps)
+Week 12:    Phase 41 (affiliate) + 42 (AI automations)
+Week 13:    Phase 43 (SEO) + 44 (deploy hardening) + launch
+```
+
+This is ambitious (~13 weeks if sequential) but realistic with parallelism. Some weeks compress if AI-accelerated.
+
+---
+
+**USER REVIEW — what to adjust:**
+
+1. **Phase count too high?** Some can merge (e.g., 30 per-benchmark + 31 category reframe could combine — both are GlitchTech IA reframes).
+2. **Order wrong?** Anything should ship earlier/later?
+3. **Missing anything?** If I dropped a pivot or carry-over, flag it.
+4. **Scope wrong per phase?** If a phase feels too big or too small, say so.
+5. **Approve as-is?** Then we commit this to ROADMAP.md + REQUIREMENTS.md traceability.
+
+---
+
+*Audit completed: 2026-04-24*
 *Milestone target: v4.0 — Production Launch*
-*Process: audit drives direction — no phase-writing until sections are triaged*
+*Process: audit drove direction — output is this 23-phase structure*
+
