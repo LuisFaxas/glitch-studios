@@ -2,6 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Star } from "lucide-react"
 import type { PublicReviewCard } from "@/lib/tech/queries"
+import { BPRMedal } from "./bpr-medal"
 
 interface ReviewCardProps {
   review: PublicReviewCard
@@ -40,20 +41,38 @@ export function ReviewCard({ review, className, glitchHover = true }: ReviewCard
         <h3 className="font-mono text-base font-bold uppercase tracking-[0.02em] text-[#f5f5f0]">
           {review.title}
         </h3>
-        <div className="flex items-center gap-1">
-          <Star className="h-3 w-3 fill-[#f5f5f0] text-[#f5f5f0]" aria-hidden="true" />
-          <span className="font-mono text-xs text-[#888]">
-            {review.overallRating.toFixed(1)} / 10
-          </span>
-          {review.categoryName && (
-            <>
-              <span className="mx-1 font-mono text-[10px] text-[#444]">·</span>
+        {review.bprScore !== null && review.bprTier !== null ? (
+          <div className="flex items-center gap-2">
+            <BPRMedal
+              tier={review.bprTier}
+              score={review.bprScore}
+              disciplineCount={review.bprDisciplineCount}
+              variant="compact"
+              showTooltip={false}
+              asLink={false}
+            />
+            {review.categoryName && (
               <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-[#888]">
                 {review.categoryName}
               </span>
-            </>
-          )}
-        </div>
+            )}
+          </div>
+        ) : (
+          <div className="flex items-center gap-1">
+            <Star className="h-3 w-3 fill-[#f5f5f0] text-[#f5f5f0]" aria-hidden="true" />
+            <span className="font-mono text-xs text-[#888]">
+              {review.overallRating.toFixed(1)} / 10
+            </span>
+            {review.categoryName && (
+              <>
+                <span className="mx-1 font-mono text-[10px] text-[#444]">·</span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-[#888]">
+                  {review.categoryName}
+                </span>
+              </>
+            )}
+          </div>
+        )}
         <p className="line-clamp-2 font-sans text-[13px] leading-relaxed text-[#888]">
           {review.excerpt}
         </p>
