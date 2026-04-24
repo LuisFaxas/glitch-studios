@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | 🟡 in-progress (A.1-A.12 done 2026-04-24) | A.12 checkout — 2 prod bugs found, BLOCKS launch |
+| A. Public Studios pages | 🟡 in-progress (A.1-A.14 done 2026-04-24) | A.14 unsubscribe — graceful no-token state |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -577,8 +577,15 @@ Both bugs need an investigation phase — separate from this audit. Likely candi
 
 **Look for:** success messaging, re-subscribe affordance, brand tone.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production (no-token case)
+
+### Feedback
+
+- Without a valid token, page shows "invalid link" message + link back to homepage. Graceful, not a crash. `[OK]`
+- Full end-to-end UX cannot be tested until Resend is wired (EMAIL-* blocker) and a real unsubscribe token exists.
+- Re-audit success-path + re-subscribe affordance after the Email phase ships.
+
+
 
 ---
 
