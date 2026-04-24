@@ -10,7 +10,7 @@
 | B. Public GlitchTech pages | ✅ done 2026-04-24 | All 10 GlitchTech surfaces audited + IA + media/SEO pivots |
 | C. Auth + client dashboard | 🟡 in-progress (C.1-C.4 done 2026-04-24) | C.4 login blocker fixed mid-audit; client dashboard visual pending |
 | D. Admin dashboard | ✅ done 2026-04-24 | All 18 admin surfaces audited; 4 broken; pattern + 3 pivots surfaced |
-| E. Global components | ⬜ pending | — |
+| E. Global components | ✅ done 2026-04-24 | All 6 global components audited; GlitchTech mobile menu content bleed found |
 | F. Cross-page flows | ⬜ pending | — |
 | G. Edge cases | ⬜ pending | — |
 | H. v3.0 carry-over triage | ⬜ pending | — |
@@ -1509,8 +1509,15 @@ All need debug investigation. Same debug phase as the A.12 Checkout and mobile-n
 
 **Look for:** visual density, hover behavior, cross-link-tile friction, how it feels on 13" vs 27".
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24
+
+Feedback captured across other sections — no new items here. Consolidated:
+- A.1 mobile hero: logo/title proportion vs button sizes — POLISH
+- B.1 cross-brand tile: 2-tap bug on mobile — BLOCK (part of mobile-nav bug cluster)
+- B.8 missing Methodology / dead /about link — BUG + wire into Methodology
+- D.1 admin mobile sidebar not dismissible — absorbed into mobile-admin sweep (pivot #12/#22)
+
+
 
 ---
 
@@ -1521,8 +1528,11 @@ All need debug investigation. Same debug phase as the A.12 Checkout and mobile-n
 
 **Look for:** icon legibility, touch-target size, active-state treatment.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24
+
+- **Solid, looks good, feels good** `[OK]`
+
+
 
 ---
 
@@ -1533,8 +1543,12 @@ All need debug investigation. Same debug phase as the A.12 Checkout and mobile-n
 
 **Look for:** menu completeness, brand-switcher placement, gesture feel.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24
+
+- **Studios menu: gold standard** — responsive to touch, closes on tap-away, opens quickly, feels like an app `[OK — reference quality]`
+- **🐛 GlitchTech menu: content bleed from Studios** — still showing Studios widgets (e.g., "Track Plane") instead of GlitchTech-appropriate items. Redesign GlitchTech menu to reflect GlitchTech's own widgets / nav items. `[BUG]`
+
+
 
 ---
 
@@ -1544,8 +1558,12 @@ All need debug investigation. Same debug phase as the A.12 Checkout and mobile-n
 
 **Look for:** density vs utility, social icons (memory note: "don't look like social media icons — need actual platform icons"), legal links, address accuracy.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24
+
+- **Looks good** `[OK visual]`
+- **Needs SEO focus** — whatever SEO best-practice calls for (internal linking, sitemap-adjacent anchor text, region/schema markup). Ties to pivot #17 (SEO + growth infrastructure). Footer is prime real estate for internal linking that every page inherits.
+
+
 
 ---
 
@@ -1554,8 +1572,13 @@ All need debug investigation. Same debug phase as the A.12 Checkout and mobile-n
 **What's there today:** Placeholder — not functional.
 **Question for you:** Does the player bar ship in v4.0, or stay stubbed? (Beats catalog works without it — play inside cards.)
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24
+
+- **Amazing** — works great today when a beat is playing `[OK]`
+- Only mobile addition needed: swipe-down-to-minimize / swipe-up-to-restore (already captured in pivot #12 mobile-native-feel)
+- Original audit doc note about it being a "placeholder" was stale — player bar IS functional in prod. Updated.
+
+
 
 ---
 
@@ -1565,8 +1588,11 @@ All need debug investigation. Same debug phase as the A.12 Checkout and mobile-n
 
 **Look for:** duration (too long? too short?), skippability, consistency between brands.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24
+
+- **Looks great** `[OK]`
+
+
 
 ---
 
