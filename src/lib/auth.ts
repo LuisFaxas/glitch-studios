@@ -24,6 +24,7 @@ export const auth = betterAuth({
   trustedOrigins: [
     "http://localhost:3004",
     "http://192.168.1.122:3004",
+    "http://100.123.116.23:3004",
     "https://glitch-studios.codebox.local",
     "https://glitchstudios.io",
     "https://www.glitchstudios.io",

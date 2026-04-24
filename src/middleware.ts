@@ -57,12 +57,33 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Shared surfaces that must resolve identically on ALL brands
+  // (auth flows, client dashboard). Skip the /tech rewrite below so
+  // glitchtech.io/login doesn't get rewritten to /tech/login (which
+  // doesn't exist, 404s).
+  const SHARED_AUTH_PATHS = [
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/reset-password",
+    "/verify-email",
+    "/unsubscribe",
+    "/dashboard",
+  ]
+  const isSharedAuthPath = SHARED_AUTH_PATHS.some((p) =>
+    url.pathname === p || url.pathname.startsWith(p + "/")
+  )
+
   // glitchtech.io — serve /tech/* pages at the domain root.
   // Two-way transform:
   //   - If user arrives at /tech/foo (internal link), 307 redirect to /foo
   //     so the browser URL stays clean.
   //   - Rewrite root paths /foo -> /tech/foo internally.
+  //   - EXCEPT shared-auth paths above, which must render as-is.
   if (TECH_HOSTS.has(hostname)) {
+    if (isSharedAuthPath) {
+      return NextResponse.next()
+    }
     if (url.pathname.startsWith("/tech")) {
       const cleanPath = url.pathname.replace(/^\/tech/, "") || "/"
       const redirectUrl = new URL(cleanPath, request.url)
