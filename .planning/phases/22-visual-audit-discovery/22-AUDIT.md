@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | 🟡 in-progress (A.1-A.5 done 2026-04-24) | A.5 book merged into Services redesign |
+| A. Public Studios pages | 🟡 in-progress (A.1-A.6 done 2026-04-24) | A.6 portfolio — needs media-strategy phase |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -294,8 +294,38 @@ This decision lives in the Services phase's discuss-phase step, not now.
 
 **Question for you:** Is this surface ever going live in v4.0, or is "coming soon" the intended state forever?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchstudios.io/portfolio`
+
+### Verdict
+
+Goes live in v4.0. Current state "looks good" visually but feels like a placeholder page, not production. Cannot meaningfully audit UX until media showcase strategy is decided. `[IN v4.0 — own phase, discuss-first]`
+
+### Observations
+
+- **Hero section is a video player** — but no videos exist, so it's hard to evaluate
+- **No videos uploaded yet** — page is structurally wired but content-empty
+- **Mobile:** one long list below the hero — user doesn't love this treatment
+
+### Questions the phase must answer (discuss-phase input)
+
+1. **Hero video selection** — how is the currently-featured video chosen? Admin flag on a specific video? Latest-published auto-pick? Manual "featured" order? Must be a clear admin workflow.
+
+2. **Single-video hero vs. multi-video hero** — should the hero play one video at a time or allow scrubbing through multiple with arrows/swipe/drag?
+
+3. **Layout pattern — three options user surfaced:**
+   - **(a) YouTube-clone** — sticky video at the top (with description/metadata), list of videos below; clicking a list item swaps the hero. Sophisticated, familiar, handles scale well.
+   - **(b) Long single list** — current mobile treatment; user doesn't love it.
+   - **(c) Carousels per category** — one carousel per category/type. Better for discovery per category but risks confusion when looking for a specific video.
+
+4. **YouTube-first alignment (pivot #2)** — every video embedded from YouTube, NOT self-hosted. One canonical video per piece of content, views unified. This is already locked via pivot #2 — portfolio phase inherits this.
+
+5. **Overlap with other video surfaces** — the portfolio media shares sources with the homepage "Our Work" carousel, artist profiles, GlitchTech reviews. Is portfolio the CANONICAL list of all video work, and other surfaces pull from it? Or does each surface curate its own?
+
+### Cross-cutting realization
+
+Portfolio, homepage Our Work, artists, trailer video surface (17.5 carry-over), GlitchTech review videos — all of these are "where does video live?" questions. May need a **cross-cutting media/video strategy phase** BEFORE individual surface redesigns, so every surface pulls from a single media model instead of each being designed in isolation.
+
+
 
 ---
 
@@ -1235,6 +1265,11 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **8. SERVICES PAGE — full redesign ("weakest page in the whole site")**
 > Services is flat, boring, doesn't sell. Needs a ground-up rebuild with its own identity. Proposed structure: own hero + two tabs (Custom Beats / Studio Sessions). Custom Beats tab = primary revenue surface, needs to be rich. Studio Sessions tab = present but clearly "coming when studio opens". This phase should also absorb the booking wizard changes (A.5) because custom beats needs a different intake flow than studio sessions (beat brief + references vs. calendar + deposit). Likely folds pivot #1 (Custom Beats CTA pivot) into its execution. Affects: `/services`, `/book`, admin custom-beat request management.
+>
+> **Surfaced during A.6 Portfolio audit (2026-04-24):**
+>
+> **9. CROSS-CUTTING MEDIA/VIDEO STRATEGY PHASE (probably precedes individual surface redesigns)**
+> Portfolio, homepage Our Work, artists, trailer video surface (17.5 carry-over), GlitchTech review videos, beat making-of videos (pivot #4) — ALL of these are "where does video live?" surfaces. Rather than designing each in isolation, this phase defines the ONE canonical video model: YouTube-embed-only (pivot #2), admin flow for adding a video with metadata, how each surface queries/displays them, featured/hero selection logic, overlap rules (is portfolio canonical? does each surface pull from it?). Blocks or informs: Portfolio (A.6), homepage Our Work (A.1), artists (A.7), trailer 17.5 carry-over, GlitchTech review videos, beat making-of (pivot #4).
 
 
 ---
