@@ -143,7 +143,14 @@ export default async function ReviewDetailPage({ params }: Props) {
         <ReviewHero review={review} breadcrumbs={breadcrumbs} />
         <ReviewVerdict text={review.verdict} />
         <ReviewBody sanitizedHtml={cleanBody} />
-        <ReviewRatingCard ratings={review.ratings} overall={review.overallRating} />
+        <ReviewRatingCard
+          ratings={review.ratings}
+          overall={review.overallRating}
+          bprScore={review.bprScore}
+          bprTier={review.bprTier}
+          bprDisciplineCount={review.bprDisciplineCount}
+          rubricVersion={review.rubricVersion}
+        />
         <ReviewProsCons pros={review.pros} cons={review.cons} />
         <ReviewGallery images={review.gallery} />
         <ReviewVideoEmbed videoUrl={review.videoUrl} reviewTitle={review.title} />

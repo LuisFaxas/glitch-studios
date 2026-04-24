@@ -1,4 +1,7 @@
 import { ReviewRatingBar } from "./review-rating-bar"
+import { BPRMedal, BPRMedalPlaceholder } from "./bpr-medal"
+import { RubricVersionBadge } from "./rubric-version-badge"
+import type { BprTier } from "@/lib/tech/bpr"
 
 interface ReviewRatingCardProps {
   ratings: {
@@ -8,15 +11,39 @@ interface ReviewRatingCardProps {
     design: number
   }
   overall: number
+  bprScore: number | null
+  bprTier: BprTier | null
+  bprDisciplineCount: number
+  rubricVersion: string
 }
 
-export function ReviewRatingCard({ ratings, overall }: ReviewRatingCardProps) {
+export function ReviewRatingCard({
+  ratings,
+  overall,
+  bprScore,
+  bprTier,
+  bprDisciplineCount,
+  rubricVersion,
+}: ReviewRatingCardProps) {
   return (
     <section className="mx-auto max-w-5xl px-4 py-8 md:px-6 md:py-12">
       <h2 className="mb-6 font-mono text-2xl font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-3xl">
         Rating
       </h2>
       <div className="border border-[#222] bg-[#111] p-6 md:p-8">
+        <div className="mb-6 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
+          {bprScore !== null && bprTier !== null ? (
+            <BPRMedal
+              tier={bprTier}
+              score={bprScore}
+              disciplineCount={bprDisciplineCount}
+            />
+          ) : (
+            <BPRMedalPlaceholder disciplineCount={bprDisciplineCount} />
+          )}
+          <RubricVersionBadge version={rubricVersion} />
+        </div>
+        <div className="mb-6 h-px w-full bg-[#222]" aria-hidden="true" />
         <div className="flex flex-col gap-4">
           <ReviewRatingBar label="Performance" value={ratings.performance} delay={0.0} />
           <ReviewRatingBar label="Build Quality" value={ratings.build} delay={0.05} />
