@@ -29,8 +29,13 @@ export async function middleware(request: NextRequest) {
   // Admin auth gate — applies on ANY host that can reach /admin.
   // Per Phase 09 infra plan: both glitchstudios.io/admin and
   // glitchtech.io/admin work; a single login gates both.
+  //
+  // Cookie name varies: Better Auth adds the __Secure- prefix on HTTPS
+  // (production), plain name on HTTP (local dev). Check both.
   if (url.pathname.startsWith("/admin")) {
-    const sessionCookie = request.cookies.get("better-auth.session_token")
+    const sessionCookie =
+      request.cookies.get("better-auth.session_token") ||
+      request.cookies.get("__Secure-better-auth.session_token")
     if (!sessionCookie) {
       return NextResponse.redirect(new URL("/login", request.url))
     }
