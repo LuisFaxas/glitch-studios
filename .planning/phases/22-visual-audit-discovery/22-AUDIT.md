@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | ⬜ pending | — |
+| A. Public Studios pages | 🟡 in-progress (A.1 done 2026-04-24) | A.1 homepage audited on prod |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -54,8 +54,37 @@ One-by-one walk the public Studios site. URL base: `http://localhost:3004`.
 - What happens if featured beats = 0? What about latest blog post = 0?
 - Mobile: does the home feel like a different product, or the same?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchstudios.io`
+
+### Desktop
+
+- **Hero section** — looks really good overall `[OK]`
+- **Splash intro animation** — fires correctly, looks good on both desktop and mobile `[OK]`
+- **Scroll-down arrow indicator** — not interactive. Should be clickable to scroll to the next section. `[POLISH]`
+- **"What We Do" section** — too basic, doesn't scream Glitch Studios. Tiles are bare. With 5 items they stack weirdly and leave empty space. Needs richer treatment (images, polish, real information). Deserves its own discuss phase rather than a cosmetic tweak. `[POLISH — own phase]`
+- **"Our Work" carousel** — simple video carousel; no videos uploaded yet. Unclear what the functionality ultimately is. `[CONTENT + design TBD]`
+- **CTA to GlitchTech cross-link section** — missing an image `[POLISH]`
+- **"What They Say" (testimonials)** — only placeholder reviews exist, no real ones. Not sure if good enough for now. `[CONTENT + design TBD]`
+
+### Mobile
+
+- **Logo + title area vs hero buttons** — logo + title feel too small compared to the Book Session / Beats / Portfolio buttons, creating a proportion/hierarchy inconsistency. Fix by either enlarging titles or shrinking the buttons. `[POLISH]`
+- **Scroll-down arrow** — same issue as desktop, needs to be tappable `[POLISH]` (pairs with desktop item)
+- **"Introduction to GlitchTech" section** — looks vertically stretched on mobile, doesn't fit the viewport well. Small reposition/redesign for mobile. `[POLISH]`
+- **Everything else** — looks great overall `[OK]`
+
+### Strategic pivots surfaced here (affect scope beyond A.1)
+
+> These are MILESTONE-level strategic shifts, not A.1 cosmetic fixes. Captured here because they surfaced during homepage audit; will re-surface in Section J and drive their own phase(s).
+
+1. **PIVOT: Custom Beats replaces Studio Sessions (for now)**
+   No physical studio yet → "Book a Session" CTA is effectively dead today. User wants the primary hero CTA to be "Custom Beat" instead, with a custom-beat request/booking flow as a real feature. Studio session stays in the codebase for later (will come back when physical studio exists). Affects: hero CTAs, `/services`, `/book`, entirely new custom-beat request surface. `[IN v4.0 — deserves its own phase / set of phases]`
+
+2. **PIVOT: YouTube as primary video host**
+   Discovery + virality beats self-hosting. Every video ("Our Work", trailers, artist content) should live on YouTube as a single canonical video with all the views, and surfaces on the site just embed it. Affects: Our Work carousel, trailer video surface (17.5 carry-over), any future video surface. `[IN v4.0 — content architecture decision]`
+
+3. **CONTENT: Trap Snyder video**
+   User has an artist video (Trap Snyder making a beat) that should replace placeholders in Our Work + Portfolio. Content swap, not a code change. `[CONTENT — drops in once YouTube-host pattern is decided]`
 
 ---
 
@@ -1043,6 +1072,17 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 
 > BRAIN DUMP:
 > 
+> **Strategic pivots surfaced during A.1 homepage audit (2026-04-24):**
+>
+> **1. Custom Beats replaces Studio Sessions as primary offering (for now)**
+> No physical studio yet — "Book a Session" CTA is dead today. Replace hero primary CTA with "Custom Beat" and build a real custom-beat request/booking flow. Studio session code stays for the future. Needs its own phase(s) in v4.0 — hero CTAs, `/services`, `/book`, new custom-beat surface all touched.
+>
+> **2. YouTube as canonical video host (discovery over self-host)**
+> Every video — Our Work carousel, trailer video surface (17.5 carry-over), artist content, future review videos — lives on YouTube as a single canonical video. The site embeds it. Goal: consolidate views + virality instead of splitting between "website video" and "YouTube video". Architecture decision for v4.0 content pipeline.
+>
+> **3. Trap Snyder beat-making video**
+> Artist Trap Snyder has footage of him making a beat. This should replace placeholders in Our Work + Portfolio. Drops in once YouTube-host pattern is decided.
+
 
 ---
 
