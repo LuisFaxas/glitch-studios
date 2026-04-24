@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | 🟡 in-progress (A.1-A.14 done 2026-04-24) | A.14 unsubscribe — graceful no-token state |
+| A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -595,8 +595,20 @@ Both bugs need an investigation phase — separate from this audit. Likely candi
 
 **Question for you:** Keep in v4.0? Rip out? Link from somewhere?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production
+
+### Verdict
+
+**Backlog — keep as-is, don't surface in nav.** `[BACKLOG]`
+
+### Feedback
+
+- User verdict: "average — not great, not bad." No strong feeling either way.
+- No strategic commitment to apparel as a v4.0 product line.
+- Default: page stays live (doesn't cost anything), stays unlinked from main nav, revisit when apparel is an actual initiative worth investing in.
+- If apparel launches for real, it gets its own redesign phase — a landing with a real email waitlist, maybe a product preview, brand integration.
+
+
 
 ---
 
