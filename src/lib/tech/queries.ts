@@ -798,6 +798,10 @@ export interface BenchmarkSpotlight {
   summary: string | null
   heroImageUrl: string | null
   topScores: Array<{ testName: string; unit: string; score: number }>
+  bprScore: number | null
+  bprTier: BprTier | null
+  bprDisciplineCount: number
+  reviewSlug: string | null
 }
 
 export async function getBenchmarkSpotlight(): Promise<BenchmarkSpotlight | null> {
@@ -826,6 +830,10 @@ export async function getBenchmarkSpotlight(): Promise<BenchmarkSpotlight | null
     .select({
       productId: techBenchmarkRuns.productId,
       score: techBenchmarkRuns.score,
+      bprScore: techReviews.bprScore,
+      bprTier: techReviews.bprTier,
+      bprDisciplineCount: techReviews.bprDisciplineCount,
+      reviewSlug: techReviews.slug,
     })
     .from(techBenchmarkRuns)
     .innerJoin(techReviews, and(
@@ -887,5 +895,10 @@ export async function getBenchmarkSpotlight(): Promise<BenchmarkSpotlight | null
       unit: r.unit,
       score: Number(r.score),
     })),
+    // bprScore stored as numeric string; returned on 0–100 scale per Phase 16 compute.
+    bprScore: candidate.bprScore !== null ? parseFloat(candidate.bprScore) : null,
+    bprTier: candidate.bprTier as BprTier | null,
+    bprDisciplineCount: candidate.bprDisciplineCount,
+    reviewSlug: candidate.reviewSlug,
   }
 }
