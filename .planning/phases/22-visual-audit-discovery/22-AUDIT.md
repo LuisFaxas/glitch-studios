@@ -8,7 +8,7 @@
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
 | B. Public GlitchTech pages | ✅ done 2026-04-24 | All 10 GlitchTech surfaces audited + IA + media/SEO pivots |
-| C. Auth + client dashboard | 🟡 in-progress (C.1-C.3 done 2026-04-24) | C.3 forgot-password routes missing — LAUNCH-BLOCKER |
+| C. Auth + client dashboard | 🟡 in-progress (C.1-C.4 done 2026-04-24) | C.4 login blocker fixed mid-audit; client dashboard visual pending |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
 | F. Cross-page flows | ⬜ pending | — |
@@ -1134,8 +1134,36 @@ NOT capturing as a v4.0 commitment. Needs a use-case decision before it earns a 
 
 **Look for:** personalization depth (just name, or more?), empty states (new user), quick-action affordances.
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 — blocker hit, unblocked mid-audit, visual audit pending
+
+### Blocker discovered: could not log in
+
+User tried to sign in with credentials in `.env.local` but couldn't reach dashboard. Diagnosis:
+- Both owner (`admin@faxas.net`) and admin (`elkins305@gmail.com`) accounts existed in DB with hashed passwords
+- Password hash was from an OLDER seed run — user had since updated passwords in `.env.local`
+- Better Auth rejected login because hash didn't match current input
+
+**Resolved mid-audit by running `pnpm db:seed-users`** to re-sync password hashes. Upsert — deletes the old credential row and inserts a fresh one with the new hash. Both accounts now log in with the passwords currently in `.env.local`.
+
+### Process gap to capture
+
+- **No documented password-recovery path for owner/admin if credentials forgotten today.** Must know the password or re-run the seed.
+- Once EMAIL-* ships, `/forgot-password` (C.3) becomes the path for everyone including admins.
+- Interim recipe: document `pnpm db:seed-users` in a dev runbook.
+
+### Client dashboard visual audit — pending
+
+Both logged-in accounts are owner/admin → redirect to `/admin`, not `/dashboard`. To visually audit the CLIENT dashboard, user needs a client-role test account. Options:
+- (a) Skip client dashboard audit now — defer to a dedicated Dashboard Polish phase post-launch
+- (b) Create a test client account for audit only — I can spin one up if you want
+
+Audit questions when this gets revisited:
+- Personalization depth (just name? more?)
+- Empty state for a brand-new user (no orders, no bookings)
+- Quick-action CTAs — what drives engagement
+- Does it feel like a home, or a receipt page?
+
+
 
 ---
 
