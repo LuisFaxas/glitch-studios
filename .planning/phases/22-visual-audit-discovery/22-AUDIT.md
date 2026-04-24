@@ -7,7 +7,7 @@
 | Section | Status | Your last entry |
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
-| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.8 done 2026-04-24) | B.8 methodology — nav gap + medal visual redesign |
+| B. Public GlitchTech pages | 🟡 in-progress (B.1-B.9 done 2026-04-24) | B.9 benchmarks — IA architecture locked |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
@@ -912,8 +912,60 @@ This **overrides MEDAL-01's original "monochrome intensity" design decision.** C
 
 **Question for you:** Does this surface even exist in v4.0, or does it collapse into the master leaderboard?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 — scope decision captured through dialogue
+
+### 🏛️ ARCHITECTURAL PRINCIPLE LOCKED (applies across all GlitchTech surfaces)
+
+**ONE DATA MODEL, MANY VIEWS.** Every entity (product, review, benchmark run, GlitchMark score, BPR tier, affiliate link) exists ONCE in the Supabase Postgres database via Drizzle schema. UI surfaces are distinct queries over the same tables. Add a new surface = new query + route, never duplicate data. Update anywhere = every surface reflects it.
+
+**This is the "everything converges" insight formalized.** It drives every v4.0 phase decision below.
+
+### Decision: `/tech/benchmarks` becomes the Per-Benchmark Rankings surface
+
+User confirmed the Option A / hybrid direction. Each GlitchTech surface gets a distinct job:
+
+| Surface | Job |
+|---|---|
+| `/tech/reviews` | Editorial chronological feed |
+| `/tech/reviews/[slug]` | Full editorial article for one product |
+| `/tech/categories` | Category navigation hub |
+| `/tech/categories/[slug]` | Editorial category hub — curated featured picks, NOT a product list |
+| `/tech/categories/[slug]/rankings` | MASTER LEADERBOARD — all products in category, sortable by any column |
+| `/tech/compare` | Deliberate head-to-head (2–4 pinned) |
+| `/tech/benchmarks` | **Per-benchmark index — "I only care about Cinebench"** |
+| `/tech/benchmarks/[slug]` | **Every device ranked by that one benchmark, cross-category** |
+| `/tech/methodology` | Trust layer — how we test, the rubric, GlitchMark formula |
+
+### `/tech/benchmarks` structure (new — pivot from empty state to per-benchmark lens)
+
+- `/tech/benchmarks` — landing index: list of all benchmarks we run (Cinebench 2024 Multi/Single, Geekbench 6 Multi/Single, 3DMark Wild Life / Steel Nomad / Solar Bay, Blender, STREAM, HandBrakeCLI, FFmpeg, BG3, Cyberpunk/GPTK, etc.). Each entry = tile with "what this measures" blurb + "see rankings" CTA.
+- `/tech/benchmarks/[slug]` — single-benchmark leaderboard. Every product (cross-category) ranked by that benchmark's score, AC + Battery tabs where applicable.
+- **Affiliate prompts natural here** — a Cinebench-sorted list is exactly where creators shop.
+- **Editorial methodology blurb at top** — explains what the benchmark measures, links to methodology page.
+
+### Category detail page gets reframed
+
+To avoid redundancy with rankings, `/tech/categories/[slug]` becomes EDITORIAL instead of a ranked product list:
+
+- Featured reviews in this category
+- Editorial "best for" cards (best for developers, best for gamers, best on battery)
+- Latest published review in this category
+- Link to the full rankings
+
+The ranked table lives at `/tech/categories/[slug]/rankings`. Category detail is the magazine cover; rankings is the spec sheet.
+
+### Cross-linking principle (sweep all GlitchTech surfaces)
+
+Every surface should link to its siblings based on user intent:
+- Review detail → "See this product in rankings" + "Compare with another" + "Check price (affiliate)"
+- Rankings row → "Read full review" + "Compare" + "Affiliate link"
+- Compare → "Full review" of each + "See in rankings"
+- Benchmark detail → "Full methodology for this test" + "See [winner] review"
+- Methodology → "See current rankings"
+
+Elevated to pivot #16 — cross-cutting.
+
+
 
 ---
 
@@ -1669,6 +1721,17 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **15. BPR MEDAL VISUAL REDESIGN (overrides MEDAL-01 monochrome decision)**
 > User previously approved monochrome intensity palette (Platinum white, Gold #888, Silver outlined, Bronze dashed) during Phase 17 planning. After seeing it rendered in context on prod, user rejected it: "the actual metals themselves are crap." Issues: sizes inconsistent between tiers (possible CSS bug), flat geometric treatment doesn't evoke "medal" at a glance, doesn't carry visual weight expected of an awards/ranking badge. User's ask: "a metal system with real, like, good actual metals" — realistic medal illustrations (SVG or photographic-style render) that read as Platinum/Gold/Silver/Bronze intuitively, all tiers same size. Data layer is fine (Phase 17 MEDAL-01 work kept); only the visual component gets redesigned. Own small phase, likely bundled with GlitchTech brand-polish (pivot #13). Updates `src/components/tech/bpr-medal.tsx` and any associated CSS.
+>
+> **Surfaced during B.9 Benchmarks + IA dialogue (2026-04-24):**
+>
+> **16. GLITCHTECH IA — ONE DATA MODEL, MANY VIEWS (architectural principle)**
+> User locked the architecture: every entity lives ONCE in the Supabase DB (products, reviews, benchmark runs, GlitchMark scores, BPR tiers, affiliate links), and each UI surface is a distinct query/view over the same tables. No duplicated data, no sync issues. Add new surface = new query + route. Resolves the "everything converges" feeling. Drives downstream:
+> - Category detail page (`/tech/categories/[slug]`) pivots from ranked-product-list to editorial hub (featured picks, "best for" cards, latest review, link to rankings) — avoids redundancy with leaderboard
+> - `/tech/benchmarks` repurposed: landing index of benchmarks + `/tech/benchmarks/[slug]` per-benchmark cross-category leaderboard
+> - Every surface has a DISTINCT job (see B.9 audit entry for the 9-surface job matrix)
+> - Cross-linking sweep — every surface links to its siblings based on user intent (review → rankings + compare + affiliate; rankings row → review + compare + affiliate; etc.)
+>
+> Not a phase of its own — an architectural principle that every GlitchTech phase follows.
 
 
 ---
