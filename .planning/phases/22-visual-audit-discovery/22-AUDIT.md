@@ -6,7 +6,7 @@
 
 | Section | Status | Your last entry |
 |---|---|---|
-| A. Public Studios pages | 🟡 in-progress (A.1-A.6 done 2026-04-24) | A.6 portfolio — needs media-strategy phase |
+| A. Public Studios pages | 🟡 in-progress (A.1-A.7 done 2026-04-24) | A.7 artists — platform pivot, split v4.0/v5.0 |
 | B. Public GlitchTech pages | ⬜ pending | — |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
@@ -336,8 +336,65 @@ Portfolio, homepage Our Work, artists, trailer video surface (17.5 carry-over), 
 
 **Question for you:** What IS this surface — team members, collaborators, featured artists you've worked with, or all three?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchstudios.io/artists`
+
+### Visual
+
+- **No hero section** (mobile or desktop) — needs one. Simple static image is fine, carousel unnecessary. Just something with presence. `[POLISH]`
+- **Mobile list** is acceptable — keep as list, not carousel (carousel might hide artists). `[OK]`
+- **Desktop** — same carousel-vs-list reasoning; list is fine. `[OK]`
+
+### Content gaps (Trap Snyder profile)
+
+- Currently one artist: Trap Snyder (videographer, editor, music producer, beat maker).
+- Tapping his profile shows NOTHING — no music, no beats, no videos, no portfolio connection.
+- **Artist detail page must show all media related to the artist:** beats they produced, videos they made/appeared in, portfolio items, the stuff they're selling.
+- This is a data-relationship gap, not just design. Beats/videos/portfolio items need to be queryable by artist.
+
+### STRATEGIC EXPANSION — The Artist Platform Vision
+
+**User's vision, captured verbatim:** "not just be the studio platform but also give artists their own page. Remember like Facebook or like MySpace back in the day. Something that they can sign up as an artist, share their beats, share their page, upload videos for their beats, and that artist page, that artist detail page, becomes what they share of Glitch Studios — becomes their portfolio, becomes their main page — like that artist feels that we get, we give them even more value for being in our page."
+
+**What this means in scope:**
+
+1. **Artists as platform citizens, not just showcased names.** Glitch pivots from "studio that works with artists" → "studio + artist platform where creators have their own home."
+2. **Self-serve artist signup** — distinct role (or distinct onboarding) from client signup. Artist dashboard separate from client dashboard.
+3. **Artist profile editor** — bio, photo, links, genre, role tags (producer/videographer/singer/writer).
+4. **Artist media upload** — artists upload their own beats/videos/portfolio items via their dashboard. Admin-moderation workflow probably needed.
+5. **Artist-beats relationship** — every beat tied to its producer/artist (DB + UI).
+6. **Artist-video relationship** — every video attributed similarly.
+7. **Shareable artist page** — an artist sees their profile as THEIR portfolio; they share the Glitch URL the way they'd share a MySpace/Bandcamp/SoundCloud profile.
+8. **Discovery surfaces** — browse artists by role, genre, featured status.
+9. **Future possibilities:** artist revenue share / royalty tracking, DMs between artist+client, collab invites, "produced by" attribution on every beat purchase.
+
+### My honest recommendation (you asked — "tell me what you think")
+
+**This is a STRONG, differentiated vision.** It fits Glitch's "community first, red raw handmade" voice. It would distinguish Glitch from BeatStars (marketplace-only) and from generic studio sites (portfolio-only).
+
+**But it's a milestone-level pivot, not a v4.0 phase.** A full creator platform with self-serve signup + upload + moderation + revenue is weeks-to-months of work, delays production launch substantially, and the platform value is only proven once real artists use it.
+
+**Suggested split — ship in two waves:**
+
+**Wave 1 (v4.0, ships with the launch):**
+- Hero section on `/artists`
+- Rich "read-only" artist detail pages — Trap Snyder's profile shows his beats (via artist-beat relationship), his videos (via artist-media relationship via pivot #9 media model), his portfolio items. Proves the concept with real data.
+- Schema work: add `primary_artist_id` / `produced_by_artist_id` to beats, attribution on videos/portfolio items.
+- Admin flow: assign artist to existing content.
+- Result: launch with a curated, rich artist experience for Trap. Validates whether the "artist as platform citizen" framing lands.
+
+**Wave 2 (v5.0 — post-launch):**
+- Artist self-serve signup + role + dashboard
+- Artist media upload with moderation
+- Artist profile editor
+- Discovery pages (browse by role/genre)
+- Revenue share / royalty tracking
+- Multi-artist collab features
+
+**Why split:** launching with 1 artist (Trap) proves the design; you learn what real creators actually want before you build the self-serve version. Prevents building a platform that nobody uses how you imagined.
+
+**Tag:** `[IN v4.0 — Wave 1 only, own phase]` + `[v5.0 — Wave 2, deferred]`
+
+
 
 ---
 
@@ -1270,6 +1327,11 @@ Everything else. Ideas, complaints, competitors you envy, videos you've watched 
 >
 > **9. CROSS-CUTTING MEDIA/VIDEO STRATEGY PHASE (probably precedes individual surface redesigns)**
 > Portfolio, homepage Our Work, artists, trailer video surface (17.5 carry-over), GlitchTech review videos, beat making-of videos (pivot #4) — ALL of these are "where does video live?" surfaces. Rather than designing each in isolation, this phase defines the ONE canonical video model: YouTube-embed-only (pivot #2), admin flow for adding a video with metadata, how each surface queries/displays them, featured/hero selection logic, overlap rules (is portfolio canonical? does each surface pull from it?). Blocks or informs: Portfolio (A.6), homepage Our Work (A.1), artists (A.7), trailer 17.5 carry-over, GlitchTech review videos, beat making-of (pivot #4).
+>
+> **Surfaced during A.7 Artists audit (2026-04-24):**
+>
+> **10. ARTIST PLATFORM VISION — potential MySpace/Bandcamp-style creator platform (split v4.0 / v5.0)**
+> User wants Glitch to be more than a studio — also an artist platform where creators have their own Glitch page they'd share like a Bandcamp URL. Self-serve signup, media upload, portfolio editor, discovery. STRONG differentiated vision but milestone-level scope. Recommended split: **v4.0 Wave 1** ships rich "read-only" artist detail pages (Trap Snyder's profile shows his beats/videos/portfolio via artist attribution on existing content) + artist hero on /artists. Proves the concept with real data, validates the framing. **v5.0 Wave 2** adds self-serve signup, artist dashboard, media upload moderation, discovery, revenue share. Schema changes needed in v4.0 Wave 1: `primary_artist_id` / `produced_by_artist_id` on beats, artist attribution on videos + portfolio items. Admin flow to assign artists to existing content.
 
 
 ---
