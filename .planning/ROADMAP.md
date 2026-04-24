@@ -29,6 +29,14 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 
 **🚨 Launch-blocker cluster (parallelizable):**
 - [ ] **Phase 23: Debug Broken Pages & Missing Routes** — fix /admin homepage editor (404), /admin/clients + /admin/roles (500), /admin/media drag-drop upload, /forgot-password + /reset-password missing routes, /about dead link, mobile checkout Stripe failure, mobile nav double-tap bug
+  - **Plans:** 7 plans (all Wave 1 — all files disjoint, fully parallelizable)
+    - [ ] 23-01-PLAN.md — Admin homepage editor 404 (sidebar href fix + Quick Action tile)
+    - [ ] 23-02-PLAN.md — /about dead-link removal (GlitchTech nav + stray anchors → /tech/methodology)
+    - [ ] 23-03-PLAN.md — /admin/clients + /admin/roles 500s (shared local-repro diagnosis + targeted fix)
+    - [ ] 23-04-PLAN.md — Mobile nav double-tap (overlay useDragControls refactor + bottom-tab prefetch)
+    - [ ] 23-05-PLAN.md — Mobile checkout Stripe (route hardening + Vercel log diagnosis + real-device verify)
+    - [ ] 23-06-PLAN.md — /forgot-password + /reset-password scaffolds (Better Auth stub, Phase 24 handoff)
+    - [ ] 23-07-PLAN.md — /admin/media drag-drop (R2 CORS + env diagnosis, code-change only if diagnosis demands)
 - [ ] **Phase 24: Email Delivery End-to-End** — Resend wired + React Email templates (verify, reset, booking confirm, order receipt, newsletter, contact auto-reply, admin invite) — EMAIL-01..08
 - [ ] **Phase 25: Performance Audit + Fixes** — admin context switcher 2-3s → <500ms, admin edit→ingest 4s, public cold-nav p95, mobile LCP, image/bundle/query audits — PERF-01..07
 
