@@ -7,7 +7,7 @@
 | Section | Status | Your last entry |
 |---|---|---|
 | A. Public Studios pages | ✅ done 2026-04-24 | All 15 Studios surfaces audited |
-| B. Public GlitchTech pages | ⬜ pending | — |
+| B. Public GlitchTech pages | 🟡 in-progress (B.1 done 2026-04-24) | B.1 tech home — mobile nav bug + pattern repeats |
 | C. Auth + client dashboard | ⬜ pending | — |
 | D. Admin dashboard | ⬜ pending | — |
 | E. Global components | ⬜ pending | — |
@@ -628,8 +628,39 @@ URL base same (`http://localhost:3004`), routes under `/tech`.
 - One published review: is the home obviously thin?
 - The spotlight "editor's choice" language: right once we have 2-3 reviews? 20?
 
-> FEEDBACK:
-> 
+**Audited:** 2026-04-24 on production `https://glitchtech.io`
+
+### 🔴 BUG — Cross-brand nav click required TWO taps on mobile
+
+- From Studios sidebar, tapped the GlitchTech cross-link tile on mobile. First tap: nothing. Second tap: navigated.
+- Same smell as the A.12 "tap Beats icon does nothing, refresh needed" bug. Possibly a mobile click-handler race condition OR a slow nav hanging on initial tap.
+- `[BLOCK]` — pairs with A.12 nav bug. Same debug phase.
+
+### Structure — only 3 sections visible
+
+- Feature Reviews (carousel) — empty
+- Categories (tile grid) — empty
+- Advanced Comparison Tool — CTA
+
+**Missing:**
+- **Master leaderboard teaser / preview section** — the "persistent list" user referred to. Maps to RANK-* v3.0 carry-over (Phase 18 was never shipped). Tech home should have at least a preview of the master chart once it exists. `[IN v4.0 — part of RANK-* phase]`
+
+### Empty-data state
+
+- No real content: no featured reviews, no products in categories, no spotlight. Expected today because no published review has populated BPR.
+- Structure-wise: user says "overall it looks good" — structure is OK, just content-blocked. `[CONTENT-BLOCKED — unblocks with flagship review (FLAG-*)]`
+- Post-audit recommendation: once flagship review ships, re-audit tech home with real content to see if the structural choices still land.
+
+### Hero / splash observations
+
+- User note: *"brought me into Glitch Tech. effect not the other two"* — ambiguous phrasing; possibly noting the splash/hero effect felt different from Studios, or a stuttered render on the second-tap navigation. Flag for clarification when re-auditing post bug-fix.
+- Mobile hero has **the same logo-vs-button proportion issue as A.1 Studios homepage** — logo and title feel too small compared to the CTAs. `[POLISH — pairs with A.1 item]`
+
+### Pattern repeat
+
+- **Scroll-down arrow not clickable** — same POLISH item as A.1 Studios. Site-wide pattern. Gets fixed once, applies everywhere. `[POLISH — cross-surface]`
+
+
 
 ---
 
