@@ -20,11 +20,11 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-21)
 
 **Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience. Tech readers trust GlitchTek's hardware scorecards.
-**Current focus:** Phase 17 — bpr-medal-ui-methodology-page
+**Current focus:** Phase 17.5 — trailer-video-surface (next incomplete phase after 17 shipped; 999.2 closed as not-a-bug 2026-04-24)
 
 ## Current Position
 
-Phase: 999.2
+Phase: 17.5
 Plan: Not started
 
 Progress: [================----] 24/33 phases complete

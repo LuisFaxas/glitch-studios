@@ -30,7 +30,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [ ] **Phase 18: Category Master Leaderboard** — sortable/filterable master rankings per category (placeholder data, one laptop)
 - [ ] **Phase 19: Flagship MBP Review Published** — MBP 16 M5 Max 64GB shell with placeholder data; content swap in parallel
 - [ ] **Phase 20: GlitchTech Blog** — /tech/blog via brand discriminator (placeholder posts)
-- [ ] **Phase 20.5: Launch Blockers Bundle (NEW)** — perf audit (999.4), email/Resend (999.3), admin auth UX (999.2), UAT admin cleanup
+- [ ] **Phase 20.5: Launch Blockers Bundle (NEW)** — perf audit (999.4), email/Resend (999.3), UAT admin cleanup
 - [ ] **Phase 21: Deploy Hardening** — glitchtech.io domain, per-brand sitemap, OG tags
 
 ## Phase Details
@@ -105,7 +105,7 @@ Plans:
 
 **Not in scope:**
 - GlitchTech homepage carousels — per user direction, content modules populate naturally in Phase 17–19; homepage "feels plain" is expected until then.
-- Admin-side issues — already tracked in 999.2 / 999.4 / 999.5.
+- Admin-side issues — already tracked in 999.4 / 999.5 (999.2 closed 2026-04-24 as not-a-bug).
 - Email / Resend — 999.3.
 - Programmatic CLI for AI workflow — 999.6.
 
@@ -297,18 +297,15 @@ v3.0: 15 → 16 → 17 (parallel with 16) → 18 → 19 → 20 (parallel after 1
 
 ## Backlog
 
-### Phase 999.2: Admin Auth UX — Separate Admin Sign-in from Client Sidebar (BACKLOG)
+### Phase 999.2: Admin Auth UX — Separate Admin Sign-in from Client Sidebar (CLOSED — NOT A BUG)
 
-**Goal:** [Captured for future planning] Admin sign-in should not appear inside the client-facing sidebar. Admin and client auth should be visually and architecturally separated so clients never see an admin sign-in surface. Secondary nit: the sign-in link should open in a new tab.
+**Status:** Closed 2026-04-24 during `/gsd:discuss-phase 999.2`. Keep as-is.
 
-**Surfaced from:** Phase 16 UAT (2026-04-22) — when trying to log in to test the ingest wizard, the admin sign-in entry point was found inside the client sidebar, confusing for both roles.
+**Why closed:** The unified `/login` page already routes correctly by role (admins → `/admin`, clients → `/dashboard`) via Better Auth's `user.role`. The Phase 16 UAT finding was a first-impression nit, not broken behavior — admins clicking the sidebar "Sign In" tile end up in the right place. Phase 08 D-08 (no separate `/admin/login`, role-based post-login redirect) remains the correct architecture.
 
-**Requirements:** TBD (likely new AUTH-UX-* ids)
+**Not reopening unless:** Real users report confusion, or a security/compliance reason emerges to separate the auth surfaces.
 
-**Plans:** 4/4 plans complete
-
-Plans:
-- [ ] TBD (promote with /gsd:review-backlog when ready)
+**Originally surfaced from:** Phase 16 UAT (2026-04-22).
 
 ### Phase 999.4: Site-Wide Performance Audit (BACKLOG — CRITICAL)
 
@@ -374,7 +371,7 @@ Plans:
 **Plans:** 0 plans
 
 Plans:
-- [ ] TBD (promote with /gsd:review-backlog when ready — may merge into 999.2 admin UX polish pass)
+- [ ] TBD (promote with /gsd:review-backlog when ready — standalone admin polish, 999.2 was closed)
 
 ### Phase 999.3: Resend + Transactional Email Integration (BACKLOG)
 
