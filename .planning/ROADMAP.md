@@ -21,21 +21,55 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 
 ### 🚧 v4.0 Production Launch (Active)
 
-**Milestone Goal:** Get the site to production — polished, performant, content-complete, credible. Phase 22 is a visual audit that determines what phases 23+ actually are. GlitchMark ships as a distinct scoring system (not a rebrand of BPR). Remaining v3.0 launch work completes inside this milestone.
+**Milestone Goal:** Get the site to production — polished, performant, content-complete, credible. Audit-driven direction captured in [22-AUDIT.md](phases/22-visual-audit-discovery/22-AUDIT.md). GlitchMark ships as a new composite scoring system (distinct from BPR). Artist platform BETA with Trap Snyder as first beta user. Glitchy 3D mascot demoed. AI agents evaluated + implemented. Remaining v3.0 launch work completes inside this milestone.
 
-**Process:** Audit-driven. No speculative phase-planning before Phase 22 runs. Phases 23+ allocated after audit output is reviewed.
+**Process:** Audit completed 2026-04-24 — 25 phases derived from Sections A-J findings. Sequencing runs launch-blockers first, then foundation, then features, polish, revenue/growth, launch readiness.
 
-- [ ] **Phase 22: Visual Audit & Discovery** — walk the live site page by page, edge cases, v3.0 carry-over triage, GlitchMark formula design. Output: populated `.planning/phases/22-visual-audit-discovery/22-AUDIT.md` + derived phase list for 23+. Covers REQ-IDs AUDIT-01 to AUDIT-04.
-- [ ] **Phase 23+:** TBD — derived from Phase 22 audit. Known-needed themes below (each becomes 1+ phases based on audit):
-  - **Email delivery** (EMAIL-*, launch blocker) — Resend + React Email templates end-to-end
-  - **Performance** (PERF-*, launch blocker) — admin context switcher 3-4s, edit→ingest 4s, public cold-nav p95, mobile LCP, image/bundle/query audits
-  - **GlitchMark system** (GLITCHMARK-*, new feature) — formula + schema + UI + methodology — distinct from BPR
-  - **Category master leaderboard** (RANK-*, v3.0 carry) — `/tech/categories/[slug]/rankings` with GlitchMark + BPR columns
-  - **Flagship MBP review** (FLAG-*, v3.0 carry) — real content publish across all 5 surfaces
-  - **GlitchTek blog** (BLOG-*, v3.0 carry) — `/tech/blog` brand discriminator
-  - **Trailer video surface** (VIDEO-*, v3.0 17.5 carry) — two finished trailers surfaced
-  - **Per-page polish** (POLISH-*) — specific items from audit (homepage 4/10, beats 4/10, services, booking, contact, admin surfaces)
-  - **Production hardening** (DEPLOY-*) — glitchtech.io domain, sitemaps, OG, UAT admin delete, env audit, error tracking, analytics
+- [x] **Phase 22: Visual Audit & Discovery** — full site walk + v3.0 carry-over triage + GlitchMark role lock + derived 25 phases (completed 2026-04-24, AUDIT-01..04)
+
+**🚨 Launch-blocker cluster (parallelizable):**
+- [ ] **Phase 23: Debug Broken Pages & Missing Routes** — fix /admin homepage editor (404), /admin/clients + /admin/roles (500), /admin/media drag-drop upload, /forgot-password + /reset-password missing routes, /about dead link, mobile checkout Stripe failure, mobile nav double-tap bug
+- [ ] **Phase 24: Email Delivery End-to-End** — Resend wired + React Email templates (verify, reset, booking confirm, order receipt, newsletter, contact auto-reply, admin invite) — EMAIL-01..08
+- [ ] **Phase 25: Performance Audit + Fixes** — admin context switcher 2-3s → <500ms, admin edit→ingest 4s, public cold-nav p95, mobile LCP, image/bundle/query audits — PERF-01..07
+
+**🔐 Auth + UX:**
+- [ ] **Phase 26: Brand-Aware Auth UI Redesign** — brand-themed login/register/forgot/reset/verify surfaces; split register (customer wizard vs artist request flow); social login (Google + Meta + GitHub)
+
+**🎬 Foundation:**
+- [ ] **Phase 27: Media/Video Strategy Foundation** — canonical YouTube (long) + Instagram (short) embed pattern; schema `media_item` with entity attachments; admin add-video flow; reusable components (embed, carousel, hero)
+
+**🏆 Tech product core (the headline):**
+- [ ] **Phase 28: GlitchMark System** — research + lock formula, schema, compute on ingest, methodology page section — GLITCHMARK-01..08
+- [ ] **Phase 29: Master Leaderboard** — `/tech/categories/[slug]/rankings` sortable/filterable with GlitchMark + BPR + any benchmark column — RANK-01..07
+- [ ] **Phase 30: Per-Benchmark Pages** — `/tech/benchmarks` landing + `/tech/benchmarks/[slug]` cross-category leaderboard per benchmark
+- [ ] **Phase 31: Category Detail Editorial Reframe** — pivot `/tech/categories/[slug]` from ranked product list to curated editorial hub with "best for" cards
+
+**🎨 Artist platform BETA:**
+- [ ] **Phase 32: Artist Platform v4.0 Admin-Invite BETA** — artist role + dashboard (profile, upload beats/songs/videos/portfolio, light customization, custom T&Cs); admin-invite only (no public signup); cross-display with Studios store; revenue share ledger; Trap Snyder beta-tests
+
+**💰 Beats commerce overhaul:**
+- [ ] **Phase 33: Beat Licensing Model Research + Redesign** — research landscape (tiered vs flat-rate), decision on positioning, schema + UI redesign
+- [ ] **Phase 34: Custom Beats Offering + Services Redesign** — 2-tab Services page (Custom Beats / Studio Sessions), custom beat intake flow, admin custom-beat requests, home hero CTA pivots to Custom Beats
+
+**📝 Content:**
+- [ ] **Phase 35: Blog Redesign (cross-brand, research-driven, typed)** — research best blog pages, predetermined type taxonomy (comparison / buyer guide / news / making-of / tutorial), template per type, video-first pattern — covers Studios + GlitchTech — BLOG-01..05
+- [ ] **Phase 36: Flagship MBP Review + Trailer Videos** — publish MBP 16 M5 Max review (real content) + surface two trailers — FLAG-01..04, VIDEO-01..02
+
+**📱 Polish sweeps:**
+- [ ] **Phase 37: Mobile-Native-Feel Sweep** — swipe gestures on drawers/sheets/modals, swipe-minimize player bar, pull-to-refresh on lists, admin mobile redesign (dismissible sidebar OR bottom-nav)
+- [ ] **Phase 38: GlitchTech Brand-Wide Editorial Polish** — hero sections, review card hierarchy, category tile polish, cross-link sweep, BPR medal visual redesign (realistic illustrations replacing monochrome), missing methodology nav link, GlitchTech mobile menu content bleed fix
+- [ ] **Phase 39: Admin List-Page Pattern Rollout** — shared `AdminListPage` component (search/filter/view-switch/thumbnail preview), applied across beats/bundles/products/reviews/categories/benchmarks/blog
+- [ ] **Phase 40: Public Per-Page Polish** — home scroll arrow clickable (site-wide), mobile hero proportion fixes, "What We Do" overhaul, GlitchTech cross-link image, GlitchTech intro mobile — POLISH-*
+
+**💸 Revenue + growth:**
+- [ ] **Phase 41: Affiliate Marketing Infrastructure** — schema (`product_affiliate_links`), render logic on every product surface, tracking + cloaking via `/go/[...]`, FTC disclosure, admin analytics dashboard
+- [ ] **Phase 42: AI Agents — Discovery + Selection (discuss-only)** — evaluate platforms (Claude / OpenAI / OpenRouter / hybrid), evaluate orchestration (n8n vs custom), pick stack, document decisions — no code
+- [ ] **Phase 43: AI Agents — Implementation** — build agents on chosen stack: review writing assistant, benchmark organization, blog creation helper, multi-surface asset pipeline, admin helpers (auto-BPM, transcription, tagging), newsletter automation
+- [ ] **Phase 44: Glitchy 3D Mascot Integration (demo)** — bring 3D raccoon character on-site as visual presence + demo; idle loops, hover reactions, `/about` introduction page; NOT conversational in v4.0 (that's v5.0+); architect so conversational upgrade is wire-up, not rebuild
+
+**🚀 Launch readiness:**
+- [ ] **Phase 45: SEO + Growth Infrastructure** — structured data on all surfaces, meta/OG per route, per-brand sitemaps, canonical URLs, internal linking sweep, Core Web Vitals, rich results validation
+- [ ] **Phase 46: Production Deploy Hardening** — glitchtech.io custom domain + SSL, UAT admin cleanup (DEPLOY-05), env audit, error tracking (Sentry), analytics, backup verification, 301 www→apex — DEPLOY-01..09
 
 ### ⚠️ v3.0 GlitchTech Launch (Closed Partial 2026-04-24)
 
@@ -311,7 +345,7 @@ Plans:
 v1.0: 1 → 1.1 → 1.2 → 1.3 → 1.4 → 2 → 3 → 4 → 4.1
 v2.0: 5 → 6 → 6.1 → 7 → 7.1 → 7.2 → 7.3 → 7.4 → 7.5 → 7.6 → 8 → 9 → 10 → 11 → 12 → 14 (13 deferred)
 v3.0: 15 → 16 → 16.1 → 17 (shipped); 17.5, 18, 19, 20, 20.5, 21 carried over to v4.0
-v4.0: 22 (audit) → 23+ (derived from audit)
+v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 → 28/33/35 (parallel tracks) → 29 (headline leaderboard) → 30/31/32 (parallel) → 34/36 → 37-40 (polish sweeps) → 41/42 → 43/44 → 45 → 46 (launch)
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -351,7 +385,31 @@ v4.0: 22 (audit) → 23+ (derived from audit)
 | 20. GlitchTek Blog | v3.0 | 0/3 | Carried over → v4.0 BLOG-* | - |
 | 20.5. Launch Blockers Bundle | v3.0 | 0/0 | Carried over → v4.0 EMAIL-/PERF-/DEPLOY-* | - |
 | 21. Deploy Hardening | v3.0 | 0/3 | Carried over → v4.0 DEPLOY-* | - |
-| **22. Visual Audit & Discovery** | **v4.0** | **0/8** | **Active** | - |
+| 22. Visual Audit & Discovery | v4.0 | 8/8 | Complete | 2026-04-24 |
+| **23. Debug Broken Pages & Missing Routes** | **v4.0** | **0/tbd** | **Up next 🚨** | - |
+| 24. Email Delivery End-to-End | v4.0 | 0/tbd | Not started 🚨 | - |
+| 25. Performance Audit + Fixes | v4.0 | 0/tbd | Not started 🚨 | - |
+| 26. Brand-Aware Auth UI Redesign | v4.0 | 0/tbd | Not started | - |
+| 27. Media/Video Strategy Foundation | v4.0 | 0/tbd | Not started | - |
+| 28. GlitchMark System | v4.0 | 0/tbd | Not started | - |
+| 29. Master Leaderboard | v4.0 | 0/tbd | Not started | - |
+| 30. Per-Benchmark Pages | v4.0 | 0/tbd | Not started | - |
+| 31. Category Detail Editorial Reframe | v4.0 | 0/tbd | Not started | - |
+| 32. Artist Platform Admin-Invite BETA | v4.0 | 0/tbd | Not started | - |
+| 33. Beat Licensing Model Redesign | v4.0 | 0/tbd | Not started | - |
+| 34. Custom Beats + Services Redesign | v4.0 | 0/tbd | Not started | - |
+| 35. Blog Redesign (cross-brand) | v4.0 | 0/tbd | Not started | - |
+| 36. Flagship MBP Review + Trailers | v4.0 | 0/tbd | Not started | - |
+| 37. Mobile-Native-Feel Sweep | v4.0 | 0/tbd | Not started | - |
+| 38. GlitchTech Brand-Wide Polish | v4.0 | 0/tbd | Not started | - |
+| 39. Admin List-Page Pattern Rollout | v4.0 | 0/tbd | Not started | - |
+| 40. Public Per-Page Polish | v4.0 | 0/tbd | Not started | - |
+| 41. Affiliate Marketing Infrastructure | v4.0 | 0/tbd | Not started | - |
+| 42. AI Agents Discovery + Selection | v4.0 | 0/tbd | Not started | - |
+| 43. AI Agents Implementation | v4.0 | 0/tbd | Not started | - |
+| 44. Glitchy 3D Mascot (demo) | v4.0 | 0/tbd | Not started | - |
+| 45. SEO + Growth Infrastructure | v4.0 | 0/tbd | Not started | - |
+| 46. Production Deploy Hardening | v4.0 | 0/tbd | Not started | - |
 
 ## Backlog
 

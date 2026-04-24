@@ -130,20 +130,37 @@
 
 ## Traceability
 
-*Traceability table populated after Phase 22 produces phase structure. Phases 23+ are TBD at seed time; will link REQ-IDs to phases once roadmap is drafted.*
+*Phases 23-46 derived from Phase 22 audit output (committed 2026-04-24).*
 
-| REQ-ID | Category | Phase (TBD) |
-|--------|----------|-------------|
-| AUDIT-01 through AUDIT-04 | Audit | Phase 22 |
-| EMAIL-01 through EMAIL-08 | Email | TBD |
-| PERF-01 through PERF-07 | Performance | TBD |
-| GLITCHMARK-01 through GLITCHMARK-08 | GlitchMark | TBD |
-| RANK-01 through RANK-07 | Leaderboard | TBD (carry-over from v3.0) |
-| FLAG-01 through FLAG-04 | Flagship review | TBD (carry-over from v3.0) |
-| BLOG-01 through BLOG-05 | Tech blog | TBD (carry-over from v3.0) |
-| VIDEO-01 through VIDEO-02 | Trailers | TBD (carry-over from v3.0 17.5) |
-| DEPLOY-01 through DEPLOY-09 | Production hardening | TBD |
-| POLISH-* | Page polish | TBD — populated from audit |
+| REQ-ID | Category | Phase |
+|--------|----------|-------|
+| AUDIT-01 through AUDIT-04 | Audit | **22** (complete) |
+| EMAIL-01 through EMAIL-08 | Email | **24** |
+| PERF-01 through PERF-07 | Performance | **25** |
+| (auth UI redesign, no REQ-IDs yet — derived from audit C.1+C.2) | Auth UI | **26** |
+| (media foundation, no REQ-IDs yet — derived from pivots #2, #9) | Media/Video | **27** |
+| GLITCHMARK-01 through GLITCHMARK-08 | GlitchMark | **28** |
+| RANK-01 through RANK-07 | Leaderboard | **29** |
+| (per-benchmark pages, no REQ-IDs yet — derived from B.9 IA) | Per-benchmark lens | **30** |
+| (category editorial reframe, no REQ-IDs yet — derived from B.5) | Category editorial | **31** |
+| (artist platform, no REQ-IDs yet — derived from pivot #10 Wave 1) | Artist BETA | **32** |
+| (licensing model, no REQ-IDs yet — derived from pivot #7) | Licensing | **33** |
+| (custom beats + services, no REQ-IDs yet — derived from pivots #1, #8) | Custom Beats + Services | **34** |
+| BLOG-01 through BLOG-05 | Blog | **35** |
+| FLAG-01 through FLAG-04 | Flagship review | **36** |
+| VIDEO-01 through VIDEO-02 | Trailer videos | **36** (bundled with flagship) |
+| (mobile-native sweep, no REQ-IDs yet — derived from pivots #12, #22) | Mobile native feel | **37** |
+| (GlitchTech polish, no REQ-IDs yet — derived from pivots #13, #15, #16) | GlitchTech polish | **38** |
+| (admin list pattern, no REQ-IDs yet — derived from pivot #21) | Admin list pattern | **39** |
+| POLISH-* | Public per-page polish | **40** |
+| (affiliate marketing, no REQ-IDs yet — derived from pivot #14) | Affiliate marketing | **41** |
+| (AI agents discovery, no REQ-IDs yet — derived from pivot #19) | AI agents discovery | **42** |
+| (AI agents impl + newsletter automation, no REQ-IDs yet — pivots #19, #24) | AI agents impl | **43** |
+| (Glitchy mascot, no REQ-IDs yet — derived from pivot #25) | Glitchy 3D mascot | **44** |
+| (SEO infrastructure, no REQ-IDs yet — derived from pivot #17) | SEO | **45** |
+| DEPLOY-01 through DEPLOY-09 | Deploy hardening | **46** |
+
+**Note:** Phase-specific REQ-IDs (auth, media, artist, licensing, custom-beats, mobile, polish, admin, affiliate, AI, Glitchy, SEO) get generated during each phase's `/gsd:discuss-phase` step before planning. The seeded requirements above (EMAIL, PERF, GLITCHMARK, RANK, FLAG, BLOG, VIDEO, POLISH, DEPLOY) were already defined when v4.0 milestone was initialized.
 
 ---
 
