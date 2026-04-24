@@ -14,8 +14,8 @@
 | F. Cross-page flows | ✅ done 2026-04-24 | Skipped — fully covered across A-E |
 | G. Edge cases | ✅ done 2026-04-24 | Skipped — fully covered across A-E |
 | H. v3.0 carry-over triage | ✅ done 2026-04-24 | All items triaged; nothing dropped; 999.6 CLI deferred post-launch |
-| I. GlitchMark design | ⬜ pending | — |
-| J. Brain dump (catch-all) | ⬜ pending | — |
+| I. GlitchMark design | ✅ done 2026-04-24 | Role + scope locked; formula deferred to phase discuss-step |
+| J. Brain dump (catch-all) | ✅ done 2026-04-24 | 24 pivots captured across audit |
 
 **How to use this doc:**
 
@@ -1917,6 +1917,35 @@ Every pending v3.0 item. Tag each `[IN v4.0]` / `[BACKLOG]` / `[DROP]`.
 ---
 
 # SECTION I — GlitchMark Design Session
+
+**Status: ANSWERED via B.6 dialogue (2026-04-24).** User clarified role + positioning during the leaderboard conversation. Remaining formula details deferred to the GlitchMark phase's own discuss-step.
+
+### What we know (locked)
+
+- **What it is:** Aggregate score combining all benchmark numbers for a device into ONE sortable number. Rubric-driven consistency (every device runs the same 15-18 tests) makes it comparable.
+- **Per-what:** Per-device (per-review). Shows up per-row on the master leaderboard.
+- **Relationship to BPR:** DIFFERENT purposes, both visible. BPR = editorial tier grade (qualitative, 4 tiers). GlitchMark = raw aggregate score (quantitative, sortable number). Sits beside BPR medal on reviews; serves as default sort-key on leaderboard.
+- **Input:** Every benchmark we record (Cinebench, Geekbench, 3DMark, Blender, STREAM, etc.). Not limited to the 7 BPR-eligible disciplines.
+- **Scope:** Laptops + mobile devices first. Expand to more categories later.
+- **Trust:** Formula is public on methodology page (or its own `/tech/methodology` section). Not proprietary/closed.
+- **Industry-standard ambition:** Explicit goal — could become a cross-industry reference score.
+- **Surfaces:** Master leaderboard column (sortable), review detail card (alongside BPR medal), per-benchmark pages may show GlitchMark rank too.
+
+### What's deferred to the GlitchMark phase's discuss-step
+
+- **Exact formula.** Candidates: geometric mean of normalized scores (industry-standard composite pattern, PassMark uses this), arithmetic mean of z-scores, weighted mean with per-discipline weights. Decision belongs inside the phase — needs research + simulation (what does MBP M5 Max actually score? feels right?).
+- **Normalization approach.** Raw scores can't be averaged directly (Cinebench Multi = 20000, Geekbench Single = 3000 have different scales). Per-benchmark range-scale or z-score normalization needed.
+- **Output range.** 0-100? 0-1000? Unbounded? User hasn't locked this yet.
+- **Missing-benchmark handling.** What if a device only ran 10 of 18 tests? GlitchMark still computes, marks as partial? Or requires minimum test count?
+- **Versioning.** GlitchMark v1 locked with v1.1 rubric. v2 when formula changes — old scores preserve for historical reviews?
+
+### Phase structure
+
+- GlitchMark phase has its OWN `/gsd:discuss-phase` gate before implementation. Formula + schema + UI all decided in that discussion.
+- Depends on: stable review dataset (FLAG-* ships first so the formula has real data to validate against) + master leaderboard (needs a home for the GlitchMark column).
+- Captured in REQUIREMENTS.md as GLITCHMARK-01 through GLITCHMARK-08.
+
+
 
 **Your concept (captured 2026-04-23 05:55 UTC):**
 > "add up all the benchmarks of a specific category then either divide them or something and create one number, that adds up and considers all the other numbers... from cinebench to 3mark and beyond all recorded in the masterchart, then all produce a glitchmark, this could be an industry standard."
