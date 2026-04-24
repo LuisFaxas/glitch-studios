@@ -83,7 +83,7 @@ function getStudiosSections(unreadCount: number): NavSection[] {
     {
       title: "Homepage",
       items: [
-        { label: "Homepage", href: "/admin/homepage", icon: Layout, permission: "manage_settings" },
+        { label: "Homepage", href: "/admin/settings/homepage", icon: Layout, permission: "manage_settings" },
       ],
     },
   ]
@@ -126,7 +126,10 @@ function getSharedSections(): NavSection[] {
 function isActiveRoute(pathname: string, href: string): boolean {
   if (href === "/admin") return pathname === "/admin"
   if (href === "/admin/tech") return pathname === "/admin/tech"
-  return pathname.startsWith(href)
+  // Site Settings has sibling entries under /admin/settings/* (e.g. Homepage), so use exact match.
+  if (href === "/admin/settings") return pathname === "/admin/settings"
+  if (href === pathname) return true
+  return pathname.startsWith(href + "/")
 }
 
 function SidebarContent({
