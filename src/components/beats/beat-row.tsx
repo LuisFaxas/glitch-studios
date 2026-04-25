@@ -6,8 +6,13 @@ import { AnimatePresence } from "motion/react"
 import { useAudioPlayer } from "@/components/player/audio-player-provider"
 import { Waveform } from "@/components/player/waveform"
 import { BeatDetailPanel } from "@/components/beats/beat-detail-panel"
+import { BeatMadeByHand } from "@/components/beats/beat-made-by-hand"
 import { Badge } from "@/components/ui/badge"
 import type { BeatSummary } from "@/types/beats"
+import type { InferSelectModel } from "drizzle-orm"
+import type { mediaItems } from "@/db/schema"
+
+type MediaItem = InferSelectModel<typeof mediaItems>
 
 function formatTime(seconds: number): string {
   if (!seconds || !isFinite(seconds)) return "0:00"
@@ -20,9 +25,10 @@ interface BeatRowProps {
   beat: BeatSummary
   isExpanded: boolean
   onToggleExpand: () => void
+  media: MediaItem[]
 }
 
-export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
+export function BeatRow({ beat, isExpanded, onToggleExpand, media }: BeatRowProps) {
   const { currentBeat, isPlaying, currentTime, duration, play, pause, seek } = useAudioPlayer()
   const isCurrentBeat = currentBeat?.id === beat.id
   const isActivePlaying = isCurrentBeat && isPlaying
@@ -189,7 +195,12 @@ export function BeatRow({ beat, isExpanded, onToggleExpand }: BeatRowProps) {
 
       {/* Expanded detail panel */}
       <AnimatePresence>
-        {isExpanded && <BeatDetailPanel beat={beat} />}
+        {isExpanded && (
+          <>
+            <BeatDetailPanel beat={beat} />
+            <BeatMadeByHand items={media} />
+          </>
+        )}
       </AnimatePresence>
     </div>
   )

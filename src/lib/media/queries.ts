@@ -1,6 +1,6 @@
 import { db } from "@/lib/db"
 import { mediaItems } from "@/db/schema"
-import { and, asc, eq } from "drizzle-orm"
+import { and, asc, eq, inArray } from "drizzle-orm"
 
 /**
  * Fetch all media_item rows attached to a given entity, ordered by sort_order asc.
@@ -49,4 +49,38 @@ export async function getAllHomeFeatureMedia() {
     .from(mediaItems)
     .where(eq(mediaItems.attachedToType, "home_feature"))
     .orderBy(asc(mediaItems.sortOrder))
+}
+
+/**
+ * Batch read: fetch all media_item rows attached to the given beat IDs and
+ * group them by beat ID. Used by the public beats catalog page so the entire
+ * catalog's media is fetched in a single query and prop-passed top-down to
+ * the (entirely client-side) BeatCatalog → BeatList → BeatRow chain.
+ *
+ * Returns an empty object when `beatIds` is empty (avoids inArray() on []).
+ * Sort order: sort_order asc within each beat group.
+ */
+export async function getMediaByBeatIds(
+  beatIds: string[],
+): Promise<Record<string, Awaited<ReturnType<typeof getMediaForEntity>>>> {
+  if (beatIds.length === 0) return {}
+
+  const rows = await db
+    .select()
+    .from(mediaItems)
+    .where(
+      and(
+        eq(mediaItems.attachedToType, "beat"),
+        inArray(mediaItems.attachedToId, beatIds),
+      ),
+    )
+    .orderBy(asc(mediaItems.sortOrder))
+
+  const grouped: Record<string, typeof rows> = {}
+  for (const row of rows) {
+    const key = row.attachedToId
+    if (!grouped[key]) grouped[key] = []
+    grouped[key].push(row)
+  }
+  return grouped
 }

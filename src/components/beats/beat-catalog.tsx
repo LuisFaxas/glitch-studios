@@ -8,6 +8,10 @@ import { FilterBar } from "@/components/beats/filter-bar"
 import { BeatCardGrid } from "@/components/beats/beat-card-grid"
 import { BeatList } from "@/components/beats/beat-list"
 import type { BeatSummary } from "@/types/beats"
+import type { InferSelectModel } from "drizzle-orm"
+import type { mediaItems } from "@/db/schema"
+
+type MediaItem = InferSelectModel<typeof mediaItems>
 
 const STORAGE_KEY = "beats-view"
 const VALID_VIEWS = ["compact", "card", "list"] as const
@@ -22,12 +26,14 @@ interface BeatCatalogProps {
   beats: BeatSummary[]
   filterOptions: { genres: string[]; keys: string[]; moods: string[] }
   hasActiveFilters: boolean
+  mediaByBeatId: Record<string, MediaItem[]>
 }
 
 function BeatCatalogInner({
   beats,
   filterOptions,
   hasActiveFilters,
+  mediaByBeatId,
 }: BeatCatalogProps) {
   const [view, setView] = useQueryState(
     "view",
@@ -89,7 +95,11 @@ function BeatCatalogInner({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <BeatList beats={beats} hasActiveFilters={hasActiveFilters} />
+                <BeatList
+                  beats={beats}
+                  hasActiveFilters={hasActiveFilters}
+                  mediaByBeatId={mediaByBeatId}
+                />
               </motion.div>
             ) : (
               <motion.div

@@ -153,7 +153,7 @@ export default async function ReviewDetailPage({ params }: Props) {
         />
         <ReviewProsCons pros={review.pros} cons={review.cons} />
         <ReviewGallery images={review.gallery} />
-        <ReviewVideoEmbed videoUrl={review.videoUrl} reviewTitle={review.title} />
+        <ReviewVideoEmbed videoUrl={review.videoUrl} reviewTitle={review.title} reviewId={review.id} />
         <ProductSpecsTable specs={specs} />
         <ProductBenchmarksTable runs={benchmarks} />
         <ReviewAudience audienceFor={review.audienceFor} audienceNotFor={review.audienceNotFor} />

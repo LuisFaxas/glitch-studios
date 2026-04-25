@@ -3,13 +3,18 @@
 import { useState } from "react"
 import { BeatRow } from "@/components/beats/beat-row"
 import type { BeatSummary } from "@/types/beats"
+import type { InferSelectModel } from "drizzle-orm"
+import type { mediaItems } from "@/db/schema"
+
+type MediaItem = InferSelectModel<typeof mediaItems>
 
 interface BeatListProps {
   beats: BeatSummary[]
   hasActiveFilters: boolean
+  mediaByBeatId: Record<string, MediaItem[]>
 }
 
-export function BeatList({ beats }: BeatListProps) {
+export function BeatList({ beats, mediaByBeatId }: BeatListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
   if (beats.length === 0) return null
@@ -40,6 +45,7 @@ export function BeatList({ beats }: BeatListProps) {
           onToggleExpand={() =>
             setExpandedId(expandedId === beat.id ? null : beat.id)
           }
+          media={mediaByBeatId[beat.id] ?? []}
         />
       ))}
     </div>

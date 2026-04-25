@@ -5,6 +5,7 @@ import { getPublishedBundles } from "@/actions/bundles"
 import { BeatCatalog } from "@/components/beats/beat-catalog"
 import { BeatsHeroCarousel } from "@/components/beats/beats-hero-carousel"
 import { getBookingLive } from "@/lib/get-booking-live"
+import { getMediaByBeatIds } from "@/lib/media/queries"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -38,6 +39,8 @@ export default async function BeatsPage({
     (v) => v !== undefined
   )
 
+  const mediaByBeatId = await getMediaByBeatIds(beats.map((b) => b.id))
+
   return (
     <div className="flex flex-col gap-6">
       <BeatsHeroCarousel bundles={bundles} bookingLive={bookingLive} />
@@ -46,6 +49,7 @@ export default async function BeatsPage({
           beats={beats}
           filterOptions={filterOptions}
           hasActiveFilters={hasActiveFilters}
+          mediaByBeatId={mediaByBeatId}
         />
       </div>
     </div>

@@ -1,16 +1,10 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, Play } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
+import { MediaEmbed } from "@/components/media/media-embed"
+import { extractYouTubeId } from "@/lib/tech/youtube"
 import type { PortfolioItem } from "@/types"
-
-function extractYouTubeId(url: string): string | null {
-  const match = url.match(
-    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-  )
-  return match ? match[1] : null
-}
 
 function Section({
   title,
@@ -31,55 +25,33 @@ function Section({
 }
 
 export function CaseStudyContent({ item }: { item: PortfolioItem }) {
-  const [playing, setPlaying] = useState(false)
   const videoId = item.videoUrl ? extractYouTubeId(item.videoUrl) : null
 
   return (
     <div>
-      {/* Hero media area */}
-      <div className="relative aspect-video max-h-[70vh] w-full bg-[#111111]">
-        {playing && videoId ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+      <div className="relative max-h-[70vh] w-full bg-[#111111]">
+        {videoId ? (
+          <MediaEmbed
+            externalId={videoId}
             title={item.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="absolute inset-0 w-full h-full"
+            thumbnailUrl={item.thumbnailUrl ?? null}
+            sizes="100vw"
+            priority
           />
+        ) : item.thumbnailUrl ? (
+          <div className="aspect-video relative">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={item.thumbnailUrl}
+              alt={item.title}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
         ) : (
-          <>
-            {item.thumbnailUrl ? (
-              <img
-                src={item.thumbnailUrl}
-                alt={item.title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            ) : videoId ? (
-              <img
-                src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
-                alt={item.title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            ) : (
-              <div className="absolute inset-0 bg-[#111111]" />
-            )}
-
-            {videoId && (
-              <button
-                onClick={() => setPlaying(true)}
-                className="absolute inset-0 flex items-center justify-center"
-                aria-label={`Play ${item.title}`}
-              >
-                <div className="w-20 h-20 rounded-none bg-[#000000]/60 hover:bg-[#000000]/80 border border-[#222222] flex items-center justify-center transition-colors">
-                  <Play className="w-8 h-8 text-white ml-1" fill="white" />
-                </div>
-              </button>
-            )}
-          </>
+          <div className="aspect-video bg-[#111111]" />
         )}
       </div>
 
-      {/* Content */}
       <div className="max-w-4xl mx-auto px-4 py-12 md:py-16">
         <Link
           href="/portfolio"

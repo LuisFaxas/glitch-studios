@@ -7,7 +7,7 @@ import { getPublishedBeats } from "@/actions/beats"
 import { StudiosHeroSection } from "@/components/home/studios-hero-section"
 import { ServicesOverview } from "@/components/home/services-overview"
 import { FeaturedCarousel } from "@/components/home/featured-carousel"
-import { VideoPortfolioCarousel } from "@/components/home/video-portfolio-carousel"
+import { HomeFeaturedWorkGrid } from "@/components/media/home-featured-work-grid"
 import { TestimonialsCarousel } from "@/components/home/testimonials-carousel"
 import { BlogSection } from "@/components/home/blog-section"
 import { GlitchTechPromoSection } from "@/components/home/glitch-tech-promo-section"
@@ -94,7 +94,7 @@ export default async function HomePage() {
       <FeaturedCarousel beats={beatsList} />
     ),
     services: () => <ServicesOverview services={servicesList} />,
-    portfolio: () => <VideoPortfolioCarousel portfolioItems={portfolioList} />,
+    portfolio: () => <HomeFeaturedWorkGrid />,
     glitch_tech_promo: () => <GlitchTechPromoSection />,
     testimonials: () => <TestimonialsCarousel testimonials={testimonialsList} />,
     blog: () => <BlogSection posts={blogList} />,
@@ -140,7 +140,7 @@ export default async function HomePage() {
             <StudiosHeroSection />
             <ServicesOverview services={servicesList} />
             <FeaturedCarousel beats={beatsList} />
-            <VideoPortfolioCarousel portfolioItems={portfolioList} />
+            <HomeFeaturedWorkGrid />
             <GlitchTechPromoSection />
             <TestimonialsCarousel testimonials={testimonialsList} />
             <BlogSection posts={blogList} />
