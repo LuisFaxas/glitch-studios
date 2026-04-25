@@ -21,6 +21,8 @@
   inset: 0;
 }
 
+/* Frost scrim keeps mobile lanyard text legible over the pixel canvas.
+   Disabled on desktop (≥768px) so the rich pixel colors aren't muted. */
 .pixel-card::after {
   content: '';
   position: absolute;
@@ -31,6 +33,12 @@
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   border-radius: inherit;
+}
+
+@media (min-width: 768px) {
+  .pixel-card::after {
+    display: none;
+  }
 }
 
 .pixel-card::before {
