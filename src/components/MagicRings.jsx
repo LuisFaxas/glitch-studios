@@ -39,8 +39,12 @@ float ring(vec2 p, float ri, float cut, float t0, float px) {
   return h * exp(-uAttenuation * d) * fade(t);
 }
 
+uniform float uFitMax;
+
 void main() {
-  float px = 1.0 / min(uResolution.x, uResolution.y);
+  float pxMin = 1.0 / min(uResolution.x, uResolution.y);
+  float pxMax = 1.0 / max(uResolution.x, uResolution.y);
+  float px = mix(pxMin, pxMax, uFitMax);
   vec2 p = (gl_FragCoord.xy - 0.5 * uResolution.xy) * px;
   float cr = cos(uRotation), sr = sin(uRotation);
   p = mat2(cr, -sr, sr, cr) * p;
@@ -85,6 +89,7 @@ export default function MagicRings({
   hoverScale = 1.2,
   parallax = 0.05,
   clickBurst = false,
+  fitMax = false,
 }) {
   const mountRef = useRef(null);
   const propsRef = useRef(null);
@@ -98,7 +103,7 @@ export default function MagicRings({
     color, colorTwo, speed, ringCount, attenuation, lineThickness,
     baseRadius, radiusStep, scaleRate, opacity, noiseAmount,
     rotation, ringGap, fadeIn, fadeOut, followMouse, mouseInfluence,
-    hoverScale, parallax, clickBurst,
+    hoverScale, parallax, clickBurst, fitMax,
   };
 
   useEffect(() => {
@@ -147,6 +152,7 @@ export default function MagicRings({
       uHoverScale: { value: 1 },
       uParallax: { value: 0 },
       uBurst: { value: 0 },
+      uFitMax: { value: 0 },
     };
 
     const material = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms, transparent: true });
@@ -216,6 +222,7 @@ export default function MagicRings({
       uniforms.uHoverScale.value = p.hoverScale;
       uniforms.uParallax.value = p.parallax;
       uniforms.uBurst.value = p.clickBurst ? burstRef.current : 0;
+      uniforms.uFitMax.value = p.fitMax ? 1 : 0;
 
       renderer.render(scene, camera);
     };

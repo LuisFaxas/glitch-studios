@@ -87,6 +87,7 @@ export function LoginForm({ availableProviders }: LoginFormProps) {
 
   return (
     <>
+      {/* Desktop rings — full-width, normal sizing */}
       <div
         aria-hidden="true"
         className="fixed inset-0 z-0 hidden md:block"
@@ -106,6 +107,29 @@ export function LoginForm({ availableProviders }: LoginFormProps) {
           hoverScale={1.15}
           parallax={0.06}
           clickBurst
+        />
+      </div>
+
+      {/* Mobile rings — vertical fit (sized to longer axis = viewport height) */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 z-0 md:hidden"
+      >
+        <MagicRings
+          color="#ffffff"
+          colorTwo="#ffffff"
+          ringCount={5}
+          baseRadius={0.36}
+          radiusStep={0.12}
+          opacity={0.85}
+          lineThickness={1.6}
+          ringGap={1.4}
+          noiseAmount={0.05}
+          followMouse
+          mouseInfluence={0.12}
+          hoverScale={1.1}
+          parallax={0.04}
+          fitMax
         />
       </div>
 

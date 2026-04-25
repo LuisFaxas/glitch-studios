@@ -273,8 +273,23 @@ export default function PixelCard({
     if (containerRef.current) {
       observer.observe(containerRef.current);
     }
+
+    // Touch / non-hover devices: trigger the appear animation once on mount
+    // so the pixel effect is visible without requiring hover. On hover-capable
+    // devices the existing onMouseEnter / onMouseLeave handlers stay in charge.
+    const isTouchOnly =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(hover: none)').matches;
+    let appearTimer: ReturnType<typeof setTimeout> | null = null;
+    if (isTouchOnly) {
+      appearTimer = setTimeout(() => {
+        handleAnimation('appear');
+      }, 80);
+    }
+
     return () => {
       observer.disconnect();
+      if (appearTimer) clearTimeout(appearTimer);
       if (animationRef.current !== null) {
         cancelAnimationFrame(animationRef.current);
       }
