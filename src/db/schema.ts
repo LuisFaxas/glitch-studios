@@ -1132,3 +1132,44 @@ export const artistApplicationsRelations = relations(artistApplications, ({ one 
     references: [user.id],
   }),
 }))
+
+// === Media Items (Phase 27) ===
+
+export const mediaKindEnum = pgEnum("media_kind", [
+  "youtube_video",
+  "instagram_post",
+])
+
+export const mediaItems = pgTable(
+  "media_item",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    kind: mediaKindEnum("kind").notNull(),
+    externalId: text("external_id").notNull(),
+    externalUrl: text("external_url").notNull(),
+    title: text("title"),
+    description: text("description"),
+    thumbnailUrl: text("thumbnail_url"),
+    durationSec: integer("duration_sec"),
+    attachedToType: text("attached_to_type").notNull(),
+    attachedToId: uuid("attached_to_id").notNull(),
+    isPrimary: boolean("is_primary").notNull().default(false),
+    sortOrder: integer("sort_order").notNull().default(0),
+    createdBy: text("created_by").references(() => user.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_media_item_attachment").on(t.attachedToType, t.attachedToId),
+    index("idx_media_item_kind_external").on(t.kind, t.externalId),
+  ],
+)
+
+export const mediaItemsRelations = relations(mediaItems, ({ one }) => ({
+  creator: one(user, {
+    fields: [mediaItems.createdBy],
+    references: [user.id],
+  }),
+}))
