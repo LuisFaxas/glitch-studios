@@ -166,7 +166,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - Dropping deprecated `video_url` columns (separate cleanup phase after one-release deprecation window)
 - AI-generated thumbnails / preview clips
 
-**Plans:** 7 plans across 4 waves
+**Plans:** 2/7 plans executed
 
 **Wave layout:**
 - Wave 1 (parallel, no deps): 27-01 (schema + migration), 27-02 (next.config i.ytimg.com)
@@ -175,8 +175,8 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - Wave 4 (sequential, depends on 03 + 04 + 06): 27-07 (public surfaces — home grid + ReviewVideoEmbed + VideoCard refactors + beat detail)
 
 Plans:
-- [ ] 27-01-PLAN.md (Wave 1) — Drizzle `mediaItems` + `mediaKindEnum` schema + idempotent SQL migration `0007_phase27_media.sql` mirroring Phase 26 pattern + standalone postgres-js runner
-- [ ] 27-02-PLAN.md (Wave 1) — Whitelist `i.ytimg.com` in `next.config.ts` `images.remotePatterns` (blocks `<MediaEmbed>` thumbnails otherwise)
+- [x] 27-01-PLAN.md (Wave 1) — Drizzle `mediaItems` + `mediaKindEnum` schema + idempotent SQL migration `0007_phase27_media.sql` mirroring Phase 26 pattern + standalone postgres-js runner
+- [x] 27-02-PLAN.md (Wave 1) — Whitelist `i.ytimg.com` in `next.config.ts` `images.remotePatterns` (blocks `<MediaEmbed>` thumbnails otherwise)
 - [ ] 27-03-PLAN.md (Wave 2) — `<MediaEmbed>` + `<MediaEmbedThumbnail>` + `useFinePointer` + `useReducedMotion` hooks (`youtube-nocookie.com`, hqdefault fallback, three render states, accessibility-first)
 - [ ] 27-04-PLAN.md (Wave 2) — `fetchYouTubeOEmbed` server-only fetcher + `getMediaForEntity`/`getHomeFeatureMedia` queries + 7 server actions (attach/update/remove/reorder/setPrimary/pinToHomeFeatures/setHomeFeatures) all guarded by `requirePermission("manage_content")`
 - [ ] 27-05-PLAN.md (Wave 3) — `<AddVideoDialog>` + `<MediaItemAttachmentList>` (dnd-kit reorder, AlertDialog destructive remove, verbatim UI-SPEC copy) + mount on 4 entity edit pages (beat / portfolio_item / service / tech_review) + add shadcn `alert-dialog` primitive
@@ -504,7 +504,7 @@ v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 →
 | 24. Email Delivery End-to-End | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 25. Performance Audit + Fixes | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 26. Brand-Aware Auth UI Redesign | v4.0 | 12/12 | Complete    | 2026-04-25 |
-| 27. Media/Video Strategy Foundation | v4.0 | 0/7 | Planned | - |
+| 27. Media/Video Strategy Foundation | v4.0 | 2/7 | In Progress|  |
 | 28. GlitchMark System | v4.0 | 0/tbd | Not started | - |
 | 29. Master Leaderboard | v4.0 | 0/tbd | Not started | - |
 | 30. Per-Benchmark Pages | v4.0 | 0/tbd | Not started | - |
