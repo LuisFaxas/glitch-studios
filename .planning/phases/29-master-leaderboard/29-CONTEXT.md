@@ -47,7 +47,7 @@ Build `/tech/categories/[slug]/rankings` — the master leaderboard page where e
   2. Year — multi-select chips (year values from current category corpus)
   3. CPU kind — multi-select chips: Apple Silicon / Intel / AMD / Snapdragon (derive from product spec; expand list if more vendors appear)
   4. RAM — multi-select chips: 8 / 16 / 32 / 64+ GB (bucketed)
-  5. Storage — multi-select chips: <512 GB / 512 GB / 1 TB / 2 TB+ (bucketed)
+  5. Storage — multi-select chips: 512 GB / 1 TB / 2 TB+ (bucketed). **AMENDED 2026-04-25 during plan-check:** dropped the `<512 GB` bucket per RESEARCH §Open Questions Q1 — no modern reviewable laptop ships below 512 GB; keeps the filter set tight without sacrificing coverage. If a budget product enters the catalog later, restore the bucket.
   6. Medal tier — multi-select chips: Platinum / Gold / Silver / Bronze (BPR tiers)
   7. Sub-category — multi-select chips (only when current category has descendants; otherwise hidden)
 - **D-06:** Zero-results behavior: dedicated empty state above (or replacing) the table area with copy "No reviews match these filters" + a "Reset filters" button that clears all `nuqs` params. Filter sidebar stays visible/accessible.
