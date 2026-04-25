@@ -47,7 +47,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 27: Media/Video Strategy Foundation** — canonical YouTube embed pattern (`<MediaEmbed>`); polymorphic `media_item` schema with entity attachments; admin add-video flow + home features picker; 7 plans across 4 waves (completed 2026-04-25)
 
 **🏆 Tech product core (the headline):**
-- [ ] **Phase 28: GlitchMark System** — research + lock formula, schema, compute on ingest, methodology page section — GLITCHMARK-01..08
+- [x] **Phase 28: GlitchMark System** — research + lock formula, schema, compute on ingest, methodology page section — GLITCHMARK-01..08 (completed 2026-04-25)
 - [ ] **Phase 29: Master Leaderboard** — `/tech/categories/[slug]/rankings` sortable/filterable with GlitchMark + BPR + any benchmark column — RANK-01..07
 - [ ] **Phase 30: Per-Benchmark Pages** — `/tech/benchmarks` landing + `/tech/benchmarks/[slug]` cross-category leaderboard per benchmark
 - [ ] **Phase 31: Category Detail Editorial Reframe** — pivot `/tech/categories/[slug]` from ranked product list to curated editorial hub with "best for" cards
@@ -505,7 +505,7 @@ v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 →
 | 25. Performance Audit + Fixes | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 26. Brand-Aware Auth UI Redesign | v4.0 | 12/12 | Complete    | 2026-04-25 |
 | 27. Media/Video Strategy Foundation | v4.0 | 7/7 | Complete    | 2026-04-25 |
-| 28. GlitchMark System | v4.0 | 0/tbd | Not started | - |
+| 28. GlitchMark System | v4.0 | 4/4 | Complete    | 2026-04-25 |
 | 29. Master Leaderboard | v4.0 | 0/tbd | Not started | - |
 | 30. Per-Benchmark Pages | v4.0 | 0/tbd | Not started | - |
 | 31. Category Detail Editorial Reframe | v4.0 | 0/tbd | Not started | - |
