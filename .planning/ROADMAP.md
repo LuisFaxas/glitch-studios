@@ -89,7 +89,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - Forgot/reset route scaffolds from Phase 23-06 (Better Auth stubs, handoff to this phase)
 - Brand host middleware already routes Studios vs GlitchTech
 
-**Requirements:** Auth UI REQ-IDs to be generated during `/gsd:discuss-phase` (derived from audit C.1 + C.2 consolidated scope; no REQ-IDs seeded yet).
+**Requirements:** AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05, AUTH-06, AUTH-07, AUTH-08, AUTH-09, AUTH-10, AUTH-11, AUTH-12, AUTH-13, AUTH-14, AUTH-15, AUTH-16, AUTH-17, AUTH-18, AUTH-19, AUTH-20, AUTH-21, AUTH-22, AUTH-23, AUTH-24, AUTH-25, AUTH-26, AUTH-27, AUTH-28, AUTH-29, AUTH-30, AUTH-31, AUTH-32
 
 **Success Criteria** (what must be TRUE):
 1. All five auth surfaces (`/login`, `/register`, `/forgot-password`, `/reset-password`, `/verify-email`) render distinct Studios vs GlitchTech theming based on host — logo, palette, typography, hero imagery/copy all swap. Both brands feel production-grade, not scaffolded.
@@ -108,6 +108,19 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - Public artist self-serve signup (v5.0; v4.0 is admin-invite only via the request flow)
 - Admin self-registration (admins are always provisioned by other admins)
 - 2FA / MFA (separate phase if/when needed)
+
+**Plans:** 11 plans
+- [ ] 26-01-PLAN.md — Brand utility extraction + (auth)/layout server component + REQUIREMENTS.md AUTH-* IDs append
+- [ ] 26-02-PLAN.md — AuthShell + BrandSidePanel + EnumSafeFormError + SocialAuthRow + WizardProgress + PasswordField + AuthFormCard + useBrand hook
+- [ ] 26-03-PLAN.md — Drizzle artistApplication schema + newsletterOptIn user column + grandfather migration + runner script
+- [ ] 26-04-PLAN.md — Better Auth socialProviders config (Google + Meta + GitHub) + accountLinking.enabled false + OAuth brand SVGs + .env.example
+- [ ] 26-05-PLAN.md — /login rebuilt against AuthShell + SocialAuthRow + EnumSafeFormError + account_not_linked URL handler
+- [ ] 26-06-PLAN.md — /register role-select tiles + customer wizard at /register/customer?step=1|2|3 (atomic step-3 submit, server-action email pre-check)
+- [ ] 26-07-PLAN.md — /register/artist single-page form + submitArtistApplication server action + admin notification email + ArtistApplicationInput type
+- [ ] 26-08-PLAN.md — /forgot-password + /reset-password polish (AuthShell + branded copy + enumeration-safe success + expired-token Alert)
+- [ ] 26-09-PLAN.md — /verify-email 3-state route + soft-gate guards in (public)/dashboard/admin layouts via requireVerifiedEmailOrRedirect helper
+- [ ] 26-10-PLAN.md — /admin/applications list + detail Sheet + Approve/Reject/Request-info server actions + artist-approval-invite email + auth.ts dual-handler + Approve confirmation modal
+- [ ] 26-11-PLAN.md — Verification + ship checklist (tsc/lint, GlitchTech spelling sweep, Playwright pass on both brands × 5 surfaces × Google OAuth, Vercel env-var checklist)
 
 ---
 
@@ -429,7 +442,7 @@ v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 →
 | **23. Debug Broken Pages & Missing Routes** | **v4.0** | **0/tbd** | **Up next 🚨** | - |
 | 24. Email Delivery End-to-End | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 25. Performance Audit + Fixes | v4.0 | 3/3 | Complete    | 2026-04-24 |
-| 26. Brand-Aware Auth UI Redesign | v4.0 | 0/tbd | Not started | - |
+| 26. Brand-Aware Auth UI Redesign | v4.0 | 0/11 | Not started | - |
 | 27. Media/Video Strategy Foundation | v4.0 | 0/tbd | Not started | - |
 | 28. GlitchMark System | v4.0 | 0/tbd | Not started | - |
 | 29. Master Leaderboard | v4.0 | 0/tbd | Not started | - |
