@@ -128,7 +128,7 @@ function RoleCard({
     <PixelCard variant={variant} className="h-full overflow-hidden md:min-h-[380px]">
       <Link
         href={href}
-        className="relative z-10 flex h-full min-h-0 flex-col justify-between gap-2 p-3 md:gap-5 md:p-8"
+        className="relative z-10 flex h-full min-h-0 flex-col justify-between gap-2 p-5 md:gap-5 md:p-8"
       >
         <div className="flex flex-col gap-1 md:gap-3">
           <span className="font-mono uppercase tracking-[0.14em] text-[11px] md:tracking-[0.18em] md:text-[16px] text-[var(--muted-foreground)]">
