@@ -10,6 +10,8 @@ import { auth } from "@/lib/auth"
 import { getReview, listReviewers } from "@/actions/admin-tech-reviews"
 import { listProducts } from "@/actions/admin-tech-products"
 import { ReviewEditor } from "@/components/admin/tech/review-editor"
+import { getMediaForEntity } from "@/lib/media/queries"
+import { MediaItemAttachmentList } from "@/components/media/media-item-attachment-list"
 
 export default async function EditTechReviewPage({
   params,
@@ -43,6 +45,7 @@ export default async function EditTechReviewPage({
   }))
 
   const initialReviewerId = session?.user.id ?? reviewers[0]?.id ?? ""
+  const mediaRows = await getMediaForEntity("tech_review", id)
 
   return (
     <>
@@ -84,6 +87,22 @@ export default async function EditTechReviewPage({
         status: review.status,
       }}
     />
+    <div className="mt-8">
+      <MediaItemAttachmentList
+        attachedToType="tech_review"
+        attachedToId={id}
+        entityNoun="review"
+        initialItems={mediaRows.map((m) => ({
+          id: m.id,
+          kind: m.kind,
+          externalId: m.externalId,
+          title: m.title,
+          thumbnailUrl: m.thumbnailUrl,
+          isPrimary: m.isPrimary,
+          sortOrder: m.sortOrder,
+        }))}
+      />
+    </div>
     </>
   )
 }
