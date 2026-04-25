@@ -166,7 +166,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - Dropping deprecated `video_url` columns (separate cleanup phase after one-release deprecation window)
 - AI-generated thumbnails / preview clips
 
-**Plans:** 4/7 plans executed
+**Plans:** 6/7 plans executed
 
 **Wave layout:**
 - Wave 1 (parallel, no deps): 27-01 (schema + migration), 27-02 (next.config i.ytimg.com)
@@ -179,8 +179,8 @@ Plans:
 - [x] 27-02-PLAN.md (Wave 1) — Whitelist `i.ytimg.com` in `next.config.ts` `images.remotePatterns` (blocks `<MediaEmbed>` thumbnails otherwise)
 - [x] 27-03-PLAN.md (Wave 2) — `<MediaEmbed>` + `<MediaEmbedThumbnail>` + `useFinePointer` + `useReducedMotion` hooks (`youtube-nocookie.com`, hqdefault fallback, three render states, accessibility-first)
 - [x] 27-04-PLAN.md (Wave 2) — `fetchYouTubeOEmbed` server-only fetcher + `getMediaForEntity`/`getHomeFeatureMedia` queries + 7 server actions (attach/update/remove/reorder/setPrimary/pinToHomeFeatures/setHomeFeatures) all guarded by `requirePermission("manage_content")`
-- [ ] 27-05-PLAN.md (Wave 3) — `<AddVideoDialog>` + `<MediaItemAttachmentList>` (dnd-kit reorder, AlertDialog destructive remove, verbatim UI-SPEC copy) + mount on 4 entity edit pages (beat / portfolio_item / service / tech_review) + add shadcn `alert-dialog` primitive
-- [ ] 27-06-PLAN.md (Wave 3) — `<HomeFeaturesAdmin>` (pin existing media_item to home_feature, dnd-kit reorder with hard-cap-3 visual, AlertDialog remove) + mount inside existing `/admin/homepage` page
+- [x] 27-05-PLAN.md (Wave 3) — `<AddVideoDialog>` + `<MediaItemAttachmentList>` (dnd-kit reorder, AlertDialog destructive remove, verbatim UI-SPEC copy) + mount on 4 entity edit pages (beat / portfolio_item / service / tech_review) + add shadcn `alert-dialog` primitive
+- [x] 27-06-PLAN.md (Wave 3) — `<HomeFeaturesAdmin>` (pin existing media_item to home_feature, dnd-kit reorder with hard-cap-3 visual, AlertDialog remove) + mount inside existing `/admin/homepage` page
 - [ ] 27-07-PLAN.md (Wave 4) — `<HomeFeaturedWorkGrid>` server component (replaces `<VideoPortfolioCarousel>` at both mount points) + refactor `<ReviewVideoEmbed>` to use `<MediaEmbed>` with `media_item` + `video_url` fallback + refactor `<VideoCard>` to use `<MediaEmbed mode="thumbnailOnly">` + add conditional "Made by hand" section to beat detail
 
 ---
@@ -504,7 +504,7 @@ v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 →
 | 24. Email Delivery End-to-End | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 25. Performance Audit + Fixes | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 26. Brand-Aware Auth UI Redesign | v4.0 | 12/12 | Complete    | 2026-04-25 |
-| 27. Media/Video Strategy Foundation | v4.0 | 4/7 | In Progress|  |
+| 27. Media/Video Strategy Foundation | v4.0 | 6/7 | In Progress|  |
 | 28. GlitchMark System | v4.0 | 0/tbd | Not started | - |
 | 29. Master Leaderboard | v4.0 | 0/tbd | Not started | - |
 | 30. Per-Benchmark Pages | v4.0 | 0/tbd | Not started | - |
