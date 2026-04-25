@@ -829,6 +829,10 @@ export const techReviews = pgTable("tech_reviews", {
   bprTier: techBprTierEnum("bpr_tier"),
   bprDisciplineCount: integer("bpr_discipline_count").notNull().default(0),
   rubricVersion: text("rubric_version").notNull().default("1.1"),
+  glitchmarkScore: numeric("glitchmark_score", { precision: 7, scale: 2 }),
+  glitchmarkTestCount: integer("glitchmark_test_count"),
+  glitchmarkIsPartial: boolean("glitchmark_is_partial"),
+  glitchmarkVersion: text("glitchmark_version"),
 }, (t) => ({
   publishedAtChk: check(
     "tech_reviews_published_at_chk",
@@ -895,6 +899,7 @@ export const techBenchmarkTests = pgTable("tech_benchmark_tests", {
   discipline: techBenchmarkDisciplineEnum("discipline"),
   mode: techBenchmarkModeEnum("mode").notNull().default("both"),
   bprEligible: boolean("bpr_eligible").notNull().default(false),
+  referenceScore: numeric("reference_score", { precision: 14, scale: 4 }),
   minRamGb: integer("min_ram_gb"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 }, (t) => ({
@@ -1173,3 +1178,38 @@ export const mediaItemsRelations = relations(mediaItems, ({ one }) => ({
     references: [user.id],
   }),
 }))
+
+// === GlitchMark History (Phase 28) ===
+
+export const techGlitchmarkHistory = pgTable(
+  "tech_glitchmark_history",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    reviewId: uuid("review_id")
+      .notNull()
+      .references(() => techReviews.id, { onDelete: "cascade" }),
+    version: text("version").notNull(),
+    score: numeric("score", { precision: 7, scale: 2 }),
+    testCount: integer("test_count"),
+    isPartial: boolean("is_partial"),
+    formulaNotes: text("formula_notes"),
+    computedAt: timestamp("computed_at").defaultNow().notNull(),
+  },
+  (t) => [
+    uniqueIndex("tech_glitchmark_history_review_version_uniq").on(
+      t.reviewId,
+      t.version,
+    ),
+    index("idx_tech_glitchmark_history_version").on(t.version),
+  ],
+)
+
+export const techGlitchmarkHistoryRelations = relations(
+  techGlitchmarkHistory,
+  ({ one }) => ({
+    review: one(techReviews, {
+      fields: [techGlitchmarkHistory.reviewId],
+      references: [techReviews.id],
+    }),
+  }),
+)

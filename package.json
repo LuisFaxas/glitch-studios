@@ -13,7 +13,8 @@
     "db:seed": "tsx src/db/seed.ts",
     "db:seed-users": "tsx --env-file=.env.local src/db/seed-admin.ts",
     "db:migrate:phase26": "tsx --env-file=.env.local scripts/run-phase26-migration.ts",
-    "db:migrate:phase27": "tsx --env-file=.env.local scripts/run-phase27-migration.ts"
+    "db:migrate:phase27": "tsx --env-file=.env.local scripts/run-phase27-migration.ts",
+    "db:migrate:phase28": "tsx --env-file=.env.local scripts/run-phase28-migration.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1016.0",
