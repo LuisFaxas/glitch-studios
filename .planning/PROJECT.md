@@ -79,7 +79,8 @@ One platform that makes Glitch Studios' work discoverable and Glitch Tech's hard
 
 Derived from audit — placeholder list pending Phase 22 output.
 
-- [ ] Visual audit & discovery (Phase 22 — seeds phases 23+)
+- [x] Visual audit & discovery (Phase 22 — seeds phases 23+)
+- [x] Brand-aware auth UI redesign (Phase 26) — login, register, customer wizard, artist application, verify-email, admin queue, AUTH-01..32 validated
 - [ ] Email delivery end-to-end (Resend + React Email) — launch blocker
 - [ ] Site-wide performance audit + fixes — launch blocker
 - [ ] **GlitchMark system** — aggregate-all-benchmarks composite score, distinct from BPR
@@ -156,4 +157,6 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-24 — v4.0 Production Launch milestone started. v3.0 closed partial with Phases 15-17 shipped; remaining launch work (17.5, 18, 19, 20, 20.5, 21) carried over. New scope: GlitchMark scoring system (distinct from BPR, captured in memory after being lost from the planning record), email delivery, performance, and production polish. Phase 22 is a visual audit that determines the rest of the milestone phases.*
+*Last updated: 2026-04-25 — Phase 26 (brand-aware auth UI redesign) shipped to production. AUTH-01..32 all validated through iterative live deploys. /login, /register (with PixelCard role tiles + mobile Backstage Lanyard composition), /register/customer wizard (split-frame value-prop + form), /register/artist (timeline-driven submitted state), /verify-email, /admin/applications all live. Better Auth social providers wired (Google live; Meta/GitHub stubbed). DB migration applied to prod. Legal stubs at /terms + /privacy.*
+
+*2026-04-24 — v4.0 Production Launch milestone started. v3.0 closed partial with Phases 15-17 shipped; remaining launch work (17.5, 18, 19, 20, 20.5, 21) carried over. New scope: GlitchMark scoring system (distinct from BPR, captured in memory after being lost from the planning record), email delivery, performance, and production polish. Phase 22 is a visual audit that determines the rest of the milestone phases.*

@@ -38,38 +38,38 @@
 
 ### Auth UI Redesign (AUTH-*) — Phase 26
 
-- [ ] **AUTH-01** All five auth surfaces (`/login`, `/register`, `/forgot-password`, `/reset-password`, `/verify-email`) render distinct Studios vs GlitchTech theming based on host (logo, palette accent hook, typography, hero treatment, copy variants from UI-SPEC).
-- [ ] **AUTH-02** Desktop split-layout (form column right, brand-side panel left, ≥1024px) + mobile stacked layout (compact brand header + form, <1024px) ship per UI-SPEC §Spacing/§Breakpoints.
-- [ ] **AUTH-03** `/login` surface rebuilt: social row above email, enumeration-safe error copy (wrong-password and unknown-email both "That email and password don't match"), branded.
-- [ ] **AUTH-04** Customer register wizard at `/register?role=customer` — 3 steps (identity → preferences → confirm). Step indicator sticky. Back button on steps 2-3. `?step=1|2|3` query param for deep-link + browser-back.
-- [ ] **AUTH-05** Account creation is atomic at step 3 submit. Steps 1-2 hold data in client state only. Verification email fires at step 3. T&Cs checkbox on step 3.
-- [ ] **AUTH-06** Step 1 → Step 2 transition pre-validates email uniqueness via server action. Enumeration-safe inline error copy on collision.
-- [ ] **AUTH-07** Step 2 (Preferences) holds only the newsletter opt-in checkbox.
-- [ ] **AUTH-08** Step 3 (Confirm) shows captured email + name read-only, T&Cs checkbox required, "Create account" CTA.
-- [ ] **AUTH-09** Drop the existing confirm-password field from `/register`. Use `<PasswordField>` show/hide toggle.
-- [ ] **AUTH-10** `/register` (no role param) shows two CTA tiles side-by-side on desktop, stacked on mobile: customer / artist (Studios) or customer / contributor (Tech).
-- [ ] **AUTH-11** `/register?role=artist` renders `<ArtistRequestForm>` — single page, on-page success state.
-- [ ] **AUTH-12** New Drizzle table `artistApplication` (uuid pk, brand, name, email, bio, portfolioUrl, focusTags jsonb, status enum, submittedAt, reviewedAt, reviewedBy fk, reviewerNote).
-- [ ] **AUTH-13** Artist request form: same shape both brands; brand auto-set from host. Studios = genre tags; Tech = focus areas. Stored in `focusTags` jsonb.
-- [ ] **AUTH-14** New admin page `/admin/applications` with list + detail drawer + Approve / Reject / Request more info actions.
-- [ ] **AUTH-15** Approve flow: creates `user` row (`emailVerified=true`, role 'artist' or 'contributor'), sets application status='approved', triggers Better Auth password-reset-style invite email.
-- [ ] **AUTH-16** Reject flow: silent (no applicant email). Reviewer note is internal-only.
-- [ ] **AUTH-17** Request-more-info flow: status='info_requested', sends admin-composed email via Resend; status returns to 'pending' on applicant reply (manual triage).
-- [ ] **AUTH-18** New admin notification email on every artist-application submission (`ADMIN_NOTIFICATION_EMAIL` env, fallback to studio inbox).
-- [ ] **AUTH-19** New email template `artist-approval-invite.tsx` under `src/lib/email/` reusing Phase 24 layout.
-- [ ] **AUTH-20** Social login row: 3 OAuth buttons (Google / Meta / GitHub) above email/password on `/login` and `/register?role=customer`.
-- [ ] **AUTH-21** Google live end-to-end on both brand hosts at v4.0 launch. Meta + GitHub plugins wired in code; buttons hide entirely if env vars missing.
-- [ ] **AUTH-22** Better Auth `socialProviders` block in `src/lib/auth.ts`. Callback `/api/auth/callback/{provider}`. Env: `GOOGLE_CLIENT_ID/SECRET`, `META_CLIENT_ID/SECRET`, `GITHUB_CLIENT_ID/SECRET`.
-- [ ] **AUTH-23** `accountLinking.enabled: false` for v4.0. Conflict copy directs user to existing-method sign-in.
-- [ ] **AUTH-24** Social-signup T&Cs: inline microcopy "By continuing, you agree to the Terms and Privacy Policy." Newsletter defaults FALSE for OAuth signups.
-- [ ] **AUTH-25** New SVGs `GoogleIcon`, `MetaIcon`, `GitHubIcon` in `src/components/icons/social-icons.tsx`.
-- [ ] **AUTH-26** Email-verification soft gate at the layout level. Authenticated unverified users redirected from any page EXCEPT `/verify-email`, `/api/auth/*`, sign-out.
-- [ ] **AUTH-27** `/verify-email` route: pending / success / expired states resolved server-side by token validity. All states share AuthShell.
-- [ ] **AUTH-28** Grandfather migration: one-shot SQL update sets `user.emailVerified = true` for users created BEFORE Phase 26 deploy. Drizzle migration with re-run guard.
-- [ ] **AUTH-29** Branded `forgot-password` + `reset-password` end-to-end pass. Phase 24 template reused.
-- [ ] **AUTH-30** `src/app/(auth)/layout.tsx` becomes server component reading `host` from `next/headers` and rendering `<div data-brand={brand}>`. Default 'studios' for unknown hosts. Mirrors middleware fall-through.
-- [ ] **AUTH-31** All page H1s wrap `<HoverGlitchHeading>`. Hover-only; never auto-runs. Reduced-motion honored.
-- [ ] **AUTH-32** `pnpm tsc --noEmit` and `pnpm lint` pass. Manual Playwright pass: both brand hosts × 5 auth surfaces × Google end-to-end.
+- [x] **AUTH-01** All five auth surfaces (`/login`, `/register`, `/forgot-password`, `/reset-password`, `/verify-email`) render distinct Studios vs GlitchTech theming based on host (logo, palette accent hook, typography, hero treatment, copy variants from UI-SPEC).
+- [x] **AUTH-02** Desktop split-layout (form column right, brand-side panel left, ≥1024px) + mobile stacked layout (compact brand header + form, <1024px) ship per UI-SPEC §Spacing/§Breakpoints.
+- [x] **AUTH-03** `/login` surface rebuilt: social row above email, enumeration-safe error copy (wrong-password and unknown-email both "That email and password don't match"), branded.
+- [x] **AUTH-04** Customer register wizard at `/register?role=customer` — 3 steps (identity → preferences → confirm). Step indicator sticky. Back button on steps 2-3. `?step=1|2|3` query param for deep-link + browser-back.
+- [x] **AUTH-05** Account creation is atomic at step 3 submit. Steps 1-2 hold data in client state only. Verification email fires at step 3. T&Cs checkbox on step 3.
+- [x] **AUTH-06** Step 1 → Step 2 transition pre-validates email uniqueness via server action. Enumeration-safe inline error copy on collision.
+- [x] **AUTH-07** Step 2 (Preferences) holds only the newsletter opt-in checkbox.
+- [x] **AUTH-08** Step 3 (Confirm) shows captured email + name read-only, T&Cs checkbox required, "Create account" CTA.
+- [x] **AUTH-09** Drop the existing confirm-password field from `/register`. Use `<PasswordField>` show/hide toggle.
+- [x] **AUTH-10** `/register` (no role param) shows two CTA tiles side-by-side on desktop, stacked on mobile: customer / artist (Studios) or customer / contributor (Tech).
+- [x] **AUTH-11** `/register?role=artist` renders `<ArtistRequestForm>` — single page, on-page success state.
+- [x] **AUTH-12** New Drizzle table `artistApplication` (uuid pk, brand, name, email, bio, portfolioUrl, focusTags jsonb, status enum, submittedAt, reviewedAt, reviewedBy fk, reviewerNote).
+- [x] **AUTH-13** Artist request form: same shape both brands; brand auto-set from host. Studios = genre tags; Tech = focus areas. Stored in `focusTags` jsonb.
+- [x] **AUTH-14** New admin page `/admin/applications` with list + detail drawer + Approve / Reject / Request more info actions.
+- [x] **AUTH-15** Approve flow: creates `user` row (`emailVerified=true`, role 'artist' or 'contributor'), sets application status='approved', triggers Better Auth password-reset-style invite email.
+- [x] **AUTH-16** Reject flow: silent (no applicant email). Reviewer note is internal-only.
+- [x] **AUTH-17** Request-more-info flow: status='info_requested', sends admin-composed email via Resend; status returns to 'pending' on applicant reply (manual triage).
+- [x] **AUTH-18** New admin notification email on every artist-application submission (`ADMIN_NOTIFICATION_EMAIL` env, fallback to studio inbox).
+- [x] **AUTH-19** New email template `artist-approval-invite.tsx` under `src/lib/email/` reusing Phase 24 layout.
+- [x] **AUTH-20** Social login row: 3 OAuth buttons (Google / Meta / GitHub) above email/password on `/login` and `/register?role=customer`.
+- [x] **AUTH-21** Google live end-to-end on both brand hosts at v4.0 launch. Meta + GitHub plugins wired in code; buttons hide entirely if env vars missing.
+- [x] **AUTH-22** Better Auth `socialProviders` block in `src/lib/auth.ts`. Callback `/api/auth/callback/{provider}`. Env: `GOOGLE_CLIENT_ID/SECRET`, `META_CLIENT_ID/SECRET`, `GITHUB_CLIENT_ID/SECRET`.
+- [x] **AUTH-23** `accountLinking.enabled: false` for v4.0. Conflict copy directs user to existing-method sign-in.
+- [x] **AUTH-24** Social-signup T&Cs: inline microcopy "By continuing, you agree to the Terms and Privacy Policy." Newsletter defaults FALSE for OAuth signups.
+- [x] **AUTH-25** New SVGs `GoogleIcon`, `MetaIcon`, `GitHubIcon` in `src/components/icons/social-icons.tsx`.
+- [x] **AUTH-26** Email-verification soft gate at the layout level. Authenticated unverified users redirected from any page EXCEPT `/verify-email`, `/api/auth/*`, sign-out.
+- [x] **AUTH-27** `/verify-email` route: pending / success / expired states resolved server-side by token validity. All states share AuthShell.
+- [x] **AUTH-28** Grandfather migration: one-shot SQL update sets `user.emailVerified = true` for users created BEFORE Phase 26 deploy. Drizzle migration with re-run guard.
+- [x] **AUTH-29** Branded `forgot-password` + `reset-password` end-to-end pass. Phase 24 template reused.
+- [x] **AUTH-30** `src/app/(auth)/layout.tsx` becomes server component reading `host` from `next/headers` and rendering `<div data-brand={brand}>`. Default 'studios' for unknown hosts. Mirrors middleware fall-through.
+- [x] **AUTH-31** All page H1s wrap `<HoverGlitchHeading>`. Hover-only; never auto-runs. Reduced-motion honored.
+- [x] **AUTH-32** `pnpm tsc --noEmit` and `pnpm lint` pass. Manual Playwright pass: both brand hosts × 5 auth surfaces × Google end-to-end.
 
 ### GlitchMark (GLITCHMARK-*) — New Feature
 
