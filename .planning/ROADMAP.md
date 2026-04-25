@@ -44,7 +44,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 26: Brand-Aware Auth UI Redesign** — brand-themed login/register/forgot/reset/verify surfaces; split register (customer wizard vs artist request flow); social login (Google + Meta + GitHub) (completed 2026-04-25)
 
 **🎬 Foundation:**
-- [ ] **Phase 27: Media/Video Strategy Foundation** — canonical YouTube embed pattern (`<MediaEmbed>`); polymorphic `media_item` schema with entity attachments; admin add-video flow + home features picker; 7 plans across 4 waves
+- [x] **Phase 27: Media/Video Strategy Foundation** — canonical YouTube embed pattern (`<MediaEmbed>`); polymorphic `media_item` schema with entity attachments; admin add-video flow + home features picker; 7 plans across 4 waves (completed 2026-04-25)
 
 **🏆 Tech product core (the headline):**
 - [ ] **Phase 28: GlitchMark System** — research + lock formula, schema, compute on ingest, methodology page section — GLITCHMARK-01..08
@@ -166,7 +166,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - Dropping deprecated `video_url` columns (separate cleanup phase after one-release deprecation window)
 - AI-generated thumbnails / preview clips
 
-**Plans:** 6/7 plans executed
+**Plans:** 7/7 plans complete
 
 **Wave layout:**
 - Wave 1 (parallel, no deps): 27-01 (schema + migration), 27-02 (next.config i.ytimg.com)
@@ -181,7 +181,7 @@ Plans:
 - [x] 27-04-PLAN.md (Wave 2) — `fetchYouTubeOEmbed` server-only fetcher + `getMediaForEntity`/`getHomeFeatureMedia` queries + 7 server actions (attach/update/remove/reorder/setPrimary/pinToHomeFeatures/setHomeFeatures) all guarded by `requirePermission("manage_content")`
 - [x] 27-05-PLAN.md (Wave 3) — `<AddVideoDialog>` + `<MediaItemAttachmentList>` (dnd-kit reorder, AlertDialog destructive remove, verbatim UI-SPEC copy) + mount on 4 entity edit pages (beat / portfolio_item / service / tech_review) + add shadcn `alert-dialog` primitive
 - [x] 27-06-PLAN.md (Wave 3) — `<HomeFeaturesAdmin>` (pin existing media_item to home_feature, dnd-kit reorder with hard-cap-3 visual, AlertDialog remove) + mount inside existing `/admin/homepage` page
-- [ ] 27-07-PLAN.md (Wave 4) — `<HomeFeaturedWorkGrid>` server component (replaces `<VideoPortfolioCarousel>` at both mount points) + refactor `<ReviewVideoEmbed>` to use `<MediaEmbed>` with `media_item` + `video_url` fallback + refactor `<VideoCard>` to use `<MediaEmbed mode="thumbnailOnly">` + add conditional "Made by hand" section to beat detail
+- [x] 27-07-PLAN.md (Wave 4) — `<HomeFeaturedWorkGrid>` server component (replaces `<VideoPortfolioCarousel>` at both mount points) + refactor `<ReviewVideoEmbed>` to use `<MediaEmbed>` with `media_item` + `video_url` fallback + refactor `<VideoCard>` to use `<MediaEmbed mode="thumbnailOnly">` + add conditional "Made by hand" section to beat detail
 
 ---
 
@@ -504,7 +504,7 @@ v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 →
 | 24. Email Delivery End-to-End | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 25. Performance Audit + Fixes | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 26. Brand-Aware Auth UI Redesign | v4.0 | 12/12 | Complete    | 2026-04-25 |
-| 27. Media/Video Strategy Foundation | v4.0 | 6/7 | In Progress|  |
+| 27. Media/Video Strategy Foundation | v4.0 | 7/7 | Complete   | 2026-04-25 |
 | 28. GlitchMark System | v4.0 | 0/tbd | Not started | - |
 | 29. Master Leaderboard | v4.0 | 0/tbd | Not started | - |
 | 30. Per-Benchmark Pages | v4.0 | 0/tbd | Not started | - |
