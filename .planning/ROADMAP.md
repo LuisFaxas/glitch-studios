@@ -44,7 +44,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 26: Brand-Aware Auth UI Redesign** — brand-themed login/register/forgot/reset/verify surfaces; split register (customer wizard vs artist request flow); social login (Google + Meta + GitHub) (completed 2026-04-25)
 
 **🎬 Foundation:**
-- [ ] **Phase 27: Media/Video Strategy Foundation** — canonical YouTube (long) + Instagram (short) embed pattern; schema `media_item` with entity attachments; admin add-video flow; reusable components (embed, carousel, hero)
+- [ ] **Phase 27: Media/Video Strategy Foundation** — canonical YouTube embed pattern (`<MediaEmbed>`); polymorphic `media_item` schema with entity attachments; admin add-video flow + home features picker; 7 plans across 4 waves
 
 **🏆 Tech product core (the headline):**
 - [ ] **Phase 28: GlitchMark System** — research + lock formula, schema, compute on ingest, methodology page section — GLITCHMARK-01..08
@@ -131,6 +131,57 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [x] 26-10-PLAN.md (Wave 4) — Admin queue BACKEND: artist-approval-invite email template + auth.ts sendResetPassword dual-handler + approve/reject/request-info server actions
 - [x] 26-11-PLAN.md (Wave 5) — Admin queue FRONTEND: /admin/applications page (with HoverGlitchHeading H1 per AUTH-31) + ApplicationListTable + ApplicationDetailSheet + ApplicationApproveDialog
 - [x] 26-12-PLAN.md (Wave 6) — Verification + ship checklist (tsc/lint, GlitchTech spelling sweep, Playwright pass on both brands × 5 surfaces × Google OAuth, Vercel env-var checklist)
+
+---
+
+#### Phase 27: Media/Video Strategy Foundation
+
+**Goal:** Establish the canonical pattern for embedding YouTube videos across the site. Ship a polymorphic `media_item` table that lets any entity (beat, portfolio_item, service, tech_review, home_feature) have one or many attached videos. Build a single `<MediaEmbed>` component (click-to-play thumbnail + desktop hover-preview muted-autoplay + youtube-nocookie host always) used by every public surface that renders video. Build the per-entity admin add-video UX (paste YouTube URL → server-side oEmbed fetch → cached row) and a home-features picker. Replace the empty hero `<VideoPortfolioCarousel>` with a 3-up `<HomeFeaturedWorkGrid>` that returns null on empty (D-12).
+
+**Depends on:**
+- Phase 22 audit (canonical YouTube + per-entity attach decisions)
+- Existing `extractYouTubeId()` at `src/lib/tech/youtube.ts`
+- Existing dnd-kit precedent at `src/components/admin/homepage-editor.tsx:65-110`
+- Phase 26 migration pattern (`0006_phase26_auth.sql` — DO $$ EXCEPTION enum guard, IF NOT EXISTS, `phase26_migration_meta` row guard)
+
+**Requirements:** D-01..D-18 (CONTEXT.md is the requirement set; no formal REQ-IDs allocated — see RESEARCH.md "Phase Requirements" section)
+
+**Success Criteria** (what must be TRUE):
+1. `media_item` table is live in Postgres with `media_kind` pgEnum, polymorphic `(attached_to_type, attached_to_id)` index, and idempotent backfill from `portfolio_items.video_url` and `tech_reviews.video_url` (rows marked `is_primary=true`).
+2. Every public surface that renders a YouTube video uses `<MediaEmbed>` — `grep -r "youtube.com/embed" src/components/ src/app/ | grep -v "youtube-nocookie" | grep -v node_modules` returns 0 lines. All embeds use `youtube-nocookie.com`.
+3. Desktop with `pointer: fine` and `prefers-reduced-motion: no-preference`: hovering a tile swaps to muted iframe preview. Mobile (`pointer: coarse`) and reduced-motion users get tap-only / click-only behavior — no iframe swap.
+4. Admin can paste a YouTube URL on any entity edit form, server-side `extractYouTubeId` validates, oEmbed fetches title + thumbnail, row inserts. Invalid URL surfaces verbatim "That URL doesn't look like a YouTube link..." copy. oEmbed timeout degrades gracefully ("Couldn't load video info from YouTube. The link is saved...").
+5. `/admin/homepage` mounts a Home Features section: pin existing media_items, drag-to-reorder with KeyboardSensor (a11y), top 3 sort_order rows tagged "Live on home" chip, cap warning when 4+ tagged.
+6. `<HomeFeaturedWorkGrid>` replaces both `<VideoPortfolioCarousel>` mount points on `src/app/(public)/page.tsx` (lines 97 + 143). Renders null when no `home_feature` rows exist (D-12). H2 + H3 wrapped in `<GlitchHeading>` per site-wide hover-only-RGB-split rule.
+7. `<ReviewVideoEmbed>` prefers `media_item`, falls back to `tech_reviews.video_url` for one release (D-07 read-time fallback). `<VideoCard>` uses `<MediaEmbed mode="thumbnailOnly">` to avoid nested interactive elements inside its `<Link>` wrapper. Beat detail conditionally renders "Made by hand" section when media_items exist.
+8. `pnpm tsc --noEmit` and `pnpm lint` pass.
+
+**UI hint:** yes — UI-SPEC.md approved 2026-04-25 (interactions, copy, a11y, verification hooks all locked).
+
+**Out of scope (explicitly):**
+- Instagram short-form embeds (deferred — schema's `kind` enum is forward-extensible)
+- Self-hosted video player (YouTube-first locked in Phase 22 audit)
+- Central `/admin/media-library` UI (per-entity attach only this phase)
+- Captions / transcripts / chapters (defer to SEO phase)
+- Dropping deprecated `video_url` columns (separate cleanup phase after one-release deprecation window)
+- AI-generated thumbnails / preview clips
+
+**Plans:** 7 plans across 4 waves
+
+**Wave layout:**
+- Wave 1 (parallel, no deps): 27-01 (schema + migration), 27-02 (next.config i.ytimg.com)
+- Wave 2 (parallel, depend on Wave 1): 27-03 (`<MediaEmbed>` + hooks), 27-04 (oEmbed action + queries + admin server actions)
+- Wave 3 (parallel, depend on Wave 2): 27-05 (admin attach UI + 4 entity edit pages), 27-06 (home features admin)
+- Wave 4 (sequential, depends on 03 + 04 + 06): 27-07 (public surfaces — home grid + ReviewVideoEmbed + VideoCard refactors + beat detail)
+
+Plans:
+- [ ] 27-01-PLAN.md (Wave 1) — Drizzle `mediaItems` + `mediaKindEnum` schema + idempotent SQL migration `0007_phase27_media.sql` mirroring Phase 26 pattern + standalone postgres-js runner
+- [ ] 27-02-PLAN.md (Wave 1) — Whitelist `i.ytimg.com` in `next.config.ts` `images.remotePatterns` (blocks `<MediaEmbed>` thumbnails otherwise)
+- [ ] 27-03-PLAN.md (Wave 2) — `<MediaEmbed>` + `<MediaEmbedThumbnail>` + `useFinePointer` + `useReducedMotion` hooks (`youtube-nocookie.com`, hqdefault fallback, three render states, accessibility-first)
+- [ ] 27-04-PLAN.md (Wave 2) — `fetchYouTubeOEmbed` server-only fetcher + `getMediaForEntity`/`getHomeFeatureMedia` queries + 7 server actions (attach/update/remove/reorder/setPrimary/pinToHomeFeatures/setHomeFeatures) all guarded by `requirePermission("manage_content")`
+- [ ] 27-05-PLAN.md (Wave 3) — `<AddVideoDialog>` + `<MediaItemAttachmentList>` (dnd-kit reorder, AlertDialog destructive remove, verbatim UI-SPEC copy) + mount on 4 entity edit pages (beat / portfolio_item / service / tech_review) + add shadcn `alert-dialog` primitive
+- [ ] 27-06-PLAN.md (Wave 3) — `<HomeFeaturesAdmin>` (pin existing media_item to home_feature, dnd-kit reorder with hard-cap-3 visual, AlertDialog remove) + mount inside existing `/admin/homepage` page
+- [ ] 27-07-PLAN.md (Wave 4) — `<HomeFeaturedWorkGrid>` server component (replaces `<VideoPortfolioCarousel>` at both mount points) + refactor `<ReviewVideoEmbed>` to use `<MediaEmbed>` with `media_item` + `video_url` fallback + refactor `<VideoCard>` to use `<MediaEmbed mode="thumbnailOnly">` + add conditional "Made by hand" section to beat detail
 
 ---
 
@@ -453,7 +504,7 @@ v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 →
 | 24. Email Delivery End-to-End | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 25. Performance Audit + Fixes | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 26. Brand-Aware Auth UI Redesign | v4.0 | 12/12 | Complete    | 2026-04-25 |
-| 27. Media/Video Strategy Foundation | v4.0 | 0/tbd | Not started | - |
+| 27. Media/Video Strategy Foundation | v4.0 | 0/7 | Planned | - |
 | 28. GlitchMark System | v4.0 | 0/tbd | Not started | - |
 | 29. Master Leaderboard | v4.0 | 0/tbd | Not started | - |
 | 30. Per-Benchmark Pages | v4.0 | 0/tbd | Not started | - |
