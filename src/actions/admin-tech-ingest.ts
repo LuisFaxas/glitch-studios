@@ -11,6 +11,7 @@ import { requirePermission } from "@/lib/permissions"
 import { z } from "zod"
 import { RUBRIC_V1_1 } from "@/lib/tech/rubric-map"
 import { computeBprScore } from "@/lib/tech/bpr"
+import { recomputeGlitchmark } from "@/lib/tech/glitchmark"
 import { revalidatePath } from "next/cache"
 import { randomUUID } from "node:crypto"
 
@@ -494,6 +495,12 @@ export async function commitBenchmarkIngest(
         bprDisciplineCount,
       })
       .where(eq(techReviews.id, validatedSession.reviewId))
+
+    // Phase 28: Recompute GlitchMark within the same transaction. Pass `tx`
+    // so the read sees the same uncommitted rows as the BPR recompute did.
+    // recomputeGlitchmark handles its own writes to tech_reviews + tech_glitchmark_history.
+    // Throwing here rolls back the whole ingest — BPR + GlitchMark are atomic together.
+    await recomputeGlitchmark(validatedSession.productId, tx)
   })
 
   // Fetch final BPR values + slug to return to UI + revalidate review detail
