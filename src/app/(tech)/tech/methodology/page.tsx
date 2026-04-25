@@ -13,8 +13,9 @@ import { MethodologyDisciplineTable } from "@/components/tech/methodology-discip
 import { MethodologyExclusionPolicy } from "@/components/tech/methodology-exclusion-policy"
 import { MethodologyFormula } from "@/components/tech/methodology-formula"
 import { MethodologyMedalTable } from "@/components/tech/methodology-medal-table"
+import { MethodologyGlitchmark } from "@/components/tech/methodology-glitchmark"
 import { TechNewsletter } from "@/components/home/tech-newsletter"
-import { getMethodologyData } from "@/lib/tech/methodology"
+import { getMethodologyData, getGlitchmarkBaselines } from "@/lib/tech/methodology"
 
 export const dynamic = "force-static"
 export const revalidate = 3600
@@ -29,12 +30,14 @@ const JUMP_LINKS = [
   { href: "#bpr", label: "BPR Formula" },
   { href: "#disciplines", label: "Disciplines" },
   { href: "#thresholds", label: "Thresholds" },
+  { href: "#glitchmark", label: "GlitchMark" },
   { href: "#exclusion-policy", label: "Exclusions" },
   { href: "#rubric-changelog", label: "Rubric Changelog" },
 ]
 
-export default function MethodologyPage() {
+export default async function MethodologyPage() {
   const data = getMethodologyData()
+  const glitchmarkBaselines = await getGlitchmarkBaselines()
 
   return (
     <main className="min-h-screen bg-black text-[#f5f5f0]">
@@ -72,6 +75,7 @@ export default function MethodologyPage() {
       <MethodologyFormula formula={data.bprFormula} />
       <MethodologyDisciplineTable disciplines={data.disciplines} />
       <MethodologyMedalTable thresholds={data.medalThresholds} />
+      <MethodologyGlitchmark baselines={glitchmarkBaselines} />
       <MethodologyExclusionPolicy />
       <MethodologyChangelog entries={data.rubricChangelog} />
 

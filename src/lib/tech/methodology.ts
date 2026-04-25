@@ -1,4 +1,5 @@
-// Pure function of static constants — no DB read. Safe to import anywhere. See Phase 17 research §Pitfall 2.
+// getMethodologyData is a pure function of static constants — no DB read.
+// getGlitchmarkBaselines (Phase 28) DOES read the DB and is server-only.
 import {
   RUBRIC_V1_1,
   BPR_ELIGIBLE_DISCIPLINES,
@@ -176,4 +177,52 @@ export function getMethodologyData(): MethodologyData {
     rubricChangelog: RUBRIC_CHANGELOG,
     medalThresholds: MEDAL_THRESHOLDS,
   }
+}
+
+// === GlitchMark baselines (Phase 28) ===
+// Server-only because it does a DB read. Imported by the methodology page
+// (force-static, revalidate=3600) so baselines are fetched at build/revalidate
+// time only.
+
+import "server-only"
+import { db } from "@/lib/db"
+import { techBenchmarkTests } from "@/db/schema"
+import { isNotNull, asc } from "drizzle-orm"
+
+export interface GlitchmarkBaselineRow {
+  id: string
+  name: string
+  discipline: string | null
+  direction: "higher_is_better" | "lower_is_better"
+  unit: string | null
+  referenceScore: string // numeric arrives as string from postgres-js
+}
+
+/**
+ * Fetch every benchmark test that contributes to GlitchMark — i.e. has a
+ * non-null reference_score. Used by the methodology page baseline table
+ * (Phase 28 — GLITCHMARK-06).
+ */
+export async function getGlitchmarkBaselines(): Promise<GlitchmarkBaselineRow[]> {
+  const rows = await db
+    .select({
+      id: techBenchmarkTests.id,
+      name: techBenchmarkTests.name,
+      discipline: techBenchmarkTests.discipline,
+      direction: techBenchmarkTests.direction,
+      unit: techBenchmarkTests.unit,
+      referenceScore: techBenchmarkTests.referenceScore,
+    })
+    .from(techBenchmarkTests)
+    .where(isNotNull(techBenchmarkTests.referenceScore))
+    .orderBy(asc(techBenchmarkTests.discipline), asc(techBenchmarkTests.name))
+
+  return rows.map((r) => ({
+    id: r.id,
+    name: r.name,
+    discipline: r.discipline,
+    direction: r.direction as "higher_is_better" | "lower_is_better",
+    unit: r.unit,
+    referenceScore: String(r.referenceScore ?? ""),
+  }))
 }
