@@ -22,6 +22,34 @@ const ownerAc = ac.newRole({
   session: ["list", "revoke", "delete"],
 })
 
+// Phase 26 — conditional social providers.
+// Build the providers object at module load time, only registering a
+// provider when both env vars are present. Buttons in the UI also hide
+// when a provider isn't registered (see src/lib/auth-providers.ts).
+//
+// CRITICAL naming: AUTH-22 specifies env vars META_CLIENT_ID/SECRET, but
+// Better Auth's provider config key is `facebook` (covers FB + IG).
+const socialProviders: NonNullable<Parameters<typeof betterAuth>[0]["socialProviders"]> = {}
+
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  socialProviders.google = {
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  }
+}
+if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
+  socialProviders.github = {
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+  }
+}
+if (process.env.META_CLIENT_ID && process.env.META_CLIENT_SECRET) {
+  socialProviders.facebook = {
+    clientId: process.env.META_CLIENT_ID,
+    clientSecret: process.env.META_CLIENT_SECRET,
+  }
+}
+
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -72,6 +100,12 @@ export const auth = betterAuth({
       } catch (err) {
         console.error("[email:verify] Unexpected error:", err)
       }
+    },
+  },
+  socialProviders,
+  account: {
+    accountLinking: {
+      enabled: false, // AUTH-23 — surfaces conflicts as account_not_linked error
     },
   },
   plugins: [

@@ -2,6 +2,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { signIn } from "@/lib/auth-client"
+import { GoogleIcon, MetaIcon, GitHubIcon } from "@/components/icons/social-icons"
 
 export type SocialProvider = "google" | "github" | "facebook"
 
@@ -14,6 +15,15 @@ const PROVIDER_LABEL: Record<SocialProvider, string> = {
   google: "Continue with Google",
   facebook: "Continue with Meta",
   github: "Continue with GitHub",
+}
+
+const PROVIDER_ICON: Record<
+  SocialProvider,
+  React.ComponentType<{ size?: number; className?: string }>
+> = {
+  google: GoogleIcon,
+  facebook: MetaIcon,
+  github: GitHubIcon,
 }
 
 export function SocialAuthRow({
@@ -40,19 +50,23 @@ export function SocialAuthRow({
   return (
     <div className="flex flex-col gap-3">
       <div className="grid gap-3 sm:grid-cols-3">
-        {availableProviders.map((p) => (
-          <Button
-            key={p}
-            type="button"
-            variant="outline"
-            size="lg"
-            disabled={pending !== null}
-            onClick={() => handleClick(p)}
-            className="bg-[#111111] border-[var(--border)] text-[16px] font-sans"
-          >
-            <span className="font-sans">{PROVIDER_LABEL[p]}</span>
-          </Button>
-        ))}
+        {availableProviders.map((p) => {
+          const Icon = PROVIDER_ICON[p]
+          return (
+            <Button
+              key={p}
+              type="button"
+              variant="outline"
+              size="lg"
+              disabled={pending !== null}
+              onClick={() => handleClick(p)}
+              className="bg-[#111111] border-[var(--border)] text-[16px] font-sans gap-2"
+            >
+              <Icon size={20} />
+              <span className="font-sans">{PROVIDER_LABEL[p]}</span>
+            </Button>
+          )
+        })}
       </div>
       <p className="text-[12px] leading-[1.5] text-[var(--muted-foreground)] font-sans">
         By continuing, you agree to the{" "}
