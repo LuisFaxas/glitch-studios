@@ -21,7 +21,7 @@ export function RegisterRoleSelect({ brand }: RegisterRoleSelectProps) {
   return (
     <>
       <div className="relative z-10 flex h-[calc(100dvh-3rem)] w-full flex-col gap-3 overflow-hidden md:h-auto md:gap-10">
-        <div className="mx-auto flex w-full max-w-[420px] flex-col items-center gap-3 md:max-w-[560px] md:gap-4">
+        <div className="mx-auto flex w-full max-w-[280px] flex-col items-center gap-2 md:max-w-[560px] md:gap-4">
           <Link
             href="/"
             aria-label="Glitch Studios — Home"
@@ -125,36 +125,36 @@ function RoleCard({
   variant = "default",
 }: RoleCardProps) {
   return (
-    <PixelCard variant={variant} className="h-full md:min-h-[380px]">
+    <PixelCard variant={variant} className="h-full overflow-hidden md:min-h-[380px]">
       <Link
         href={href}
-        className="relative z-10 flex h-full flex-col justify-between gap-3 p-5 md:gap-5 md:p-8"
+        className="relative z-10 flex h-full min-h-0 flex-col justify-between gap-2 p-3 md:gap-5 md:p-8"
       >
-        <div className="flex flex-col gap-3">
-          <span className="font-mono uppercase tracking-[0.18em] text-[16px] text-[var(--muted-foreground)]">
+        <div className="flex flex-col gap-1 md:gap-3">
+          <span className="font-mono uppercase tracking-[0.14em] text-[11px] md:tracking-[0.18em] md:text-[16px] text-[var(--muted-foreground)]">
             {badge}
           </span>
-          <h2 className="font-mono uppercase tracking-[0.05em] text-[24px] md:text-[28px] leading-[1.15] font-semibold text-[#f5f5f0]">
+          <h2 className="font-mono uppercase tracking-[0.04em] text-[20px] md:tracking-[0.05em] md:text-[28px] leading-[1.1] md:leading-[1.15] font-semibold text-[#f5f5f0]">
             {title}
           </h2>
-          <p className="text-[14px] leading-[1.5] text-[var(--muted-foreground)] font-sans italic">
+          <p className="text-[12px] leading-[1.4] md:text-[14px] md:leading-[1.5] text-[var(--muted-foreground)] font-sans italic">
             {subtitle}
           </p>
         </div>
 
-        <ul className="flex flex-col gap-3 md:gap-4 text-[18px] md:text-[20px] font-sans text-[#f5f5f0]/85">
+        <ul className="flex min-h-0 flex-col gap-1 md:gap-4 text-[13px] md:text-[20px] font-sans text-[#f5f5f0]/85">
           {bullets.map((b) => (
-            <li key={b} className="flex items-center gap-3">
+            <li key={b} className="flex items-center gap-2 md:gap-3">
               <span
                 aria-hidden="true"
-                className="inline-block h-1.5 w-4 bg-[#f5f5f0] shrink-0"
+                className="inline-block h-1 w-2.5 md:h-1.5 md:w-4 bg-[#f5f5f0] shrink-0"
               />
-              {b}
+              <span className="truncate">{b}</span>
             </li>
           ))}
         </ul>
 
-        <span className="font-mono uppercase tracking-[0.18em] text-[18px] font-semibold text-[#f5f5f0]">
+        <span className="font-mono uppercase tracking-[0.14em] text-[12px] md:tracking-[0.18em] md:text-[18px] font-semibold text-[#f5f5f0]">
           Continue →
         </span>
       </Link>

@@ -89,7 +89,7 @@ export function LoginForm({ availableProviders }: LoginFormProps) {
     <>
       <div
         aria-hidden="true"
-        className="fixed inset-0 z-0"
+        className="fixed inset-0 z-0 hidden md:block"
       >
         <MagicRings
           color="#ffffff"
