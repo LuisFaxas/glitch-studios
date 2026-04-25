@@ -21,6 +21,7 @@ export const user = pgTable("user", {
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   emailVerified: boolean("emailVerified").default(false),
+  newsletterOptIn: boolean("newsletter_opt_in").notNull().default(false),
   image: text("image"),
   role: text("role").default("user"),
   banned: boolean("banned").default(false),
@@ -1087,3 +1088,47 @@ export const techReviewDisciplineExclusionsRelations = relations(
     }),
   }),
 )
+
+// === Artist Application (Phase 26) ===
+
+export const artistApplicationStatusEnum = pgEnum("artist_application_status", [
+  "pending",
+  "approved",
+  "rejected",
+  "info_requested",
+])
+
+export const artistApplicationBrandEnum = pgEnum("artist_application_brand", [
+  "studios",
+  "tech",
+])
+
+export const artistApplications = pgTable(
+  "artist_applications",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    brand: artistApplicationBrandEnum("brand").notNull(),
+    name: text("name").notNull(),
+    email: text("email").notNull(),
+    bio: text("bio").notNull(),
+    portfolioUrl: text("portfolio_url"),
+    focusTags: jsonb("focus_tags").$type<string[]>().notNull().default([]),
+    status: artistApplicationStatusEnum("status").notNull().default("pending"),
+    submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+    reviewedAt: timestamp("reviewed_at"),
+    reviewedBy: text("reviewed_by").references(() => user.id, { onDelete: "set null" }),
+    reviewerNote: text("reviewer_note"),
+  },
+  (t) => [
+    index("idx_artist_applications_status").on(t.status),
+    index("idx_artist_applications_brand").on(t.brand),
+    index("idx_artist_applications_submitted_at").on(t.submittedAt),
+  ],
+)
+
+export const artistApplicationsRelations = relations(artistApplications, ({ one }) => ({
+  reviewer: one(user, {
+    fields: [artistApplications.reviewedBy],
+    references: [user.id],
+  }),
+}))
