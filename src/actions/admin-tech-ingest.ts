@@ -12,7 +12,7 @@ import { z } from "zod"
 import { RUBRIC_V1_1 } from "@/lib/tech/rubric-map"
 import { computeBprScore } from "@/lib/tech/bpr"
 import { recomputeGlitchmark } from "@/lib/tech/glitchmark"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { randomUUID } from "node:crypto"
 
 // --- Types ---
@@ -517,8 +517,11 @@ export async function commitBenchmarkIngest(
   revalidatePath("/tech") // homepage spotlight
   revalidatePath("/admin/tech/reviews") // admin list
   revalidatePath(`/admin/tech/reviews/${reviewId}/edit`) // admin edit page
-  // Leaderboard placeholder — no-op on non-existent route, safe per D-15 note
   revalidatePath("/tech/categories/laptops/rankings")
+  // Phase 29: invalidate the leaderboard unstable_cache so the recomputed
+  // GlitchMark / BPR appears immediately on /tech/categories/[slug]/rankings.
+  // Next.js 16 split: updateTag(tag) is the single-arg server-action variant.
+  updateTag("leaderboard")
 
   return {
     ok: true,

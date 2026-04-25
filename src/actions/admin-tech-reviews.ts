@@ -12,7 +12,7 @@ import {
 import { eq, desc, ne } from "drizzle-orm"
 import { requirePermission } from "@/lib/permissions"
 import { slugify } from "@/lib/slugify"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 
 export interface ReviewFormInput {
   productId: string
@@ -234,6 +234,11 @@ export async function publishReview(id: string): Promise<void> {
   if (updated?.slug) {
     revalidatePath(`/tech/reviews/${updated.slug}`, "page")
   }
+  // Phase 29: invalidate the leaderboard unstable_cache so the new score / status
+  // appears immediately on /tech/categories/[slug]/rankings.
+  // Next.js 16 split: updateTag(tag) is the single-arg server-action variant
+  // (read-your-own-writes); revalidateTag now requires a CacheLife profile.
+  updateTag("leaderboard")
 }
 
 export async function unpublishReview(id: string): Promise<void> {
@@ -251,6 +256,11 @@ export async function unpublishReview(id: string): Promise<void> {
   if (updated?.slug) {
     revalidatePath(`/tech/reviews/${updated.slug}`, "page")
   }
+  // Phase 29: invalidate the leaderboard unstable_cache so the new score / status
+  // appears immediately on /tech/categories/[slug]/rankings.
+  // Next.js 16 split: updateTag(tag) is the single-arg server-action variant
+  // (read-your-own-writes); revalidateTag now requires a CacheLife profile.
+  updateTag("leaderboard")
 }
 
 export async function deleteReview(id: string): Promise<void> {
