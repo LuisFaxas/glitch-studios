@@ -251,7 +251,7 @@ const PLACEHOLDERS: PlaceholderRow[] = [
   },
 ]
 
-const PLACEHOLDER_HERO_URL = "https://placehold.co/1200x800/0a0a0a/f5f5f0?text=Placeholder+Laptop"
+const PLACEHOLDER_HERO_URL = "https://placehold.co/1200x800/0a0a0a/f5f5f0/png?text=Placeholder+Laptop"
 const PLACEHOLDER_VERDICT =
   "Placeholder review for v4.0 leaderboard density. Replace with real review when this product is benchmarked."
 const PLACEHOLDER_BODY = "<p>Placeholder body — see Phase 29 seed.</p>"
@@ -343,6 +343,8 @@ export async function seedPlaceholderLaptops(sql: Sql): Promise<SeedSummary> {
   `
   if (existingHero.length > 0) {
     heroImageId = existingHero[0].id
+    // Idempotent URL refresh — keep the seed source of truth in the URL constant.
+    await sql`UPDATE media_assets SET url=${PLACEHOLDER_HERO_URL} WHERE id=${heroImageId}`
   } else {
     const [hero] = await sql<{ id: string }[]>`
       INSERT INTO media_assets (filename, key, url, mime_type, size, width, height, alt, uploaded_by)

@@ -300,6 +300,7 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
                 alt={row.original.heroImageAlt ?? row.original.productName}
                 width={48}
                 height={48}
+                unoptimized
                 className="h-12 w-12 flex-none border border-[#222] object-cover"
               />
             ) : (

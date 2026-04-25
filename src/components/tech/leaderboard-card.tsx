@@ -1,6 +1,5 @@
 "use client"
 import Link from "next/link"
-import Image from "next/image"
 import { BPRMedal } from "./bpr-medal"
 import { BuyButton } from "./buy-button"
 import type {
@@ -36,6 +35,7 @@ export function LeaderboardCard({ row, rank, benchmarkColumns }: Props) {
             score={row.bprScore}
             disciplineCount={row.bprDisciplineCount}
             variant="compact"
+            asLink={false}
           />
         )}
         <div className="min-w-0 flex-1">
@@ -47,15 +47,6 @@ export function LeaderboardCard({ row, rank, benchmarkColumns }: Props) {
             {row.subCategoryName ? ` · ${row.subCategoryName}` : ""}
           </p>
         </div>
-        {row.heroImageUrl && (
-          <Image
-            src={row.heroImageUrl}
-            alt={row.heroImageAlt ?? row.productName}
-            width={48}
-            height={48}
-            className="h-12 w-12 flex-none border border-[#222] object-cover"
-          />
-        )}
       </div>
       <div className="mt-4 flex items-baseline gap-2">
         <span className="font-mono text-3xl text-[#f5f5f0]">
