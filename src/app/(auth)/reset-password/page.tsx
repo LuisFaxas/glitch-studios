@@ -3,163 +3,122 @@
 import { Suspense, useState } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { z } from "zod/v4"
 import { toast } from "sonner"
 import { authClient } from "@/lib/auth-client"
-import { GlitchLogo } from "@/components/layout/glitch-logo"
+import { AuthFormCard } from "@/components/auth/auth-form-card"
+import { PasswordField } from "@/components/auth/password-field"
+import { EnumSafeFormError } from "@/components/auth/enum-safe-form-error"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 
-const schema = z
-  .object({
-    newPassword: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string(),
-  })
-  .refine((d) => d.newPassword === d.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Passwords do not match",
-  })
+function ExpiredView() {
+  return (
+    <AuthFormCard heading="Set a new password">
+      <Alert variant="destructive">
+        <AlertDescription className="text-[16px] leading-[1.5] font-sans">
+          This reset link expired. Request a new one.
+        </AlertDescription>
+      </Alert>
+      <Link
+        href="/forgot-password"
+        className="inline-flex items-center justify-center h-9 px-2.5 rounded-lg bg-[var(--foreground)] text-black font-sans text-sm font-medium"
+      >
+        Send a new link
+      </Link>
+    </AuthFormCard>
+  )
+}
 
 function ResetPasswordForm() {
   const router = useRouter()
-  const token = useSearchParams().get("token")
-  const [isLoading, setIsLoading] = useState(false)
-  const [errors, setErrors] = useState<{
-    newPassword?: string
-    confirmPassword?: string
-  }>({})
+  const searchParams = useSearchParams()
+  const token = searchParams.get("token") ?? ""
 
-  if (!token) {
-    return (
-      <div className="space-y-8">
-        <div className="flex flex-col items-center space-y-4">
-          <GlitchLogo size="md" />
-          <h1 className="font-mono text-2xl font-bold uppercase tracking-tight text-white">
-            Invalid or Expired Link
-          </h1>
-        </div>
-        <p className="text-center text-sm text-gray-300">
-          This password reset link is invalid or has expired. Request a new one
-          to continue.
-        </p>
-        <Link
-          href="/forgot-password"
-          className="block text-center text-white underline underline-offset-4 hover:text-pure-white"
-        >
-          Request a new link
-        </Link>
-      </div>
-    )
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [pending, setPending] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [expired, setExpired] = useState(false)
+
+  if (!token || expired) {
+    return <ExpiredView />
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setErrors({})
+    setError(null)
 
-    const formData = new FormData(e.currentTarget)
-    const newPassword = (formData.get("newPassword") as string | null) ?? ""
-    const confirmPassword =
-      (formData.get("confirmPassword") as string | null) ?? ""
-
-    const result = schema.safeParse({ newPassword, confirmPassword })
-    if (!result.success) {
-      const fieldErrors: {
-        newPassword?: string
-        confirmPassword?: string
-      } = {}
-      for (const issue of result.error.issues) {
-        const field = issue.path[0] as "newPassword" | "confirmPassword"
-        fieldErrors[field] = issue.message
-      }
-      setErrors(fieldErrors)
+    if (newPassword !== confirmPassword) {
+      setError("Passwords don't match.")
+      return
+    }
+    if (newPassword.length < 8) {
+      setError(
+        "Use at least 8 characters with a mix of letters, numbers, and symbols.",
+      )
       return
     }
 
-    setIsLoading(true)
+    setPending(true)
     try {
-      const { error } = await authClient.resetPassword({
-        newPassword,
-        token: token!,
-      })
-      if (error) {
-        toast.error(error.message ?? "Reset failed. Request a new link.")
+      const result = await authClient.resetPassword({ newPassword, token })
+      if (result && "error" in result && result.error) {
+        setExpired(true)
+        setPending(false)
         return
       }
-      toast.success("Password updated. Please sign in.")
+      toast.success("Password updated. Sign in with your new password.")
       router.push("/login")
     } catch {
-      toast.error("Reset failed. Request a new link.")
-    } finally {
-      setIsLoading(false)
+      setExpired(true)
+      setPending(false)
     }
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col items-center space-y-4">
-        <GlitchLogo size="md" />
-        <h1 className="font-mono text-2xl font-bold uppercase tracking-tight text-white">
-          Set a New Password
-        </h1>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="newPassword">New Password</Label>
-          <Input
-            id="newPassword"
-            name="newPassword"
-            type="password"
-            placeholder="At least 8 characters"
-            required
-            minLength={8}
-            autoComplete="new-password"
-            disabled={isLoading}
-          />
-          {errors.newPassword && (
-            <p className="text-sm text-destructive">{errors.newPassword}</p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
-          <Input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            placeholder="Re-enter your new password"
-            required
-            minLength={8}
-            autoComplete="new-password"
-            disabled={isLoading}
-          />
-          {errors.confirmPassword && (
-            <p className="text-sm text-destructive">
-              {errors.confirmPassword}
-            </p>
-          )}
-        </div>
-
+    <AuthFormCard
+      heading="Set a new password"
+      subhead="Choose a new password for your account."
+      footer={
+        <p>
+          <Link href="/login" className="underline">
+            Back to sign in
+          </Link>
+        </p>
+      }
+    >
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <EnumSafeFormError message={error} />
+        <PasswordField
+          id="new-password"
+          name="newPassword"
+          label="New password"
+          value={newPassword}
+          onChange={setNewPassword}
+          autoComplete="new-password"
+          required
+          disabled={pending}
+        />
+        <PasswordField
+          id="confirm-password"
+          name="confirmPassword"
+          label="Confirm new password"
+          value={confirmPassword}
+          onChange={setConfirmPassword}
+          autoComplete="new-password"
+          required
+          disabled={pending}
+        />
         <Button
           type="submit"
-          className="w-full"
           size="lg"
-          disabled={isLoading}
+          disabled={pending}
+          className="bg-[var(--foreground)] text-black font-sans"
         >
-          {isLoading ? "Updating..." : "Update Password"}
+          {pending ? "Setting..." : "Set new password"}
         </Button>
       </form>
-
-      <p className="text-center text-sm text-gray-400">
-        <Link
-          href="/login"
-          className="text-white underline underline-offset-4 hover:text-pure-white"
-        >
-          Back to sign in
-        </Link>
-      </p>
-    </div>
+    </AuthFormCard>
   )
 }
 
