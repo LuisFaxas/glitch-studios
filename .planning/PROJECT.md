@@ -81,6 +81,7 @@ Derived from audit — placeholder list pending Phase 22 output.
 
 - [x] Visual audit & discovery (Phase 22 — seeds phases 23+)
 - [x] Brand-aware auth UI redesign (Phase 26) — login, register, customer wizard, artist application, verify-email, admin queue, AUTH-01..32 validated
+- [x] Media/Video strategy foundation (Phase 27) — polymorphic `media_item` schema, canonical `<MediaEmbed>` (youtube-nocookie, hover-preview gated on pointer:fine + !reduced-motion), admin attach UX on beat/service/tech_review edit pages, home features picker, public surfaces wired (home grid, video card thumbnailOnly, beat made-by-hand, review video embed media-item-first), D-01..D-18 validated
 - [ ] Email delivery end-to-end (Resend + React Email) — launch blocker
 - [ ] Site-wide performance audit + fixes — launch blocker
 - [ ] **GlitchMark system** — aggregate-all-benchmarks composite score, distinct from BPR
@@ -157,6 +158,6 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-25 — Phase 26 (brand-aware auth UI redesign) shipped to production. AUTH-01..32 all validated through iterative live deploys. /login, /register (with PixelCard role tiles + mobile Backstage Lanyard composition), /register/customer wizard (split-frame value-prop + form), /register/artist (timeline-driven submitted state), /verify-email, /admin/applications all live. Better Auth social providers wired (Google live; Meta/GitHub stubbed). DB migration applied to prod. Legal stubs at /terms + /privacy.*
+*Last updated: 2026-04-25 — Phase 27 (media/video strategy foundation) shipped. Polymorphic `media_item` table with `media_kind` enum live in Postgres (4 backfilled rows from existing `portfolio_items.video_url` + `tech_reviews.video_url`). Canonical `<MediaEmbed>` component (youtube-nocookie.com only; hover-preview gated on `(pointer: fine)` + `!prefers-reduced-motion: reduce`; `mode="thumbnailOnly"` for nested-Link cards) is now the only YouTube iframe emitter site-wide — verified via grep. Admin can paste-validate-attach via per-entity edit pages (beat/service/tech_review) and curate `home_feature` rows from `/admin/settings/homepage` with hard-cap-3 read enforcement. Public payoff: `<HomeFeaturedWorkGrid>` 3-up grid (returns null when empty per D-12), `<VideoCard>` thumbnailOnly inside `<Link>`, beat detail conditional "Made by hand" via top-down prop-pass, `<ReviewVideoEmbed>` media_item-first with one-release `video_url` fallback. Portfolio admin Videos section deferred — admin edit page does not exist as standalone surface. Phase 26 (brand-aware auth UI redesign) previously shipped: AUTH-01..32 all validated.*
 
 *2026-04-24 — v4.0 Production Launch milestone started. v3.0 closed partial with Phases 15-17 shipped; remaining launch work (17.5, 18, 19, 20, 20.5, 21) carried over. New scope: GlitchMark scoring system (distinct from BPR, captured in memory after being lost from the planning record), email delivery, performance, and production polish. Phase 22 is a visual audit that determines the rest of the milestone phases.*
