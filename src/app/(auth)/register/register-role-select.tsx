@@ -17,6 +17,7 @@ interface RegisterRoleSelectProps {
 export function RegisterRoleSelect({ brand }: RegisterRoleSelectProps) {
   const wordmark = brand === "tech" ? "Join GlitchTech" : "Join the studio"
   const altLabel = "Show off!"
+  const isTech = brand === "tech"
 
   return (
     <>
@@ -62,25 +63,43 @@ export function RegisterRoleSelect({ brand }: RegisterRoleSelectProps) {
           <RoleCard
             href="/register/customer?step=1"
             title="I'm in!"
+            mobileTitle="I'M IN."
             badge="Member"
             subtitle="One account. Studio time, beats, receipts — all in one place."
+            mobileTagline="«ONE ACCOUNT · STUDIO · BEATS · RECEIPTS»"
+            mobileBenefits="BOOK ROOMS · STREAM DROPS · OWN MASTERS"
             bullets={[
               "Browse and license beats",
               "Book studio sessions",
               "Track orders and downloads",
             ]}
+            accessLevel="01"
+            serial="0001"
+            ghostNumeral="01"
+            mobileCta="PUNCH IN"
           />
           <RoleCard
             href="/register/artist"
             title={altLabel}
-            badge={brand === "tech" ? "Contributor" : "Artist"}
+            mobileTitle="SHOW OFF."
+            badge={isTech ? "Contributor" : "Artist"}
             subtitle={
-              brand === "tech"
+              isTech
                 ? "We publish what holds up. Bring receipts."
                 : "We build the roster slowly. Bring your A material."
             }
+            mobileTagline={
+              isTech
+                ? "«BENCHMARKS · TEARDOWNS · BYLINES»"
+                : "«ROSTER · CATALOG · ROYALTIES»"
+            }
+            mobileBenefits={
+              isTech
+                ? "PUBLISH REVIEWS · SUBMIT DATA · BUILD A BYLINE"
+                : "UPLOAD BEATS · GROW ROSTER · EARN LICENSES"
+            }
             bullets={
-              brand === "tech"
+              isTech
                 ? [
                     "Publish reviews",
                     "Submit benchmark data",
@@ -92,6 +111,10 @@ export function RegisterRoleSelect({ brand }: RegisterRoleSelectProps) {
                     "Earn from licenses",
                   ]
             }
+            accessLevel="02"
+            serial="0002"
+            ghostNumeral="02"
+            mobileCta="AUDITION"
             colors="#fffbeb,#fcd34d,#f59e0b"
           />
         </div>
@@ -110,9 +133,16 @@ export function RegisterRoleSelect({ brand }: RegisterRoleSelectProps) {
 interface RoleCardProps {
   href: string
   title: string
+  mobileTitle: string
   badge: string
   subtitle: string
+  mobileTagline: string
+  mobileBenefits: string
   bullets: string[]
+  accessLevel: string
+  serial: string
+  ghostNumeral: string
+  mobileCta: string
   variant?: "default" | "blue" | "yellow" | "pink"
   colors?: string
 }
@@ -120,9 +150,16 @@ interface RoleCardProps {
 function RoleCard({
   href,
   title,
+  mobileTitle,
   badge,
   subtitle,
+  mobileTagline,
+  mobileBenefits,
   bullets,
+  accessLevel,
+  serial,
+  ghostNumeral,
+  mobileCta,
   variant = "default",
   colors,
 }: RoleCardProps) {
@@ -132,35 +169,75 @@ function RoleCard({
       colors={colors}
       className="h-full overflow-hidden md:min-h-[380px]"
     >
+      {/* Mobile — Backstage Lanyard */}
       <Link
         href={href}
-        className="relative z-10 flex h-full min-h-0 flex-col gap-3 p-6 md:gap-5 md:p-8"
+        className="relative z-10 flex h-full min-h-0 flex-col p-5 md:hidden"
       >
-        <div className="flex flex-col gap-1.5 text-center md:gap-3 md:text-left">
-          <span className="font-mono uppercase tracking-[0.14em] text-[13px] md:tracking-[0.18em] md:text-[16px] text-[var(--muted-foreground)]">
+        {/* Top row: ACCESS LVL chip + role badge */}
+        <div className="flex items-start justify-between font-mono uppercase tracking-[0.22em] text-[10px] text-[#f5f5f0]/65">
+          <span>ACCESS LVL ░ {accessLevel}</span>
+          <span>{badge}</span>
+        </div>
+
+        {/* Ghost numeral behind everything */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 flex items-center justify-center font-mono text-[180px] font-extrabold leading-none text-[#f5f5f0] opacity-[0.05] -rotate-12 select-none"
+        >
+          {ghostNumeral}
+        </span>
+
+        {/* Center block — title + tagline + one-line benefits */}
+        <div className="relative z-10 mt-auto flex flex-col gap-2">
+          <h2 className="font-mono uppercase font-bold tracking-[0.02em] text-[34px] leading-[0.95] text-[#f5f5f0]">
+            {mobileTitle}
+          </h2>
+          <p className="font-mono uppercase tracking-[0.06em] text-[11px] text-[#f5f5f0]/85">
+            {mobileTagline}
+          </p>
+          <p className="font-mono uppercase tracking-[0.05em] text-[10.5px] leading-[1.55] text-[#f5f5f0]/55">
+            {mobileBenefits}
+          </p>
+        </div>
+
+        {/* Bottom row: serial + CTA */}
+        <div className="relative z-10 mt-3 flex items-end justify-between border-t border-[#f5f5f0]/15 pt-3 font-mono uppercase tracking-[0.18em] text-[11px]">
+          <span className="text-[#f5f5f0]/45">N° {serial}</span>
+          <span className="font-bold text-[#f5f5f0]">{mobileCta} →</span>
+        </div>
+      </Link>
+
+      {/* Desktop — keep existing composition */}
+      <Link
+        href={href}
+        className="relative z-10 hidden h-full min-h-0 flex-col gap-5 p-8 md:flex"
+      >
+        <div className="flex flex-col gap-3">
+          <span className="font-mono uppercase tracking-[0.18em] text-[16px] text-[var(--muted-foreground)]">
             {badge}
           </span>
-          <h2 className="font-mono uppercase tracking-[0.04em] text-[24px] md:tracking-[0.05em] md:text-[28px] leading-[1.1] md:leading-[1.15] font-semibold text-[#f5f5f0]">
+          <h2 className="font-mono uppercase tracking-[0.05em] text-[28px] leading-[1.15] font-semibold text-[#f5f5f0]">
             {title}
           </h2>
-          <p className="text-[14px] leading-[1.4] md:text-[14px] md:leading-[1.5] text-[var(--muted-foreground)] font-sans italic">
+          <p className="text-[14px] leading-[1.5] text-[var(--muted-foreground)] font-sans italic">
             {subtitle}
           </p>
         </div>
 
-        <ul className="flex flex-col gap-2 md:gap-4 text-[15px] md:text-[20px] font-sans text-[#f5f5f0]/90">
+        <ul className="flex flex-col gap-4 text-[20px] font-sans text-[#f5f5f0]/90">
           {bullets.map((b) => (
-            <li key={b} className="flex items-center gap-2 md:gap-3">
+            <li key={b} className="flex items-center gap-3">
               <span
                 aria-hidden="true"
-                className="inline-block h-1.5 w-3 md:h-1.5 md:w-4 bg-[#f5f5f0] shrink-0"
+                className="inline-block h-1.5 w-4 bg-[#f5f5f0] shrink-0"
               />
               <span>{b}</span>
             </li>
           ))}
         </ul>
 
-        <span className="mt-auto font-mono uppercase tracking-[0.14em] text-[14px] md:tracking-[0.18em] md:text-[18px] font-semibold text-[#f5f5f0]">
+        <span className="mt-auto font-mono uppercase tracking-[0.18em] text-[18px] font-semibold text-[#f5f5f0]">
           Continue →
         </span>
       </Link>
