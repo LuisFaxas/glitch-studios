@@ -9,6 +9,7 @@ import { db } from "./db"
 import * as schema from "@/db/schema"
 import { PasswordResetEmail } from "@/lib/email/password-reset"
 import { AccountVerificationEmail } from "@/lib/email/account-verification"
+import { ArtistApprovalInviteEmail } from "@/lib/email/artist-approval-invite"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const EMAIL_FROM = "Glitch Studios <noreply@glitchstudios.io>"
@@ -68,12 +69,24 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
+      const isInvite = url.includes("invite=1")
+      const brand: "studios" | "tech" = url.includes("brand=tech")
+        ? "tech"
+        : "studios"
       try {
         const { error } = await resend.emails.send({
           from: EMAIL_FROM,
           to: user.email,
-          subject: "Reset your Glitch Studios password",
-          react: PasswordResetEmail({ name: user.name, url }),
+          subject: isInvite
+            ? "You're approved — set your password."
+            : "Reset your Glitch Studios password",
+          react: isInvite
+            ? ArtistApprovalInviteEmail({
+                name: user.name ?? "there",
+                url,
+                brand,
+              })
+            : PasswordResetEmail({ name: user.name, url }),
         })
         if (error) {
           console.error("[email:reset] Resend send failed:", error)
