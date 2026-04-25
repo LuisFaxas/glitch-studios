@@ -128,33 +128,33 @@ function RoleCard({
     <PixelCard variant={variant} className="h-full overflow-hidden md:min-h-[380px]">
       <Link
         href={href}
-        className="relative z-10 flex h-full min-h-0 flex-col justify-between gap-2 p-5 md:gap-5 md:p-8"
+        className="relative z-10 flex h-full min-h-0 flex-col gap-3 p-6 md:gap-5 md:p-8"
       >
-        <div className="flex flex-col gap-1 md:gap-3">
-          <span className="font-mono uppercase tracking-[0.14em] text-[11px] md:tracking-[0.18em] md:text-[16px] text-[var(--muted-foreground)]">
+        <div className="flex flex-col gap-1.5 md:gap-3">
+          <span className="font-mono uppercase tracking-[0.14em] text-[13px] md:tracking-[0.18em] md:text-[16px] text-[var(--muted-foreground)]">
             {badge}
           </span>
-          <h2 className="font-mono uppercase tracking-[0.04em] text-[20px] md:tracking-[0.05em] md:text-[28px] leading-[1.1] md:leading-[1.15] font-semibold text-[#f5f5f0]">
+          <h2 className="font-mono uppercase tracking-[0.04em] text-[24px] md:tracking-[0.05em] md:text-[28px] leading-[1.1] md:leading-[1.15] font-semibold text-[#f5f5f0]">
             {title}
           </h2>
-          <p className="text-[12px] leading-[1.4] md:text-[14px] md:leading-[1.5] text-[var(--muted-foreground)] font-sans italic">
+          <p className="text-[14px] leading-[1.4] md:text-[14px] md:leading-[1.5] text-[var(--muted-foreground)] font-sans italic">
             {subtitle}
           </p>
         </div>
 
-        <ul className="flex min-h-0 flex-col gap-1 md:gap-4 text-[13px] md:text-[20px] font-sans text-[#f5f5f0]/85">
+        <ul className="flex flex-col gap-2 md:gap-4 text-[15px] md:text-[20px] font-sans text-[#f5f5f0]/90">
           {bullets.map((b) => (
             <li key={b} className="flex items-center gap-2 md:gap-3">
               <span
                 aria-hidden="true"
-                className="inline-block h-1 w-2.5 md:h-1.5 md:w-4 bg-[#f5f5f0] shrink-0"
+                className="inline-block h-1.5 w-3 md:h-1.5 md:w-4 bg-[#f5f5f0] shrink-0"
               />
-              <span className="truncate">{b}</span>
+              <span>{b}</span>
             </li>
           ))}
         </ul>
 
-        <span className="font-mono uppercase tracking-[0.14em] text-[12px] md:tracking-[0.18em] md:text-[18px] font-semibold text-[#f5f5f0]">
+        <span className="mt-auto font-mono uppercase tracking-[0.14em] text-[14px] md:tracking-[0.18em] md:text-[18px] font-semibold text-[#f5f5f0]">
           Continue →
         </span>
       </Link>
