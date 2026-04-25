@@ -1,11 +1,17 @@
-export default function AuthLayout({
+import { headers } from "next/headers"
+import { getBrandFromHost } from "@/lib/brand"
+
+export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const headersList = await headers()
+  const brand = getBrandFromHost(headersList.get("host"))
+
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4">
-      <div className="w-full max-w-md">{children}</div>
+    <div data-brand={brand} className="min-h-screen bg-black text-white">
+      {children}
     </div>
   )
 }
