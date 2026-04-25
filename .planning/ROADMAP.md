@@ -109,18 +109,28 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - Admin self-registration (admins are always provisioned by other admins)
 - 2FA / MFA (separate phase if/when needed)
 
-**Plans:** 11 plans
-- [ ] 26-01-PLAN.md — Brand utility extraction + (auth)/layout server component + REQUIREMENTS.md AUTH-* IDs append
-- [ ] 26-02-PLAN.md — AuthShell + BrandSidePanel + EnumSafeFormError + SocialAuthRow + WizardProgress + PasswordField + AuthFormCard + useBrand hook
-- [ ] 26-03-PLAN.md — Drizzle artistApplication schema + newsletterOptIn user column + grandfather migration + runner script
-- [ ] 26-04-PLAN.md — Better Auth socialProviders config (Google + Meta + GitHub) + accountLinking.enabled false + OAuth brand SVGs + .env.example
-- [ ] 26-05-PLAN.md — /login rebuilt against AuthShell + SocialAuthRow + EnumSafeFormError + account_not_linked URL handler
-- [ ] 26-06-PLAN.md — /register role-select tiles + customer wizard at /register/customer?step=1|2|3 (atomic step-3 submit, server-action email pre-check)
-- [ ] 26-07-PLAN.md — /register/artist single-page form + submitArtistApplication server action + admin notification email + ArtistApplicationInput type
-- [ ] 26-08-PLAN.md — /forgot-password + /reset-password polish (AuthShell + branded copy + enumeration-safe success + expired-token Alert)
-- [ ] 26-09-PLAN.md — /verify-email 3-state route + soft-gate guards in (public)/dashboard/admin layouts via requireVerifiedEmailOrRedirect helper
-- [ ] 26-10-PLAN.md — /admin/applications list + detail Sheet + Approve/Reject/Request-info server actions + artist-approval-invite email + auth.ts dual-handler + Approve confirmation modal
-- [ ] 26-11-PLAN.md — Verification + ship checklist (tsc/lint, GlitchTech spelling sweep, Playwright pass on both brands × 5 surfaces × Google OAuth, Vercel env-var checklist)
+**Plans:** 12 plans (6 waves; max parallelism on Waves 1, 3, 4)
+
+**Wave layout:**
+- Wave 1 (parallel): 01, 03 — independent foundations (brand utility, schema)
+- Wave 2: 02 — shared auth components (depends on 01)
+- Wave 3 (parallel): 04, 07, 08, 09 — backend/page rebuilds that don't share files
+- Wave 4 (parallel): 05, 06, 10 — login + register customer + admin backend (all depend on 04 and/or 07)
+- Wave 5: 11 — admin queue UI (depends on 10)
+- Wave 6: 12 — verification + ship checklist (depends on all)
+
+- [ ] 26-01-PLAN.md (Wave 1) — Brand utility extraction + (auth)/layout server component + REQUIREMENTS.md AUTH-* IDs append
+- [ ] 26-02-PLAN.md (Wave 2) — AuthShell + BrandSidePanel + EnumSafeFormError + SocialAuthRow + WizardProgress + PasswordField + AuthFormCard + useBrand hook + (auth)/layout AuthShell wiring
+- [ ] 26-03-PLAN.md (Wave 1) — Drizzle artistApplication schema + newsletterOptIn user column + grandfather migration + runner script
+- [ ] 26-04-PLAN.md (Wave 3) — Better Auth socialProviders config (Google + Meta + GitHub) + accountLinking.enabled false + OAuth brand SVGs + SocialAuthRow icons wiring + .env.example
+- [ ] 26-05-PLAN.md (Wave 4) — /login rebuilt against AuthShell + SocialAuthRow + EnumSafeFormError + account_not_linked URL handler
+- [ ] 26-06-PLAN.md (Wave 4) — /register role-select tiles + customer wizard at /register/customer?step=1|2|3 (atomic step-3 submit, server-action email pre-check)
+- [ ] 26-07-PLAN.md (Wave 3) — /register/artist single-page form + submitArtistApplication server action + admin notification email + ArtistApplicationInput type
+- [ ] 26-08-PLAN.md (Wave 3) — /forgot-password + /reset-password polish (AuthShell + branded copy + enumeration-safe success + expired-token Alert)
+- [ ] 26-09-PLAN.md (Wave 3) — /verify-email 3-state route + soft-gate guards in (public)/dashboard/admin layouts via requireVerifiedEmailOrRedirect helper
+- [ ] 26-10-PLAN.md (Wave 4) — Admin queue BACKEND: artist-approval-invite email template + auth.ts sendResetPassword dual-handler + approve/reject/request-info server actions
+- [ ] 26-11-PLAN.md (Wave 5) — Admin queue FRONTEND: /admin/applications page (with HoverGlitchHeading H1 per AUTH-31) + ApplicationListTable + ApplicationDetailSheet + ApplicationApproveDialog
+- [ ] 26-12-PLAN.md (Wave 6) — Verification + ship checklist (tsc/lint, GlitchTech spelling sweep, Playwright pass on both brands × 5 surfaces × Google OAuth, Vercel env-var checklist)
 
 ---
 
