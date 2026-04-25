@@ -26,6 +26,9 @@ export default async function EditTechReviewPage({
     auth.api.getSession({ headers: await headers() }),
   ])
   if (!review) notFound()
+  // Phase 29: placeholder reviews are seed-managed only — they have no editorial fields
+  // (verdict/body/etc) and the admin UI is not designed to edit them.
+  if (review.status === "placeholder") notFound()
 
   const assetIds = [review.heroImageId, ...review.galleryMediaIds].filter(
     (v): v is string => typeof v === "string"
@@ -84,7 +87,7 @@ export default async function EditTechReviewPage({
         pros: review.pros,
         cons: review.cons,
         galleryMediaIds: review.galleryMediaIds,
-        status: review.status,
+        status: review.status as "draft" | "published",
       }}
     />
     <div className="mt-8">

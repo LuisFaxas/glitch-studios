@@ -9,7 +9,7 @@ import {
   techProducts,
   user,
 } from "@/db/schema"
-import { eq, desc } from "drizzle-orm"
+import { eq, desc, ne } from "drizzle-orm"
 import { requirePermission } from "@/lib/permissions"
 import { slugify } from "@/lib/slugify"
 import { revalidatePath } from "next/cache"
@@ -63,8 +63,13 @@ export async function listReviews(): Promise<ReviewListRow[]> {
     .from(techReviews)
     .leftJoin(techProducts, eq(techReviews.productId, techProducts.id))
     .leftJoin(user, eq(techReviews.reviewerId, user.id))
+    .where(ne(techReviews.status, "placeholder"))
     .orderBy(desc(techReviews.updatedAt))
-  return rows.map((r) => ({ ...r, reviewerName: r.reviewerName ?? "Unknown" }))
+  return rows.map((r) => ({
+    ...r,
+    reviewerName: r.reviewerName ?? "Unknown",
+    status: r.status as "draft" | "published",
+  }))
 }
 
 export async function getReview(id: string) {

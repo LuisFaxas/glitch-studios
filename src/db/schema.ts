@@ -675,9 +675,14 @@ export const techSpecFieldTypeEnum = pgEnum("tech_spec_field_type", [
   "boolean",
 ])
 
+// Phase 29: 'placeholder' is shown ONLY on /tech/categories/[slug]/rankings.
+// DO NOT add to existing eq(techReviews.status, "published") filters in
+// src/lib/tech/queries.ts — those gates protect sitemap, /tech/reviews list,
+// homepage carousel, getBenchmarkSpotlight, and review detail from leakage.
 export const techReviewStatusEnum = pgEnum("tech_review_status", [
   "draft",
   "published",
+  "placeholder",
 ])
 
 export const techBenchmarkDirectionEnum = pgEnum("tech_benchmark_direction", [
