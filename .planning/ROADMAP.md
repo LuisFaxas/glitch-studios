@@ -41,7 +41,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 25: Performance Audit + Fixes** — admin context switcher 2-3s → <500ms, admin edit→ingest 4s, public cold-nav p95, mobile LCP, image/bundle/query audits — PERF-01..07 (completed 2026-04-24)
 
 **🔐 Auth + UX:**
-- [ ] **Phase 26: Brand-Aware Auth UI Redesign** — brand-themed login/register/forgot/reset/verify surfaces; split register (customer wizard vs artist request flow); social login (Google + Meta + GitHub)
+- [x] **Phase 26: Brand-Aware Auth UI Redesign** — brand-themed login/register/forgot/reset/verify surfaces; split register (customer wizard vs artist request flow); social login (Google + Meta + GitHub) (completed 2026-04-25)
 
 **🎬 Foundation:**
 - [ ] **Phase 27: Media/Video Strategy Foundation** — canonical YouTube (long) + Instagram (short) embed pattern; schema `media_item` with entity attachments; admin add-video flow; reusable components (embed, carousel, hero)
@@ -109,7 +109,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - Admin self-registration (admins are always provisioned by other admins)
 - 2FA / MFA (separate phase if/when needed)
 
-**Plans:** 12 plans (6 waves; max parallelism on Waves 1, 3, 4)
+**Plans:** 12/12 plans complete
 
 **Wave layout:**
 - Wave 1 (parallel): 01, 03 — independent foundations (brand utility, schema)
@@ -119,18 +119,18 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - Wave 5: 11 — admin queue UI (depends on 10)
 - Wave 6: 12 — verification + ship checklist (depends on all)
 
-- [ ] 26-01-PLAN.md (Wave 1) — Brand utility extraction + (auth)/layout server component + REQUIREMENTS.md AUTH-* IDs append
-- [ ] 26-02-PLAN.md (Wave 2) — AuthShell + BrandSidePanel + EnumSafeFormError + SocialAuthRow + WizardProgress + PasswordField + AuthFormCard + useBrand hook + (auth)/layout AuthShell wiring
-- [ ] 26-03-PLAN.md (Wave 1) — Drizzle artistApplication schema + newsletterOptIn user column + grandfather migration + runner script
-- [ ] 26-04-PLAN.md (Wave 3) — Better Auth socialProviders config (Google + Meta + GitHub) + accountLinking.enabled false + OAuth brand SVGs + SocialAuthRow icons wiring + .env.example
-- [ ] 26-05-PLAN.md (Wave 4) — /login rebuilt against AuthShell + SocialAuthRow + EnumSafeFormError + account_not_linked URL handler
-- [ ] 26-06-PLAN.md (Wave 4) — /register role-select tiles + customer wizard at /register/customer?step=1|2|3 (atomic step-3 submit, server-action email pre-check)
-- [ ] 26-07-PLAN.md (Wave 3) — /register/artist single-page form + submitArtistApplication server action + admin notification email + ArtistApplicationInput type
-- [ ] 26-08-PLAN.md (Wave 3) — /forgot-password + /reset-password polish (AuthShell + branded copy + enumeration-safe success + expired-token Alert)
-- [ ] 26-09-PLAN.md (Wave 3) — /verify-email 3-state route + soft-gate guards in (public)/dashboard/admin layouts via requireVerifiedEmailOrRedirect helper
-- [ ] 26-10-PLAN.md (Wave 4) — Admin queue BACKEND: artist-approval-invite email template + auth.ts sendResetPassword dual-handler + approve/reject/request-info server actions
-- [ ] 26-11-PLAN.md (Wave 5) — Admin queue FRONTEND: /admin/applications page (with HoverGlitchHeading H1 per AUTH-31) + ApplicationListTable + ApplicationDetailSheet + ApplicationApproveDialog
-- [ ] 26-12-PLAN.md (Wave 6) — Verification + ship checklist (tsc/lint, GlitchTech spelling sweep, Playwright pass on both brands × 5 surfaces × Google OAuth, Vercel env-var checklist)
+- [x] 26-01-PLAN.md (Wave 1) — Brand utility extraction + (auth)/layout server component + REQUIREMENTS.md AUTH-* IDs append
+- [x] 26-02-PLAN.md (Wave 2) — AuthShell + BrandSidePanel + EnumSafeFormError + SocialAuthRow + WizardProgress + PasswordField + AuthFormCard + useBrand hook + (auth)/layout AuthShell wiring
+- [x] 26-03-PLAN.md (Wave 1) — Drizzle artistApplication schema + newsletterOptIn user column + grandfather migration + runner script
+- [x] 26-04-PLAN.md (Wave 3) — Better Auth socialProviders config (Google + Meta + GitHub) + accountLinking.enabled false + OAuth brand SVGs + SocialAuthRow icons wiring + .env.example
+- [x] 26-05-PLAN.md (Wave 4) — /login rebuilt against AuthShell + SocialAuthRow + EnumSafeFormError + account_not_linked URL handler
+- [x] 26-06-PLAN.md (Wave 4) — /register role-select tiles + customer wizard at /register/customer?step=1|2|3 (atomic step-3 submit, server-action email pre-check)
+- [x] 26-07-PLAN.md (Wave 3) — /register/artist single-page form + submitArtistApplication server action + admin notification email + ArtistApplicationInput type
+- [x] 26-08-PLAN.md (Wave 3) — /forgot-password + /reset-password polish (AuthShell + branded copy + enumeration-safe success + expired-token Alert)
+- [x] 26-09-PLAN.md (Wave 3) — /verify-email 3-state route + soft-gate guards in (public)/dashboard/admin layouts via requireVerifiedEmailOrRedirect helper
+- [x] 26-10-PLAN.md (Wave 4) — Admin queue BACKEND: artist-approval-invite email template + auth.ts sendResetPassword dual-handler + approve/reject/request-info server actions
+- [x] 26-11-PLAN.md (Wave 5) — Admin queue FRONTEND: /admin/applications page (with HoverGlitchHeading H1 per AUTH-31) + ApplicationListTable + ApplicationDetailSheet + ApplicationApproveDialog
+- [x] 26-12-PLAN.md (Wave 6) — Verification + ship checklist (tsc/lint, GlitchTech spelling sweep, Playwright pass on both brands × 5 surfaces × Google OAuth, Vercel env-var checklist)
 
 ---
 
@@ -452,7 +452,7 @@ v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 →
 | **23. Debug Broken Pages & Missing Routes** | **v4.0** | **0/tbd** | **Up next 🚨** | - |
 | 24. Email Delivery End-to-End | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 25. Performance Audit + Fixes | v4.0 | 3/3 | Complete    | 2026-04-24 |
-| 26. Brand-Aware Auth UI Redesign | v4.0 | 0/11 | Not started | - |
+| 26. Brand-Aware Auth UI Redesign | v4.0 | 12/12 | Complete   | 2026-04-25 |
 | 27. Media/Video Strategy Foundation | v4.0 | 0/tbd | Not started | - |
 | 28. GlitchMark System | v4.0 | 0/tbd | Not started | - |
 | 29. Master Leaderboard | v4.0 | 0/tbd | Not started | - |

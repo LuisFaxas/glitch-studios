@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
 import Link from "next/link"
+import dynamic from "next/dynamic"
 import { useRouter, useSearchParams } from "next/navigation"
 import { authClient, signIn } from "@/lib/auth-client"
 import { AuthFormCard } from "@/components/auth/auth-form-card"
@@ -10,10 +11,16 @@ import {
 } from "@/components/auth/social-auth-row"
 import { PasswordField } from "@/components/auth/password-field"
 import { EnumSafeFormError } from "@/components/auth/enum-safe-form-error"
+import { TechPulseLine } from "@/components/home/tech-pulse-line"
+import logoStyles from "@/components/tiles/logo-tile.module.css"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+
+const MagicRings = dynamic(() => import("@/components/MagicRings"), {
+  ssr: false,
+})
 
 interface LoginFormProps {
   availableProviders: SocialProvider[]
@@ -79,9 +86,68 @@ export function LoginForm({ availableProviders }: LoginFormProps) {
   }
 
   return (
-    <AuthFormCard
-      heading="Welcome back"
-      footer={
+    <>
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 z-0"
+      >
+        <MagicRings
+          color="#ffffff"
+          colorTwo="#ffffff"
+          ringCount={6}
+          baseRadius={0.32}
+          radiusStep={0.08}
+          opacity={0.85}
+          lineThickness={1.6}
+          ringGap={1.4}
+          noiseAmount={0.05}
+          followMouse
+          mouseInfluence={0.18}
+          hoverScale={1.15}
+          parallax={0.06}
+          clickBurst
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto flex w-full max-w-[560px] flex-col gap-6">
+        <div className="flex w-full flex-col items-center gap-3 md:gap-4">
+          <Link
+            href="/"
+            aria-label="Glitch Studios — Home"
+            className={`${logoStyles.glitchWrapper} block w-full`}
+          >
+            <div className={logoStyles.glitchImg} />
+            <div className={logoStyles.glitchLayer1} aria-hidden="true" />
+            <div className={logoStyles.glitchLayer2} aria-hidden="true" />
+            <div className={logoStyles.beamLayer1} aria-hidden="true" />
+            <div className={logoStyles.beamLayer2} aria-hidden="true" />
+          </Link>
+          <div className="flex w-full items-center gap-3 md:gap-4">
+            <TechPulseLine delay={0} />
+            <span
+              className={`${logoStyles.glitchTextWrapper} font-mono text-sm md:text-base font-bold uppercase tracking-[0.5em] text-[#f5f5f0] whitespace-nowrap`}
+              aria-label="Welcome back"
+            >
+              Welcome back
+              <span
+                className={`${logoStyles.glitchTextLayer} ${logoStyles.glitchTextLayer1}`}
+                aria-hidden="true"
+              >
+                Welcome back
+              </span>
+              <span
+                className={`${logoStyles.glitchTextLayer} ${logoStyles.glitchTextLayer2}`}
+                aria-hidden="true"
+              >
+                Welcome back
+              </span>
+            </span>
+            <TechPulseLine delay={1} />
+          </div>
+        </div>
+
+        <AuthFormCard
+          footer={
         <>
           <p>
             <Link href="/forgot-password" className="underline">
@@ -151,6 +217,8 @@ export function LoginForm({ availableProviders }: LoginFormProps) {
           {pending ? "Signing in..." : "Sign In"}
         </Button>
       </form>
-    </AuthFormCard>
+        </AuthFormCard>
+      </div>
+    </>
   )
 }

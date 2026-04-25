@@ -1,6 +1,7 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
 import { JetBrains_Mono, Inter } from "next/font/google"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Toaster } from "@/components/ui/sonner"
 import { AudioPlayerProvider } from "@/components/player/audio-player-provider"
@@ -40,14 +41,16 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-black text-white font-sans antialiased">
-        <AudioPlayerProvider>
-          <CartProvider>
-            <TooltipProvider>{children}</TooltipProvider>
-            <CartDrawer />
-            <FloatingCartButton />
-            <Toaster />
-          </CartProvider>
-        </AudioPlayerProvider>
+        <NuqsAdapter>
+          <AudioPlayerProvider>
+            <CartProvider>
+              <TooltipProvider>{children}</TooltipProvider>
+              <CartDrawer />
+              <FloatingCartButton />
+              <Toaster />
+            </CartProvider>
+          </AudioPlayerProvider>
+        </NuqsAdapter>
       </body>
     </html>
   )
