@@ -10,10 +10,9 @@ Lock the formula, schema, ingest hook, and methodology surface for **GlitchMark*
 
 **In scope:**
 - Drizzle schema additions to `tech_reviews` + new `tech_glitchmark_history` table + idempotent SQL migration
-- New `reference_score` column on `tech_benchmark_tests` (admin-set baseline per test)
+- New `reference_score` column on `tech_benchmark_tests` (operator-populated via SQL at v1 launch — see D-15)
 - `src/lib/tech/glitchmark.ts` pure-function module mirroring `bpr.ts` patterns
 - Compute hook: invoked from the same code path as `recomputeBpr` on ingest commit (`src/actions/admin-tech-ingest.ts`)
-- Admin UI: surface `reference_score` field in benchmark-test edit form
 - Methodology page: new `## GlitchMark` section explaining formula + reference baseline table
 
 **Out of scope (other phases):**
@@ -65,7 +64,7 @@ Lock the formula, schema, ingest hook, and methodology surface for **GlitchMark*
   5. Version history (v1 only at launch)
 
 ### Admin
-- **D-15:** Admin **benchmark-test edit form** gains a `reference_score` numeric input. When empty, the test is excluded from GlitchMark computation (same as `bpr_eligible: false` excludes a test from BPR). Admin sees a "GlitchMark-eligible: yes/no" badge derived from `reference_score IS NOT NULL`.
+- **D-15:** ~~Admin **benchmark-test edit form** gains a `reference_score` numeric input.~~ **DEFERRED 2026-04-25** (during plan-phase). Discovered during planning that no admin edit surface exists for `tech_benchmark_tests` today — they are seeded via `db:seed` and the only admin page (`/admin/tech/benchmarks`) lists runs, not tests. Building a new admin route + form + server actions is a small phase on its own. **v1 plan:** operator sets `reference_score` per test via direct SQL `UPDATE` at launch (~10 tests max for laptops). Tracked as a follow-up phase / 999.x backlog item. The eligibility derivation rule (`reference_score IS NOT NULL`) is still in force — Plan 28-02's `recomputeGlitchmark` and Plan 28-03's `getGlitchmarkBaselines` both filter on it.
 
 ### Relationship to BPR (re-affirmed from Audit Section I)
 - **D-16:** **GlitchMark and BPR coexist forever**. BPR = qualitative editorial tier (Platinum/Gold/Silver/Bronze on a rubric subset). GlitchMark = quantitative aggregate ratio over the full benchmark set. Methodology page has both sections side by side. Review detail card surfaces both. Master leaderboard (Phase 29) gets a column for each.
@@ -165,6 +164,7 @@ Lock the formula, schema, ingest hook, and methodology surface for **GlitchMark*
 - **Cross-category GlitchMark** ("best across laptops + phones + tablets") — per-device only in v1
 - **"GlitchMark Hall of Fame"** showcase surface — out of v4.0
 - **Mobile-first device support beyond laptops** — per audit Section I "laptops + mobile devices first," but no mobile devices ingested in v1; mobile expansion is implicit-future, not new scope here
+- **Admin benchmark-test edit form** (was D-15) — deferred 2026-04-25 during plan-phase. No existing admin surface for editing `tech_benchmark_tests`; building one is a small follow-up phase. v1 operator sets `reference_score` via SQL `UPDATE`. Add to roadmap as `999.x` backlog item: "Admin benchmark-test editor (reference_score, bpr_eligible, direction, name)".
 
 </deferred>
 
