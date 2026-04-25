@@ -504,7 +504,7 @@ v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 →
 | 24. Email Delivery End-to-End | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 25. Performance Audit + Fixes | v4.0 | 3/3 | Complete    | 2026-04-24 |
 | 26. Brand-Aware Auth UI Redesign | v4.0 | 12/12 | Complete    | 2026-04-25 |
-| 27. Media/Video Strategy Foundation | v4.0 | 7/7 | Complete   | 2026-04-25 |
+| 27. Media/Video Strategy Foundation | v4.0 | 7/7 | Complete    | 2026-04-25 |
 | 28. GlitchMark System | v4.0 | 0/tbd | Not started | - |
 | 29. Master Leaderboard | v4.0 | 0/tbd | Not started | - |
 | 30. Per-Benchmark Pages | v4.0 | 0/tbd | Not started | - |
