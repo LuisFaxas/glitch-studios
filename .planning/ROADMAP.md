@@ -79,6 +79,38 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [ ] **Phase 45: SEO + Growth Infrastructure** — structured data on all surfaces, meta/OG per route, per-brand sitemaps, canonical URLs, internal linking sweep, Core Web Vitals, rich results validation
 - [ ] **Phase 46: Production Deploy Hardening** — glitchtech.io custom domain + SSL, UAT admin cleanup (DEPLOY-05), env audit, error tracking (Sentry), analytics, backup verification, 301 www→apex — DEPLOY-01..09
 
+#### Phase 26: Brand-Aware Auth UI Redesign
+
+**Goal:** Replace the generic email+password auth surfaces (login, register, forgot-password, reset-password, verify-email) with brand-aware, production-grade flows that theme by host (`glitchstudios.io` vs `glitchtech.io`), split registration by role (customer wizard vs artist request), and add social login (Google + Meta + GitHub). Auth must feel like a real product on both brands, not a scaffold.
+
+**Depends on:**
+- Phase 24 (Email Delivery) shipped — Resend + React Email wired so verify/reset emails actually send
+- Better Auth stack already in place (`src/lib/auth.ts`); `trustedOrigins` + prod domain fixes landed in Phase 22 audit
+- Forgot/reset route scaffolds from Phase 23-06 (Better Auth stubs, handoff to this phase)
+- Brand host middleware already routes Studios vs GlitchTech
+
+**Requirements:** Auth UI REQ-IDs to be generated during `/gsd:discuss-phase` (derived from audit C.1 + C.2 consolidated scope; no REQ-IDs seeded yet).
+
+**Success Criteria** (what must be TRUE):
+1. All five auth surfaces (`/login`, `/register`, `/forgot-password`, `/reset-password`, `/verify-email`) render distinct Studios vs GlitchTech theming based on host — logo, palette, typography, hero imagery/copy all swap. Both brands feel production-grade, not scaffolded.
+2. Desktop split-layout (form + brand-side treatment) and mobile stacked layout both ship. Visual hierarchy matches the rest of the site's editorial weight (not a bare form on a blank page).
+3. `/register` presents two CTAs: **Register as customer** (multi-step wizard: identity → preferences → confirm) and **Request to join as artist** (application form → admin review queue → invite email on approval). Public artist self-serve is explicitly OUT of scope (v5.0).
+4. Social login buttons (Google + Meta + GitHub) are functional end-to-end on at least one brand host: OAuth app created per provider, redirect URIs configured, client IDs/secrets in Vercel env, Better Auth provider plugins wired, successful sign-in creates/links a Better Auth user. Extensible pattern documented for adding more providers.
+5. Error messaging is enumeration-safe (same generic "invalid credentials" on wrong-password vs unknown-email), but copy is brand-voice polished, not raw framework strings.
+6. Email verification (Better Auth + Resend) is enforced on new email/password registrations; social logins skip (provider-verified). `/verify-email` landing page handles valid/expired/already-verified tokens gracefully with branded copy.
+7. Forgot/reset flow works end-to-end on prod: form submit → Resend-delivered email → tokenized link → `/reset-password` accepts new password → user redirected to login with success toast. No dead ends.
+8. `pnpm tsc --noEmit` and `pnpm lint` pass. Manual Playwright pass through both brand hosts on login/register/forgot/reset/verify with at least one social provider.
+
+**UI hint:** yes — this phase is primarily UI design (brand-aware layouts, theming system, wizard patterns, social-login button treatment). UI-SPEC.md required before planning.
+
+**Out of scope (explicitly):**
+- Twilio SMS (user-flagged, parked — no v4.0 commitment)
+- Public artist self-serve signup (v5.0; v4.0 is admin-invite only via the request flow)
+- Admin self-registration (admins are always provisioned by other admins)
+- 2FA / MFA (separate phase if/when needed)
+
+---
+
 ### ⚠️ v3.0 GlitchTech Launch (Closed Partial 2026-04-24)
 
 **Shipped in v3.0:**

@@ -1,10 +1,11 @@
 ---
 phase: 26
 slug: brand-aware-auth-ui-redesign
-status: draft
+status: approved
 shadcn_initialized: true
 preset: base-nova
 created: 2026-04-24
+reviewed_at: 2026-04-24T00:00:00Z
 ---
 
 # Phase 26 — UI Design Contract
