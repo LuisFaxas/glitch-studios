@@ -92,7 +92,7 @@ export function RegisterRoleSelect({ brand }: RegisterRoleSelectProps) {
                     "Earn from licenses",
                   ]
             }
-            variant="pink"
+            colors="#fffbeb,#fcd34d,#f59e0b"
           />
         </div>
 
@@ -114,6 +114,7 @@ interface RoleCardProps {
   subtitle: string
   bullets: string[]
   variant?: "default" | "blue" | "yellow" | "pink"
+  colors?: string
 }
 
 function RoleCard({
@@ -123,14 +124,19 @@ function RoleCard({
   subtitle,
   bullets,
   variant = "default",
+  colors,
 }: RoleCardProps) {
   return (
-    <PixelCard variant={variant} className="h-full overflow-hidden md:min-h-[380px]">
+    <PixelCard
+      variant={variant}
+      colors={colors}
+      className="h-full overflow-hidden md:min-h-[380px]"
+    >
       <Link
         href={href}
         className="relative z-10 flex h-full min-h-0 flex-col gap-3 p-6 md:gap-5 md:p-8"
       >
-        <div className="flex flex-col gap-1.5 md:gap-3">
+        <div className="flex flex-col gap-1.5 text-center md:gap-3 md:text-left">
           <span className="font-mono uppercase tracking-[0.14em] text-[13px] md:tracking-[0.18em] md:text-[16px] text-[var(--muted-foreground)]">
             {badge}
           </span>
