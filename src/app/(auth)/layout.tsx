@@ -1,5 +1,6 @@
 import { headers } from "next/headers"
 import { getBrandFromHost } from "@/lib/brand"
+import { AuthShell } from "@/components/auth/auth-shell"
 
 export default async function AuthLayout({
   children,
@@ -11,7 +12,7 @@ export default async function AuthLayout({
 
   return (
     <div data-brand={brand} className="min-h-screen bg-black text-white">
-      {children}
+      <AuthShell brand={brand}>{children}</AuthShell>
     </div>
   )
 }
