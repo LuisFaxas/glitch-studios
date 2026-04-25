@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
+import { STUDIOS_HOSTS, TECH_HOSTS, getHostname } from "@/lib/brand"
 
-const STUDIOS_HOSTS = new Set([
-  "glitchstudios.io",
-  "www.glitchstudios.io",
-])
-const TECH_HOSTS = new Set([
-  "glitchtech.io",
-  "www.glitchtech.io",
-])
 const APPAREL_HOSTS = new Set([
   "glitchapparel.com",
   "www.glitchapparel.com",
@@ -17,14 +10,9 @@ const REVIEWS_HOSTS = new Set([
   "www.glitch.reviews",
 ])
 
-function getHostname(request: NextRequest): string {
-  const header = request.headers.get("host") ?? ""
-  return header.split(":")[0].toLowerCase()
-}
-
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl
-  const hostname = getHostname(request)
+  const hostname = getHostname(request.headers.get("host"))
 
   // Admin auth gate — applies on ANY host that can reach /admin.
   // Per Phase 09 infra plan: both glitchstudios.io/admin and
