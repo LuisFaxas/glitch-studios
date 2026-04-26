@@ -222,18 +222,20 @@ Plans:
 - About page full editorial rewrite — minimum needed: the methodology anchors work and both formulas are explained
 - Auth, payment, blog, beats work
 
-**Plans:** TBD (sequential, one plan per discrete visual change)
+**Plans:** 9 plans
 
-**Wave layout:** Sequential only — no parallel waves. Each plan must complete (including its Playwright pass) before the next plan starts. Suggested sequence:
-1. Active-state bug fix (`isTechPathActive` helper + `BottomTabBar` + audit) — fastest win, reduces noise on every other Playwright test
-2. Sidebar nav reorder + Rankings + About entries (`tech-nav-config.ts`)
-3. New routes: `/tech/rankings/page.tsx` (hub) + `/tech/rankings/[slug]/page.tsx` (canonical) + 301 redirect from old URL
-4. Hero sections on all three surfaces (`tech-hero` component or per-page JSX, beats pattern)
-5. Top filter bar rewrite (`leaderboard-filter-sidebar.tsx` → `LeaderboardFilterBar`; mobile `Sheet` reuse)
-6. Horizontal-scroll fix (table `min-width`, remove wrapper max-width cap)
-7. Mobile view toggle (`leaderboard-view-toggle.tsx` + nuqs `view` key + Cards/Table render gate)
-8. GlitchMark ×10 display (`formatGlitchmarkDisplay` helper + table cell + card + methodology copy)
-9. About methodology sections + anchors + `/tech/methodology` redirect decision
+**Plans:**
+- [ ] 29.1-01-tech-nav-active-state-PLAN.md — Mobile/desktop nav active-state fix (`isTechPathActive` helper + `BottomTabBar` + tile-nav both branches) — D-23, D-24, D-25
+- [ ] 29.1-02-about-methodology-anchors-PLAN.md — About page methodology hub + anchors `#methodology #bpr #glitchmark` + `/tech/methodology` 308 redirect + 6 in-app caller updates — D-02, D-03, D-21
+- [ ] 29.1-03-rankings-routes-redirect-PLAN.md — New `/tech/rankings` (hub) + `/tech/rankings/[slug]` (canonical) + per-route `permanentRedirect` from old URL + category page CTA href update — D-04, D-05, D-06, D-07
+- [ ] 29.1-04-sidebar-nav-reorder-PLAN.md — `tech-nav-config.ts` desktop sidebar reorder + Rankings/About in mobile overlay menu (bottom-tab unchanged for muscle memory) — D-01
+- [ ] 29.1-05-tech-hero-component-PLAN.md — Reusable `TechHero` component (cyan/amber tone) + mounted on rankings hub, leaderboard, category page; hover-only RGB-split via `<GlitchHeading>` — D-08, D-09, D-10, D-11
+- [ ] 29.1-06-top-filter-bar-PLAN.md — Rewrite `LeaderboardFilters` in place as horizontal top bar (all 7 facets always visible, Price popover, chip rows wrap, Reset right); mobile Sheet reuses vertically — D-12, D-13, D-14
+- [ ] 29.1-07-table-horizontal-scroll-fix-PLAN.md — `<table>` `min-width: 1600px` + remove outer `max-w-[1400px]` cap; sticky cells hold — D-15, D-16
+- [ ] 29.1-08-mobile-view-toggle-PLAN.md — `LeaderboardViewToggle` segmented control + nuqs `view` URL key (`parseAsStringLiteral` Cards/Table, default Cards, clearOnDefault) + render gate — D-17, D-18
+- [ ] 29.1-09-glitchmark-display-PLAN.md — `formatGlitchmarkDisplay(score)` helper in `src/lib/tech/glitchmark.ts` + 2 callsite updates (table + card); accessorFn + sort comparator UNCHANGED — D-19, D-20, D-21, D-22
+
+**Wave layout:** Sequential only — no parallel waves. Each plan completes (including its Playwright pass) before the next plan starts. Waves run 1..9 with `depends_on: ["29.1-NN"]` chain.
 
 ---
 
