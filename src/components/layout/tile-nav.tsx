@@ -19,6 +19,7 @@ import { useCart } from "@/components/cart/cart-provider"
 import { useSidebar } from "@/components/layout/sidebar-context"
 import Link from "next/link"
 import type { NavItem } from "@/components/layout/nav-config-types"
+import { isTechPathActive } from "@/lib/tech/nav"
 
 function getInitials(name: string | null | undefined, email: string): string {
   if (name?.trim()) {
@@ -86,12 +87,12 @@ export function TileNav({
           <nav aria-label="Main navigation" className="mt-1 flex flex-col gap-1 w-full">
             {navItems.map((item) => {
               const resolvedHref = resolveHref(item.href, bookingLive)
-              const isActive =
-                pathname === item.href || pathname.startsWith(item.href + "/")
+              const isActive = isTechPathActive(item.href, pathname)
               return (
                 <Link
                   key={item.href}
                   href={resolvedHref}
+                  data-active={isActive ? "true" : "false"}
                   className={`flex items-center justify-center p-3 border border-[#222] transition-colors duration-200 ${
                     isActive
                       ? "bg-[#f5f5f0] border-[#f5f5f0] text-[#000]"
@@ -192,8 +193,7 @@ export function TileNav({
             <div className="grid grid-cols-2 gap-1">
               {navItems.map((item) => {
                 const resolvedHref = resolveHref(item.href, bookingLive)
-                const isActive =
-                  pathname === item.href || pathname.startsWith(item.href + "/")
+                const isActive = isTechPathActive(item.href, pathname)
                 return (
                   <Tile
                     key={item.href}

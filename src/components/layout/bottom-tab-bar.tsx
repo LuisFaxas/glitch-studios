@@ -11,6 +11,7 @@ import {
   defaultStudiosOverlaySocialLinks,
 } from "@/components/layout/mobile-nav-overlay"
 import type { NavItem, SocialLink } from "@/components/layout/nav-config-types"
+import { isTechPathActive } from "@/lib/tech/nav"
 
 interface BottomTabBarProps {
   items: readonly NavItem[]
@@ -45,6 +46,7 @@ export function BottomTabBar({
   return (
     <>
       <nav
+        data-tab-bar=""
         className="fixed bottom-0 left-0 right-0 z-50 flex h-[var(--tab-bar-height)] items-stretch bg-[#000000] border-t border-[#222222] pb-[env(safe-area-inset-bottom)] md:hidden"
         role="navigation"
         aria-label="Mobile navigation"
@@ -53,13 +55,13 @@ export function BottomTabBar({
         {items.map((item) => {
           const resolvedHref =
             !bookingLive && item.href === "/book" ? "/services" : item.href
-          const isActive =
-            pathname === item.href || pathname.startsWith(item.href + "/")
+          const isActive = isTechPathActive(item.href, pathname)
           return (
             <Link
               key={item.href}
               href={resolvedHref}
               aria-label={item.label}
+              data-active={isActive ? "true" : "false"}
               className={clsx(
                 "flex flex-1 flex-col items-center justify-center gap-0.5",
                 "border-r border-[#222222]",

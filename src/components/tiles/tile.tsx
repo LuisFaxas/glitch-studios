@@ -172,6 +172,7 @@ export function Tile({
     className: baseClasses,
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
+    "data-active": isActive ? "true" : "false",
     ...(isActive && { "aria-current": "page" as const }),
   }
 
