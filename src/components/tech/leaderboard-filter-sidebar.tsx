@@ -1,6 +1,8 @@
 "use client"
+import { useMemo } from "react"
 import { Slider } from "@/components/ui/slider"
 import { X } from "lucide-react"
+import { Popover as PopoverPrimitive } from "@base-ui/react/popover"
 
 export interface FilterState {
   minPrice: number | null
@@ -44,203 +46,213 @@ export const MEDAL_TIERS = [
   { value: "bronze", label: "Bronze" },
 ] as const
 
-interface Props {
+export interface LeaderboardFiltersProps {
   state: FilterState
   onChange: (next: Partial<FilterState>) => void
   onReset: () => void
   bounds: FilterCorpusBounds
+  layout?: "bar" | "vertical"
 }
 
-function SectionHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <h3 className="mb-2 font-mono text-xs uppercase tracking-wider text-[#888]">
-      {children}
-    </h3>
-  )
+function countActiveFilters(state: FilterState): number {
+  let n = 0
+  if (state.minPrice != null || state.maxPrice != null) n += 1
+  if (state.year.length) n += 1
+  if (state.cpu.length) n += 1
+  if (state.ram.length) n += 1
+  if (state.storage.length) n += 1
+  if (state.medal.length) n += 1
+  if (state.subcat.length) n += 1
+  return n
 }
 
-function Chip<T extends string | number>({
-  value,
-  label,
-  isSelected,
-  onToggle,
-}: {
-  value: T
+function toggleArray<T>(arr: T[], value: T): T[] {
+  return arr.includes(value) ? arr.filter((x) => x !== value) : [...arr, value]
+}
+
+interface FilterChipGroupProps<T extends string | number> {
   label: string
-  isSelected: boolean
-  onToggle: (v: T) => void
-}) {
+  selected: T[]
+  chips: Array<{ value: T; label: string }>
+  onToggle: (value: T) => void
+  layout: "bar" | "vertical"
+}
+function FilterChipGroup<T extends string | number>({
+  label,
+  selected,
+  chips,
+  onToggle,
+  layout,
+}: FilterChipGroupProps<T>) {
+  const activeCount = chips.filter((c) => selected.includes(c.value)).length
+  const labelText = activeCount > 0 ? `${label} (${activeCount})` : label
   return (
-    <button
-      type="button"
-      aria-pressed={isSelected}
-      onClick={() => onToggle(value)}
-      className={`border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide transition-colors ${
-        isSelected
-          ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
-          : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444] hover:text-[#ccc]"
-      }`}
+    <div
+      data-chip-group={label}
+      className={
+        layout === "bar"
+          ? "flex flex-wrap items-center gap-1.5"
+          : "flex flex-col gap-2"
+      }
     >
-      {label}
-    </button>
+      <span className="mr-1 font-mono text-[10px] uppercase tracking-wider text-[#888]">
+        {labelText}
+      </span>
+      <div className="flex flex-wrap gap-1.5">
+        {chips.map((c) => {
+          const isOn = selected.includes(c.value)
+          return (
+            <button
+              key={String(c.value)}
+              type="button"
+              onClick={() => onToggle(c.value)}
+              aria-pressed={isOn}
+              className={
+                "border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide transition-colors " +
+                (isOn
+                  ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
+                  : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444] hover:text-[#ccc]")
+              }
+            >
+              {c.label}
+            </button>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 
-export function LeaderboardFilters({ state, onChange, onReset, bounds }: Props) {
-  const toggleString =
-    (key: keyof Pick<FilterState, "cpu" | "ram" | "storage" | "medal" | "subcat">) =>
-    (v: string) => {
-      const current = state[key]
-      const next = current.includes(v)
-        ? current.filter((x) => x !== v)
-        : [...current, v]
-      onChange({ [key]: next } as Partial<FilterState>)
-    }
-  const toggleNumber = (key: "year") => (v: number) => {
-    const current = state[key]
-    const next = current.includes(v)
-      ? current.filter((x) => x !== v)
-      : [...current, v]
-    onChange({ [key]: next } as Partial<FilterState>)
-  }
-
+interface PriceFilterPopoverProps {
+  state: FilterState
+  bounds: FilterCorpusBounds
+  onChange: (next: Partial<FilterState>) => void
+}
+function PriceFilterPopover({ state, bounds, onChange }: PriceFilterPopoverProps) {
   const min = state.minPrice ?? bounds.priceMin
   const max = state.maxPrice ?? bounds.priceMax
+  const isActive = state.minPrice != null || state.maxPrice != null
+  const labelText = isActive
+    ? `Price: $${min.toLocaleString()}–$${max.toLocaleString()}`
+    : "Price"
+  return (
+    <PopoverPrimitive.Root>
+      <PopoverPrimitive.Trigger
+        data-price-popover-trigger
+        className={
+          "border px-3 py-1 font-mono text-[10px] uppercase tracking-wide transition-colors " +
+          (isActive
+            ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
+            : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444]")
+        }
+      >
+        {labelText}
+      </PopoverPrimitive.Trigger>
+      <PopoverPrimitive.Portal>
+        <PopoverPrimitive.Positioner sideOffset={8} className="isolate z-50">
+          <PopoverPrimitive.Popup className="border border-[#222] bg-[#0a0a0a] p-4 w-[320px]">
+            <Slider
+              value={[min, max]}
+              min={bounds.priceMin}
+              max={bounds.priceMax}
+              step={50}
+              onValueChange={(v) => {
+                const arr = Array.isArray(v) ? Array.from(v) : [v]
+                onChange({ minPrice: arr[0] ?? null, maxPrice: arr[1] ?? null })
+              }}
+            />
+            <div className="mt-2 flex justify-between font-mono text-[10px] text-[#888]">
+              <span>${min.toLocaleString()}</span>
+              <span>${max.toLocaleString()}</span>
+            </div>
+          </PopoverPrimitive.Popup>
+        </PopoverPrimitive.Positioner>
+      </PopoverPrimitive.Portal>
+    </PopoverPrimitive.Root>
+  )
+}
+
+export function LeaderboardFilters({
+  state,
+  onChange,
+  onReset,
+  bounds,
+  layout = "bar",
+}: LeaderboardFiltersProps) {
+  const activeCount = useMemo(() => countActiveFilters(state), [state])
+
+  const containerClass =
+    layout === "bar"
+      ? "mb-6 border border-[#222] bg-[#0a0a0a] px-4 py-3"
+      : "space-y-6"
+  const innerClass =
+    layout === "bar"
+      ? "flex flex-wrap items-center gap-x-4 gap-y-3"
+      : "flex flex-col gap-6"
 
   return (
-    <div className="space-y-6">
-      {/* D-06: Reset filters button at top of sidebar header */}
-      <div className="flex items-center justify-between border-b border-[#222] pb-3">
-        <span className="font-mono text-xs uppercase tracking-wider text-[#f5f5f0]">
-          Filters
-        </span>
+    <div data-leaderboard-filters data-layout={layout} className={containerClass}>
+      <div className={innerClass}>
+        <PriceFilterPopover state={state} bounds={bounds} onChange={onChange} />
+
+        <FilterChipGroup
+          label="Year"
+          selected={state.year}
+          chips={bounds.years.map((y) => ({ value: y, label: String(y) }))}
+          onToggle={(v) => onChange({ year: toggleArray(state.year, v) })}
+          layout={layout}
+        />
+        <FilterChipGroup
+          label="CPU"
+          selected={state.cpu}
+          chips={bounds.cpuKinds.map((c) => ({ value: c, label: c }))}
+          onToggle={(v) => onChange({ cpu: toggleArray(state.cpu, v) })}
+          layout={layout}
+        />
+        <FilterChipGroup
+          label="RAM"
+          selected={state.ram}
+          chips={RAM_BUCKETS.map((b) => ({ value: b.value, label: b.label }))}
+          onToggle={(v) => onChange({ ram: toggleArray(state.ram, v) })}
+          layout={layout}
+        />
+        <FilterChipGroup
+          label="Storage"
+          selected={state.storage}
+          chips={STORAGE_BUCKETS.map((b) => ({ value: b.value, label: b.label }))}
+          onToggle={(v) => onChange({ storage: toggleArray(state.storage, v) })}
+          layout={layout}
+        />
+        <FilterChipGroup
+          label="Medal"
+          selected={state.medal}
+          chips={MEDAL_TIERS.map((t) => ({ value: t.value, label: t.label }))}
+          onToggle={(v) => onChange({ medal: toggleArray(state.medal, v) })}
+          layout={layout}
+        />
+        {bounds.subCategories.length > 0 && (
+          <FilterChipGroup
+            label="Sub-cat"
+            selected={state.subcat}
+            chips={bounds.subCategories.map((sc) => ({ value: sc.slug, label: sc.name }))}
+            onToggle={(v) => onChange({ subcat: toggleArray(state.subcat, v) })}
+            layout={layout}
+          />
+        )}
+
         <button
           type="button"
+          data-reset-filters
           onClick={onReset}
-          className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-[#888] hover:text-[#f5f5f0]"
+          className={
+            (layout === "bar" ? "ml-auto " : "") +
+            "inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-[#888] hover:text-[#f5f5f0]"
+          }
         >
           <X className="h-3 w-3" aria-hidden />
-          Reset filters
+          Reset filters{activeCount > 0 ? ` (${activeCount})` : ""}
         </button>
       </div>
-
-      {/* 1. Price — range slider */}
-      <section>
-        <SectionHeading>Price</SectionHeading>
-        <Slider
-          value={[min, max]}
-          min={bounds.priceMin}
-          max={bounds.priceMax}
-          step={50}
-          onValueChange={(v) => {
-            const arr = Array.isArray(v) ? Array.from(v) : [v]
-            onChange({ minPrice: arr[0] ?? null, maxPrice: arr[1] ?? null })
-          }}
-          className="mt-3"
-        />
-        <div className="mt-2 flex justify-between font-mono text-[10px] text-[#888]">
-          <span>${min.toLocaleString()}</span>
-          <span>${max.toLocaleString()}</span>
-        </div>
-      </section>
-
-      {/* 2. Year */}
-      <section>
-        <SectionHeading>Year</SectionHeading>
-        <div className="flex flex-wrap gap-1.5">
-          {bounds.years.map((y) => (
-            <Chip
-              key={y}
-              value={y}
-              label={String(y)}
-              isSelected={state.year.includes(y)}
-              onToggle={toggleNumber("year")}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* 3. CPU kind — derived from corpus */}
-      <section>
-        <SectionHeading>CPU</SectionHeading>
-        <div className="flex flex-wrap gap-1.5">
-          {bounds.cpuKinds.map((c) => (
-            <Chip
-              key={c}
-              value={c}
-              label={c}
-              isSelected={state.cpu.includes(c)}
-              onToggle={toggleString("cpu")}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* 4. RAM */}
-      <section>
-        <SectionHeading>RAM</SectionHeading>
-        <div className="flex flex-wrap gap-1.5">
-          {RAM_BUCKETS.map((b) => (
-            <Chip
-              key={b.value}
-              value={b.value}
-              label={b.label}
-              isSelected={state.ram.includes(b.value)}
-              onToggle={toggleString("ram")}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* 5. Storage — 3 buckets (D-05 amendment 2026-04-25 dropped <512) */}
-      <section>
-        <SectionHeading>Storage</SectionHeading>
-        <div className="flex flex-wrap gap-1.5">
-          {STORAGE_BUCKETS.map((b) => (
-            <Chip
-              key={b.value}
-              value={b.value}
-              label={b.label}
-              isSelected={state.storage.includes(b.value)}
-              onToggle={toggleString("storage")}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* 6. Medal tier */}
-      <section>
-        <SectionHeading>Medal</SectionHeading>
-        <div className="flex flex-wrap gap-1.5">
-          {MEDAL_TIERS.map((t) => (
-            <Chip
-              key={t.value}
-              value={t.value}
-              label={t.label}
-              isSelected={state.medal.includes(t.value)}
-              onToggle={toggleString("medal")}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* 7. Sub-category — only when descendants are flattened (>0) */}
-      {bounds.subCategories.length > 0 && (
-        <section>
-          <SectionHeading>Sub-category</SectionHeading>
-          <div className="flex flex-wrap gap-1.5">
-            {bounds.subCategories.map((s) => (
-              <Chip
-                key={s.slug}
-                value={s.slug}
-                label={s.name}
-                isSelected={state.subcat.includes(s.slug)}
-                onToggle={toggleString("subcat")}
-              />
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   )
 }

@@ -522,28 +522,27 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
   }
   if (filteredRows.length === 0) {
     return (
-      <div className="md:grid md:grid-cols-[280px_1fr] md:gap-6">
-        <aside className="hidden border border-[#222] bg-[#0a0a0a] p-4 md:block">
+      <div>
+        <div className="hidden md:block">
           <LeaderboardFilters
             state={filterState}
             onChange={onFilterChange}
             onReset={onResetFilters}
             bounds={bounds}
-          />
-        </aside>
-        <div>
-          <LeaderboardEmptyState
-            mode="no-results-filtered"
-            onResetFilters={onResetFilters}
-          />
-          <LeaderboardFilterSheet
-            state={filterState}
-            onChange={onFilterChange}
-            onReset={onResetFilters}
-            bounds={bounds}
-            activeCount={activeFilterCount}
+            layout="bar"
           />
         </div>
+        <LeaderboardEmptyState
+          mode="no-results-filtered"
+          onResetFilters={onResetFilters}
+        />
+        <LeaderboardFilterSheet
+          state={filterState}
+          onChange={onFilterChange}
+          onReset={onResetFilters}
+          bounds={bounds}
+          activeCount={activeFilterCount}
+        />
       </div>
     )
   }
@@ -553,19 +552,21 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
   const sortedRows = table.getRowModel().rows
 
   return (
-    <div className="md:grid md:grid-cols-[280px_1fr] md:gap-6">
-      <aside className="hidden border border-[#222] bg-[#0a0a0a] p-4 md:block">
+    <div>
+      {/* Desktop top filter bar (D-12) — replaces left sidebar */}
+      <div className="hidden md:block">
         <LeaderboardFilters
           state={filterState}
           onChange={onFilterChange}
           onReset={onResetFilters}
           bounds={bounds}
+          layout="bar"
         />
-      </aside>
+      </div>
 
       <div>
         {/* Desktop table */}
-        <div className="hidden overflow-x-auto md:block">
+        <div data-leaderboard-table className="hidden overflow-x-auto md:block">
           <table className="w-full border-collapse">
             <thead className="sticky top-0 z-30 bg-[#0a0a0a]">
               <tr>

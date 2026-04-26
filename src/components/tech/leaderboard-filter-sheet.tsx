@@ -39,6 +39,7 @@ export function LeaderboardFilterSheet({
         render={
           <button
             type="button"
+            data-mobile-filter-sheet-trigger
             className="fixed bottom-4 right-4 z-30 inline-flex items-center gap-2 border border-[#f5f5f0] bg-[#0a0a0a] px-4 py-3 text-xs font-mono uppercase tracking-wider text-[#f5f5f0] shadow-lg md:hidden"
           >
             <Filter className="h-4 w-4" aria-hidden />
@@ -61,6 +62,7 @@ export function LeaderboardFilterSheet({
             onChange={onChange}
             onReset={onReset}
             bounds={bounds}
+            layout="vertical"
           />
         </div>
       </SheetContent>
