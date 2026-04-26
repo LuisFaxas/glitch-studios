@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
 status: Milestone complete
-stopped_at: Phase 29.1 context gathered
-last_updated: "2026-04-26T15:11:44.096Z"
+stopped_at: Phase 29.2 UI-SPEC approved
+last_updated: "2026-04-26T18:51:34.263Z"
 last_activity: 2026-04-26
 progress:
   total_phases: 3
@@ -168,8 +168,8 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-26T09:14:37.453Z
-Stopped at: Phase 29.1 context gathered
-Resume file: .planning/phases/29.1-master-leaderboard-polish/29.1-CONTEXT.md
+Last session: 2026-04-26T18:51:34.255Z
+Stopped at: Phase 29.2 UI-SPEC approved
+Resume file: .planning/phases/29.2-site-wide-hero-rollout/29.2-UI-SPEC.md
 
 Last activity: 2026-04-26
