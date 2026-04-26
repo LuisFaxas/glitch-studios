@@ -51,6 +51,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 29: Master Leaderboard** — `/tech/categories/[slug]/rankings` sortable/filterable with GlitchMark + BPR + any benchmark column — RANK-01..07 (completed 2026-04-25)
 - [x] **Phase 29.1: Master Leaderboard Polish (INSERTED)** — top-level `/tech/rankings` route + sidebar nav button next to Blog, hero sections on rankings + category pages, horizontal-scroll fix, filter UI rework (top bar vs collapsible sidebar), mobile view toggle (cards ↔ table), GlitchMark scale display revisit. Sequential execution, Playwright-driven visual verification each step. (completed 2026-04-26)
 - [ ] **Phase 29.2: Site-Wide Hero Rollout + Methodology Editorial Upgrade (INSERTED)** — TechHero on every remaining /tech/* surface (about, reviews, categories hub, compare, benchmarks, blog); methodology page editorial upgrade (stat cards, discipline-card grid, medal-tier ladder, glitchy table treatment); category tile imagery (real thumbnails or hero-sized icons replacing the empty-box look); /tech/blog page build-out beyond stub. Methodology data already audited and accurate (no rubric fix needed). Sequential execution, Playwright-driven verification per plan. See `.planning/phases/29.2-site-wide-hero-rollout/29.2-CONTEXT.md`.
+- [ ] **Phase 29.3: Rebuild Leaderboard Filter (INSERTED — URGENT)** — chip clicks on `/tech/rankings/laptops` crashed macOS Safari + Firefox tabs (Chrome tolerated it but renderer pegged). 6+ hours of debugging eliminated 15+ candidate causes (sticky cells, mix-blend-mode layers, framer-motion, Base UI Popover, Tooltip portals, startTransition stuck transitions, BottomTabBar router.prefetch storm, Footer 404 RSC prefetches, drop-shadow GPU layer, 1200×800 placeholder PNG decoded per row). Filter UI is currently HIDDEN in `leaderboard-table.tsx` as an atomic page-works fix; this phase is the proper rebuild. Constraints: NO URL state (no nuqs / shallow routing / usePathname cascade), NO Base UI Popover or third-party state machine for dropdowns, NO framer-motion, bounded DOM mutations per chip click. Verified working on macOS Safari + Firefox via Playwright Webkit + Firefox engine tests before merge. Re-enable filter render in `leaderboard-table.tsx` (currently commented around line 612 and 731). Investigation artifact: `.planning/debug/filter-chip-crash-mac-browsers.md`.
 - [ ] **Phase 30: Per-Benchmark Pages** — `/tech/benchmarks` landing + `/tech/benchmarks/[slug]` cross-category leaderboard per benchmark
 - [ ] **Phase 31: Category Detail Editorial Reframe** — pivot `/tech/categories/[slug]` from ranked product list to curated editorial hub with "best for" cards
 
@@ -297,6 +298,66 @@ Plans:
 - [ ] 29.2-10-PLAN.md — /tech/blog build-out (amber, "Read latest" + empty-state)
 
 **Wave layout:** Sequential only — waves 1-10, each plan depends on the prior. Each plan completes (including its Playwright pass) before the next plan starts.
+
+---
+
+#### Phase 29.3: Rebuild Leaderboard Filter (INSERTED — URGENT)
+
+**Goal:** Re-enable the `/tech/rankings/[slug]` filter UI (currently hidden as an atomic page-works fix in `leaderboard-table.tsx`) by rebuilding the dropdown/popover layer with an architecture that demonstrably does not crash macOS Safari + Firefox tabs on chip click. The 2026-04-26 debug artifact (`.planning/debug/filter-chip-crash-mac-browsers.md`) closed two compounding macOS-GPU-only root causes (1200×800 placeholder PNG decoded per row, permanent `filter: drop-shadow` on always-mounted LogoTile) — the filter UI itself was never proven safe under chip-click load on real macOS browsers because it has been hidden since. This phase ships the filter back, with bounded DOM mutations per chip click, no URL state, no third-party popover state machines, no framer-motion, and a Playwright Webkit + Firefox engine test gate that runs the chip-click cycle before merge. Sequential execution, real-browser verification on macOS Safari + Firefox by the user before the phase closes.
+
+**Depends on:**
+- Phase 29.1 shipped — `LeaderboardFilters` (top-bar + Sheet rewrite), `LeaderboardTable` integration, `view` URL key, sticky cells removed
+- Debug artifact `.planning/debug/filter-chip-crash-mac-browsers.md` — eliminated hypotheses + locked root causes for the placeholder image and drop-shadow GPU costs
+- Existing `src/components/tech/leaderboard-filter-sidebar.tsx` (chip-bar component, currently unmounted from `LeaderboardTable`) and `leaderboard-filter-sheet.tsx` (mobile sheet, also unmounted)
+- Existing `tests/forensics-overlay-leak.spec.ts` and `scripts/crash-repro.mjs` instrumentation harness
+
+**Requirements:** TBD (no formal REQ-IDs allocated — driven by the debug artifact constraints + roadmap summary; CONTEXT.md scope is the requirement set)
+
+**Canonical refs:**
+- `.planning/debug/filter-chip-crash-mac-browsers.md` — root-cause analysis, eliminated hypotheses, locked constraints (NO URL state / NO Base UI Popover / NO framer-motion / bounded DOM mutations)
+- `src/components/tech/leaderboard-table.tsx` — atomic-fix boundary (filter render commented around lines 606-612 and mobile sheet around line 717); `applyFilters` + `deriveBounds` + `AllFilters` state machinery already lives here and is correct
+- `src/components/tech/leaderboard-filter-sidebar.tsx` — `LeaderboardFilters` chip-bar component (the dropdown layer to rebuild)
+- `src/components/tech/leaderboard-filter-sheet.tsx` — mobile sheet wrapper
+- `tests/forensics-overlay-leak.spec.ts`, `scripts/crash-repro.mjs` — existing crash-repro harness (Playwright Webkit + Firefox)
+- `references/ui-brand.md` — brand standards (hover-only RGB-split, GlitchTech spelling, sidebar-no-scroll)
+
+**Success Criteria** (what must be TRUE):
+1. `/tech/rankings/laptops` renders the filter UI again — the atomic-fix comment block + `{/* Filter UI intentionally not rendered here */}` line in `leaderboard-table.tsx` is removed and `<LeaderboardFilters>` is mounted at the documented site (above the table).
+2. Mobile filter sheet (`<LeaderboardFilterSheet>`) is mounted again on small viewports.
+3. Filter chip click on `/tech/rankings/laptops` does NOT crash macOS Safari or Firefox tabs in real-browser verification by the user. Tab CPU stays bounded; first chip click registers (`aria-pressed` flips immediately); subsequent clicks remain responsive.
+4. Architectural constraints honored, all checkable in code review:
+   - **NO URL state** — no `nuqs`, no `router.replace`/`router.push` from filter changes, no `usePathname`/`useSearchParams` reads in the filter render path. Filter state stays in local React state (the existing `useState<AllFilters>` pattern).
+   - **NO Base UI Popover** or other third-party popover/dropdown state machine (Floating UI / Headless UI / Radix Popover) for chip dropdowns. The dropdown layer is a hand-rolled component with explicit open/close state, click-outside via a single document listener, and Escape via a single keydown listener — both attached only while a dropdown is open.
+   - **NO framer-motion** in the filter subtree (no `<motion.*>`, no `<AnimatePresence>`).
+   - **Bounded DOM mutations per chip click** — a single chip toggle must not re-mount the dropdown, the chip row, or the table header. Re-render is allowed (React reconciliation), but DOM node count for the filter subtree must stay constant across a single chip toggle.
+5. Playwright crash-repro gate passes on BOTH Webkit and Firefox engines. The test opens any filter dropdown, clicks a chip 20× in rapid succession, and asserts: (a) page stays responsive (no console errors, no thrown exceptions, document still interactive), (b) `aria-pressed` reflects each toggle, (c) row count in the table changes when filter actually filters something, (d) DOM node count for the filter subtree before vs. after the click batch is within ±2 nodes (proving no leak).
+6. User runs the real-browser verification on macOS Safari + Firefox after Vercel preview, and confirms the tab does not die. (The Playwright gate is the automated proof; real-browser verification is the human gate before merge.)
+7. No regressions to the rest of the leaderboard surface — sort still works, mobile view toggle (Cards/Table) still works, table horizontal scroll still works, sticky cells stay removed (do not reintroduce them).
+8. `pnpm tsc --noEmit` and `pnpm lint` pass after each plan. `pnpm build` clean.
+9. Brand standards preserved — any new component uses `<GlitchHeading>` for any heading, hover-only RGB-split, GlitchTech spelling.
+
+**UI hint:** yes — this phase rebuilds an interactive surface (chip-bar + dropdown popovers + mobile sheet). Visual contract is "match the Phase 29.1 chip-bar design" — same layout, same chip styling, same Reset placement. UI-SPEC may not be needed since we are restoring an already-designed UI; planner can decide whether `/gsd:ui-phase` is warranted before proceeding.
+
+**Out of scope (explicitly):**
+- Rewriting `applyFilters` / `deriveBounds` / `AllFilters` state machine — that logic is already proven and was not the crash cause
+- Reintroducing URL state for filters — explicitly forbidden per constraint 4
+- Replacing the placeholder product cell — already handled by the atomic fix (CSS-color tile); when real product imagery ships it MUST NOT be a 1200×800 source for a 48×48 render (per debug artifact)
+- Reintroducing sticky cells in the table — explicitly forbidden
+- Reintroducing `filter: drop-shadow` on always-mounted shell elements — explicitly forbidden
+- New filter facets or new filter behaviors — restore existing behavior only
+- Touching `/tech/about`, `/tech/reviews`, hero rollout, methodology editorial (Phase 29.2 territory)
+- Studios-side pages, auth, payment, beats
+
+**Plans:** 5 plans (estimate; planner may consolidate or split)
+
+Plans:
+- [ ] 29.3-01-PLAN.md — Hand-rolled `<FilterDropdown>` primitive (open/close state, click-outside listener attached only while open, Escape keydown only while open, focus return on close, no portal needed for chip-bar context)
+- [ ] 29.3-02-PLAN.md — Rewrite `LeaderboardFilters` to use `<FilterDropdown>` for each facet (year / cpu / ram / storage / medal / subcat); price stays as the existing popover pattern; no framer-motion; no Base UI; no URL state
+- [ ] 29.3-03-PLAN.md — Re-mount `<LeaderboardFilters>` and `<LeaderboardFilterSheet>` in `leaderboard-table.tsx`; remove atomic-fix comment block; verify no sticky cells / drop-shadow regressions reintroduced
+- [ ] 29.3-04-PLAN.md — Playwright crash-repro test (`tests/29.3-filter-chip-crash.spec.ts`) — Webkit + Firefox projects; 20× rapid chip clicks; assertions on responsiveness + aria-pressed + row count + DOM node delta
+- [ ] 29.3-05-PLAN.md — Vercel preview deploy + real-browser verification handoff to user (macOS Safari + Firefox); document the verification command + criteria in the plan; do NOT mark phase complete until user confirms
+
+**Wave layout:** Sequential only — waves 1-5, each plan depends on the prior. Plan 1 (`<FilterDropdown>` primitive) must land and pass tsc+lint before Plan 2 consumes it. Plan 4 (Playwright gate) must pass on both engines locally before Plan 5 (real-browser handoff) begins.
 
 ---
 
