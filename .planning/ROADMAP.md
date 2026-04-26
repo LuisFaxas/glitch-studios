@@ -240,6 +240,53 @@ Plans:
 
 ---
 
+#### Phase 29.2: Site-Wide Hero Rollout + Methodology Editorial Upgrade (INSERTED)
+
+**Goal:** Bring the TechHero pattern from Phase 29.1-05 to every remaining `/tech/*` surface that still renders a bare `<h1>` (about, reviews, categories hub, compare, benchmarks, blog), promote `TechHero` to accept a `size?: "compact" | "default" | "tall"` variant for editorial-keystone surfaces, lift the methodology page (`/tech/about`) from "a lot of text" to a richer editorial layout (stat cards, discipline card grid, medal threshold ladder, terminal-styled formula block, RGB-split row hover on the rubric table), upgrade category tile imagery from a 40px lucide-icon-in-empty-box to a real visual (Direction A: thumbnails + small badge icon — preferred; Direction B: 80–96px scaled icon + caption — acceptable fallback), and build out `/tech/blog` beyond the current stub. Sequential execution, Playwright verification per plan.
+
+**Depends on:**
+- Phase 29.1 shipped — `TechHero` component, `<GlitchHeading>` integration, sidebar nav, `/tech/rankings` routes, methodology hub anchors
+- Phase 17 (BPR Medal UI + Methodology Page) — methodology data layer (`getMethodologyData()`, 13 disciplines, 7 BPR-eligible, 43 tests, rubric v1.1, BPR formula) audited 2026-04-26 and confirmed accurate
+- Existing `<MethodologyFormula>`, `<MethodologyDisciplineTable>`, `<MethodologyMedalTable>`, `<CategoryTile>` components
+
+**Requirements:** TBD (no formal REQ-IDs allocated — driven by Phase 29.1 UAT findings; CONTEXT.md scope is the requirement set)
+
+**Canonical refs:**
+- `.planning/phases/29.2-site-wide-hero-rollout/29.2-CONTEXT.md` — phase scope and decisions
+- `.planning/phases/29.2-site-wide-hero-rollout/29.2-UI-SPEC.md` — UI design contract (6/6 dimensions APPROVED)
+- `.planning/phases/29.1-master-leaderboard-polish/29.1-05-tech-hero-component-PLAN.md` — original TechHero pattern
+- `references/ui-brand.md` — brand standards (hover-only RGB-split, GlitchTech spelling, sidebar-no-scroll)
+
+**Success Criteria** (what must be TRUE):
+1. Every `/tech/*` route renders a `<TechHero>` (or richer hero variant) at the top — no bare `<h1>` remains on `/tech/about`, `/tech/reviews`, `/tech/categories`, `/tech/compare`, `/tech/benchmarks`, `/tech/blog`.
+2. `TechHero` accepts a `size?: "compact" | "default" | "tall"` prop with corresponding heights (200px / 280px / 400px). Default behavior unchanged for callers that omit the prop. `/tech/about` renders the `tall` variant.
+3. `/tech/about` no longer reads as "a lot of text" — has stat cards row (43 tests / 13 disciplines / 7 BPR-eligible) above formula block, discipline grid replacing the discipline table (13 cards, 7 carry the BPR-eligible badge), medal threshold ladder replacing the medal table (Platinum ≥90 / Gold 80–89 / Silver 70–79 / Bronze 60–69 in correct order), terminal-styled formula block, RGB-split row hover on rubric-changelog table.
+4. Category tiles don't read as empty boxes — either a real thumbnail with corner badge icon (Direction A) or a hero-sized 80–96px lucide icon with a category-descriptor caption (Direction B). Decision locked in plan-phase.
+5. `/tech/blog` page builds out beyond the stub — base TechHero (amber, "Read latest" CTA) plus either an actual list of posts or a "Coming soon" treatment if content isn't ready.
+6. Every hero h1 wraps in `<GlitchHeading>` with hover-only RGB-split (no auto-running animations on h1).
+7. Brand spelling is GlitchTech everywhere new copy is added (no GlitchTek typos introduced).
+8. Sidebar continues to fit one screen without scroll — no new fixed-height widgets that push the sidebar past one screen.
+9. Each plan ships a Playwright spec covering its visual change. Sequential execution: Plan N's Playwright passes before Plan N+1 begins. `pnpm tsc --noEmit` and `pnpm lint` pass after each plan.
+10. `pnpm build` clean (no new TypeScript errors, no new lint warnings).
+
+**UI hint:** yes — every plan in this phase touches surface visuals (heroes, methodology editorial elements, tile imagery, blog page). UI-SPEC.md (`29.2-UI-SPEC.md`) is the design contract — 6/6 dimensions approved 2026-04-26.
+
+**Out of scope (explicitly):**
+- Rankings filter crash (escalated to Codex separately, blocking — handled outside this phase)
+- Per-benchmark cross-category pages (`/tech/benchmarks/[slug]` — Phase 30)
+- Editorial reframe of `/tech/categories/[slug]` — that page already has TechHero from 29.1-05; full editorial reframe is later (Phase 31)
+- Studios-side pages (`/`, `/beats`, `/services`, etc.) — separate cycle
+- Methodology data fixes — data layer audited 2026-04-26 and confirmed accurate; this phase is presentation only
+- Real category thumbnail asset pipeline (uploads, CDN config) — placeholder thumbnails or Direction B fallback are acceptable for this phase
+- Replacing placeholder reviews with real ones (Phase 36+)
+- Auth, payment, beats, studios work
+
+**Plans:** TBD — gsd-planner will produce a sequential plan breakdown (no parallel waves), modeled after Phase 29.1's structure. CONTEXT.md suggests 10 plans (TechHero size variants → /tech/about hero+stats → discipline cards → medal ladder → reviews hero → categories hub hero → tile imagery → compare hero → benchmarks hero → blog buildout); planner finalizes.
+
+**Wave layout:** Sequential only — no parallel waves. Each plan completes (including its Playwright pass) before the next plan starts.
+
+---
+
 ### ⚠️ v3.0 GlitchTech Launch (Closed Partial 2026-04-24)
 
 **Shipped in v3.0:**
