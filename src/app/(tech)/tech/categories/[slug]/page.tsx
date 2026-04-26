@@ -12,7 +12,7 @@ import {
 } from "@/lib/tech/queries"
 import { ReviewCard } from "@/components/tech/review-card"
 import { CategoryProductTile } from "@/components/tech/category-product-tile"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
+import { TechHero } from "@/components/tech/tech-hero"
 import { TechNewsletter } from "@/components/home/tech-newsletter"
 
 export const revalidate = 60
@@ -76,10 +76,15 @@ export default async function CategoryDetailPage({ params }: Props) {
           </ol>
         </nav>
 
-        <h1 className="font-mono text-4xl font-bold uppercase tracking-tight text-[#f5f5f0] md:text-5xl">
-          <GlitchHeading text={category.name}>{category.name}</GlitchHeading>
-        </h1>
-        <p className="mt-3 font-mono text-[13px] uppercase tracking-[0.05em] text-[#888]">
+        <TechHero
+          eyebrow="CATEGORY"
+          title={category.name}
+          subhead={`Browse our ${category.name.toLowerCase()} reviews.`}
+          ctaLabel="View Rankings"
+          ctaHref={`/tech/rankings/${slug}`}
+          tone="amber"
+        />
+        <p className="mt-4 font-mono text-[13px] uppercase tracking-[0.05em] text-[#888]">
           {reviewed.length} review{reviewed.length === 1 ? "" : "s"}
           {" · "}
           {products.length} product{products.length === 1 ? "" : "s"}
@@ -98,14 +103,6 @@ export default async function CategoryDetailPage({ params }: Props) {
             ))}
           </div>
         )}
-
-        <Link
-          href={`/tech/rankings/${slug}`}
-          className="mt-6 inline-flex items-center gap-2 border border-[#f5f5f0] bg-transparent px-5 py-3 font-mono text-xs uppercase tracking-wider text-[#f5f5f0] transition-colors hover:bg-[#f5f5f0] hover:text-[#0a0a0a]"
-        >
-          View Rankings
-          <span aria-hidden="true">→</span>
-        </Link>
       </section>
 
       {reviewed.length > 0 && (

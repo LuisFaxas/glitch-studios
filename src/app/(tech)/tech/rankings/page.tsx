@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
+import { TechHero } from "@/components/tech/tech-hero"
 import {
   Monitor,
   Headphones,
@@ -49,14 +49,14 @@ export default async function TechRankingsHubPage() {
   return (
     <main className="min-h-screen bg-black text-[#f5f5f0]">
       <div className="mx-auto max-w-[1600px] px-4 py-8 md:py-12">
-        {/* Phase 29.1 Plan 05 will replace this h1 with <TechHero eyebrow="RANKINGS" title="Rankings" subhead="Every laptop, phone, and PC we've reviewed — ranked side-by-side by GlitchMark, BPR, and benchmark." ctaLabel="Read methodology" ctaHref="/tech/about#methodology" tone="cyan" /> */}
-        <h1 className="font-mono text-[44px] font-bold uppercase leading-none md:text-[64px]">
-          <GlitchHeading text="RANKINGS">RANKINGS</GlitchHeading>
-        </h1>
-        <p className="mt-4 max-w-2xl font-sans text-sm text-[#888] md:text-base">
-          Every laptop, phone, and PC we&apos;ve reviewed — ranked side-by-side
-          by GlitchMark, BPR, and benchmark.
-        </p>
+        <TechHero
+          eyebrow="RANKINGS"
+          title="Rankings"
+          subhead="Every laptop, phone, and PC we've reviewed — ranked side-by-side by GlitchMark, BPR, and benchmark."
+          ctaLabel="Read methodology"
+          ctaHref="/tech/about#methodology"
+          tone="cyan"
+        />
 
         <section
           className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"

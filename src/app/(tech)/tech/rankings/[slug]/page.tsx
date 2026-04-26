@@ -8,7 +8,7 @@ import {
 } from "@/lib/tech/leaderboard"
 import { LeaderboardTable } from "@/components/tech/leaderboard-table"
 import { LeaderboardEmptyState } from "@/components/tech/leaderboard-empty-state"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
+import { TechHero } from "@/components/tech/tech-hero"
 import { ChevronRight } from "lucide-react"
 
 interface PageProps {
@@ -36,8 +36,6 @@ export default async function RankingsPage({ params }: PageProps) {
     getCategoryBreadcrumb(category.id),
   ])
 
-  const headingText = `${category.name.toUpperCase()} RANKINGS`
-
   return (
     <main className="min-h-screen bg-black">
       <div className="mx-auto max-w-[1600px] px-4 py-8 md:py-12">
@@ -60,18 +58,15 @@ export default async function RankingsPage({ params }: PageProps) {
           ))}
         </nav>
 
-        <header className="mb-8">
-          {/* Phase 29.1 Plan 05 will replace this h1 with <TechHero eyebrow="RANKINGS" title={`${category.name} Rankings`} subhead={`Compare every ${category.name.toLowerCase()} we've reviewed — sortable by GlitchMark, BPR, and key benchmarks.`} ctaLabel="Read methodology" ctaHref="/tech/about#methodology" tone="cyan" /> */}
-          <h1 className="font-mono text-[44px] font-bold uppercase leading-none md:text-[64px]">
-            <GlitchHeading text={headingText}>{headingText}</GlitchHeading>
-          </h1>
-          <p className="mt-3 max-w-2xl text-sm text-[#888]">
-            Every {category.name.toLowerCase()} we&apos;ve benchmarked, ranked
-            side-by-side. Default sort is GlitchMark — our aggregate performance
-            score. Click any column header to sort. Open the methodology link
-            beside each header to read how we measure.
-          </p>
-        </header>
+        <TechHero
+          eyebrow="RANKINGS"
+          title={`${category.name} Rankings`}
+          subhead={`Compare every ${category.name.toLowerCase()} we've reviewed — sortable by GlitchMark, BPR, and key benchmarks.`}
+          ctaLabel="Read methodology"
+          ctaHref="/tech/about#methodology"
+          tone="cyan"
+        />
+        <div className="mb-8" />
 
         {rows.length === 0 ? (
           <LeaderboardEmptyState mode="no-reviews-yet" />
