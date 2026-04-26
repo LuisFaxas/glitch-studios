@@ -49,7 +49,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 **🏆 Tech product core (the headline):**
 - [x] **Phase 28: GlitchMark System** — research + lock formula, schema, compute on ingest, methodology page section — GLITCHMARK-01..08 (completed 2026-04-25)
 - [x] **Phase 29: Master Leaderboard** — `/tech/categories/[slug]/rankings` sortable/filterable with GlitchMark + BPR + any benchmark column — RANK-01..07 (completed 2026-04-25)
-- [ ] **Phase 29.1: Master Leaderboard Polish (INSERTED)** — top-level `/tech/rankings` route + sidebar nav button next to Blog, hero sections on rankings + category pages, horizontal-scroll fix, filter UI rework (top bar vs collapsible sidebar), mobile view toggle (cards ↔ table), GlitchMark scale display revisit. Sequential execution, Playwright-driven visual verification each step.
+- [x] **Phase 29.1: Master Leaderboard Polish (INSERTED)** — top-level `/tech/rankings` route + sidebar nav button next to Blog, hero sections on rankings + category pages, horizontal-scroll fix, filter UI rework (top bar vs collapsible sidebar), mobile view toggle (cards ↔ table), GlitchMark scale display revisit. Sequential execution, Playwright-driven visual verification each step. (completed 2026-04-26)
 - [ ] **Phase 30: Per-Benchmark Pages** — `/tech/benchmarks` landing + `/tech/benchmarks/[slug]` cross-category leaderboard per benchmark
 - [ ] **Phase 31: Category Detail Editorial Reframe** — pivot `/tech/categories/[slug]` from ranked product list to curated editorial hub with "best for" cards
 
@@ -222,7 +222,7 @@ Plans:
 - About page full editorial rewrite — minimum needed: the methodology anchors work and both formulas are explained
 - Auth, payment, blog, beats work
 
-**Plans:** 9 plans
+**Plans:** 9/9 plans complete
 
 **Plans:**
 - [ ] 29.1-01-tech-nav-active-state-PLAN.md — Mobile/desktop nav active-state fix (`isTechPathActive` helper + `BottomTabBar` + tile-nav both branches) — D-23, D-24, D-25
