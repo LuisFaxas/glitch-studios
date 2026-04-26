@@ -100,7 +100,7 @@ export default async function CategoryDetailPage({ params }: Props) {
         )}
 
         <Link
-          href={`/tech/categories/${slug}/rankings`}
+          href={`/tech/rankings/${slug}`}
           className="mt-6 inline-flex items-center gap-2 border border-[#f5f5f0] bg-transparent px-5 py-3 font-mono text-xs uppercase tracking-wider text-[#f5f5f0] transition-colors hover:bg-[#f5f5f0] hover:text-[#0a0a0a]"
         >
           View Rankings

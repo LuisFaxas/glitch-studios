@@ -488,6 +488,17 @@ export async function listTopLevelCategoriesWithCounts(): Promise<TopCategoryTil
   })
 }
 
+/**
+ * Phase 29.1 D-05 — list level-1 tech categories that have at least one
+ * PUBLISHED tech_review. Used by the /tech/rankings hub page to render
+ * one tile per category. Today this returns ["Laptops"]; future categories
+ * auto-tile once they get their first published review.
+ */
+export async function getRankingsHubCategories(): Promise<TopCategoryTile[]> {
+  const all = await listTopLevelCategoriesWithCounts()
+  return all.filter((c) => c.reviewCount > 0)
+}
+
 export async function getCategoryBySlug(slug: string) {
   const row = await db.query.techCategories.findFirst({ where: eq(techCategories.slug, slug) })
   return row ?? null
