@@ -281,9 +281,22 @@ Plans:
 - Replacing placeholder reviews with real ones (Phase 36+)
 - Auth, payment, beats, studios work
 
-**Plans:** TBD — gsd-planner will produce a sequential plan breakdown (no parallel waves), modeled after Phase 29.1's structure. CONTEXT.md suggests 10 plans (TechHero size variants → /tech/about hero+stats → discipline cards → medal ladder → reviews hero → categories hub hero → tile imagery → compare hero → benchmarks hero → blog buildout); planner finalizes.
 
-**Wave layout:** Sequential only — no parallel waves. Each plan completes (including its Playwright pass) before the next plan starts.
+**Plans:** 10 plans
+
+Plans:
+- [ ] 29.2-01-PLAN.md — TechHero size variants (compact/default/tall prop + HEIGHT_MAP)
+- [ ] 29.2-02-PLAN.md — /tech/about hero (tall amber) + stat cards row + terminal formula
+- [ ] 29.2-03-PLAN.md — /tech/about discipline cards (13-card grid replacing table)
+- [ ] 29.2-04-PLAN.md — /tech/about medal threshold ladder (replacing table)
+- [ ] 29.2-05-PLAN.md — /tech/reviews TechHero (cyan, "Browse latest")
+- [ ] 29.2-06-PLAN.md — /tech/categories hub TechHero (amber, "View rankings")
+- [ ] 29.2-07-PLAN.md — Category tile imagery Direction B (80px icon + caption)
+- [ ] 29.2-08-PLAN.md — /tech/compare TechHero (cyan, "Pick devices")
+- [ ] 29.2-09-PLAN.md — /tech/benchmarks TechHero (cyan, "Read methodology")
+- [ ] 29.2-10-PLAN.md — /tech/blog build-out (amber, "Read latest" + empty-state)
+
+**Wave layout:** Sequential only — waves 1-10, each plan depends on the prior. Each plan completes (including its Playwright pass) before the next plan starts.
 
 ---
 
