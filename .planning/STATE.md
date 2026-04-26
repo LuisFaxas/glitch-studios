@@ -137,6 +137,7 @@ Recent decisions affecting current work:
 - Phase 07.5 inserted after Phase 7: Product reviews data model & admin input (INSERTED) — Drizzle schema for products/categories/benchmarks, admin CRUD for computer reviews rubric (Geekbench, 3DMark, storage, AI).
 - Phase 07.6 inserted after Phase 7: Reviews display & comparison tables (INSERTED) — Public review page template with YouTube embed, comparison tables with Recharts.
 - v3.0 Milestone started: Phases 15-21 added (2026-04-20) — GlitchTek Launch: methodology lock, JSONL ingest, BPR medal, category leaderboard, flagship review, tech blog, deploy hardening.
+- Phase 29.1 inserted after Phase 29 (2026-04-26): Master Leaderboard Polish (INSERTED) — top-level /tech/rankings route + sidebar nav button next to Blog, hero sections on rankings + category pages, horizontal-scroll fix, filter UI rework, mobile view toggle, GlitchMark scale display revisit. Sequential execution with Playwright verification per task. From user UAT immediately after Phase 29 ship.
 
 ### Pending Todos
 
