@@ -34,6 +34,7 @@ import {
 } from "./leaderboard-filter-sidebar"
 import { LeaderboardFilterSheet } from "./leaderboard-filter-sheet"
 import { LeaderboardViewToggle } from "./leaderboard-view-toggle"
+import { formatGlitchmarkDisplay } from "@/lib/tech/glitchmark-display"
 import type {
   LeaderboardRow,
   LeaderboardBenchmarkColumn,
@@ -416,7 +417,7 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
         cell: ({ row }) =>
           row.original.glitchmarkScore !== null ? (
             <span className="font-mono text-[#f5f5f0]">
-              {row.original.glitchmarkScore.toFixed(2)}
+              {formatGlitchmarkDisplay(row.original.glitchmarkScore)}
               {row.original.glitchmarkIsPartial && (
                 <span className="ml-1 text-xs text-[#888]">· partial</span>
               )}

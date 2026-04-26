@@ -2,6 +2,7 @@
 import Link from "next/link"
 import { BPRMedal } from "./bpr-medal"
 import { BuyButton } from "./buy-button"
+import { formatGlitchmarkDisplay } from "@/lib/tech/glitchmark-display"
 import type {
   LeaderboardRow,
   LeaderboardBenchmarkColumn,
@@ -50,7 +51,7 @@ export function LeaderboardCard({ row, rank, benchmarkColumns }: Props) {
       </div>
       <div className="mt-4 flex items-baseline gap-2">
         <span className="font-mono text-3xl text-[#f5f5f0]">
-          {row.glitchmarkScore !== null ? row.glitchmarkScore.toFixed(2) : "—"}
+          {formatGlitchmarkDisplay(row.glitchmarkScore)}
         </span>
         <span className="text-xs text-[#666]">
           GlitchMark
