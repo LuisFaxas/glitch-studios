@@ -50,6 +50,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 28: GlitchMark System** — research + lock formula, schema, compute on ingest, methodology page section — GLITCHMARK-01..08 (completed 2026-04-25)
 - [x] **Phase 29: Master Leaderboard** — `/tech/categories/[slug]/rankings` sortable/filterable with GlitchMark + BPR + any benchmark column — RANK-01..07 (completed 2026-04-25)
 - [x] **Phase 29.1: Master Leaderboard Polish (INSERTED)** — top-level `/tech/rankings` route + sidebar nav button next to Blog, hero sections on rankings + category pages, horizontal-scroll fix, filter UI rework (top bar vs collapsible sidebar), mobile view toggle (cards ↔ table), GlitchMark scale display revisit. Sequential execution, Playwright-driven visual verification each step. (completed 2026-04-26)
+- [ ] **Phase 29.2: Site-Wide Hero Rollout + Methodology Editorial Upgrade (INSERTED)** — TechHero on every remaining /tech/* surface (about, reviews, categories hub, compare, benchmarks, blog); methodology page editorial upgrade (stat cards, discipline-card grid, medal-tier ladder, glitchy table treatment); category tile imagery (real thumbnails or hero-sized icons replacing the empty-box look); /tech/blog page build-out beyond stub. Methodology data already audited and accurate (no rubric fix needed). Sequential execution, Playwright-driven verification per plan. See `.planning/phases/29.2-site-wide-hero-rollout/29.2-CONTEXT.md`.
 - [ ] **Phase 30: Per-Benchmark Pages** — `/tech/benchmarks` landing + `/tech/benchmarks/[slug]` cross-category leaderboard per benchmark
 - [ ] **Phase 31: Category Detail Editorial Reframe** — pivot `/tech/categories/[slug]` from ranked product list to curated editorial hub with "best for" cards
 
@@ -66,7 +67,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 
 **📱 Polish sweeps:**
 - [ ] **Phase 37: Mobile-Native-Feel Sweep** — swipe gestures on drawers/sheets/modals, swipe-minimize player bar, pull-to-refresh on lists, admin mobile redesign (dismissible sidebar OR bottom-nav)
-- [ ] **Phase 38: GlitchTech Brand-Wide Editorial Polish** — hero sections, review card hierarchy, category tile polish, cross-link sweep, BPR medal visual redesign (realistic illustrations replacing monochrome), missing methodology nav link, GlitchTech mobile menu content bleed fix
+- [ ] **Phase 38: GlitchTech Brand-Wide Editorial Polish (slimmed by 29.2)** — review card hierarchy, cross-link sweep, BPR medal visual redesign (realistic illustrations replacing monochrome), GlitchTech mobile menu content bleed fix. NOTE: hero sections + category tile polish + methodology nav link were absorbed into Phase 29.2.
 - [ ] **Phase 39: Admin List-Page Pattern Rollout** — shared `AdminListPage` component (search/filter/view-switch/thumbnail preview), applied across beats/bundles/products/reviews/categories/benchmarks/blog
 - [ ] **Phase 40: Public Per-Page Polish** — home scroll arrow clickable (site-wide), mobile hero proportion fixes, "What We Do" overhaul, GlitchTech cross-link image, GlitchTech intro mobile — POLISH-*
 
