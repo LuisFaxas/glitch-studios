@@ -1,44 +1,50 @@
 import { test, expect } from "@playwright/test"
 
-test.describe("29.1-06 — Top filter bar (D-12/D-13/D-14)", () => {
+test.describe("29.1-06 — Top filter bar (D-12/D-13/D-14) — dropdown facets (post-rebuild)", () => {
   test.setTimeout(30_000)
 
-  test("desktop @1280: bar visible, 5+ facet groups present, Reset visible", async ({ page }) => {
+  test("desktop @1280: bar visible, 5+ facet dropdown triggers + Price + Reset", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 })
     await page.goto("/tech/rankings/laptops")
-    const bar = page.locator('[data-leaderboard-filters][data-layout="bar"]')
-    // Bar may be hidden if there are no rows (empty state). When the leaderboard
-    // has any rows, the bar must render.
-    if ((await bar.count()) === 0) {
-      test.skip(true, "No rows on this page; bar not rendered (no-reviews-yet empty state)")
-    }
-    await expect(bar).toBeVisible({ timeout: 5_000 })
-
-    await expect(bar.locator('[data-price-popover-trigger]')).toBeVisible()
-    for (const label of ["Year", "CPU", "RAM", "Storage", "Medal"]) {
-      await expect(bar.locator(`[data-chip-group="${label}"]`)).toBeVisible()
-    }
-    await expect(bar.locator('[data-reset-filters]')).toBeVisible()
-  })
-
-  test("desktop: navigating with cpu URL param marks chip pressed + label shows (1)", async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 900 })
-    // Pre-seed the URL to test the read path (the write path is exercised by
-    // the production flow — clicking a chip live is flaky under Turbopack +
-    // nuqs + Playwright due to in-flight transitions; the read assertion is
-    // the meaningful regression gate).
-    await page.goto("/tech/rankings/laptops?cpu=AMD")
     const bar = page.locator('[data-leaderboard-filters][data-layout="bar"]')
     if ((await bar.count()) === 0) {
       test.skip(true, "No rows; bar not rendered")
     }
     await expect(bar).toBeVisible({ timeout: 5_000 })
 
-    const cpuGroup = bar.locator('[data-chip-group="CPU"]')
-    // Exactly one chip should be pressed.
-    await expect(cpuGroup.locator('button[aria-pressed="true"]')).toHaveCount(1)
-    // Group label should show active-count "CPU (1)".
-    await expect(cpuGroup.locator("span").first()).toContainText("CPU (1)")
+    await expect(bar.locator('[data-price-popover-trigger]')).toBeVisible()
+    for (const label of ["Year", "CPU", "RAM", "Storage", "Medal"]) {
+      await expect(bar.locator(`[data-facet-dropdown="${label}"]`)).toBeVisible()
+    }
+    await expect(bar.locator('[data-reset-filters]')).toBeVisible()
+  })
+
+  test("desktop: ?cpu=AMD URL state marks the CPU dropdown trigger active with (1) suffix", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 })
+    await page.goto("/tech/rankings/laptops?cpu=AMD")
+    const bar = page.locator('[data-leaderboard-filters][data-layout="bar"]')
+    if ((await bar.count()) === 0) {
+      test.skip(true, "No rows; bar not rendered")
+    }
+    await expect(bar).toBeVisible({ timeout: 5_000 })
+    const cpuTrigger = bar.locator('[data-facet-dropdown="CPU"]')
+    // Trigger label shows the active count.
+    await expect(cpuTrigger).toContainText("CPU (1)")
+  })
+
+  test("desktop: opening the CPU dropdown shows pressed chip for the URL-selected value", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 })
+    await page.goto("/tech/rankings/laptops?cpu=AMD")
+    const bar = page.locator('[data-leaderboard-filters][data-layout="bar"]')
+    if ((await bar.count()) === 0) {
+      test.skip(true, "No rows; bar not rendered")
+    }
+    const cpuTrigger = bar.locator('[data-facet-dropdown="CPU"]')
+    await expect(cpuTrigger).toBeVisible({ timeout: 5_000 })
+    await cpuTrigger.click()
+    // Popover renders inside a portal — search the whole page, not the bar.
+    const pressed = page.locator('button[aria-pressed="true"]')
+    await expect(pressed.first()).toBeVisible({ timeout: 3_000 })
   })
 
   test("desktop: price popover opens on click, contains a slider", async ({ page }) => {
@@ -50,7 +56,6 @@ test.describe("29.1-06 — Top filter bar (D-12/D-13/D-14)", () => {
     }
     await expect(trigger).toBeVisible({ timeout: 5_000 })
     await trigger.click()
-    // Base UI slider thumbs carry data-slot="slider-thumb" (see src/components/ui/slider.tsx).
     await expect(
       page.locator('[data-slot="slider-thumb"]').first(),
     ).toBeVisible({ timeout: 3_000 })
@@ -65,13 +70,11 @@ test.describe("29.1-06 — Top filter bar (D-12/D-13/D-14)", () => {
       test.skip(true, "No rows; sheet trigger not rendered")
     }
     await expect(sheetTrigger).toBeVisible({ timeout: 5_000 })
-    // The trigger sits at bottom-right (z-30) and the bottom-tab-bar
-    // (z-50) intercepts pointer events on top of it. Dispatch the click
-    // directly on the element to bypass hit-testing.
     await sheetTrigger.dispatchEvent("click")
 
     const verticalFilters = page.locator('[data-leaderboard-filters][data-layout="vertical"]')
     await expect(verticalFilters).toBeVisible({ timeout: 3_000 })
+    // Vertical layout uses inline chip groups.
     for (const label of ["Year", "CPU", "RAM", "Storage", "Medal"]) {
       await expect(verticalFilters.locator(`[data-chip-group="${label}"]`)).toBeVisible()
     }

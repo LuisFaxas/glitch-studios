@@ -489,14 +489,20 @@ export async function listTopLevelCategoriesWithCounts(): Promise<TopCategoryTil
 }
 
 /**
- * Phase 29.1 D-05 — list level-1 tech categories that have at least one
- * PUBLISHED tech_review. Used by the /tech/rankings hub page to render
- * one tile per category. Today this returns ["Laptops"]; future categories
- * auto-tile once they get their first published review.
+ * Phase 29.1 D-05 — list level-1 tech categories that have any catalog
+ * presence (≥1 product, not necessarily a published review). The hub
+ * tiles into the per-category leaderboard, which itself handles the
+ * empty/no-reviews-yet state gracefully — so a tile-without-reviews
+ * is a valid (and useful) entry point for users who want to see what
+ * we're tracking before reviews land.
+ *
+ * 2026-04-26 amendment: was filtering on reviewCount > 0, but the
+ * hub appeared empty in dev (and would appear empty during the
+ * placeholder-first build phase too). Switched to productCount > 0.
  */
 export async function getRankingsHubCategories(): Promise<TopCategoryTile[]> {
   const all = await listTopLevelCategoriesWithCounts()
-  return all.filter((c) => c.reviewCount > 0)
+  return all.filter((c) => c.productCount > 0)
 }
 
 export async function getCategoryBySlug(slug: string) {

@@ -583,7 +583,7 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
                       #
                     </span>
                   </th>
-                  <th className="sticky left-12 z-40 min-w-[280px] bg-[#0a0a0a] px-3 py-3 text-left">
+                  <th className="sticky left-12 z-40 min-w-[200px] lg:min-w-[280px] bg-[#0a0a0a] px-3 py-3 text-left">
                     {flexRender(
                       productHeader.column.columnDef.header,
                       productHeader.getContext(),

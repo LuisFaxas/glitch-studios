@@ -14,8 +14,7 @@ import {
 } from "lucide-react"
 import { getRankingsHubCategories } from "@/lib/tech/queries"
 
-export const dynamic = "force-static"
-export const revalidate = 3600
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: "Rankings — GlitchTech",
