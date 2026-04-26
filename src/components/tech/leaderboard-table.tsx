@@ -215,21 +215,36 @@ function deriveDisciplineFromRubricKey(key: string): string {
 export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
   const router = useRouter()
 
-  const [filters, setFilters] = useQueryStates({
-    sort: parseAsString.withDefault("glitchmark").withOptions({ clearOnDefault: true }),
-    dir: parseAsString.withDefault("desc").withOptions({ clearOnDefault: true }),
-    minPrice: parseAsInteger.withOptions({ clearOnDefault: true }),
-    maxPrice: parseAsInteger.withOptions({ clearOnDefault: true }),
-    year: parseAsArrayOf(parseAsInteger).withDefault([]).withOptions({ clearOnDefault: true }),
-    cpu: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
-    ram: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
-    storage: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
-    medal: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
-    subcat: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
-    view: parseAsStringLiteral(["cards", "table"] as const)
-      .withDefault("cards")
-      .withOptions({ clearOnDefault: true }),
-  })
+  const [filters, setFilters] = useQueryStates(
+    {
+      sort: parseAsString.withDefault("glitchmark").withOptions({ clearOnDefault: true }),
+      dir: parseAsString.withDefault("desc").withOptions({ clearOnDefault: true }),
+      minPrice: parseAsInteger.withOptions({ clearOnDefault: true }),
+      maxPrice: parseAsInteger.withOptions({ clearOnDefault: true }),
+      year: parseAsArrayOf(parseAsInteger).withDefault([]).withOptions({ clearOnDefault: true }),
+      cpu: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
+      ram: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
+      storage: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
+      medal: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
+      subcat: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
+      view: parseAsStringLiteral(["cards", "table"] as const)
+        .withDefault("cards")
+        .withOptions({ clearOnDefault: true }),
+    },
+    {
+      // Phase 29.1 follow-up — every filter chip click was triggering a full
+      // server re-render of /tech/rankings/[slug] (~1s per click in dev),
+      // saturating the dev server within a few clicks. shallow:true updates
+      // the URL via window.history without an RSC roundtrip; filtering happens
+      // entirely client-side via the existing applyFilters memo.
+      shallow: true,
+      // Don't scroll to top on URL change.
+      scroll: false,
+      // Use replaceState rather than pushState so the back button doesn't get
+      // polluted with one entry per chip click.
+      history: "replace",
+    },
+  )
 
   const filterState: FilterState = {
     minPrice: filters.minPrice,

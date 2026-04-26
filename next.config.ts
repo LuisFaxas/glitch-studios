@@ -8,6 +8,13 @@ const nextConfig: NextConfig = {
     "glitch_studios.codebox.local",
   ],
   images: {
+    // placehold.co serves SVG by default — Next.js Image refuses to optimize
+    // SVGs unless this flag is on. Without it, every <Image src="placehold.co/...">
+    // emits a 400 + retry cycle in dev that snowballs under load. Safe here:
+    // we only allow placehold.co (a known-good placeholder service) for dev
+    // seed data and removes the ⨯ error from logs. Swap when real images ship.
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
     remotePatterns: [
       {
         protocol: "https",
