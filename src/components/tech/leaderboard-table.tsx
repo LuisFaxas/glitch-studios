@@ -15,6 +15,7 @@ import {
   parseAsString,
   parseAsArrayOf,
   parseAsInteger,
+  parseAsStringLiteral,
 } from "nuqs"
 import { ArrowUpDown, ExternalLink } from "lucide-react"
 import {
@@ -32,6 +33,7 @@ import {
   type FilterCorpusBounds,
 } from "./leaderboard-filter-sidebar"
 import { LeaderboardFilterSheet } from "./leaderboard-filter-sheet"
+import { LeaderboardViewToggle } from "./leaderboard-view-toggle"
 import type {
   LeaderboardRow,
   LeaderboardBenchmarkColumn,
@@ -223,6 +225,9 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
     storage: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
     medal: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
     subcat: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
+    view: parseAsStringLiteral(["cards", "table"] as const)
+      .withDefault("cards")
+      .withOptions({ clearOnDefault: true }),
   })
 
   const filterState: FilterState = {
@@ -565,76 +570,102 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
       </div>
 
       <div>
-        {/* Desktop table */}
-        <div data-leaderboard-table className="hidden overflow-x-auto md:block">
-          <table className="w-full border-collapse" style={{ minWidth: "1600px" }}>
-            <thead className="sticky top-0 z-30 bg-[#0a0a0a]">
-              <tr>
-                <th className="sticky left-0 z-40 w-12 bg-[#0a0a0a] px-3 py-3 text-left">
-                  <span className="font-mono text-xs uppercase tracking-wider text-[#888]">
-                    #
-                  </span>
-                </th>
-                <th className="sticky left-12 z-40 min-w-[280px] bg-[#0a0a0a] px-3 py-3 text-left">
-                  {flexRender(
-                    productHeader.column.columnDef.header,
-                    productHeader.getContext(),
-                  )}
-                </th>
-                {headerGroup.headers.slice(1).map((h) => (
-                  <th key={h.id} className="px-3 py-3 text-left">
-                    {flexRender(h.column.columnDef.header, h.getContext())}
+        {/* Phase 29.1 D-17 — table markup is rendered both on desktop (always)
+            and on mobile (when view=table). Single source of truth, no drift. */}
+        {(() => {
+          const tableMarkup = (
+            <table className="w-full border-collapse" style={{ minWidth: "1600px" }}>
+              <thead className="sticky top-0 z-30 bg-[#0a0a0a]">
+                <tr>
+                  <th className="sticky left-0 z-40 w-12 bg-[#0a0a0a] px-3 py-3 text-left">
+                    <span className="font-mono text-xs uppercase tracking-wider text-[#888]">
+                      #
+                    </span>
                   </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {sortedRows.map((row, i) => {
-                const cells = row.getVisibleCells()
-                const productCell = cells[0]
-                return (
-                  <tr
-                    key={row.id}
-                    onClick={() =>
-                      router.push(`/tech/reviews/${row.original.reviewSlug}`)
-                    }
-                    className="group cursor-pointer border-t border-[#222] transition-[background,box-shadow] duration-150 hover:bg-[#1a1a1a] hover:[box-shadow:inset_2px_0_0_0_#f5f5f0]"
-                  >
-                    <td className="sticky left-0 z-20 bg-[#0a0a0a] px-3 py-3 font-mono text-[#666] group-hover:bg-[#1a1a1a]">
-                      {i + 1}
-                    </td>
-                    <td className="sticky left-12 z-20 bg-[#0a0a0a] px-3 py-3 group-hover:bg-[#1a1a1a]">
-                      {flexRender(
-                        productCell.column.columnDef.cell,
-                        productCell.getContext(),
-                      )}
-                    </td>
-                    {cells.slice(1).map((cell) => (
-                      <td key={cell.id} className="px-3 py-3">
+                  <th className="sticky left-12 z-40 min-w-[280px] bg-[#0a0a0a] px-3 py-3 text-left">
+                    {flexRender(
+                      productHeader.column.columnDef.header,
+                      productHeader.getContext(),
+                    )}
+                  </th>
+                  {headerGroup.headers.slice(1).map((h) => (
+                    <th key={h.id} className="px-3 py-3 text-left">
+                      {flexRender(h.column.columnDef.header, h.getContext())}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {sortedRows.map((row, i) => {
+                  const cells = row.getVisibleCells()
+                  const productCell = cells[0]
+                  return (
+                    <tr
+                      key={row.id}
+                      onClick={() =>
+                        router.push(`/tech/reviews/${row.original.reviewSlug}`)
+                      }
+                      className="group cursor-pointer border-t border-[#222] transition-[background,box-shadow] duration-150 hover:bg-[#1a1a1a] hover:[box-shadow:inset_2px_0_0_0_#f5f5f0]"
+                    >
+                      <td className="sticky left-0 z-20 bg-[#0a0a0a] px-3 py-3 font-mono text-[#666] group-hover:bg-[#1a1a1a]">
+                        {i + 1}
+                      </td>
+                      <td className="sticky left-12 z-20 bg-[#0a0a0a] px-3 py-3 group-hover:bg-[#1a1a1a]">
                         {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
+                          productCell.column.columnDef.cell,
+                          productCell.getContext(),
                         )}
                       </td>
-                    ))}
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+                      {cells.slice(1).map((cell) => (
+                        <td key={cell.id} className="px-3 py-3">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )
 
-        {/* Mobile cards */}
-        <div className="block space-y-3 md:hidden">
-          {sortedRows.map((row, i) => (
-            <LeaderboardCard
-              key={row.original.reviewId}
-              row={row.original}
-              rank={i + 1}
-              benchmarkColumns={benchmarkColumns}
-            />
-          ))}
-        </div>
+          return (
+            <>
+              {/* Desktop table — always visible at md+ */}
+              <div data-leaderboard-table className="hidden overflow-x-auto md:block">
+                {tableMarkup}
+              </div>
+
+              {/* Mobile — toggle between Cards and Table */}
+              <div className="block md:hidden">
+                <div className="mb-3 flex items-center justify-end">
+                  <LeaderboardViewToggle
+                    value={filters.view}
+                    onChange={(v) => void setFilters({ view: v })}
+                  />
+                </div>
+                {filters.view === "cards" ? (
+                  <div className="space-y-3">
+                    {sortedRows.map((row, i) => (
+                      <LeaderboardCard
+                        key={row.original.reviewId}
+                        row={row.original}
+                        rank={i + 1}
+                        benchmarkColumns={benchmarkColumns}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div data-leaderboard-table-mobile className="overflow-x-auto">
+                    {tableMarkup}
+                  </div>
+                )}
+              </div>
+            </>
+          )
+        })()}
 
         {/* Mobile filter sheet */}
         <LeaderboardFilterSheet
