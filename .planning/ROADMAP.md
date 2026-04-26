@@ -186,6 +186,57 @@ Plans:
 
 ---
 
+#### Phase 29.1: Master Leaderboard Polish (INSERTED)
+
+**Goal:** Polish the leaderboard SURFACE based on Phase 29 UAT — promote rankings to a top-level discovery surface (`/tech/rankings` hub + `/tech/rankings/[slug]` canonical leaderboard), add hero sections to rankings + category pages, fix the desktop horizontal-scroll bug, replace the left filter sidebar with a top filter bar, ship a mobile Cards↔Table view toggle, change GlitchMark display to ×10 (display-only, schema unchanged), and fix the production mobile-nav active-state bug caused by the brand-host rewrite. Sequential execution (no parallel waves) — each visual change verified inline with Playwright before the next plan starts.
+
+**Depends on:**
+- Phase 29 (Master Leaderboard) shipped — data layer (`leaderboard.ts`), seed (6 placeholder reviews), TanStack + nuqs table shell, URL state schema, cache invalidation wiring, 7-filter set all stay
+- Phase 28 (GlitchMark System) shipped — formula and base-100 anchor unchanged; this phase only changes the display scale
+- Phase 27 (Media/Video) and Phase 22 §B.6 framing — rankings as the headline product surface
+
+**Requirements:** TBD (no formal REQ-IDs allocated — driven by Phase 29 UAT findings + user direction; CONTEXT.md decisions D-01..D-25 are the requirement set)
+
+**Success Criteria** (what must be TRUE):
+1. New canonical route `/tech/rankings/[slug]` ships and renders the same leaderboard data as the old `/tech/categories/[slug]/rankings`. New hub `/tech/rankings` lists category tiles. Old URL 301-redirects to the new one. The category page's "View Rankings" CTA points at the new canonical URL.
+2. Sidebar nav order on GlitchTech is `Reviews → Rankings → Categories → Compare → Benchmarks → Blog → About`. About sits last. Rankings sits second. Mobile overlay menu reflects the same order; mobile bottom-tab capacity is preserved (Rankings goes in the overlay menu, not the always-visible bottom tab).
+3. Hero sections render on three surfaces (`/tech/rankings`, `/tech/rankings/[slug]`, `/tech/categories/[slug]`) using the beats-store full-bleed dark hero pattern, with `<GlitchHeading>` h1s that follow the hover-only RGB-split rule (no auto-running animations).
+4. Top filter bar replaces the left sidebar with all 7 facets always visible (Price as popover, the rest as inline chips, Reset filters at right). The mobile filter `Sheet` reuses the same component in vertical layout.
+5. Desktop table no longer cuts off the rightmost columns: `<table>` has a sensible `min-width` based on column count, the outer `max-w-[1400px]` wrapper cap is removed, and `overflow-x-auto` engages when viewport < min-width. Sticky `#` and Product columns hold without bleed-through.
+6. Mobile view toggle (`[ Cards | Table ]`) ships as a segmented control in the mobile filter bar, default = Cards, URL state `?view=cards|table` via nuqs with `clearOnDefault: true`. View toggle persists across navigation within the leaderboard surface.
+7. GlitchMark displays as stored-value × 10, rounded to integer, everywhere it surfaces (desktop table cell + mobile card). A single helper `formatGlitchmarkDisplay(score)` in `src/lib/tech/glitchmark.ts` is the single source of truth. Sort comparator unchanged (sorts on numeric, NULLS LAST holds). Schema unchanged. Methodology page documents the ×10 convention.
+8. About page (`/tech/about`) becomes the methodology hub with working anchors `#methodology`, `#bpr`, `#glitchmark` (and `#disciplines` if reusable). `/tech/methodology` either 301-redirects forward (preserving the `#anchor` fragment when possible) or stays as a thin landing — researcher decides. Existing leaderboard column-header methodology icons resolve correctly.
+9. Mobile nav active-state highlights correctly on `glitchtech.io` in production. Root cause (middleware rewrites `/foo` → `/tech/foo` but `usePathname()` returns the browser URL `/foo` while nav items are configured with `/tech/*` hrefs) is fixed via a normalization helper (e.g. `isTechPathActive(itemHref, pathname)` in `src/lib/tech/nav.ts`) applied to every mobile nav surface that uses `usePathname()` for active highlighting.
+10. Each plan ships a Playwright spec covering its visual change. Sequential execution: Plan N's Playwright passes before Plan N+1 begins. `pnpm tsc --noEmit` and `pnpm lint` pass after each plan.
+
+**UI hint:** yes — every plan in this phase touches surface visuals (hero, filter bar, table layout, view toggle, nav order). Use existing Phase 26/29 design patterns — no new UI-SPEC.md required since the design contract is fully captured in CONTEXT.md decisions D-01..D-25 and `references/ui-brand.md`.
+
+**Out of scope (explicitly):**
+- Affiliate cloaking (Phase 41)
+- Compare integration: row-pinning, slug acceptance, redesign (future phase)
+- Per-benchmark cross-category pages (Phase 30)
+- Editorial reframe of `/tech/categories/[slug]` — this phase only adds the hero (Phase 31)
+- Replacing placeholder reviews with real ones (Phase 36+)
+- Recompute internal GlitchMark to base 1000 — display ×10 is presentation-only
+- New filter facets, table column reorder, BPR medal/score column changes
+- About page full editorial rewrite — minimum needed: the methodology anchors work and both formulas are explained
+- Auth, payment, blog, beats work
+
+**Plans:** TBD (sequential, one plan per discrete visual change)
+
+**Wave layout:** Sequential only — no parallel waves. Each plan must complete (including its Playwright pass) before the next plan starts. Suggested sequence:
+1. Active-state bug fix (`isTechPathActive` helper + `BottomTabBar` + audit) — fastest win, reduces noise on every other Playwright test
+2. Sidebar nav reorder + Rankings + About entries (`tech-nav-config.ts`)
+3. New routes: `/tech/rankings/page.tsx` (hub) + `/tech/rankings/[slug]/page.tsx` (canonical) + 301 redirect from old URL
+4. Hero sections on all three surfaces (`tech-hero` component or per-page JSX, beats pattern)
+5. Top filter bar rewrite (`leaderboard-filter-sidebar.tsx` → `LeaderboardFilterBar`; mobile `Sheet` reuse)
+6. Horizontal-scroll fix (table `min-width`, remove wrapper max-width cap)
+7. Mobile view toggle (`leaderboard-view-toggle.tsx` + nuqs `view` key + Cards/Table render gate)
+8. GlitchMark ×10 display (`formatGlitchmarkDisplay` helper + table cell + card + methodology copy)
+9. About methodology sections + anchors + `/tech/methodology` redirect decision
+
+---
+
 ### ⚠️ v3.0 GlitchTech Launch (Closed Partial 2026-04-24)
 
 **Shipped in v3.0:**
