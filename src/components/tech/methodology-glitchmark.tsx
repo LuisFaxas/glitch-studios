@@ -8,7 +8,7 @@ interface MethodologyGlitchmarkProps {
 /**
  * GlitchMark methodology section per CONTEXT D-14.
  * Server component. Mirrors the typography of <MethodologyFormula> and
- * <MethodologyMedalTable> for visual consistency on /tech/methodology.
+ * <MethodologyMedalTable> for visual consistency on /tech/about.
  */
 export function MethodologyGlitchmark({ baselines }: MethodologyGlitchmarkProps) {
   return (
@@ -35,6 +35,11 @@ export function MethodologyGlitchmark({ baselines }: MethodologyGlitchmarkProps)
           / Silver / Bronze on a 7-of-13 rubric), GlitchMark is the raw
           aggregate sortable number across the full benchmark set. Both
           surface side-by-side; they answer different questions.
+        </p>
+        <p className="text-[#888]">
+          The GlitchMark numbers shown in rankings are the stored score
+          multiplied by 10 and rounded to the nearest integer — a base-1000
+          reference scale for human readability.
         </p>
       </div>
 

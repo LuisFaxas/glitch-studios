@@ -39,7 +39,7 @@ export function LeaderboardEmptyState({ mode, onResetFilters }: EmptyStateProps)
             We&apos;re still benchmarking this category. Read how we score in the meantime.
           </p>
           <Link
-            href="/tech/methodology"
+            href="/tech/about#methodology"
             className="inline-flex items-center border border-[#f5f5f0] bg-transparent px-5 py-2 text-xs font-mono uppercase tracking-wider text-[#f5f5f0] transition-colors hover:bg-[#f5f5f0] hover:text-[#0a0a0a]"
           >
             Read the methodology

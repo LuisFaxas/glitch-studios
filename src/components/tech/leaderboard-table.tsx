@@ -180,7 +180,7 @@ function SortHeader({
       </button>
       {methodologyAnchor && (
         <a
-          href={`/tech/methodology${methodologyAnchor}`}
+          href={`/tech/about${methodologyAnchor}`}
           target="_blank"
           rel="noopener noreferrer"
           className="text-[#666] hover:text-[#f5f5f0]"

@@ -100,7 +100,7 @@ export function BPRMedal({
 
   const wrapped = asLink ? (
     <Link
-      href="/tech/methodology#bpr"
+      href="/tech/about#bpr"
       aria-label={ariaLabel}
       className={`${outerClass} focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f5f5f0]`}
     >
@@ -153,7 +153,7 @@ export function BPRMedalPlaceholder({
   if (asLink) {
     return (
       <Link
-        href="/tech/methodology#exclusion-policy"
+        href="/tech/about#exclusion-policy"
         aria-label={ariaLabel}
         className={`${outerClass} focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f5f5f0]`}
       >
