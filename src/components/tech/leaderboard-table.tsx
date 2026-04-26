@@ -567,7 +567,7 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
       <div>
         {/* Desktop table */}
         <div data-leaderboard-table className="hidden overflow-x-auto md:block">
-          <table className="w-full border-collapse">
+          <table className="w-full border-collapse" style={{ minWidth: "1600px" }}>
             <thead className="sticky top-0 z-30 bg-[#0a0a0a]">
               <tr>
                 <th className="sticky left-0 z-40 w-12 bg-[#0a0a0a] px-3 py-3 text-left">
