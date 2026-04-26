@@ -225,6 +225,7 @@ export function MobileNavOverlay({
             role="dialog"
             aria-modal="true"
             aria-label="Navigation menu"
+            data-mobile-overlay
             className="relative flex flex-col overflow-hidden bg-[#000000] px-3 pb-[calc(0.5rem+env(safe-area-inset-bottom))]"
           >
             {/* Glitch flash on open */}

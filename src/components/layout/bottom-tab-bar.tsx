@@ -84,6 +84,7 @@ export function BottomTabBar({
         <button
           ref={menuTriggerRef}
           type="button"
+          data-mobile-menu-trigger
           onClick={() => setOverlayOpen(true)}
           aria-label="Open navigation menu"
           aria-expanded={overlayOpen}
