@@ -443,7 +443,6 @@ export function LeaderboardFilters({
         data-testid="leaderboard-filters"
         data-layout="bar"
         className="mb-6 border border-[#222] bg-[#0a0a0a] px-4 py-3"
-        style={{ contain: "layout style" }}
       >
         <div className="flex flex-wrap items-center gap-2">
           <PriceFilterPopover state={state} bounds={bounds} onChange={onChange} />

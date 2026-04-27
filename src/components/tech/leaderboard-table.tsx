@@ -639,10 +639,7 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
             // environment (Codebox VM) cannot easily verify column legibility on
             // real macOS browsers — 1280px preserves laptop-standard column
             // widths. Plan 29.3-02 will validate on real macOS Safari + Firefox.
-            <table
-              className="w-full table-fixed border-collapse"
-              style={{ minWidth: "1280px" }}
-            >
+            <table className="w-full border-collapse" style={{ minWidth: "1280px" }}>
               <thead className="bg-[#0a0a0a]">
                 <tr>
                   <th className="w-12 bg-[#0a0a0a] px-3 py-3 text-left">
@@ -702,20 +699,12 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
           return (
             <>
               {/* Desktop table — always visible at md+ */}
-              <div
-                data-leaderboard-table
-                className="hidden overflow-x-auto md:block"
-                style={{ contain: "layout paint style" }}
-              >
+              <div data-leaderboard-table className="hidden overflow-x-auto md:block">
                 {tableMarkup}
               </div>
 
               {/* Mobile — toggle between Cards and Table */}
-              <div
-                data-leaderboard-table-mobile-wrapper
-                className="block md:hidden"
-                style={{ contain: "layout paint style" }}
-              >
+              <div className="block md:hidden">
                 <div className="mb-3 flex items-center justify-end">
                   <LeaderboardViewToggle
                     value={filters.view}
