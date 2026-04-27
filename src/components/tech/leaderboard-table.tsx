@@ -603,16 +603,18 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
 
   return (
     <div>
-      {/* ATOMIC FIX (2026-04-26): filter UI is temporarily hidden because chip
-          clicks were crashing macOS Safari + Firefox tabs. After 6+ hours of
-          debugging across 15+ deploys (sticky cells, mix-blend-mode layers,
-          framer-motion, Base UI Popover, Tooltips, startTransition, nuqs,
-          BottomTabBar prefetch effect, Footer 404 prefetches, etc.) the
-          underlying cause is still unidentified. Page now renders the full
-          unfiltered leaderboard so the rest of the site is usable. Phase 29.3
-          will rebuild the filter system from scratch with a new architecture.
-          REMOVE THIS WHEN PHASE 29.3 SHIPS. */}
-      {/* Filter UI intentionally not rendered here. Atomic page-works fix. */}
+      {/* Phase 29.3: filter re-mounted after baseline GPU/render fixes
+          (Plan 29.3-01) and macOS Safari/Firefox sort-header verification
+          (Plan 29.3-02) confirmed the chip-bar is safe to render. */}
+      <div className="hidden md:block">
+        <LeaderboardFilters
+          state={filterState}
+          onChange={onFilterChange}
+          onReset={onResetFilters}
+          bounds={bounds}
+          layout="bar"
+        />
+      </div>
 
       <div>
         {/* Phase 29.1 D-17 — table markup is rendered both on desktop (always)
@@ -730,7 +732,14 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
           )
         })()}
 
-        {/* Mobile filter sheet — also disabled for atomic fix. Phase 29.3 rebuild. */}
+        {/* Phase 29.3: mobile filter sheet re-mounted (re-enabled). */}
+        <LeaderboardFilterSheet
+          state={filterState}
+          onChange={onFilterChange}
+          onReset={onResetFilters}
+          bounds={bounds}
+          activeCount={activeFilterCount}
+        />
       </div>
     </div>
   )

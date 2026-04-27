@@ -285,6 +285,7 @@ export function LeaderboardFilters({
     return (
       <div
         data-leaderboard-filters
+        data-testid="leaderboard-filters"
         data-layout="bar"
         className="mb-6 border border-[#222] bg-[#0a0a0a] px-4 py-3"
       >
