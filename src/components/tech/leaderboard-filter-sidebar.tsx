@@ -361,7 +361,7 @@ function PriceFilterPopover({ state, bounds, onChange }: PriceFilterPopoverProps
         min={bounds.priceMin}
         max={bounds.priceMax}
         step={50}
-        onValueChange={onSliderChange}
+        onValueCommitted={onSliderChange}
       />
       <div className="mt-2 flex justify-between font-mono text-[10px] text-[#888]">
         <span>${min.toLocaleString()}</span>
