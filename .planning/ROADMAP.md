@@ -362,6 +362,52 @@ Plans:
 
 ---
 
+#### Phase 30: Per-Benchmark Pages
+
+**Goal:** Surface every benchmark we run as its own browsable page. Ship a `/tech/benchmarks` landing that lists all 43 tests in `RUBRIC_V1_1` (grouped by discipline) and a per-benchmark detail route `/tech/benchmarks/[slug]` that shows what the benchmark measures, why it matters in the BPR/GlitchMark methodology, and a cross-category leaderboard of every reviewed product's score for that specific test (highest-first by direction). Replaces the current honest-empty-state stub on `/tech/benchmarks`. Sequential execution, Playwright verification per plan.
+
+**Depends on:**
+- Phase 17 (BPR Medal UI + Methodology Page) — `RUBRIC_V1_1` constant in `src/lib/tech/rubric-map.ts` (43 tests with discipline / tool / field / name / unit / mode / direction / baseline metadata) is the authoritative test catalog
+- Phase 28 (GlitchMark system) — `tech_benchmark_tests` schema with `reference_score`, `tech_benchmark_runs` table holding per-product scores
+- Phase 29 (Master Leaderboard) — `src/lib/tech/leaderboard.ts` query patterns (Drizzle joins, sort/filter shape, BPR + GlitchMark surfacing) reusable for cross-category leaderboards
+- Phase 29.1 (Master Leaderboard Polish) — `<TechHero>` component, sidebar nav, methodology hub anchors at `/tech/about#methodology`
+- Phase 29.2 (Site-Wide Hero Rollout) — `<TechHero>` already mounted on `/tech/benchmarks` (cyan, "Read methodology" → `/tech/about#methodology`); the empty-state body section below it is what this phase replaces
+
+**Requirements:** TBD (no formal REQ-IDs allocated — CONTEXT.md gathered in `/gsd:discuss-phase 30` will be the requirement set; success criteria below define the must-haves)
+
+**Canonical refs:**
+- `src/lib/tech/rubric-map.ts` — `RUBRIC_V1_1` (43 RubricTestSpec entries keyed `<discipline>:<tool>:<field>`); `BenchmarkDiscipline`, `BenchmarkMode`, `BenchmarkDirection` types
+- `src/lib/tech/leaderboard.ts` — query patterns, `direction` handling, sort helpers
+- `src/lib/tech/queries.ts` — `getBenchmarkRunsForProducts` (Phase 27/28 cross-product fetch shape) — `references/ui-brand.md` (hover-only RGB-split, GlitchTech spelling, sidebar-no-scroll, no auto animations on h1)
+- `.planning/phases/29.2-site-wide-hero-rollout/29.2-CONTEXT.md` — TechHero usage pattern + copywriting cadence on /tech/* surfaces
+- `src/app/(tech)/tech/benchmarks/page.tsx` — current landing page (TechHero + empty-state); this phase replaces the empty-state body
+
+**Success Criteria** (what must be TRUE):
+1. `/tech/benchmarks` lists all 43 tests from `RUBRIC_V1_1`, grouped by discipline (13 sections), with each test linking to its detail page. Empty-state stub is removed.
+2. Each test has a stable URL slug derived from its rubric key (e.g., `cpu:geekbench6:multi` → `/tech/benchmarks/cpu-geekbench6-multi`). Slug strategy is decided in `discuss-phase` and locked in `CONTEXT.md`.
+3. `/tech/benchmarks/[slug]` renders a detail page with: TechHero (size + tone TBD in discuss), test metadata (discipline, tool, field, unit, direction, mode, baseline), a "what this measures" block sourced from rubric metadata or a content layer (TBD), a "why it matters" block tying the test to BPR / GlitchMark methodology with a methodology link, and a cross-category leaderboard of every reviewed product's score for this test (highest-first or lowest-first per `direction`), tied or "not measured" rows handled deterministically.
+4. Leaderboard rows display product name + category + score + unit + the relative score vs. the baseline (so a "Geekbench 6 Multi-Core" row reading 21,234 also shows "+47% vs baseline" or similar) — exact formula locked in CONTEXT.md.
+5. Empty-state behavior: when no products have a score for the test, the leaderboard renders an honest "No measurements yet" panel (no fake rows). When `RUBRIC_V1_1` is queried but no matching `tech_benchmark_tests` row exists, the page returns 404, not a blank panel.
+6. SSG strategy: detail pages prerender at build via `generateStaticParams` driven by `RUBRIC_V1_1` keys (43 known slugs); landing page is `force-static` with `revalidate = 60` matching other `/tech/*` surfaces. New benchmarks added to `RUBRIC_V1_1` get pages on next build.
+7. Cross-link: methodology page (`/tech/about#disciplines`) links each discipline name to its filtered subset of `/tech/benchmarks` (or directly to the disciplines section). Leaderboard rows on per-benchmark page link to the product's review page (`/tech/reviews/[slug]`).
+8. Sequential plan execution; each plan ships a Playwright spec; `pnpm tsc --noEmit` and `pnpm lint` pass clean after each plan; final `pnpm build` exits 0.
+9. Brand spelling is GlitchTech everywhere new copy is added (no GlitchTek typos).
+10. Sidebar continues to fit one screen without scroll.
+
+**UI hint:** yes — every plan in this phase touches public visual surfaces (landing list page, detail page hero + leaderboard table). UI-SPEC.md (`30-UI-SPEC.md`) should be generated via `/gsd:ui-phase 30` before planning if the discuss-phase decisions warrant it.
+
+**Out of scope (explicitly):**
+- Adding new benchmarks to `RUBRIC_V1_1` (data-layer change — separate phase)
+- Editing `tech_benchmark_tests` schema (Phase 28 territory; this phase is read-only on data)
+- BPR or GlitchMark formula changes
+- Per-product benchmark detail pages (a product's full benchmark suite already surfaces on its review page)
+- Cross-benchmark normalization or aggregate scoring beyond what BPR/GlitchMark already do (separate research phase if pursued)
+- Admin tooling for benchmark editing
+- Search/filter on the landing page beyond discipline grouping (defer to a later polish phase if needed)
+- Real content writing for "what this measures" / "why it matters" beyond minimal placeholder copy (full editorial pass is a separate content phase)
+
+---
+
 ### ⚠️ v3.0 GlitchTech Launch (Closed Partial 2026-04-24)
 
 **Shipped in v3.0:**
