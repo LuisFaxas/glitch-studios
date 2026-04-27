@@ -406,6 +406,14 @@ Plans:
 - Search/filter on the landing page beyond discipline grouping (defer to a later polish phase if needed)
 - Real content writing for "what this measures" / "why it matters" beyond minimal placeholder copy (full editorial pass is a separate content phase)
 
+**Plans:** 5 plans (sequential, one wave each)
+
+- [ ] 30-01-slug-data-layer-PLAN.md — Slug helpers (slugFromRubricKey/rubricKeyFromSlug/getAllBenchmarkSlugs) + getLeaderboardForBenchmark server query + vitest + Playwright spec
+- [ ] 30-02-landing-page-rebuild-PLAN.md — Replace /tech/benchmarks empty-state with 13 discipline sections + 43 tile index + jump-nav + Playwright spec
+- [ ] 30-03-detail-page-route-PLAN.md — Create /tech/benchmarks/[slug]/page.tsx (TechHero + metadata chips + what-this-measures + sortable leaderboard table OR empty-state) + generateStaticParams for 43 slugs + Playwright spec
+- [ ] 30-04-cross-links-PLAN.md — Wire MethodologyDisciplineCards discipline tiles to /tech/benchmarks#discipline-{slug}; verify all Phase 30 cross-links resolve via Playwright
+- [ ] 30-05-final-pass-PLAN.md — pnpm build clean (43 prerendered detail pages); GlitchTek typo sweep returns zero; sidebar one-screen verification on landing + detail; full Phase 30 spec batch passes against built artifact
+
 ---
 
 ### ⚠️ v3.0 GlitchTech Launch (Closed Partial 2026-04-24)
