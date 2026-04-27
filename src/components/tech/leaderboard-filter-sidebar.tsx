@@ -1,8 +1,7 @@
 "use client"
-import { useMemo } from "react"
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Slider } from "@/components/ui/slider"
 import { ChevronDown, X } from "lucide-react"
-import { Popover as PopoverPrimitive } from "@base-ui/react/popover"
 
 export interface FilterState {
   minPrice: number | null
@@ -46,6 +45,90 @@ export const MEDAL_TIERS = [
   { value: "bronze", label: "Bronze" },
 ] as const
 
+// ============================================================================
+// CustomDropdown — a hand-rolled popover replacing @base-ui/react/popover.
+// Why: Base UI 1.3 / 1.4 has a Firefox-specific state-machine race that pegs
+// the Firefox content process at 90% CPU after the sequence
+//   open → click chip inside → close → click a different trigger.
+// Forensics in /tmp/ff_diag*.log identified Base UI's internal `removalRequest`
+// staying pending after a chip-click + URL update during the popover's exit
+// transition. Controlled mode + 1.4.1 upgrade did not resolve it.
+// This implementation: no portal, no Floating UI, no third-party state store,
+// no exit transition. Just useState + click-outside listener + absolute pos.
+// ============================================================================
+interface CustomDropdownProps {
+  trigger: (props: {
+    onClick: () => void
+    "aria-expanded": boolean
+    "aria-haspopup": "menu"
+    ref: React.Ref<HTMLButtonElement>
+  }) => React.ReactNode
+  children: React.ReactNode
+}
+function CustomDropdown({ trigger, children }: CustomDropdownProps) {
+  const [open, setOpen] = useState(false)
+  const triggerRef = useRef<HTMLButtonElement | null>(null)
+  const popupRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function onPointerDown(e: PointerEvent) {
+      const t = e.target as Node | null
+      if (!t) return
+      if (popupRef.current?.contains(t)) return
+      if (triggerRef.current?.contains(t)) return
+      setOpen(false)
+    }
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false)
+    }
+    document.addEventListener("pointerdown", onPointerDown)
+    document.addEventListener("keydown", onKeyDown)
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown)
+      document.removeEventListener("keydown", onKeyDown)
+    }
+  }, [open])
+
+  const triggerProps = useMemo(
+    () => ({
+      onClick: () => setOpen((v) => !v),
+      "aria-expanded": open,
+      "aria-haspopup": "menu" as const,
+      ref: triggerRef,
+    }),
+    [open],
+  )
+
+  return (
+    <div className="relative inline-block">
+      {trigger(triggerProps)}
+      {open && (
+        <div
+          ref={popupRef}
+          role="menu"
+          className="absolute left-0 top-[calc(100%+8px)] z-50 border border-[#222] bg-[#0a0a0a] p-3 min-w-[200px] max-w-[320px]"
+        >
+          {children}
+        </div>
+      )}
+    </div>
+  )
+}
+
+const RAM_OPTIONS: Array<{ value: string; label: string }> = RAM_BUCKETS.map((b) => ({
+  value: b.value,
+  label: b.label,
+}))
+const STORAGE_OPTIONS: Array<{ value: string; label: string }> = STORAGE_BUCKETS.map((b) => ({
+  value: b.value,
+  label: b.label,
+}))
+const MEDAL_OPTIONS: Array<{ value: string; label: string }> = MEDAL_TIERS.map((t) => ({
+  value: t.value,
+  label: t.label,
+}))
+
 export interface LeaderboardFiltersProps {
   state: FilterState
   onChange: (next: Partial<FilterState>) => void
@@ -82,7 +165,7 @@ interface FilterFacetDropdownProps<T extends string | number> {
   onToggle: (value: T) => void
   onClear: () => void
 }
-function FilterFacetDropdown<T extends string | number>({
+function FilterFacetDropdownInner<T extends string | number>({
   label,
   selected,
   options,
@@ -93,63 +176,63 @@ function FilterFacetDropdown<T extends string | number>({
   const isActive = activeCount > 0
   const triggerLabel = isActive ? `${label} (${activeCount})` : label
   return (
-    <PopoverPrimitive.Root>
-      <PopoverPrimitive.Trigger
-        data-facet-dropdown={label}
-        className={
-          "inline-flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide transition-colors " +
-          (isActive
-            ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
-            : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444] hover:text-[#ccc]")
-        }
-      >
-        <span>{triggerLabel}</span>
-        <ChevronDown className="h-3 w-3" aria-hidden />
-      </PopoverPrimitive.Trigger>
-      <PopoverPrimitive.Portal>
-        <PopoverPrimitive.Positioner sideOffset={8} className="isolate z-50">
-          <PopoverPrimitive.Popup className="border border-[#222] bg-[#0a0a0a] p-3 min-w-[200px] max-w-[320px]">
-            <div className="mb-2 flex items-center justify-between">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-[#888]">
-                {label}
-              </span>
-              {isActive && (
-                <button
-                  type="button"
-                  onClick={onClear}
-                  className="font-mono text-[10px] uppercase tracking-wider text-[#888] hover:text-[#f5f5f0]"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {options.map((o) => {
-                const isOn = selected.includes(o.value)
-                return (
-                  <button
-                    key={String(o.value)}
-                    type="button"
-                    onClick={() => onToggle(o.value)}
-                    aria-pressed={isOn}
-                    className={
-                      "border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide transition-colors " +
-                      (isOn
-                        ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
-                        : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444] hover:text-[#ccc]")
-                    }
-                  >
-                    {o.label}
-                  </button>
-                )
-              })}
-            </div>
-          </PopoverPrimitive.Popup>
-        </PopoverPrimitive.Positioner>
-      </PopoverPrimitive.Portal>
-    </PopoverPrimitive.Root>
+    <CustomDropdown
+      trigger={(p) => (
+        <button
+          {...p}
+          type="button"
+          data-facet-dropdown={label}
+          className={
+            "inline-flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide transition-colors " +
+            (isActive
+              ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
+              : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444] hover:text-[#ccc]")
+          }
+        >
+          <span>{triggerLabel}</span>
+          <ChevronDown className="h-3 w-3" aria-hidden />
+        </button>
+      )}
+    >
+      <div className="mb-2 flex items-center justify-between">
+        <span className="font-mono text-[10px] uppercase tracking-wider text-[#888]">
+          {label}
+        </span>
+        {isActive && (
+          <button
+            type="button"
+            onClick={onClear}
+            className="font-mono text-[10px] uppercase tracking-wider text-[#888] hover:text-[#f5f5f0]"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        {options.map((o) => {
+          const isOn = selected.includes(o.value)
+          return (
+            <button
+              key={String(o.value)}
+              type="button"
+              onClick={() => onToggle(o.value)}
+              aria-pressed={isOn}
+              className={
+                "border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide transition-colors " +
+                (isOn
+                  ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
+                  : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444] hover:text-[#ccc]")
+              }
+            >
+              {o.label}
+            </button>
+          )
+        })}
+      </div>
+    </CustomDropdown>
   )
 }
+const FilterFacetDropdown = memo(FilterFacetDropdownInner) as typeof FilterFacetDropdownInner
 
 // ============================================================================
 // FilterChipGroupVertical — vertical-layout (mobile sheet) inline chip group.
@@ -161,7 +244,7 @@ interface FilterChipGroupVerticalProps<T extends string | number> {
   options: Array<{ value: T; label: string }>
   onToggle: (value: T) => void
 }
-function FilterChipGroupVertical<T extends string | number>({
+function FilterChipGroupVerticalInner<T extends string | number>({
   label,
   selected,
   options,
@@ -198,6 +281,9 @@ function FilterChipGroupVertical<T extends string | number>({
     </div>
   )
 }
+const FilterChipGroupVertical = memo(
+  FilterChipGroupVerticalInner,
+) as typeof FilterChipGroupVerticalInner
 
 // ============================================================================
 // PriceFilterPopover — same shape as the FilterFacetDropdown but houses a
@@ -215,55 +301,63 @@ function PriceFilterPopover({ state, bounds, onChange }: PriceFilterPopoverProps
   const triggerLabel = isActive
     ? `Price: $${min.toLocaleString()}–$${max.toLocaleString()}`
     : "Price"
+  const sliderValue = useMemo(() => [min, max], [min, max])
+  const onSliderChange = useCallback(
+    (v: number | number[] | readonly number[]) => {
+      const arr: number[] = Array.isArray(v) ? Array.from(v) : [v as number]
+      onChange({ minPrice: arr[0] ?? null, maxPrice: arr[1] ?? null })
+    },
+    [onChange],
+  )
+  const onClearPrice = useCallback(
+    () => onChange({ minPrice: null, maxPrice: null }),
+    [onChange],
+  )
   return (
-    <PopoverPrimitive.Root>
-      <PopoverPrimitive.Trigger
-        data-price-popover-trigger
-        className={
-          "inline-flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide transition-colors " +
-          (isActive
-            ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
-            : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444] hover:text-[#ccc]")
-        }
-      >
-        <span>{triggerLabel}</span>
-        <ChevronDown className="h-3 w-3" aria-hidden />
-      </PopoverPrimitive.Trigger>
-      <PopoverPrimitive.Portal>
-        <PopoverPrimitive.Positioner sideOffset={8} className="isolate z-50">
-          <PopoverPrimitive.Popup className="border border-[#222] bg-[#0a0a0a] p-4 w-[320px]">
-            <div className="mb-3 flex items-center justify-between">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-[#888]">
-                Price
-              </span>
-              {isActive && (
-                <button
-                  type="button"
-                  onClick={() => onChange({ minPrice: null, maxPrice: null })}
-                  className="font-mono text-[10px] uppercase tracking-wider text-[#888] hover:text-[#f5f5f0]"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-            <Slider
-              value={[min, max]}
-              min={bounds.priceMin}
-              max={bounds.priceMax}
-              step={50}
-              onValueChange={(v) => {
-                const arr = Array.isArray(v) ? Array.from(v) : [v]
-                onChange({ minPrice: arr[0] ?? null, maxPrice: arr[1] ?? null })
-              }}
-            />
-            <div className="mt-2 flex justify-between font-mono text-[10px] text-[#888]">
-              <span>${min.toLocaleString()}</span>
-              <span>${max.toLocaleString()}</span>
-            </div>
-          </PopoverPrimitive.Popup>
-        </PopoverPrimitive.Positioner>
-      </PopoverPrimitive.Portal>
-    </PopoverPrimitive.Root>
+    <CustomDropdown
+      trigger={(p) => (
+        <button
+          {...p}
+          type="button"
+          data-price-popover-trigger
+          className={
+            "inline-flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide transition-colors " +
+            (isActive
+              ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
+              : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444] hover:text-[#ccc]")
+          }
+        >
+          <span>{triggerLabel}</span>
+          <ChevronDown className="h-3 w-3" aria-hidden />
+        </button>
+      )}
+    >
+      <div className="mb-3 flex w-[280px] items-center justify-between">
+        <span className="font-mono text-[10px] uppercase tracking-wider text-[#888]">
+          Price
+        </span>
+        {isActive && (
+          <button
+            type="button"
+            onClick={onClearPrice}
+            className="font-mono text-[10px] uppercase tracking-wider text-[#888] hover:text-[#f5f5f0]"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+      <Slider
+        value={sliderValue}
+        min={bounds.priceMin}
+        max={bounds.priceMax}
+        step={50}
+        onValueChange={onSliderChange}
+      />
+      <div className="mt-2 flex justify-between font-mono text-[10px] text-[#888]">
+        <span>${min.toLocaleString()}</span>
+        <span>${max.toLocaleString()}</span>
+      </div>
+    </CustomDropdown>
   )
 }
 
@@ -281,10 +375,72 @@ export function LeaderboardFilters({
 }: LeaderboardFiltersProps) {
   const activeCount = useMemo(() => countActiveFilters(state), [state])
 
+  // Bounds-derived options — recomputed only when bounds change, not on every
+  // chip click. Without this, the option arrays were new references on every
+  // render which forced all 7 popovers to reconcile and froze the main thread.
+  const yearOptions = useMemo(
+    () => bounds.years.map((y) => ({ value: y, label: String(y) })),
+    [bounds.years],
+  )
+  const cpuOptions = useMemo(
+    () => bounds.cpuKinds.map((c) => ({ value: c, label: c })),
+    [bounds.cpuKinds],
+  )
+  const subcatOptions = useMemo(
+    () => bounds.subCategories.map((sc) => ({ value: sc.slug, label: sc.name })),
+    [bounds.subCategories],
+  )
+
+  // Per-facet toggle/clear callbacks — stable across renders unless that
+  // facet's selection actually changed. memo() on the dropdowns then prevents
+  // siblings from re-rendering when only one facet is touched.
+  const onToggleYear = useCallback(
+    (v: number) => onChange({ year: toggleArray(state.year, v) }),
+    [onChange, state.year],
+  )
+  const onClearYear = useCallback(() => onChange({ year: [] }), [onChange])
+
+  const onToggleCpu = useCallback(
+    (v: string) => onChange({ cpu: toggleArray(state.cpu, v) }),
+    [onChange, state.cpu],
+  )
+  const onClearCpu = useCallback(() => onChange({ cpu: [] }), [onChange])
+
+  const onToggleRam = useCallback(
+    (v: string) => onChange({ ram: toggleArray(state.ram, v) }),
+    [onChange, state.ram],
+  )
+  const onClearRam = useCallback(() => onChange({ ram: [] }), [onChange])
+
+  const onToggleStorage = useCallback(
+    (v: string) => onChange({ storage: toggleArray(state.storage, v) }),
+    [onChange, state.storage],
+  )
+  const onClearStorage = useCallback(
+    () => onChange({ storage: [] }),
+    [onChange],
+  )
+
+  const onToggleMedal = useCallback(
+    (v: string) => onChange({ medal: toggleArray(state.medal, v) }),
+    [onChange, state.medal],
+  )
+  const onClearMedal = useCallback(() => onChange({ medal: [] }), [onChange])
+
+  const onToggleSubcat = useCallback(
+    (v: string) => onChange({ subcat: toggleArray(state.subcat, v) }),
+    [onChange, state.subcat],
+  )
+  const onClearSubcat = useCallback(
+    () => onChange({ subcat: [] }),
+    [onChange],
+  )
+
   if (layout === "bar") {
     return (
       <div
         data-leaderboard-filters
+        data-testid="leaderboard-filters"
         data-layout="bar"
         className="mb-6 border border-[#222] bg-[#0a0a0a] px-4 py-3"
       >
@@ -293,45 +449,45 @@ export function LeaderboardFilters({
           <FilterFacetDropdown
             label="Year"
             selected={state.year}
-            options={bounds.years.map((y) => ({ value: y, label: String(y) }))}
-            onToggle={(v) => onChange({ year: toggleArray(state.year, v) })}
-            onClear={() => onChange({ year: [] })}
+            options={yearOptions}
+            onToggle={onToggleYear}
+            onClear={onClearYear}
           />
           <FilterFacetDropdown
             label="CPU"
             selected={state.cpu}
-            options={bounds.cpuKinds.map((c) => ({ value: c, label: c }))}
-            onToggle={(v) => onChange({ cpu: toggleArray(state.cpu, v) })}
-            onClear={() => onChange({ cpu: [] })}
+            options={cpuOptions}
+            onToggle={onToggleCpu}
+            onClear={onClearCpu}
           />
           <FilterFacetDropdown
             label="RAM"
             selected={state.ram}
-            options={RAM_BUCKETS.map((b) => ({ value: b.value, label: b.label }))}
-            onToggle={(v) => onChange({ ram: toggleArray(state.ram, v) })}
-            onClear={() => onChange({ ram: [] })}
+            options={RAM_OPTIONS}
+            onToggle={onToggleRam}
+            onClear={onClearRam}
           />
           <FilterFacetDropdown
             label="Storage"
             selected={state.storage}
-            options={STORAGE_BUCKETS.map((b) => ({ value: b.value, label: b.label }))}
-            onToggle={(v) => onChange({ storage: toggleArray(state.storage, v) })}
-            onClear={() => onChange({ storage: [] })}
+            options={STORAGE_OPTIONS}
+            onToggle={onToggleStorage}
+            onClear={onClearStorage}
           />
           <FilterFacetDropdown
             label="Medal"
             selected={state.medal}
-            options={MEDAL_TIERS.map((t) => ({ value: t.value, label: t.label }))}
-            onToggle={(v) => onChange({ medal: toggleArray(state.medal, v) })}
-            onClear={() => onChange({ medal: [] })}
+            options={MEDAL_OPTIONS}
+            onToggle={onToggleMedal}
+            onClear={onClearMedal}
           />
           {bounds.subCategories.length > 0 && (
             <FilterFacetDropdown
               label="Sub-cat"
               selected={state.subcat}
-              options={bounds.subCategories.map((sc) => ({ value: sc.slug, label: sc.name }))}
-              onToggle={(v) => onChange({ subcat: toggleArray(state.subcat, v) })}
-              onClear={() => onChange({ subcat: [] })}
+              options={subcatOptions}
+              onToggle={onToggleSubcat}
+              onClear={onClearSubcat}
             />
           )}
 
@@ -366,39 +522,39 @@ export function LeaderboardFilters({
       <FilterChipGroupVertical
         label="Year"
         selected={state.year}
-        options={bounds.years.map((y) => ({ value: y, label: String(y) }))}
-        onToggle={(v) => onChange({ year: toggleArray(state.year, v) })}
+        options={yearOptions}
+        onToggle={onToggleYear}
       />
       <FilterChipGroupVertical
         label="CPU"
         selected={state.cpu}
-        options={bounds.cpuKinds.map((c) => ({ value: c, label: c }))}
-        onToggle={(v) => onChange({ cpu: toggleArray(state.cpu, v) })}
+        options={cpuOptions}
+        onToggle={onToggleCpu}
       />
       <FilterChipGroupVertical
         label="RAM"
         selected={state.ram}
-        options={RAM_BUCKETS.map((b) => ({ value: b.value, label: b.label }))}
-        onToggle={(v) => onChange({ ram: toggleArray(state.ram, v) })}
+        options={RAM_OPTIONS}
+        onToggle={onToggleRam}
       />
       <FilterChipGroupVertical
         label="Storage"
         selected={state.storage}
-        options={STORAGE_BUCKETS.map((b) => ({ value: b.value, label: b.label }))}
-        onToggle={(v) => onChange({ storage: toggleArray(state.storage, v) })}
+        options={STORAGE_OPTIONS}
+        onToggle={onToggleStorage}
       />
       <FilterChipGroupVertical
         label="Medal"
         selected={state.medal}
-        options={MEDAL_TIERS.map((t) => ({ value: t.value, label: t.label }))}
-        onToggle={(v) => onChange({ medal: toggleArray(state.medal, v) })}
+        options={MEDAL_OPTIONS}
+        onToggle={onToggleMedal}
       />
       {bounds.subCategories.length > 0 && (
         <FilterChipGroupVertical
           label="Sub-cat"
           selected={state.subcat}
-          options={bounds.subCategories.map((sc) => ({ value: sc.slug, label: sc.name }))}
-          onToggle={(v) => onChange({ subcat: toggleArray(state.subcat, v) })}
+          options={subcatOptions}
+          onToggle={onToggleSubcat}
         />
       )}
 
