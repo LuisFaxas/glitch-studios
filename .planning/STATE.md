@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
-status: Ready to execute
-stopped_at: Phase 29.3 COMPLETE — Plan 06 verified passed on real macOS Safari + Firefox 2026-04-27T17:00Z; root-cause fix at 6af8177 (native input event feedback loop) holds; ready to transition to Phase 29.2
-last_updated: "2026-04-27T16:15:00.000Z"
+status: Ready to plan
+stopped_at: Phase 29.3 audit complete — filter re-enabled in working tree, dev-server visual clean, prod build broken (separate fix), pending commit + close-out
+last_updated: "2026-04-27T21:59:21.355Z"
 last_activity: 2026-04-27
 progress:
   total_phases: 5
-  completed_phases: 3
-  total_plans: 43
-  completed_plans: 32
+  completed_phases: 5
+  total_plans: 44
+  completed_plans: 44
 ---
 
 # Project State
@@ -20,11 +20,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 
 **Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience. Tech readers trust GlitchTech's hardware scorecards.
-**Current focus:** Phase 29.3 — Reduce Filter-Path GPU Baseline + Re-Enable Filter
+**Current focus:** Phase 29.2 — site-wide-hero-rollout
 
 ## Current Position
 
-Phase: 29.3 (Reduce Filter-Path GPU Baseline + Re-Enable Filter) — **COMPLETE 2026-04-27T17:00Z**
+Phase: 29.3
+Plan: Not started
 Plans: 6 plans, 6 summaries (01 passed, 02 skipped, 03 passed, 04 passed, 05 failed_superseded, 06 passed)
 Filter UI ships visible on `/tech/rankings/laptops` — verified on real macOS Safari + Firefox.
 Next phase: 29.2 — Site-Wide Hero Rollout + Methodology Editorial Upgrade (10 plans drafted, 0 executed)
@@ -39,6 +40,7 @@ Phase 29.2 (Site-Wide Hero Rollout) gated on Plan 06 macOS verification result.
 Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to ROADMAP. 10 production bugs caught (6 auth fixed live during audit; 4 broken admin pages + mobile checkout + mobile nav + /forgot-password routes + /about bundled into Phase 23 debug).
 
 **2026-04-27 audit (.planning/audit-screenshots/2026-04-27/AUDIT-FINDINGS.md):**
+
 - Dev server (`pnpm dev` :3010) renders `/tech/rankings/laptops` clean on desktop + mobile, 4/4 Playwright visual tests pass with zero console/page errors
 - Filter UI is **rendering** in working tree (`<LeaderboardFilters>` + `<LeaderboardFilterSheet>` mounted) — STATE note about it being hidden is now stale
 - Uncommitted Phase 29.3 closure: `leaderboard-table.tsx (+173/-69)`, `leaderboard-filter-sidebar.tsx (+26/-9)`, plus a new audit test

@@ -50,7 +50,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 28: GlitchMark System** — research + lock formula, schema, compute on ingest, methodology page section — GLITCHMARK-01..08 (completed 2026-04-25)
 - [x] **Phase 29: Master Leaderboard** — `/tech/categories/[slug]/rankings` sortable/filterable with GlitchMark + BPR + any benchmark column — RANK-01..07 (completed 2026-04-25)
 - [x] **Phase 29.1: Master Leaderboard Polish (INSERTED)** — top-level `/tech/rankings` route + sidebar nav button next to Blog, hero sections on rankings + category pages, horizontal-scroll fix, filter UI rework (top bar vs collapsible sidebar), mobile view toggle (cards ↔ table), GlitchMark scale display revisit. Sequential execution, Playwright-driven visual verification each step. (completed 2026-04-26)
-- [ ] **Phase 29.2: Site-Wide Hero Rollout + Methodology Editorial Upgrade (INSERTED)** — TechHero on every remaining /tech/* surface (about, reviews, categories hub, compare, benchmarks, blog); methodology page editorial upgrade (stat cards, discipline-card grid, medal-tier ladder, glitchy table treatment); category tile imagery (real thumbnails or hero-sized icons replacing the empty-box look); /tech/blog page build-out beyond stub. Methodology data already audited and accurate (no rubric fix needed). Sequential execution, Playwright-driven verification per plan. See `.planning/phases/29.2-site-wide-hero-rollout/29.2-CONTEXT.md`.
+- [x] **Phase 29.2: Site-Wide Hero Rollout + Methodology Editorial Upgrade (INSERTED)** — TechHero on every remaining /tech/* surface (about, reviews, categories hub, compare, benchmarks, blog); methodology page editorial upgrade (stat cards, discipline-card grid, medal-tier ladder, glitchy table treatment); category tile imagery (real thumbnails or hero-sized icons replacing the empty-box look); /tech/blog page build-out beyond stub. Methodology data already audited and accurate (no rubric fix needed). Sequential execution, Playwright-driven verification per plan. See `.planning/phases/29.2-site-wide-hero-rollout/29.2-CONTEXT.md`. (completed 2026-04-27)
 - [ ] **Phase 29.3: Reduce Filter-Path GPU Baseline + Re-Enable Filter (INSERTED — URGENT)** — chip clicks on `/tech/rankings/laptops` crashed macOS Safari + Firefox tabs. 4-agent code audit on 2026-04-26 revealed the original "rebuild the dropdown" plan was targeting the wrong layer: cost is dominantly in the persistent baseline (Footer mounts LogoTile glitchLayer1/2 unguarded — same `mix-blend-mode + filter` pattern that was fixed in `logo-tile.tsx` was missed in `footer.tsx`; AudioPlayerProvider ships fresh `value` object every render → re-renders WidgetNowPlaying which always renders a `<canvas>` waveform; columns useMemo has stale `filters.sort/dir` deps that rebuild all column defs on sort; table has `min-width: 1600px` overflow surface). All independent of dropdown architecture. This phase fixes the baseline first, deploys to preview with filter still hidden so user can verify on macOS Safari + Firefox via sort-header click (same `setFilters` write path), THEN re-mounts the existing filter UI as-is. NO dropdown rebuild unless baseline fixes fail. Investigation artifact: `.planning/debug/filter-chip-crash-mac-browsers.md`. Audit findings: this phase's CONTEXT.md.
 - [ ] **Phase 30: Per-Benchmark Pages** — `/tech/benchmarks` landing + `/tech/benchmarks/[slug]` cross-category leaderboard per benchmark
 - [ ] **Phase 31: Category Detail Editorial Reframe** — pivot `/tech/categories/[slug]` from ranked product list to curated editorial hub with "best for" cards
@@ -283,19 +283,19 @@ Plans:
 - Auth, payment, beats, studios work
 
 
-**Plans:** 10 plans
+**Plans:** 10/10 plans complete
 
 Plans:
-- [ ] 29.2-01-PLAN.md — TechHero size variants (compact/default/tall prop + HEIGHT_MAP)
-- [ ] 29.2-02-PLAN.md — /tech/about hero (tall amber) + stat cards row + terminal formula
-- [ ] 29.2-03-PLAN.md — /tech/about discipline cards (13-card grid replacing table)
-- [ ] 29.2-04-PLAN.md — /tech/about medal threshold ladder (replacing table)
-- [ ] 29.2-05-PLAN.md — /tech/reviews TechHero (cyan, "Browse latest")
-- [ ] 29.2-06-PLAN.md — /tech/categories hub TechHero (amber, "View rankings")
-- [ ] 29.2-07-PLAN.md — Category tile imagery Direction B (80px icon + caption)
-- [ ] 29.2-08-PLAN.md — /tech/compare TechHero (cyan, "Pick devices")
-- [ ] 29.2-09-PLAN.md — /tech/benchmarks TechHero (cyan, "Read methodology")
-- [ ] 29.2-10-PLAN.md — /tech/blog build-out (amber, "Read latest" + empty-state)
+- [x] 29.2-01-PLAN.md — TechHero size variants (compact/default/tall prop + HEIGHT_MAP)
+- [x] 29.2-02-PLAN.md — /tech/about hero (tall amber) + stat cards row + terminal formula
+- [x] 29.2-03-PLAN.md — /tech/about discipline cards (13-card grid replacing table)
+- [x] 29.2-04-PLAN.md — /tech/about medal threshold ladder (replacing table)
+- [x] 29.2-05-PLAN.md — /tech/reviews TechHero (cyan, "Browse latest")
+- [x] 29.2-06-PLAN.md — /tech/categories hub TechHero (amber, "View rankings")
+- [x] 29.2-07-PLAN.md — Category tile imagery Direction B (80px icon + caption)
+- [x] 29.2-08-PLAN.md — /tech/compare TechHero (cyan, "Pick devices")
+- [x] 29.2-09-PLAN.md — /tech/benchmarks TechHero (cyan, "Read methodology")
+- [x] 29.2-10-PLAN.md — /tech/blog build-out (amber, "Read latest" + empty-state)
 
 **Wave layout:** Sequential only — waves 1-10, each plan depends on the prior. Each plan completes (including its Playwright pass) before the next plan starts.
 
