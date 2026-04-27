@@ -16,12 +16,15 @@
     "db:migrate:phase27": "tsx --env-file=.env.local scripts/run-phase27-migration.ts",
     "db:migrate:phase28": "tsx --env-file=.env.local scripts/run-phase28-migration.ts",
     "db:migrate:phase29": "tsx --env-file=.env.local scripts/run-phase29-migration.ts",
-    "db:seed:phase29-placeholders": "tsx --env-file=.env.local scripts/seed-phase29-placeholders.ts"
+    "db:seed:phase29-placeholders": "tsx --env-file=.env.local scripts/seed-phase29-placeholders.ts",
+    "brand:render": "node brand-engine/render.mjs",
+    "brand:list": "node brand-engine/render.mjs --list",
+    "brand:all": "node brand-engine/render.mjs --all"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1016.0",
     "@aws-sdk/s3-request-presigner": "^3.1016.0",
-    "@base-ui/react": "^1.3.0",
+    "@base-ui/react": "^1.4.1",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
