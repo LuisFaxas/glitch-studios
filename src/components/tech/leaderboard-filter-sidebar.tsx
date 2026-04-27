@@ -69,6 +69,16 @@ function CustomDropdown({ trigger, children }: CustomDropdownProps) {
   const [open, setOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement | null>(null)
   const popupRef = useRef<HTMLDivElement | null>(null)
+  // Real macOS Safari/Firefox can enter a pointer/style feedback loop if this
+  // popup updates synchronously inside the native input event.
+  const setOpenAfterInput = useCallback(
+    (next: boolean | ((current: boolean) => boolean)) => {
+      window.setTimeout(() => {
+        setOpen(next)
+      }, 0)
+    },
+    [],
+  )
 
   useEffect(() => {
     if (!open) return
@@ -77,10 +87,10 @@ function CustomDropdown({ trigger, children }: CustomDropdownProps) {
       if (!t) return
       if (popupRef.current?.contains(t)) return
       if (triggerRef.current?.contains(t)) return
-      setOpen(false)
+      setOpenAfterInput(false)
     }
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false)
+      if (e.key === "Escape") setOpenAfterInput(false)
     }
     document.addEventListener("pointerdown", onPointerDown)
     document.addEventListener("keydown", onKeyDown)
@@ -88,16 +98,16 @@ function CustomDropdown({ trigger, children }: CustomDropdownProps) {
       document.removeEventListener("pointerdown", onPointerDown)
       document.removeEventListener("keydown", onKeyDown)
     }
-  }, [open])
+  }, [open, setOpenAfterInput])
 
   const triggerProps = useMemo(
     () => ({
-      onClick: () => setOpen((v) => !v),
+      onClick: () => setOpenAfterInput((v) => !v),
       "aria-expanded": open,
       "aria-haspopup": "menu" as const,
       ref: triggerRef,
     }),
-    [open],
+    [open, setOpenAfterInput],
   )
 
   return (

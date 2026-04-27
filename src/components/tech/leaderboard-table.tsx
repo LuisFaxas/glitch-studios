@@ -9,7 +9,7 @@ import {
   type ColumnDef,
   type SortingFn,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ExternalLink } from "lucide-react"
+import { ExternalLink } from "lucide-react"
 import { BPRMedal } from "./bpr-medal"
 import { BuyButton } from "./buy-button"
 import { LeaderboardCard } from "./leaderboard-card"
@@ -229,7 +229,11 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
   })
   const setFilters = useCallback(
     (patch: Partial<AllFilters>) => {
-      setFiltersState((prev) => ({ ...prev, ...patch }))
+      // Defer out of the native click task. Synchronous filter/dropdown updates
+      // can trigger a browser pointer/style feedback loop on macOS Safari/Firefox.
+      window.setTimeout(() => {
+        setFiltersState((prev) => ({ ...prev, ...patch }))
+      }, 0)
     },
     [],
   )
