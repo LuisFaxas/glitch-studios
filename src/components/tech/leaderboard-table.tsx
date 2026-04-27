@@ -1,7 +1,6 @@
 "use client"
-import { useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import Image from "next/image"
 import {
   useReactTable,
   getCoreRowModel,
@@ -10,19 +9,7 @@ import {
   type ColumnDef,
   type SortingFn,
 } from "@tanstack/react-table"
-import {
-  useQueryStates,
-  parseAsString,
-  parseAsArrayOf,
-  parseAsInteger,
-  parseAsStringLiteral,
-} from "nuqs"
 import { ArrowUpDown, ExternalLink } from "lucide-react"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 import { BPRMedal } from "./bpr-medal"
 import { BuyButton } from "./buy-button"
 import { LeaderboardCard } from "./leaderboard-card"
@@ -154,33 +141,19 @@ interface SortHeaderProps {
 
 function SortHeader({
   label,
-  sortId,
   methodologyAnchor,
-  currentSort,
-  currentDir,
-  onSort,
 }: SortHeaderProps) {
-  const active = currentSort === sortId
+  // ATOMIC FIX (2026-04-26): sort interaction disabled. User reports that ANY
+  // table state change — sort included, not just filter — crashes macOS Safari
+  // + Firefox. So the bug is in the table re-render cycle itself, not filter-
+  // specific. Until Phase 29.3 rebuild, the header is a static label only.
   return (
     <div className="flex items-center gap-1.5">
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation()
-          onSort(sortId)
-        }}
-        className={`inline-flex items-center gap-1 font-mono text-xs uppercase tracking-wider ${
-          active ? "text-[#f5f5f0]" : "text-[#888]"
-        } hover:text-[#f5f5f0]`}
+      <span
+        className="inline-flex items-center gap-1 font-mono text-xs uppercase tracking-wider text-[#888]"
       >
         {label}
-        <ArrowUpDown className="h-3 w-3" aria-hidden />
-        {active && (
-          <span className="text-[10px] text-[#f5f5f0]">
-            {currentDir === "desc" ? "▼" : "▲"}
-          </span>
-        )}
-      </button>
+      </span>
       {methodologyAnchor && (
         <a
           href={`/tech/about${methodologyAnchor}`}
@@ -197,14 +170,18 @@ function SortHeader({
   )
 }
 
+// Native title attribute instead of a Base UI Tooltip — a typical leaderboard
+// row has 5-10 empty benchmark cells, and 7 rows × ~7 dashes = ~50 tooltips
+// per page. Each Base UI Tooltip mounts a FloatingPortal with resize/scroll/
+// pointer listeners (~5 per tooltip = 250+ listeners just for dashes). On
+// every chip click, the table re-renders and Floating UI reconciles all of
+// them — Firefox runs out of resources within a few clicks. The title attr
+// gives the same hover-explanation UX with zero listeners.
 function DashCell({ tooltip }: { tooltip: string }) {
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={<span className="cursor-help text-[#666]">—</span>}
-      />
-      <TooltipContent>{tooltip}</TooltipContent>
-    </Tooltip>
+    <span className="cursor-help text-[#666]" title={tooltip}>
+      —
+    </span>
   )
 }
 
@@ -215,67 +192,92 @@ function deriveDisciplineFromRubricKey(key: string): string {
 export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
   const router = useRouter()
 
-  const [filters, setFilters] = useQueryStates(
-    {
-      sort: parseAsString.withDefault("glitchmark").withOptions({ clearOnDefault: true }),
-      dir: parseAsString.withDefault("desc").withOptions({ clearOnDefault: true }),
-      minPrice: parseAsInteger.withOptions({ clearOnDefault: true }),
-      maxPrice: parseAsInteger.withOptions({ clearOnDefault: true }),
-      year: parseAsArrayOf(parseAsInteger).withDefault([]).withOptions({ clearOnDefault: true }),
-      cpu: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
-      ram: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
-      storage: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
-      medal: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
-      subcat: parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true }),
-      view: parseAsStringLiteral(["cards", "table"] as const)
-        .withDefault("cards")
-        .withOptions({ clearOnDefault: true }),
+  // Filter state is LOCAL React state, not URL state. Codex forensic review
+  // identified the chip-click crash as: nuqs URL update → shallow URL replace
+  // → (tech) client layout (which uses usePathname) re-renders → cascade
+  // through TileNav / BottomTabBar / MobileContentWrapper → macOS Safari +
+  // Firefox can't keep up with the app-shell churn. By keeping filters local,
+  // a chip click only re-renders LeaderboardTable. The rest of the shell
+  // never knows the filter changed.
+  // Trade-off: filtered views are no longer shareable via URL. Acceptable
+  // until we lift TileNav out of being router-sensitive (Codex fix #2).
+  type AllFilters = {
+    sort: string
+    dir: string
+    minPrice: number | null
+    maxPrice: number | null
+    year: number[]
+    cpu: string[]
+    ram: string[]
+    storage: string[]
+    medal: string[]
+    subcat: string[]
+    view: "cards" | "table"
+  }
+  const [filters, setFiltersState] = useState<AllFilters>({
+    sort: "glitchmark",
+    dir: "desc",
+    minPrice: null,
+    maxPrice: null,
+    year: [],
+    cpu: [],
+    ram: [],
+    storage: [],
+    medal: [],
+    subcat: [],
+    view: "cards",
+  })
+  const setFilters = useCallback(
+    (patch: Partial<AllFilters>) => {
+      setFiltersState((prev) => ({ ...prev, ...patch }))
     },
-    {
-      // Phase 29.1 follow-up — every filter chip click was triggering a full
-      // server re-render of /tech/rankings/[slug] (~1s per click in dev),
-      // saturating the dev server within a few clicks. shallow:true updates
-      // the URL via window.history without an RSC roundtrip; filtering happens
-      // entirely client-side via the existing applyFilters memo.
-      shallow: true,
-      // Don't scroll to top on URL change.
-      scroll: false,
-      // Use replaceState rather than pushState so the back button doesn't get
-      // polluted with one entry per chip click.
-      history: "replace",
-    },
+    [],
   )
 
-  const filterState: FilterState = {
-    minPrice: filters.minPrice,
-    maxPrice: filters.maxPrice,
-    year: filters.year,
-    cpu: filters.cpu,
-    ram: filters.ram,
-    storage: filters.storage,
-    medal: filters.medal,
-    subcat: filters.subcat,
-  }
+  const filterState: FilterState = useMemo(
+    () => ({
+      minPrice: filters.minPrice,
+      maxPrice: filters.maxPrice,
+      year: filters.year,
+      cpu: filters.cpu,
+      ram: filters.ram,
+      storage: filters.storage,
+      medal: filters.medal,
+      subcat: filters.subcat,
+    }),
+    [
+      filters.minPrice,
+      filters.maxPrice,
+      filters.year,
+      filters.cpu,
+      filters.ram,
+      filters.storage,
+      filters.medal,
+      filters.subcat,
+    ],
+  )
 
   const bounds = useMemo(() => deriveBounds(rows), [rows])
   const filteredRows = useMemo(
     () => applyFilters(rows, filterState),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [rows, filters],
+    [rows, filterState],
   )
 
-  const onSort = (id: string) => {
-    if (filters.sort === id) {
-      void setFilters({ dir: filters.dir === "desc" ? "asc" : "desc" })
-    } else {
-      void setFilters({ sort: id, dir: "desc" })
-    }
-  }
+  const onSort = useCallback(
+    (id: string) => {
+      if (filters.sort === id) {
+        setFilters({ dir: filters.dir === "desc" ? "asc" : "desc" })
+      } else {
+        setFilters({ sort: id, dir: "desc" })
+      }
+    },
+    [filters.sort, filters.dir, setFilters],
+  )
 
-  const onResetFilters = () => {
-    void setFilters({
-      sort: null,
-      dir: null,
+  const onResetFilters = useCallback(() => {
+    setFilters({
+      sort: "glitchmark",
+      dir: "desc",
       minPrice: null,
       maxPrice: null,
       year: [],
@@ -285,11 +287,21 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
       medal: [],
       subcat: [],
     })
-  }
+  }, [setFilters])
 
-  const onFilterChange = (next: Partial<FilterState>) => {
-    void setFilters(next as Parameters<typeof setFilters>[0])
-  }
+  const onFilterChange = useCallback(
+    (next: Partial<FilterState>) => {
+      setFilters(next)
+    },
+    [setFilters],
+  )
+
+  const onViewChange = useCallback(
+    (v: "cards" | "table") => {
+      void setFilters({ view: v })
+    },
+    [setFilters],
+  )
 
   const activeFilterCount =
     (filters.minPrice !== null ? 1 : 0) +
@@ -315,22 +327,26 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
         enableSorting: false,
         cell: ({ row }) => (
           <div className="flex items-center gap-3">
-            {row.original.heroImageUrl ? (
-              <Image
-                src={row.original.heroImageUrl}
-                alt={row.original.heroImageAlt ?? row.original.productName}
-                width={48}
-                height={48}
-                unoptimized
-                className="h-12 w-12 flex-none border border-[#222] object-cover"
-              />
-            ) : (
-              <div className="flex h-12 w-12 flex-none items-center justify-center border border-[#222] bg-[#111] font-mono text-sm text-[#666]">
-                {(
-                  row.original.manufacturer ?? row.original.productName
-                ).charAt(0)}
-              </div>
-            )}
+            {/* Phase 29.1 chip-crash forensic fix: replaced `next/image` with
+                a CSS-color tile. Every placeholder row was loading the SAME
+                1200x800 PNG from placehold.co (via `unoptimized`), then
+                downscaling 7 copies to 48x48 in the GPU. On macOS Safari +
+                Firefox, chip click → table re-flow → ImageIO re-decode of
+                the same large PNG 7 times. Headless Playwright tests cache
+                the image and don't see this cost.
+                Once real product imagery ships, swap this back to `<Image>`
+                with width/height matching the served file (NOT 1200x800). */}
+            <div
+              className="flex h-12 w-12 flex-none items-center justify-center border border-[#222] bg-[#111] font-mono text-sm text-[#666]"
+              aria-label={row.original.heroImageAlt ?? row.original.productName}
+            >
+              {(
+                row.original.manufacturer ?? row.original.productName
+              ).charAt(0)}
+            </div>
+            {/* heroImageUrl intentionally not rendered while placeholder URLs
+                are in use. Restore an <img> or <Image> here when real product
+                images ship. */}
             <div className="min-w-0">
               <div className="truncate font-mono text-sm text-[#f5f5f0]">
                 {row.original.productName}
@@ -523,12 +539,22 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [benchmarkColumns, filters.sort, filters.dir],
+    // Phase 29.3 Suspect #2 fix: filters.sort/filters.dir intentionally
+    // excluded — SortHeader (lines 142-171) is a no-op visual after the
+    // atomic fix and does not read currentSort/currentDir. TanStack reads
+    // sort state from `state.sorting` (line 554), not from columns. This
+    // change prevents a full ~14-column rebuild on every sort/filter click.
+    [benchmarkColumns],
   )
 
   const table = useReactTable({
     data: filteredRows,
     columns,
+    // Stable row ID — without this TanStack uses array-index identity, so any
+    // filter/sort change rebuilds every row's React key and forces every row
+    // (and every <img>) to remount. Codex called this out as the second
+    // load-bearing churn source on the rankings page.
+    getRowId: (row) => row.reviewId,
     state: {
       sorting: [{ id: filters.sort, desc: filters.dir === "desc" }],
     },
@@ -574,31 +600,41 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
 
   return (
     <div>
-      {/* Desktop top filter bar (D-12) — replaces left sidebar */}
-      <div className="hidden md:block">
-        <LeaderboardFilters
-          state={filterState}
-          onChange={onFilterChange}
-          onReset={onResetFilters}
-          bounds={bounds}
-          layout="bar"
-        />
-      </div>
+      {/* ATOMIC FIX (2026-04-26): filter UI is temporarily hidden because chip
+          clicks were crashing macOS Safari + Firefox tabs. After 6+ hours of
+          debugging across 15+ deploys (sticky cells, mix-blend-mode layers,
+          framer-motion, Base UI Popover, Tooltips, startTransition, nuqs,
+          BottomTabBar prefetch effect, Footer 404 prefetches, etc.) the
+          underlying cause is still unidentified. Page now renders the full
+          unfiltered leaderboard so the rest of the site is usable. Phase 29.3
+          will rebuild the filter system from scratch with a new architecture.
+          REMOVE THIS WHEN PHASE 29.3 SHIPS. */}
+      {/* Filter UI intentionally not rendered here. Atomic page-works fix. */}
 
       <div>
         {/* Phase 29.1 D-17 — table markup is rendered both on desktop (always)
             and on mobile (when view=table). Single source of truth, no drift. */}
         {(() => {
           const tableMarkup = (
+            // Sticky positioning removed from <thead>, rank <th>, product <th>,
+            // and the matching per-row <td>s. Three sticky layers inside an
+            // `overflow-x: auto` wrapper × 7 rows = 14 sticky cells that
+            // macOS Firefox + WebRender corrupts on rapid DOM mutation (chip
+            // click → table re-renders → all sticky cells recompute their
+            // anchor positions while the GPU compositor is still flushing the
+            // previous frame). The user's tab pegs at 90% CPU and dies.
+            // Trade-off: scrolling horizontally no longer pins the # / Product
+            // columns. Acceptable because the table's min-width:1600px rarely
+            // requires horizontal scroll on desktop, and the page works.
             <table className="w-full border-collapse" style={{ minWidth: "1600px" }}>
-              <thead className="sticky top-0 z-30 bg-[#0a0a0a]">
+              <thead className="bg-[#0a0a0a]">
                 <tr>
-                  <th className="sticky left-0 z-40 w-12 bg-[#0a0a0a] px-3 py-3 text-left">
+                  <th className="w-12 bg-[#0a0a0a] px-3 py-3 text-left">
                     <span className="font-mono text-xs uppercase tracking-wider text-[#888]">
                       #
                     </span>
                   </th>
-                  <th className="sticky left-12 z-40 min-w-[200px] lg:min-w-[280px] bg-[#0a0a0a] px-3 py-3 text-left">
+                  <th className="min-w-[200px] lg:min-w-[280px] bg-[#0a0a0a] px-3 py-3 text-left">
                     {flexRender(
                       productHeader.column.columnDef.header,
                       productHeader.getContext(),
@@ -621,12 +657,12 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
                       onClick={() =>
                         router.push(`/tech/reviews/${row.original.reviewSlug}`)
                       }
-                      className="group cursor-pointer border-t border-[#222] transition-[background,box-shadow] duration-150 hover:bg-[#1a1a1a] hover:[box-shadow:inset_2px_0_0_0_#f5f5f0]"
+                      className="group cursor-pointer border-t border-[#222] hover:bg-[#1a1a1a]"
                     >
-                      <td className="sticky left-0 z-20 bg-[#0a0a0a] px-3 py-3 font-mono text-[#666] group-hover:bg-[#1a1a1a]">
+                      <td className="bg-[#0a0a0a] px-3 py-3 font-mono text-[#666] group-hover:bg-[#1a1a1a]">
                         {i + 1}
                       </td>
-                      <td className="sticky left-12 z-20 bg-[#0a0a0a] px-3 py-3 group-hover:bg-[#1a1a1a]">
+                      <td className="bg-[#0a0a0a] px-3 py-3 group-hover:bg-[#1a1a1a]">
                         {flexRender(
                           productCell.column.columnDef.cell,
                           productCell.getContext(),
@@ -659,7 +695,7 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
                 <div className="mb-3 flex items-center justify-end">
                   <LeaderboardViewToggle
                     value={filters.view}
-                    onChange={(v) => void setFilters({ view: v })}
+                    onChange={onViewChange}
                   />
                 </div>
                 {filters.view === "cards" ? (
@@ -683,14 +719,7 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
           )
         })()}
 
-        {/* Mobile filter sheet */}
-        <LeaderboardFilterSheet
-          state={filterState}
-          onChange={onFilterChange}
-          onReset={onResetFilters}
-          bounds={bounds}
-          activeCount={activeFilterCount}
-        />
+        {/* Mobile filter sheet — also disabled for atomic fix. Phase 29.3 rebuild. */}
       </div>
     </div>
   )
