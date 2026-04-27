@@ -5,6 +5,11 @@
 // Hover: border #444, bg #1a1a1a, animated underline on discipline name.
 // Discipline name wraps GlitchHeading for hover-only RGB split.
 // No auto-running animations.
+//
+// Phase 30-04: each tile is now a Link to /tech/benchmarks#discipline-{slug}
+// (underscores in the slug → hyphens, so battery_life → battery-life). The
+// landing page renders the matching anchor ids.
+import Link from "next/link"
 import { GlitchHeading } from "@/components/ui/glitch-heading"
 
 interface DisciplineCardProps {
@@ -16,6 +21,10 @@ interface DisciplineCardProps {
 
 interface MethodologyDisciplineCardsProps {
   disciplines: DisciplineCardProps[]
+}
+
+function disciplineAnchorHref(slug: string): string {
+  return `/tech/benchmarks#discipline-${slug.replace(/_/g, "-")}`
 }
 
 export function MethodologyDisciplineCards({
@@ -33,9 +42,10 @@ export function MethodologyDisciplineCards({
       </p>
       <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {disciplines.map((d) => (
-          <div
+          <Link
             key={d.slug}
-            className="group relative border border-[#222] bg-[#111] p-4 transition-colors hover:border-[#444] hover:bg-[#1a1a1a]"
+            href={disciplineAnchorHref(d.slug)}
+            className="group relative block border border-[#222] bg-[#111] p-4 transition-colors hover:border-[#444] hover:bg-[#1a1a1a]"
           >
             {d.bprEligible && (
               <span className="absolute right-3 top-3 bg-[#f5f5f0] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[#000]">
@@ -48,7 +58,7 @@ export function MethodologyDisciplineCards({
             <p className="mt-2 font-sans text-[13px] leading-relaxed text-[#888]">
               {d.description}
             </p>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
