@@ -35,18 +35,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Hydrate from localStorage on mount (client-only)
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        const parsed = JSON.parse(stored)
-        if (Array.isArray(parsed)) {
-          setItems(parsed)
+    window.setTimeout(() => {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY)
+        if (stored) {
+          const parsed = JSON.parse(stored)
+          if (Array.isArray(parsed)) {
+            setItems(parsed)
+          }
         }
+      } catch {
+        // Ignore parse errors
+      } finally {
+        setIsMounted(true)
       }
-    } catch {
-      // Ignore parse errors
-    }
-    setIsMounted(true)
+    }, 0)
   }, [])
 
   // Persist to localStorage when items change (skip initial empty state before hydration)
@@ -80,9 +83,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems([])
   }, [])
 
-  const openCart = useCallback(() => setIsOpen(true), [])
-  const closeCart = useCallback(() => setIsOpen(false), [])
-  const toggleCart = useCallback(() => setIsOpen((prev) => !prev), [])
+  const setIsOpenAfterInput = useCallback(
+    (next: boolean | ((prev: boolean) => boolean)) => {
+      window.setTimeout(() => {
+        setIsOpen(next)
+      }, 0)
+    },
+    [],
+  )
+
+  const openCart = useCallback(() => setIsOpenAfterInput(true), [setIsOpenAfterInput])
+  const closeCart = useCallback(() => setIsOpenAfterInput(false), [setIsOpenAfterInput])
+  const toggleCart = useCallback(
+    () => setIsOpenAfterInput((prev) => !prev),
+    [setIsOpenAfterInput],
+  )
 
   const total = useMemo(
     () => items.reduce((sum, item) => sum + item.price, 0),

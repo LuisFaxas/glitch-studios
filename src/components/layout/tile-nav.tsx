@@ -7,7 +7,6 @@ import {
   ChevronsRight,
   ShoppingCart,
 } from "lucide-react"
-import { motion } from "motion/react"
 import { Tile } from "@/components/tiles/tile"
 import { LogoTile } from "@/components/tiles/logo-tile"
 import { WidgetNowPlaying } from "@/components/tiles/widget-now-playing"
@@ -71,13 +70,12 @@ export function TileNav({
   const targetWidth = collapsed ? 64 : 280
 
   return (
-    <motion.aside
-      className={`hidden md:flex flex-col shrink-0 bg-[#000000] overflow-y-auto h-screen sticky top-0 sidebar-scroll ${
+    // Plain <aside> + CSS width transition. Was a motion.aside w/ framer-motion's
+    // projection running on every render — heavy on macOS Firefox WebRender.
+    <aside
+      className={`hidden md:flex flex-col shrink-0 bg-[#000000] overflow-y-auto h-screen sticky top-0 sidebar-scroll transition-[width,min-width] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
         collapsed ? "p-2 items-center" : "p-3"
       }`}
-      initial={false}
-      animate={{ width: targetWidth, minWidth: targetWidth }}
-      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       style={{ width: targetWidth, minWidth: targetWidth }}
     >
       {collapsed ? (
@@ -316,6 +314,6 @@ export function TileNav({
           <div className="pointer-events-none sticky bottom-0 h-8 bg-gradient-to-t from-black to-transparent" />
         </>
       )}
-    </motion.aside>
+    </aside>
   )
 }

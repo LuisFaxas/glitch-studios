@@ -4,7 +4,6 @@ import {
   useEffect,
   useCallback,
   useRef,
-  useState,
   type ReactNode,
   type RefObject,
 } from "react"
@@ -75,7 +74,6 @@ export function MobileNavOverlay({
   isOpen,
   onClose,
   triggerRef,
-  latestPostSlot,
   navItems,
   socialLinks,
 }: MobileNavOverlayProps) {
@@ -112,11 +110,11 @@ export function MobileNavOverlay({
   useEffect(() => {
     if (!isOpen) return
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
+      if (e.key === "Escape") handleDeferredClose()
     }
     document.addEventListener("keydown", handleKeyDown)
     return () => document.removeEventListener("keydown", handleKeyDown)
-  }, [isOpen, onClose])
+  }, [isOpen, handleDeferredClose])
 
   // Focus trap
   useEffect(() => {
@@ -148,9 +146,9 @@ export function MobileNavOverlay({
   useEffect(() => {
     if (pathname !== previousPathnameRef.current) {
       previousPathnameRef.current = pathname
-      if (isOpen) onClose()
+      if (isOpen) handleDeferredClose()
     }
-  }, [pathname, isOpen, onClose])
+  }, [pathname, isOpen, handleDeferredClose])
 
   // Return focus to trigger on close
   useEffect(() => {
@@ -186,7 +184,7 @@ export function MobileNavOverlay({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            onClick={onClose}
+            onClick={handleDeferredClose}
             aria-hidden="true"
           />
 
@@ -205,7 +203,7 @@ export function MobileNavOverlay({
             onDragEnd={(_, info) => {
               // Dismiss: long drag OR quick flick
               if (info.offset.y > 120 || info.velocity.y > 500) {
-                onClose()
+                handleDeferredClose()
               } else {
                 // Smooth spring back to origin
                 animate(dragY, 0, {
@@ -371,7 +369,7 @@ export function MobileNavOverlay({
 
               <button
                 type="button"
-                onClick={onClose}
+                onClick={handleDeferredClose}
                 aria-label="Close navigation menu"
                 className="flex items-center justify-center gap-2 border border-[#222222] bg-[#111111] text-[#f5f5f0] outline-none transition-colors duration-200 hover:bg-[#1a1a1a] active:bg-[#0a0a0a] focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2"
               >

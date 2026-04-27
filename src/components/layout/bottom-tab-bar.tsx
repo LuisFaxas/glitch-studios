@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { LayoutGrid, type LucideIcon } from "lucide-react"
 import clsx from "clsx"
 import {
@@ -30,18 +30,21 @@ export function BottomTabBar({
   bookingLive = true,
 }: BottomTabBarProps) {
   const pathname = usePathname()
-  const router = useRouter()
   const [overlayOpen, setOverlayOpen] = useState(false)
   const menuTriggerRef = useRef<HTMLButtonElement>(null)
+  const setOverlayOpenAfterInput = useCallback((next: boolean) => {
+    window.setTimeout(() => {
+      setOverlayOpen(next)
+    }, 0)
+  }, [])
 
-  // Phase 23-04 router.prefetch mitigation for audit §A.12 (Beats-icon cold-nav).
-  // Full perf fix lives in Phase 25 (Performance Audit + Fixes).
-  useEffect(() => {
-    for (const item of items) {
-      const href = !bookingLive && item.href === "/book" ? "/services" : item.href
-      router.prefetch(href)
-    }
-  }, [items, bookingLive, router])
+  // router.prefetch effect removed — `useRouter()` returns a new object every
+  // render, so listing it in deps caused the prefetch loop to re-fire every
+  // time pathname changed (which Next.js considers a render trigger even on
+  // shallow URL state changes from nuqs). Each filter chip click triggered
+  // a fresh round of prefetch fetches for every nav item. <Link> components
+  // already auto-prefetch on viewport intersection — the explicit useEffect
+  // was redundant and load-bearing for the chip-click crash.
 
   return (
     <>
@@ -85,7 +88,7 @@ export function BottomTabBar({
           ref={menuTriggerRef}
           type="button"
           data-mobile-menu-trigger
-          onClick={() => setOverlayOpen(true)}
+          onClick={() => setOverlayOpenAfterInput(true)}
           aria-label="Open navigation menu"
           aria-expanded={overlayOpen}
           aria-controls="mobile-navigation-dialog"
@@ -107,7 +110,7 @@ export function BottomTabBar({
       {/* Mobile nav overlay */}
       <MobileNavOverlay
         isOpen={overlayOpen}
-        onClose={() => setOverlayOpen(false)}
+        onClose={() => setOverlayOpenAfterInput(false)}
         triggerRef={menuTriggerRef}
         navItems={overlayNavItems ?? defaultStudiosOverlayNavItems}
         socialLinks={overlaySocialLinks ?? defaultStudiosOverlaySocialLinks}

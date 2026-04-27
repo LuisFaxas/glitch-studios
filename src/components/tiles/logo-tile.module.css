@@ -1,9 +1,18 @@
+/* Phase 29.1 chip-crash forensic fix: removed the persistent
+   `filter: drop-shadow()` on `.glitchWrapper`. drop-shadow forces the
+   browser to allocate a GPU compositing layer for the subtree EVEN when
+   nothing else changes — and since LogoTile is mounted on every page in
+   the always-visible sidebar, that layer is permanent. On macOS Metal +
+   Firefox WebRender, the layer competes with other repaints during
+   filter-chip-driven table re-flows. The visual glow is recreated with
+   a no-GPU-cost approach: hover-only filter (mirrors the existing
+   pattern of moving glitch layers to hover-only mount). The non-hover
+   state has no shadow — on a black sidebar background the glow was
+   barely visible anyway. */
 .glitchWrapper {
   position: relative;
   width: 100%;
   aspect-ratio: 1906 / 421;
-  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.35));
-  transition: filter 0.3s;
 }
 
 .glitchWrapper:hover {
