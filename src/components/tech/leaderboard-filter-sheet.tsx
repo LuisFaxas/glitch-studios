@@ -1,4 +1,5 @@
 "use client"
+import { useCallback, useState } from "react"
 import {
   Sheet,
   SheetContent,
@@ -33,14 +34,21 @@ export function LeaderboardFilterSheet({
   bounds,
   activeCount,
 }: Props) {
+  const [open, setOpen] = useState(false)
+  const setOpenAfterInput = useCallback((next: boolean) => {
+    window.setTimeout(() => {
+      setOpen(next)
+    }, 0)
+  }, [])
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpenAfterInput}>
       <SheetTrigger
         render={
           <button
             type="button"
             data-mobile-filter-sheet-trigger
-            className="fixed bottom-4 right-4 z-30 inline-flex items-center gap-2 border border-[#f5f5f0] bg-[#0a0a0a] px-4 py-3 text-xs font-mono uppercase tracking-wider text-[#f5f5f0] shadow-lg md:hidden"
+            className="fixed bottom-[calc(var(--tab-bar-height,0px)+1rem+env(safe-area-inset-bottom))] right-4 z-[60] inline-flex items-center gap-2 border border-[#f5f5f0] bg-[#0a0a0a] px-4 py-3 text-xs font-mono uppercase tracking-wider text-[#f5f5f0] shadow-lg md:hidden"
           >
             <Filter className="h-4 w-4" aria-hidden />
             Filters {activeCount > 0 ? `(${activeCount})` : ""}

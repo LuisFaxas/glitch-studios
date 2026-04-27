@@ -1,6 +1,5 @@
 "use client"
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Slider } from "@/components/ui/slider"
 import { ChevronDown, X } from "lucide-react"
 
 export interface FilterState {
@@ -138,6 +137,288 @@ const MEDAL_OPTIONS: Array<{ value: string; label: string }> = MEDAL_TIERS.map((
   value: t.value,
   label: t.label,
 }))
+
+interface PriceRangeSliderProps {
+  value: readonly [number, number]
+  min: number
+  max: number
+  step?: number
+  onCommit: (value: [number, number]) => void
+}
+
+function PriceRangeSlider({
+  value,
+  min,
+  max,
+  step = 50,
+  onCommit,
+}: PriceRangeSliderProps) {
+  const trackRef = useRef<HTMLDivElement | null>(null)
+  const rangeRef = useRef<HTMLDivElement | null>(null)
+  const minThumbRef = useRef<HTMLButtonElement | null>(null)
+  const maxThumbRef = useRef<HTMLButtonElement | null>(null)
+  const minLabelRef = useRef<HTMLSpanElement | null>(null)
+  const maxLabelRef = useRef<HTMLSpanElement | null>(null)
+  const activeThumbRef = useRef<0 | 1 | null>(null)
+  const stopDraggingRef = useRef<(event: PointerEvent) => void>(() => {})
+  const liveValueRef = useRef<[number, number]>([value[0], value[1]])
+  const rafRef = useRef<number | null>(null)
+
+  const clampValue = useCallback(
+    (next: number) => Math.min(max, Math.max(min, next)),
+    [max, min],
+  )
+
+  const snapValue = useCallback(
+    (next: number) => {
+      if (step <= 0) return clampValue(next)
+      const snapped = Math.round((next - min) / step) * step + min
+      return clampValue(snapped)
+    },
+    [clampValue, min, step],
+  )
+
+  const getPercent = useCallback(
+    (next: number) => {
+      const range = Math.max(max - min, 1)
+      return ((clampValue(next) - min) / range) * 100
+    },
+    [clampValue, max, min],
+  )
+
+  const formatPrice = useCallback(
+    (next: number) => `$${Math.round(next).toLocaleString()}`,
+    [],
+  )
+
+  const paint = useCallback(
+    (nextValue: [number, number]) => {
+      const [nextMin, nextMax] = nextValue
+      const low = getPercent(nextMin)
+      const high = getPercent(nextMax)
+
+      if (rangeRef.current) {
+        rangeRef.current.style.left = `${low}%`
+        rangeRef.current.style.right = `${100 - high}%`
+      }
+      if (minThumbRef.current) {
+        minThumbRef.current.style.left = `${low}%`
+        minThumbRef.current.setAttribute("aria-valuenow", String(nextMin))
+        minThumbRef.current.setAttribute("aria-valuetext", formatPrice(nextMin))
+      }
+      if (maxThumbRef.current) {
+        maxThumbRef.current.style.left = `${high}%`
+        maxThumbRef.current.setAttribute("aria-valuenow", String(nextMax))
+        maxThumbRef.current.setAttribute("aria-valuetext", formatPrice(nextMax))
+      }
+      if (minLabelRef.current) minLabelRef.current.textContent = formatPrice(nextMin)
+      if (maxLabelRef.current) maxLabelRef.current.textContent = formatPrice(nextMax)
+    },
+    [formatPrice, getPercent],
+  )
+
+  const schedulePaint = useCallback(
+    (nextValue: [number, number]) => {
+      if (rafRef.current != null) window.cancelAnimationFrame(rafRef.current)
+      rafRef.current = window.requestAnimationFrame(() => {
+        rafRef.current = null
+        paint(nextValue)
+      })
+    },
+    [paint],
+  )
+
+  const commitLiveValue = useCallback(() => {
+    const nextValue = liveValueRef.current
+    window.setTimeout(() => onCommit(nextValue), 0)
+  }, [onCommit])
+
+  const valueFromClientX = useCallback(
+    (clientX: number) => {
+      const rect = trackRef.current?.getBoundingClientRect()
+      if (!rect || rect.width <= 0) return liveValueRef.current[0]
+      const raw = min + ((clientX - rect.left) / rect.width) * (max - min)
+      return snapValue(raw)
+    },
+    [max, min, snapValue],
+  )
+
+  const setLiveThumbValue = useCallback(
+    (thumbIndex: 0 | 1, clientX: number) => {
+      const next = valueFromClientX(clientX)
+      const [currentMin, currentMax] = liveValueRef.current
+      const nextValue: [number, number] =
+        thumbIndex === 0
+          ? [Math.min(next, currentMax), currentMax]
+          : [currentMin, Math.max(next, currentMin)]
+
+      liveValueRef.current = nextValue
+      schedulePaint(nextValue)
+    },
+    [schedulePaint, valueFromClientX],
+  )
+
+  const onPointerMove = useCallback(
+    (event: PointerEvent) => {
+      const thumbIndex = activeThumbRef.current
+      if (thumbIndex == null) return
+      setLiveThumbValue(thumbIndex, event.clientX)
+    },
+    [setLiveThumbValue],
+  )
+
+  const stopDragging = useCallback(
+    (event?: PointerEvent) => {
+      if (event && activeThumbRef.current != null) {
+        setLiveThumbValue(activeThumbRef.current, event.clientX)
+      }
+      window.removeEventListener("pointermove", onPointerMove)
+      window.removeEventListener("pointerup", stopDraggingRef.current)
+      activeThumbRef.current = null
+      commitLiveValue()
+    },
+    [commitLiveValue, onPointerMove, setLiveThumbValue],
+  )
+
+  useEffect(() => {
+    stopDraggingRef.current = stopDragging
+  }, [stopDragging])
+
+  const startDragging = useCallback(
+    (thumbIndex: 0 | 1, event: React.PointerEvent<HTMLElement>) => {
+      event.preventDefault()
+      event.stopPropagation()
+      activeThumbRef.current = thumbIndex
+      event.currentTarget.focus({ preventScroll: true })
+      setLiveThumbValue(thumbIndex, event.clientX)
+      window.removeEventListener("pointermove", onPointerMove)
+      window.removeEventListener("pointerup", stopDraggingRef.current)
+      window.addEventListener("pointermove", onPointerMove, { passive: true })
+      window.addEventListener("pointerup", stopDragging, { once: true })
+    },
+    [onPointerMove, setLiveThumbValue, stopDragging],
+  )
+
+  const onTrackPointerDown = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      const target = event.target as HTMLElement | null
+      if (target?.closest("[data-slot='slider-thumb']")) return
+
+      const next = valueFromClientX(event.clientX)
+      const [currentMin, currentMax] = liveValueRef.current
+      const thumbIndex: 0 | 1 =
+        Math.abs(next - currentMin) <= Math.abs(next - currentMax) ? 0 : 1
+
+      startDragging(thumbIndex, event)
+    },
+    [startDragging, valueFromClientX],
+  )
+
+  const onThumbKeyDown = useCallback(
+    (thumbIndex: 0 | 1, event: React.KeyboardEvent<HTMLButtonElement>) => {
+      let delta = 0
+      if (event.key === "ArrowLeft" || event.key === "ArrowDown") delta = -step
+      if (event.key === "ArrowRight" || event.key === "ArrowUp") delta = step
+      if (event.key === "Home") {
+        delta =
+          thumbIndex === 0
+            ? min - liveValueRef.current[0]
+            : min - liveValueRef.current[1]
+      }
+      if (event.key === "End") {
+        delta =
+          thumbIndex === 0
+            ? max - liveValueRef.current[0]
+            : max - liveValueRef.current[1]
+      }
+      if (delta === 0) return
+
+      event.preventDefault()
+      const [currentMin, currentMax] = liveValueRef.current
+      const nextValue: [number, number] =
+        thumbIndex === 0
+          ? [Math.min(snapValue(currentMin + delta), currentMax), currentMax]
+          : [currentMin, Math.max(snapValue(currentMax + delta), currentMin)]
+
+      liveValueRef.current = nextValue
+      paint(nextValue)
+      commitLiveValue()
+    },
+    [commitLiveValue, max, min, paint, snapValue, step],
+  )
+
+  useEffect(() => {
+    const nextValue: [number, number] = [clampValue(value[0]), clampValue(value[1])]
+    liveValueRef.current =
+      nextValue[0] <= nextValue[1] ? nextValue : [nextValue[1], nextValue[0]]
+    paint(liveValueRef.current)
+  }, [clampValue, paint, value])
+
+  useEffect(
+    () => () => {
+      if (rafRef.current != null) window.cancelAnimationFrame(rafRef.current)
+      window.removeEventListener("pointermove", onPointerMove)
+      window.removeEventListener("pointerup", stopDraggingRef.current)
+    },
+    [onPointerMove, stopDragging],
+  )
+
+  const lowPercent = getPercent(value[0])
+  const highPercent = getPercent(value[1])
+
+  return (
+    <div data-slot="slider" className="w-full">
+      <div
+        ref={trackRef}
+        data-slot="slider-track"
+        className="relative flex h-8 w-full touch-none items-center select-none"
+        onPointerDown={onTrackPointerDown}
+      >
+        <div className="absolute left-0 right-0 top-1/2 h-1 -translate-y-1/2 overflow-hidden rounded-full bg-muted" />
+        <div
+          ref={rangeRef}
+          data-slot="slider-range"
+          className="absolute top-1/2 h-1 -translate-y-1/2 bg-primary"
+          style={{ left: `${lowPercent}%`, right: `${100 - highPercent}%` }}
+        />
+        <button
+          ref={minThumbRef}
+          type="button"
+          data-slot="slider-thumb"
+          role="slider"
+          aria-label="Minimum price"
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={value[0]}
+          aria-valuetext={formatPrice(value[0])}
+          className="absolute top-1/2 block size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-ring bg-white ring-ring/50 select-none after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3"
+          style={{ left: `${lowPercent}%` }}
+          onPointerDown={(event) => startDragging(0, event)}
+          onKeyDown={(event) => onThumbKeyDown(0, event)}
+        />
+        <button
+          ref={maxThumbRef}
+          type="button"
+          data-slot="slider-thumb"
+          role="slider"
+          aria-label="Maximum price"
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={value[1]}
+          aria-valuetext={formatPrice(value[1])}
+          className="absolute top-1/2 block size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-ring bg-white ring-ring/50 select-none after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3"
+          style={{ left: `${highPercent}%` }}
+          onPointerDown={(event) => startDragging(1, event)}
+          onKeyDown={(event) => onThumbKeyDown(1, event)}
+        />
+      </div>
+      <div className="mt-2 flex justify-between font-mono text-[10px] text-[#888]">
+        <span ref={minLabelRef}>{formatPrice(value[0])}</span>
+        <span ref={maxLabelRef}>{formatPrice(value[1])}</span>
+      </div>
+    </div>
+  )
+}
 
 export interface LeaderboardFiltersProps {
   state: FilterState
@@ -311,11 +592,10 @@ function PriceFilterPopover({ state, bounds, onChange }: PriceFilterPopoverProps
   const triggerLabel = isActive
     ? `Price: $${min.toLocaleString()}–$${max.toLocaleString()}`
     : "Price"
-  const sliderValue = useMemo(() => [min, max], [min, max])
+  const sliderValue = useMemo<readonly [number, number]>(() => [min, max], [min, max])
   const onSliderChange = useCallback(
-    (v: number | number[] | readonly number[]) => {
-      const arr: number[] = Array.isArray(v) ? Array.from(v) : [v as number]
-      onChange({ minPrice: arr[0] ?? null, maxPrice: arr[1] ?? null })
+    (v: [number, number]) => {
+      onChange({ minPrice: v[0], maxPrice: v[1] })
     },
     [onChange],
   )
@@ -356,17 +636,13 @@ function PriceFilterPopover({ state, bounds, onChange }: PriceFilterPopoverProps
           </button>
         )}
       </div>
-      <Slider
+      <PriceRangeSlider
         value={sliderValue}
         min={bounds.priceMin}
         max={bounds.priceMax}
         step={50}
-        onValueCommitted={onSliderChange}
+        onCommit={onSliderChange}
       />
-      <div className="mt-2 flex justify-between font-mono text-[10px] text-[#888]">
-        <span>${min.toLocaleString()}</span>
-        <span>${max.toLocaleString()}</span>
-      </div>
     </CustomDropdown>
   )
 }
