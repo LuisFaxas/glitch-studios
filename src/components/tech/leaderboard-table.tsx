@@ -1,5 +1,5 @@
 "use client"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import {
   useReactTable,
@@ -189,8 +189,37 @@ function deriveDisciplineFromRubricKey(key: string): string {
   return key.split(":")[0] ?? ""
 }
 
+function useDesktopLayout() {
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)")
+    let timeoutId: number | null = null
+    const sync = () => {
+      const next = mq.matches
+      if (timeoutId != null) window.clearTimeout(timeoutId)
+      timeoutId = window.setTimeout(() => {
+        setIsDesktop(next)
+        timeoutId = null
+      }, 0)
+    }
+
+    sync()
+    mq.addEventListener("change", sync)
+    return () => {
+      if (timeoutId != null) window.clearTimeout(timeoutId)
+      mq.removeEventListener("change", sync)
+    }
+  }, [])
+
+  return isDesktop
+}
+
 export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
   const router = useRouter()
+  const isDesktopLayout = useDesktopLayout()
+  const renderDesktop = isDesktopLayout !== false
+  const renderMobile = isDesktopLayout !== true
 
   // Filter state is LOCAL React state, not URL state. Codex forensic review
   // identified the chip-click crash as: nuqs URL update → shallow URL replace
@@ -577,26 +606,30 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
   if (filteredRows.length === 0) {
     return (
       <div>
-        <div className="hidden md:block">
-          <LeaderboardFilters
-            state={filterState}
-            onChange={onFilterChange}
-            onReset={onResetFilters}
-            bounds={bounds}
-            layout="bar"
-          />
-        </div>
+        {renderDesktop && (
+          <div className="hidden md:block">
+            <LeaderboardFilters
+              state={filterState}
+              onChange={onFilterChange}
+              onReset={onResetFilters}
+              bounds={bounds}
+              layout="bar"
+            />
+          </div>
+        )}
         <LeaderboardEmptyState
           mode="no-results-filtered"
           onResetFilters={onResetFilters}
         />
-        <LeaderboardFilterSheet
-          state={filterState}
-          onChange={onFilterChange}
-          onReset={onResetFilters}
-          bounds={bounds}
-          activeCount={activeFilterCount}
-        />
+        {renderMobile && (
+          <LeaderboardFilterSheet
+            state={filterState}
+            onChange={onFilterChange}
+            onReset={onResetFilters}
+            bounds={bounds}
+            activeCount={activeFilterCount}
+          />
+        )}
       </div>
     )
   }
@@ -610,15 +643,17 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
       {/* Phase 29.3: filter re-mounted after baseline GPU/render fixes
           (Plan 29.3-01) and macOS Safari/Firefox sort-header verification
           (Plan 29.3-02) confirmed the chip-bar is safe to render. */}
-      <div className="hidden md:block">
-        <LeaderboardFilters
-          state={filterState}
-          onChange={onFilterChange}
-          onReset={onResetFilters}
-          bounds={bounds}
-          layout="bar"
-        />
-      </div>
+      {renderDesktop && (
+        <div className="hidden md:block">
+          <LeaderboardFilters
+            state={filterState}
+            onChange={onFilterChange}
+            onReset={onResetFilters}
+            bounds={bounds}
+            layout="bar"
+          />
+        </div>
+      )}
 
       <div>
         {/* Phase 29.1 D-17 — table markup is rendered both on desktop (always)
@@ -703,55 +738,61 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
           return (
             <>
               {/* Desktop table — always visible at md+ */}
-              <div
-                data-leaderboard-table
-                className="hidden overflow-x-auto md:block"
-                style={{ contain: "layout paint style" }}
-              >
-                {tableMarkup}
-              </div>
+              {renderDesktop && (
+                <div
+                  data-leaderboard-table
+                  className="hidden overflow-x-auto md:block"
+                  style={{ contain: "layout paint style" }}
+                >
+                  {tableMarkup}
+                </div>
+              )}
 
               {/* Mobile — toggle between Cards and Table */}
-              <div
-                data-leaderboard-table-mobile-wrapper
-                className="block md:hidden"
-                style={{ contain: "layout paint style" }}
-              >
-                <div className="mb-3 flex items-center justify-end">
-                  <LeaderboardViewToggle
-                    value={filters.view}
-                    onChange={onViewChange}
-                  />
+              {renderMobile && (
+                <div
+                  data-leaderboard-table-mobile-wrapper
+                  className="block md:hidden"
+                  style={{ contain: "layout paint style" }}
+                >
+                  <div className="mb-3 flex items-center justify-end">
+                    <LeaderboardViewToggle
+                      value={filters.view}
+                      onChange={onViewChange}
+                    />
+                  </div>
+                  {filters.view === "cards" ? (
+                    <div className="space-y-3">
+                      {sortedRows.map((row, i) => (
+                        <LeaderboardCard
+                          key={row.original.reviewId}
+                          row={row.original}
+                          rank={i + 1}
+                          benchmarkColumns={benchmarkColumns}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div data-leaderboard-table-mobile className="overflow-x-auto">
+                      {tableMarkup}
+                    </div>
+                  )}
                 </div>
-                {filters.view === "cards" ? (
-                  <div className="space-y-3">
-                    {sortedRows.map((row, i) => (
-                      <LeaderboardCard
-                        key={row.original.reviewId}
-                        row={row.original}
-                        rank={i + 1}
-                        benchmarkColumns={benchmarkColumns}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div data-leaderboard-table-mobile className="overflow-x-auto">
-                    {tableMarkup}
-                  </div>
-                )}
-              </div>
+              )}
             </>
           )
         })()}
 
         {/* Phase 29.3: mobile filter sheet re-mounted (re-enabled). */}
-        <LeaderboardFilterSheet
-          state={filterState}
-          onChange={onFilterChange}
-          onReset={onResetFilters}
-          bounds={bounds}
-          activeCount={activeFilterCount}
-        />
+        {renderMobile && (
+          <LeaderboardFilterSheet
+            state={filterState}
+            onChange={onFilterChange}
+            onReset={onResetFilters}
+            bounds={bounds}
+            activeCount={activeFilterCount}
+          />
+        )}
       </div>
     </div>
   )

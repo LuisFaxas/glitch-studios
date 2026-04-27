@@ -1,7 +1,6 @@
 import Link from "next/link"
 
 import type { BprTier } from "@/lib/tech/bpr"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
 const TIER_CLASSES: Record<
   BprTier,
@@ -98,31 +97,24 @@ export function BPRMedal({
       ? `relative inline-flex h-6 items-center gap-2 px-2 py-1 font-mono ${t.bg} ${t.border} ${t.text}`
       : `relative inline-flex min-w-[120px] flex-col items-center px-4 py-3 font-mono ${t.bg} ${t.border} ${t.text} before:absolute before:inset-[-8px] before:content-['']`
 
-  const wrapped = asLink ? (
+  // Native title attr instead of Base UI Tooltip — see DashCell in
+  // leaderboard-table.tsx. BPRMedal is rendered once per leaderboard row, so
+  // a single page mounts 7+ instances; combined with DashCell and BuyButton,
+  // the Floating UI portals were exhausting Firefox.
+  const titleAttr = showTooltip ? tooltipText : undefined
+  return asLink ? (
     <Link
       href="/tech/about#bpr"
       aria-label={ariaLabel}
+      title={titleAttr}
       className={`${outerClass} focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f5f5f0]`}
     >
       {inner}
     </Link>
   ) : (
-    <span aria-label={ariaLabel} className={outerClass}>
+    <span aria-label={ariaLabel} title={titleAttr} className={outerClass}>
       {inner}
     </span>
-  )
-
-  if (!showTooltip) {
-    return wrapped
-  }
-
-  return (
-    <Tooltip>
-      <TooltipTrigger render={wrapped} />
-      <TooltipContent className="border border-[#222] bg-[#111] px-3 py-2 font-sans text-[13px] text-[#f5f5f0]">
-        {tooltipText}
-      </TooltipContent>
-    </Tooltip>
   )
 }
 

@@ -91,11 +91,23 @@ function CustomDropdown({ trigger, children }: CustomDropdownProps) {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") setOpenAfterInput(false)
     }
+    function closeBeforePageSuspends() {
+      setOpen(false)
+    }
+    function onVisibilityChange() {
+      if (document.visibilityState !== "visible") closeBeforePageSuspends()
+    }
     document.addEventListener("pointerdown", onPointerDown)
     document.addEventListener("keydown", onKeyDown)
+    document.addEventListener("visibilitychange", onVisibilityChange)
+    window.addEventListener("pagehide", closeBeforePageSuspends)
+    window.addEventListener("blur", closeBeforePageSuspends)
     return () => {
       document.removeEventListener("pointerdown", onPointerDown)
       document.removeEventListener("keydown", onKeyDown)
+      document.removeEventListener("visibilitychange", onVisibilityChange)
+      window.removeEventListener("pagehide", closeBeforePageSuspends)
+      window.removeEventListener("blur", closeBeforePageSuspends)
     }
   }, [open, setOpenAfterInput])
 
@@ -160,7 +172,7 @@ function PriceRangeSlider({
   const minLabelRef = useRef<HTMLSpanElement | null>(null)
   const maxLabelRef = useRef<HTMLSpanElement | null>(null)
   const activeThumbRef = useRef<0 | 1 | null>(null)
-  const stopDraggingRef = useRef<(event: PointerEvent) => void>(() => {})
+  const stopDraggingRef = useRef<(event: Event) => void>(() => {})
   const liveValueRef = useRef<[number, number]>([value[0], value[1]])
   const rafRef = useRef<number | null>(null)
 
@@ -268,12 +280,14 @@ function PriceRangeSlider({
   )
 
   const stopDragging = useCallback(
-    (event?: PointerEvent) => {
-      if (event && activeThumbRef.current != null) {
+    (event?: Event) => {
+      if (event instanceof PointerEvent && activeThumbRef.current != null) {
         setLiveThumbValue(activeThumbRef.current, event.clientX)
       }
       window.removeEventListener("pointermove", onPointerMove)
       window.removeEventListener("pointerup", stopDraggingRef.current)
+      window.removeEventListener("pointercancel", stopDraggingRef.current)
+      window.removeEventListener("blur", stopDraggingRef.current)
       activeThumbRef.current = null
       commitLiveValue()
     },
@@ -293,8 +307,12 @@ function PriceRangeSlider({
       setLiveThumbValue(thumbIndex, event.clientX)
       window.removeEventListener("pointermove", onPointerMove)
       window.removeEventListener("pointerup", stopDraggingRef.current)
+      window.removeEventListener("pointercancel", stopDraggingRef.current)
+      window.removeEventListener("blur", stopDraggingRef.current)
       window.addEventListener("pointermove", onPointerMove, { passive: true })
       window.addEventListener("pointerup", stopDragging, { once: true })
+      window.addEventListener("pointercancel", stopDragging, { once: true })
+      window.addEventListener("blur", stopDragging, { once: true })
     },
     [onPointerMove, setLiveThumbValue, stopDragging],
   )
@@ -359,6 +377,8 @@ function PriceRangeSlider({
       if (rafRef.current != null) window.cancelAnimationFrame(rafRef.current)
       window.removeEventListener("pointermove", onPointerMove)
       window.removeEventListener("pointerup", stopDraggingRef.current)
+      window.removeEventListener("pointercancel", stopDraggingRef.current)
+      window.removeEventListener("blur", stopDraggingRef.current)
     },
     [onPointerMove, stopDragging],
   )
