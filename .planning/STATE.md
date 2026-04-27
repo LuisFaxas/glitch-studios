@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
 status: Ready to execute
-stopped_at: Completed 29.3-04-PLAN.md (Playwright crash-repro test passes on webkit/firefox/chromium)
-last_updated: "2026-04-27T02:44:47.463Z"
+stopped_at: Phase 29.3 — Plan 05 historical failure (03:15Z, commit e6a1ba2) superseded by Plan 06; root-cause fix shipped at 6af8177 (native input event feedback loop), 4 follow-on commits + uncommitted gating work pending Vercel preview + macOS retest
+last_updated: "2026-04-27T16:15:00.000Z"
 last_activity: 2026-04-27
 progress:
   total_phases: 5
@@ -24,10 +24,24 @@ See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 
 ## Current Position
 
-Phase: 29.3 (Reduce Filter-Path GPU Baseline + Re-Enable Filter) — EXECUTING
-Plan: 4 of 5
+Phase: 29.3 (Reduce Filter-Path GPU Baseline + Re-Enable Filter) — **AWAITING macOS RETEST (Plan 06)**
+Plan: 4 of 5 summarized; Plan 05 = `failed_superseded` (commit e6a1ba2, 03:15Z); Plan 06 = stabilization/verification in flight
+
+**Root cause identified 2026-04-27T00:48Z (commit 6af8177):** Native pointer/style feedback loop on synchronous React state updates inside native input event handlers. Codex reproduced locally on headless Chromium with real-mouse input. Fix defers `setFilters` + `setOpen` via `setTimeout(0)` out of the native-event task. Verified Codex-side on Chromium + Firefox + WebKit. Awaiting real macOS retest.
+
+Post-root-cause gating commits: `6af8177` (root cause), `12214c7` (price slider commit-on-release), `ba1e747` (PriceRangeSlider replaces Base UI Slider, defer mobile sheet open), `c9d8c60` (cross-engine timeline test). Uncommitted: `bpr-medal.tsx` (Tooltip → native title), `leaderboard-table.tsx`, `leaderboard-filter-sidebar.tsx` (lifecycle close handler).
+
+Active debug session: .planning/debug/filter-chip-crash-mac-browsers.md (Current Focus updated to native-event hypothesis; historical image/drop-shadow/min-width hypotheses retained below as superseded).
+Phase 29.2 (Site-Wide Hero Rollout) gated on Plan 06 macOS verification result.
 
 Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to ROADMAP. 10 production bugs caught (6 auth fixed live during audit; 4 broken admin pages + mobile checkout + mobile nav + /forgot-password routes + /about bundled into Phase 23 debug).
+
+**2026-04-27 audit (.planning/audit-screenshots/2026-04-27/AUDIT-FINDINGS.md):**
+- Dev server (`pnpm dev` :3010) renders `/tech/rankings/laptops` clean on desktop + mobile, 4/4 Playwright visual tests pass with zero console/page errors
+- Filter UI is **rendering** in working tree (`<LeaderboardFilters>` + `<LeaderboardFilterSheet>` mounted) — STATE note about it being hidden is now stale
+- Uncommitted Phase 29.3 closure: `leaderboard-table.tsx (+173/-69)`, `leaderboard-filter-sidebar.tsx (+26/-9)`, plus a new audit test
+- 🚨 Local prod (`pm2 glitch_studios_prod` :3004) has a missing build chunk and is misleading any visual check against it. Fix: `pnpm build && pm2 restart glitch_studios_prod`. Vercel prod unaffected.
+- Visual flags for human review: BPR medal `1%` suffix consistency, GlitchMark Acer row outlier (8,400 vs 800–1200 cluster)
 
 ## Performance Metrics
 
@@ -180,8 +194,9 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-27T02:44:47.446Z
-Stopped at: Completed 29.3-04-PLAN.md (Playwright crash-repro test passes on webkit/firefox/chromium)
-Resume file: None
+Last session: 2026-04-27T16:15:00.000Z
+Stopped at: Phase 29.3 audit complete — filter re-enabled in working tree, dev-server visual clean, prod build broken (separate fix), pending commit + close-out
+Resume file: .planning/audit-screenshots/2026-04-27/AUDIT-FINDINGS.md
+Next session entry point: commit Phase 29.3 closure (leaderboard-table.tsx + leaderboard-filter-sidebar.tsx + tests/audit-2026-04-27-leaderboard.spec.ts), then `/gsd:transition` 29.3 → next phase
 
 Last activity: 2026-04-27
