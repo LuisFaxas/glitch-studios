@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { listTopLevelCategoriesWithCounts } from "@/lib/tech/queries"
 import { CategoryTile } from "@/components/tech/category-tile"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
+import { TechHero } from "@/components/tech/tech-hero"
 import { TechNewsletter } from "@/components/home/tech-newsletter"
 
 export const metadata: Metadata = {
@@ -16,16 +16,16 @@ export default async function TechCategoriesPage() {
 
   return (
     <main className="min-h-screen bg-black">
-      <section className="mx-auto max-w-7xl px-4 pt-16 pb-8 md:px-6 md:pt-24">
-        <h1 className="font-mono text-4xl font-bold uppercase tracking-tight text-[#f5f5f0] md:text-5xl">
-          <GlitchHeading text="Categories">Categories</GlitchHeading>
-        </h1>
-        <p className="mt-3 font-sans text-[15px] text-[#888]">
-          Browse reviews by product type
-        </p>
-      </section>
+      <TechHero
+        eyebrow="CATEGORIES"
+        title="Categories"
+        subhead="All the hardware categories we cover. Drill in to see rankings, specs, and scores."
+        ctaLabel="View rankings"
+        ctaHref="/tech/rankings"
+        tone="amber"
+      />
 
-      <section className="mx-auto max-w-7xl px-4 pb-16 md:px-6 md:pb-24">
+      <section className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12">
         {categories.length === 0 ? (
           <div className="flex flex-col items-center gap-4 py-20 text-center">
             <h2 className="font-mono text-xl font-bold uppercase tracking-[0.05em] text-[#f5f5f0]">
