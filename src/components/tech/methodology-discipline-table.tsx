@@ -40,9 +40,9 @@ export function MethodologyDisciplineTable({
         </thead>
         <tbody>
           {eligible.map((d) => (
-            <tr key={d.slug} className="border-b border-[#222]">
-              <td className="px-4 py-3 align-top font-mono text-[13px] font-bold uppercase text-[#f5f5f0]">
-                {d.name}
+            <tr key={d.slug} className="group border-b border-[#222]">
+              <td className="px-4 py-3 align-top font-mono text-[13px] font-bold uppercase text-[#f5f5f0] transition-transform duration-150 group-hover:translate-x-[2px] motion-reduce:group-hover:translate-x-0">
+                <GlitchHeading text={d.name}>{d.name}</GlitchHeading>
               </td>
               <td className="px-4 py-3 font-sans text-[13px] text-[#f5f5f0]">
                 {d.description}

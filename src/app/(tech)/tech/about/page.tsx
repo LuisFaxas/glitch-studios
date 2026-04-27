@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
+import { TechHero } from "@/components/tech/tech-hero"
 import { MethodologyChangelog } from "@/components/tech/methodology-changelog"
 import { MethodologyDisciplineTable } from "@/components/tech/methodology-discipline-table"
 import { MethodologyExclusionPolicy } from "@/components/tech/methodology-exclusion-policy"
@@ -35,11 +35,41 @@ export default async function TechAboutPage() {
 
   return (
     <main className="min-h-screen bg-black text-[#f5f5f0]">
-      <section className="mx-auto max-w-5xl px-6 pb-8 pt-12">
-        <h1 className="font-mono text-[44px] font-bold uppercase leading-none md:text-[64px]">
-          <GlitchHeading text="ABOUT">ABOUT</GlitchHeading>
-        </h1>
-        <nav className="mt-8 flex flex-wrap items-center gap-2" aria-label="Jump to section">
+      <TechHero
+        eyebrow="METHODOLOGY HUB"
+        title="About GlitchTech"
+        subhead="43 tests across 13 disciplines. One score. Built to cut through the noise."
+        ctaLabel="Read methodology"
+        ctaHref="#methodology"
+        tone="amber"
+        size="tall"
+      />
+
+      {/* Stat cards row — 29.2-02 */}
+      <section className="mx-auto max-w-5xl px-6 py-8" aria-label="Methodology statistics">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {[
+            { value: "43", label: "TESTS IN RUBRIC V1.1" },
+            { value: "13", label: "DISCIPLINES" },
+            { value: "7", label: "BPR-ELIGIBLE DISCIPLINES" },
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              className="border border-[#222] bg-[#111] p-6"
+            >
+              <p className="font-mono text-[28px] font-bold text-[#f5f5f0] md:text-[40px]">
+                {stat.value}
+              </p>
+              <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.1em] text-[#888]">
+                {stat.label}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-6 pb-8">
+        <nav className="flex flex-wrap items-center gap-2" aria-label="Jump to section">
           <span className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-[#888]">
             Jump to:
           </span>
