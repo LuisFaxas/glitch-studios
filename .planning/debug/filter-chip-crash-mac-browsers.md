@@ -1,11 +1,13 @@
 ---
-status: awaiting_human_verify
+status: resolved
 trigger: "Filter chip click on /tech/rankings/laptops crashes macOS Safari + Firefox tabs. Chrome doesn't crash. 6+ hours debugging across 15+ deploys has not fixed it."
 created: 2026-04-26T00:00:00Z
-updated: 2026-04-27T16:30:00Z
+updated: 2026-04-27T17:00:00Z
+resolved_at: 2026-04-27T17:00:00Z
 root_cause_identified: 2026-04-27T00:48:22Z (commit 6af8177)
+verified_real_macos: 2026-04-27T17:00:00Z (Plan 29.3-06, Safari + Firefox both passed)
 fact_pattern_supersedes: "image-decode + drop-shadow + min-width hypotheses (kept below for history)"
-gating_artifact: .planning/phases/29.3-rebuild-filter/29.3-06-PLAN.md
+gating_artifact: .planning/phases/29.3-rebuild-filter/29.3-06-VERIFICATION.md
 ---
 
 ## Current Focus (2026-04-27 — supersedes earlier hypotheses)
@@ -23,7 +25,7 @@ verified_codex_local: Real mouse open → chip click → close × 6 cycles on Ch
 
 verified_codebox_headless: Plan 29.3-04 comprehensive timeline test passes 4/4 on chromium + webkit + firefox via dev server (~1m total). dispatchEvent('click') was used because the **chip-bar's setFilters re-render schedule** competes with synthetic Playwright .click() — that finding is now consistent with the native-event hypothesis.
 
-verified_real_macos: **NOT YET.** Plan 29.3-05 verification on real macOS Safari at 03:15Z FAILED, but that test predated commit 6af8177 (the root-cause fix). Plan 29.3-06 deploys the post-6af8177 + post-`ba1e747` + post-`12214c7` + uncommitted gating work and re-verifies on real macOS.
+verified_real_macos: **PASSED 2026-04-27T17:00Z.** Plan 29.3-06 deployed the post-6af8177 + post-`ba1e747` + post-`12214c7` + 3cf5991 tree to a fresh Vercel preview. User ran the 9-step protocol (Year × 10, Medal × 10, cross-facet, Reset, Price slider × 5) on real macOS Safari and Firefox — both passed, no freeze, table updated correctly throughout. Plan 29.3-05 historical failure on commit `e6a1ba2` is preserved as `failed_superseded`.
 
 post_root_cause_gating_commits:
   - 6af8177 fix(29.3): defer setFilters + dropdown setOpen out of native input event ← root-cause fix
@@ -34,7 +36,7 @@ post_root_cause_gating_commits:
   - (uncommitted) leaderboard-table.tsx — additional defer cycles + useEffect for cleanup
   - (uncommitted) leaderboard-filter-sidebar.tsx — `closeBeforePageSuspends` page-lifecycle handler
 
-next_action: Deploy preview from current working tree → real macOS Safari + Firefox chip-click verification per 29.3-06-VERIFICATION.md.
+next_action: NONE — debug session resolved. Future filter / dropdown / slider / sheet edits must preserve the **deferred-update pattern** (no synchronous React state inside native input/focus/visibility event handlers) or the crash class returns. This is now load-bearing in PROJECT.md key decisions + Praxis SOT.
 
 ---
 
