@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
 status: Ready to execute
-stopped_at: Phase 29.3 — Plan 05 historical failure (03:15Z, commit e6a1ba2) superseded by Plan 06; root-cause fix shipped at 6af8177 (native input event feedback loop), 4 follow-on commits + uncommitted gating work pending Vercel preview + macOS retest
+stopped_at: Phase 29.3 COMPLETE — Plan 06 verified passed on real macOS Safari + Firefox 2026-04-27T17:00Z; root-cause fix at 6af8177 (native input event feedback loop) holds; ready to transition to Phase 29.2
 last_updated: "2026-04-27T16:15:00.000Z"
 last_activity: 2026-04-27
 progress:
@@ -24,8 +24,10 @@ See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 
 ## Current Position
 
-Phase: 29.3 (Reduce Filter-Path GPU Baseline + Re-Enable Filter) — **AWAITING macOS RETEST (Plan 06)**
-Plan: 4 of 5 summarized; Plan 05 = `failed_superseded` (commit e6a1ba2, 03:15Z); Plan 06 = stabilization/verification in flight
+Phase: 29.3 (Reduce Filter-Path GPU Baseline + Re-Enable Filter) — **COMPLETE 2026-04-27T17:00Z**
+Plans: 6 plans, 6 summaries (01 passed, 02 skipped, 03 passed, 04 passed, 05 failed_superseded, 06 passed)
+Filter UI ships visible on `/tech/rankings/laptops` — verified on real macOS Safari + Firefox.
+Next phase: 29.2 — Site-Wide Hero Rollout + Methodology Editorial Upgrade (10 plans drafted, 0 executed)
 
 **Root cause identified 2026-04-27T00:48Z (commit 6af8177):** Native pointer/style feedback loop on synchronous React state updates inside native input event handlers. Codex reproduced locally on headless Chromium with real-mouse input. Fix defers `setFilters` + `setOpen` via `setTimeout(0)` out of the native-event task. Verified Codex-side on Chromium + Firefox + WebKit. Awaiting real macOS retest.
 
