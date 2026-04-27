@@ -42,16 +42,9 @@ export function WidgetNowPlaying() {
             ---
           </span>
         </div>
-        {/* Row 3: flat waveform fallback */}
-        <Waveform
-          peaks={null}
-          progress={0}
-          height={32}
-          barRadius={1}
-          mirrored
-          mirrorOpacity={0.3}
-          interactive={false}
-        />
+        {/* Row 3: idle placeholder. Phase 29.3 Suspect #8 fix — no <canvas>
+            allocated for the no-track-playing state. Restored when a beat plays. */}
+        <div className="h-8 w-full" aria-hidden />
       </Tile>
     )
   }
