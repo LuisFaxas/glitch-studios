@@ -538,12 +538,15 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
         cell: ({ row }) => <BuyButton productId={row.original.productId} />,
       },
     ],
+    // Phase 29.3 Suspect #2 fix: filters.sort/filters.dir/onSort intentionally
+    // excluded from deps — SortHeader (lines 142-171) is a no-op visual after
+    // the atomic fix and does NOT read currentSort/currentDir/onSort from
+    // props (it destructures only label + methodologyAnchor). The values are
+    // still passed in JSX so ESLint sees them; the disable below silences
+    // that false positive. TanStack reads sort state from `state.sorting`
+    // (line 554), not from columns. This change prevents a full ~14-column
+    // rebuild on every sort/filter click.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // Phase 29.3 Suspect #2 fix: filters.sort/filters.dir intentionally
-    // excluded — SortHeader (lines 142-171) is a no-op visual after the
-    // atomic fix and does not read currentSort/currentDir. TanStack reads
-    // sort state from `state.sorting` (line 554), not from columns. This
-    // change prevents a full ~14-column rebuild on every sort/filter click.
     [benchmarkColumns],
   )
 
@@ -626,7 +629,15 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
             // Trade-off: scrolling horizontally no longer pins the # / Product
             // columns. Acceptable because the table's min-width:1600px rarely
             // requires horizontal scroll on desktop, and the page works.
-            <table className="w-full border-collapse" style={{ minWidth: "1600px" }}>
+            // Phase 29.3 Suspect #3 fix: 1600px → 1280px reduces the GPU
+            // rasterization surface from a viewport-wide tile to a content-sized
+            // one on common laptop viewports. The product column already enforces
+            // 200/280px min-width (line 632); other columns size to content.
+            // Conservative choice over `min-width: 100%` because the dev
+            // environment (Codebox VM) cannot easily verify column legibility on
+            // real macOS browsers — 1280px preserves laptop-standard column
+            // widths. Plan 29.3-02 will validate on real macOS Safari + Firefox.
+            <table className="w-full border-collapse" style={{ minWidth: "1280px" }}>
               <thead className="bg-[#0a0a0a]">
                 <tr>
                   <th className="w-12 bg-[#0a0a0a] px-3 py-3 text-left">
