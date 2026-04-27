@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { TechHero } from "@/components/tech/tech-hero"
 import { MethodologyChangelog } from "@/components/tech/methodology-changelog"
-import { MethodologyDisciplineTable } from "@/components/tech/methodology-discipline-table"
+import { MethodologyDisciplineCards } from "@/components/tech/methodology-discipline-cards"
 import { MethodologyExclusionPolicy } from "@/components/tech/methodology-exclusion-policy"
 import { MethodologyFormula } from "@/components/tech/methodology-formula"
 import { MethodologyMedalTable } from "@/components/tech/methodology-medal-table"
@@ -111,7 +111,7 @@ export default async function TechAboutPage() {
       </section>
 
       <MethodologyFormula formula={data.bprFormula} />
-      <MethodologyDisciplineTable disciplines={data.disciplines} />
+      <MethodologyDisciplineCards disciplines={data.disciplines} />
       <MethodologyMedalTable thresholds={data.medalThresholds} />
       <MethodologyGlitchmark baselines={glitchmarkBaselines} />
       <MethodologyExclusionPolicy />
