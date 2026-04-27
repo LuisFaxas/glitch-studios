@@ -8,7 +8,7 @@ export default defineConfig({
   workers: 1,
   reporter: "list",
   use: {
-    baseURL: "http://localhost:3004",
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3004",
     ignoreHTTPSErrors: true,
     trace: "off",
   },
@@ -25,6 +25,14 @@ export default defineConfig({
       use: {
         viewport: { width: 375, height: 812 },
       },
+    },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
+    },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
     },
   ],
 })
