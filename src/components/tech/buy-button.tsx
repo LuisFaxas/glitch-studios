@@ -1,6 +1,5 @@
 "use client"
-import { useId } from "react"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { memo } from "react"
 import { ExternalLink } from "lucide-react"
 
 interface BuyButtonProps {
@@ -13,29 +12,27 @@ interface BuyButtonProps {
  * so Phase 41 does not need to touch the leaderboard table layout.
  *
  * D-19: stopPropagation on click so the surrounding row click does not fire.
+ *
+ * Tooltip removed in favour of a native `title` attribute — see DashCell in
+ * leaderboard-table.tsx for the resource-leak rationale (Firefox tab crash
+ * caused by ~50+ Floating UI portals reconciling per filter click).
  */
-export function BuyButton({ productId }: BuyButtonProps) {
-  const triggerId = useId()
+function BuyButtonInner({ productId }: BuyButtonProps) {
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <button
-            type="button"
-            data-product-id={productId}
-            onClick={(e) => {
-              e.stopPropagation()
-              e.preventDefault()
-            }}
-            className="inline-flex items-center gap-1.5 border border-[#333] bg-[#111] px-3 py-1.5 text-xs font-mono uppercase tracking-wide text-[#ccc] transition-colors hover:border-[#f5f5f0] hover:text-[#f5f5f0] focus:outline-none focus:ring-1 focus:ring-[#f5f5f0]"
-            aria-describedby={triggerId}
-          >
-            Buy
-            <ExternalLink className="h-3 w-3" aria-hidden />
-          </button>
-        }
-      />
-      <TooltipContent id={triggerId}>Affiliate links coming soon</TooltipContent>
-    </Tooltip>
+    <button
+      type="button"
+      data-product-id={productId}
+      title="Affiliate links coming soon"
+      onClick={(e) => {
+        e.stopPropagation()
+        e.preventDefault()
+      }}
+      className="inline-flex items-center gap-1.5 border border-[#333] bg-[#111] px-3 py-1.5 text-xs font-mono uppercase tracking-wide text-[#ccc] hover:border-[#f5f5f0] hover:text-[#f5f5f0] focus:outline-none focus:ring-1 focus:ring-[#f5f5f0]"
+    >
+      Buy
+      <ExternalLink className="h-3 w-3" aria-hidden />
+    </button>
   )
 }
+
+export const BuyButton = memo(BuyButtonInner)

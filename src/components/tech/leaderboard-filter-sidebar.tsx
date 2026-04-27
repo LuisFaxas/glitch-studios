@@ -183,7 +183,7 @@ function FilterFacetDropdownInner<T extends string | number>({
           type="button"
           data-facet-dropdown={label}
           className={
-            "inline-flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide transition-colors " +
+            "inline-flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide " +
             (isActive
               ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
               : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444] hover:text-[#ccc]")
@@ -218,7 +218,7 @@ function FilterFacetDropdownInner<T extends string | number>({
               onClick={() => onToggle(o.value)}
               aria-pressed={isOn}
               className={
-                "border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide transition-colors " +
+                "border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide " +
                 (isOn
                   ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
                   : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444] hover:text-[#ccc]")
@@ -267,7 +267,7 @@ function FilterChipGroupVerticalInner<T extends string | number>({
               onClick={() => onToggle(o.value)}
               aria-pressed={isOn}
               className={
-                "border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide transition-colors " +
+                "border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide " +
                 (isOn
                   ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
                   : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444] hover:text-[#ccc]")
@@ -321,7 +321,7 @@ function PriceFilterPopover({ state, bounds, onChange }: PriceFilterPopoverProps
           type="button"
           data-price-popover-trigger
           className={
-            "inline-flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide transition-colors " +
+            "inline-flex items-center gap-1.5 border px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide " +
             (isActive
               ? "border-[#f5f5f0] bg-[#1a1a1a] text-[#f5f5f0]"
               : "border-[#222] bg-[#0a0a0a] text-[#888] hover:border-[#444] hover:text-[#ccc]")
@@ -497,7 +497,7 @@ export function LeaderboardFilters({
             onClick={onReset}
             disabled={activeCount === 0}
             className={
-              "ml-auto inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider transition-colors " +
+              "ml-auto inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider " +
               (activeCount === 0
                 ? "text-[#444] cursor-not-allowed"
                 : "text-[#888] hover:text-[#f5f5f0]")
@@ -564,7 +564,7 @@ export function LeaderboardFilters({
         onClick={onReset}
         disabled={activeCount === 0}
         className={
-          "inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider transition-colors " +
+          "inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider " +
           (activeCount === 0
             ? "text-[#444] cursor-not-allowed"
             : "text-[#888] hover:text-[#f5f5f0]")
