@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
-status: Milestone complete
-stopped_at: Phase 29.2 plans complete (verification passed iter 2)
-last_updated: "2026-04-26T19:40:52.600Z"
-last_activity: 2026-04-26
+status: Ready to execute
+stopped_at: Completed 29.3-01-PLAN.md (5 baseline GPU/render fixes)
+last_updated: "2026-04-27T01:20:35.298Z"
+last_activity: 2026-04-27
 progress:
-  total_phases: 4
+  total_phases: 5
   completed_phases: 3
-  total_plans: 38
-  completed_plans: 28
+  total_plans: 43
+  completed_plans: 29
 ---
 
 # Project State
@@ -20,12 +20,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 
 **Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience. Tech readers trust GlitchTech's hardware scorecards.
-**Current focus:** Phase 29.1 — master-leaderboard-polish
+**Current focus:** Phase 29.3 — Reduce Filter-Path GPU Baseline + Re-Enable Filter
 
 ## Current Position
 
-Phase: 29.1
-Plan: Not started
+Phase: 29.3 (Reduce Filter-Path GPU Baseline + Re-Enable Filter) — EXECUTING
+Plan: 2 of 5
 
 Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to ROADMAP. 10 production bugs caught (6 auth fixed live during audit; 4 broken admin pages + mobile checkout + mobile nav + /forgot-password routes + /about bundled into Phase 23 debug).
 
@@ -77,6 +77,7 @@ Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to R
 | Phase 16 P02 | 4 | 2 tasks | 2 files |
 | Phase 16 P03 | 14 | 1 tasks | 2 files |
 | Phase 16 P04 | 19 | 2 tasks | 6 files |
+| Phase 29.3 P01 | 7 | 5 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -127,6 +128,9 @@ Recent decisions affecting current work:
 - [Phase 16]: Phase 16 Plan 03: @base-ui accordion uses multiple boolean (not type='multiple'); Button has no asChild — use Link/anchor + buttonVariants() for styled links
 - [Phase 16]: Phase 16 Plan 04: JSONL fixture 'field' values must match RUBRIC_V1_1 object-key suffix (short form), not the longer RubricTestSpec.field property — pre-existing rubric inconsistency logged to deferred-items.md for rubric v1.2 remediation
 - [Phase 16]: Phase 16 Plan 04: Playwright E2E tests skip gracefully when ADMIN_EMAIL/ADMIN_PASSWORD/TEST_REVIEW_ID env are unset — mirrors tests/07.5-*.spec.ts convention; tests commit-safe even without CI envs
+- [Phase 29.3]: Phase 29.3 Plan 01: Footer marked 'use client' (NewsletterForm child already client) — chosen over <FooterLogo> island for smaller blast radius
+- [Phase 29.3]: Phase 29.3 Plan 01: Table min-width 1280px (laptop standard) chosen over 100% — Codebox VM cannot validate column legibility on real macOS browsers; Plan 29.3-02 will A/B if needed
+- [Phase 29.3]: Phase 29.3 Plan 01: Columns useMemo eslint-disable retained — SortHeader receives currentSort/currentDir as JSX props but ignores them at destructure; ESLint can't see the dead-prop pattern
 
 ### Roadmap Evolution
 
@@ -138,6 +142,7 @@ Recent decisions affecting current work:
 - Phase 07.6 inserted after Phase 7: Reviews display & comparison tables (INSERTED) — Public review page template with YouTube embed, comparison tables with Recharts.
 - v3.0 Milestone started: Phases 15-21 added (2026-04-20) — GlitchTek Launch: methodology lock, JSONL ingest, BPR medal, category leaderboard, flagship review, tech blog, deploy hardening.
 - Phase 29.1 inserted after Phase 29 (2026-04-26): Master Leaderboard Polish (INSERTED) — top-level /tech/rankings route + sidebar nav button next to Blog, hero sections on rankings + category pages, horizontal-scroll fix, filter UI rework, mobile view toggle, GlitchMark scale display revisit. Sequential execution with Playwright verification per task. From user UAT immediately after Phase 29 ship.
+- Phase 29.3 inserted after Phase 29.2 (2026-04-26): Rebuild Leaderboard Filter (URGENT). Filter chip clicks on `/tech/rankings/laptops` crashed macOS Safari + Firefox tabs across 15+ deploy attempts that addressed sticky cells, mix-blend-mode layers, framer-motion, Base UI Popover, Tooltip portals, startTransition, BottomTabBar prefetch, Footer 404 RSC prefetches, drop-shadow GPU layer, and image decode cost. Atomic fix: filter UI is currently HIDDEN in `leaderboard-table.tsx` so the page is usable. Phase 29.3 = proper rebuild with constraints (no URL state, no Base UI, no framer-motion, bounded DOM mutations, cross-engine Playwright tests on Webkit + Firefox). Investigation artifact: `.planning/debug/filter-chip-crash-mac-browsers.md`. Re-enable filter render in `leaderboard-table.tsx` when phase ships.
 
 ### Pending Todos
 
@@ -168,8 +173,8 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-26T19:40:52.594Z
-Stopped at: Phase 29.2 plans complete (verification passed iter 2)
-Resume file: .planning/phases/29.2-site-wide-hero-rollout/29.2-01-PLAN.md
+Last session: 2026-04-27T01:20:27.155Z
+Stopped at: Completed 29.3-01-PLAN.md (5 baseline GPU/render fixes)
+Resume file: None
 
-Last activity: 2026-04-26
+Last activity: 2026-04-27

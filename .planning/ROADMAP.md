@@ -349,10 +349,10 @@ Plans:
 - Touching `/tech/about`, `/tech/reviews`, hero rollout, methodology editorial (Phase 29.2 territory)
 - Studios-side pages, auth, payment, beats
 
-**Plans:** 5 plans
+**Plans:** 1/5 plans executed
 
 Plans:
-- [ ] 29.3-01-PLAN.md — GPU baseline + render-cycle fixes (5 tasks: Footer hover-gate, AudioPlayerProvider value memo, WidgetNowPlaying canvas conditional, columns useMemo deps cleanup, table min-width reduction)
+- [x] 29.3-01-PLAN.md — GPU baseline + render-cycle fixes (5 tasks: Footer hover-gate, AudioPlayerProvider value memo, WidgetNowPlaying canvas conditional, columns useMemo deps cleanup, table min-width reduction)
 - [ ] 29.3-02-PLAN.md — Vercel preview deploy + macOS BASELINE verification (HUMAN GATE — filter still hidden; user verifies sort header click does not crash tab on real Safari + Firefox; if it crashes, STOP for more investigation; if it works, proceed to Plan 03)
 - [ ] 29.3-03-PLAN.md — Re-mount `<LeaderboardFilters>` and `<LeaderboardFilterSheet>` in `leaderboard-table.tsx`; remove atomic-fix comment block; leave `filteredRows.length === 0` branch untouched; no changes to filter logic
 - [ ] 29.3-04-PLAN.md — Playwright crash-repro test on Webkit + Firefox (adds projects to `playwright.config.ts` if missing); 20× rapid chip clicks; locator-based panel-close gate; DOM node delta within ±2
