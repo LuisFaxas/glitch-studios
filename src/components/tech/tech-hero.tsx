@@ -13,6 +13,7 @@ export interface TechHeroProps {
   ctaHref: string
   ctaOpensInNewTab?: boolean
   tone?: "cyan" | "amber"
+  size?: "compact" | "default" | "tall"
 }
 
 const GRADIENTS: Record<NonNullable<TechHeroProps["tone"]>, string> = {
@@ -30,6 +31,12 @@ const GRADIENTS: Record<NonNullable<TechHeroProps["tone"]>, string> = {
   `,
 }
 
+const HEIGHT_MAP: Record<NonNullable<TechHeroProps["size"]>, string> = {
+  compact: "h-[200px]",
+  default: "h-[280px]",
+  tall: "h-[400px]",
+}
+
 export function TechHero({
   eyebrow,
   title,
@@ -38,6 +45,7 @@ export function TechHero({
   ctaHref,
   ctaOpensInNewTab = false,
   tone = "cyan",
+  size = "default",
 }: TechHeroProps) {
   return (
     <div data-tech-hero data-tone={tone}>
@@ -47,7 +55,7 @@ export function TechHero({
         </span>
       )}
       <div
-        className="relative h-[280px] w-full overflow-hidden"
+        className={`relative ${HEIGHT_MAP[size]} w-full overflow-hidden`}
         style={{ background: GRADIENTS[tone] }}
       >
         <div className="flex h-full flex-col items-center justify-center text-center px-6 md:px-10">
@@ -62,7 +70,7 @@ export function TechHero({
             {...(ctaOpensInNewTab
               ? { target: "_blank", rel: "noopener noreferrer" }
               : {})}
-            className="mt-5 w-fit border border-[#f5f5f0] px-6 py-2 font-mono text-[12px] uppercase tracking-[0.05em] text-[#f5f5f0] transition-colors hover:bg-[#f5f5f0] hover:text-[#000]"
+            className="mt-5 inline-flex min-h-[44px] w-fit items-center border border-[#f5f5f0] px-6 py-2 font-mono text-[12px] uppercase tracking-[0.05em] text-[#f5f5f0] transition-colors hover:bg-[#f5f5f0] hover:text-[#000]"
           >
             {ctaLabel}
           </Link>
