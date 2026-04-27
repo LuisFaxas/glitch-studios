@@ -337,8 +337,9 @@ From src/db/schema (the only columns this plan reads):
      *   mode='both' with one mode present → included with the other side as null.
      *
      * Default sort delegated to client (Plan 30-03 sorts by AC desc / asc per direction).
-     * This function returns rows in a stable but non-leaderboard order (by review id)
-     * so the client owns sort semantics.
+     * This function returns rows in a stable but non-leaderboard order — actual SQL ORDER BY
+     * is (productId asc, mode asc, recordedAt desc) per the DISTINCT ON pattern below — so the
+     * client owns sort semantics.
      */
     export const getLeaderboardForBenchmark = unstable_cache(
       async (rubricKey: string): Promise<BenchmarkLeaderboardResult | null> => {

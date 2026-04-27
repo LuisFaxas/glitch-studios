@@ -440,6 +440,10 @@ RUBRIC_V1_1 (43 entries)
     - src/lib/tech/rubric-map.ts (RUBRIC_V1_1, BenchmarkDiscipline)
     - .planning/phases/30-per-benchmark-pages/30-UI-SPEC.md sections "Detail page — `/tech/benchmarks/[slug]`", "TechHero (per-detail dynamic)", "Test metadata strip", "What this measures panel", "Leaderboard table", "Empty state — no measurements", "Methodology footer link", "404 handling"
     - existing dynamic [slug] page in /tech to confirm Next 16 params shape (e.g., `src/app/(tech)/tech/reviews/[slug]/page.tsx` if it exists, or `src/app/(tech)/tech/categories/[slug]/page.tsx`) — confirm whether params is `Promise<{slug: string}>` (Next 15+) or `{slug: string}` directly
+    - **Precheck (REQUIRED before writing copy):** run `grep -rn "glitchmark\|GlitchMark" src/lib/tech/ src/app/\(tech\)/` to determine whether GlitchMark is a USER-FACING surfaced concept today.
+        - GlitchMark scoring code DOES exist in `src/lib/tech/glitchmark.ts`, but per user memory `project_glitchmark.md` it is "never roadmapped... distinct from BPR" and SHOULD NOT be conflated with BPR in user-facing copy.
+        - Per checker MAJOR-1: encode the **neutral fallback** verbatim in the bprSentence ternary (do NOT use the original UI-SPEC line 273 phrasing about "feeds the GlitchMark composite"). This is a deliberate divergence from UI-SPEC for factual accuracy in user-facing copy.
+        - The summary for this plan must note the divergence and recommend the user update UI-SPEC.md line 273 post-execution.
   </read_first>
   <action>
     Server component: generateStaticParams, generateMetadata, page render. Per UI-SPEC, the detail page has 5 vertical regions:
@@ -576,9 +580,15 @@ RUBRIC_V1_1 (43 entries)
             ? "We run this benchmark on AC power only — battery state does not change the result for this test."
             : "We run this benchmark on battery only — it measures sustained battery behavior."
 
+      // Per checker MAJOR-1: use the neutral fallback for non-BPR tests instead of the original
+      // UI-SPEC line 273 phrasing "feeds the GlitchMark composite". GlitchMark exists internally
+      // (src/lib/tech/glitchmark.ts) but is NOT a user-facing surfaced concept yet, and per user
+      // memory project_glitchmark.md it is distinct from BPR and never roadmapped. This deliberate
+      // divergence from UI-SPEC line 273 is to avoid fabricating a user-facing system. Note the
+      // divergence in the plan SUMMARY and recommend updating UI-SPEC.md post-execution.
       const bprSentence = spec.bprEligible
         ? "This test contributes to the device's BPR score."
-        : "This test does not contribute to BPR; it feeds the GlitchMark composite."
+        : "This test does not contribute to BPR. It surfaces here as a standalone reference."
 
       return `${spec.name} measures ${disciplineReadable} performance via ${spec.tool}. ${directionSentence} ${modeSentence} ${bprSentence}`
     }

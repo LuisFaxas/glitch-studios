@@ -79,9 +79,20 @@ Output: One updated component (MethodologyDisciplineCards) + one Playwright spec
     - src/app/(tech)/tech/about/page.tsx (full file — how MethodologyDisciplineCards is invoked; what gets passed in `disciplines` prop)
     - src/app/(tech)/tech/benchmarks/page.tsx (Plan 30-02 — confirm anchor id format `discipline-{slug}` where slug uses hyphens — e.g. `discipline-cpu`, `discipline-battery-life`)
     - .planning/phases/30-per-benchmark-pages/30-CONTEXT.md (D-07 cross-link contract: "discipline names link to the corresponding discipline section on `/tech/benchmarks` (anchor link, not a new route)")
+    - **Precheck (REQUIRED before editing component):** count current discipline tiles vs. all 13 disciplines in RUBRIC_V1_1.
+        - Run: `grep -c "slug:" src/app/\(tech\)/tech/about/page.tsx` (or whichever file constructs the `disciplines` array passed to MethodologyDisciplineCards) — count entries.
+        - Cross-reference against the 13 disciplines in `BenchmarkDiscipline` type in `src/lib/tech/rubric-map.ts`: cpu, gpu, memory, storage, llm, video, dev, python, games, thermal, battery_life, wireless, display.
+        - If current count < 13: the parent page is rendering only a subset (likely the 7 BPR-eligible ones). In that case, ALSO update the parent to pass all 13 disciplines (with appropriate `bprEligible` flags) before wiring the cross-links. This is the correct interpretation of ROADMAP SC-7.
+        - If current count == 13: only wire the cross-links; no scope expansion needed.
   </read_first>
   <action>
     Update MethodologyDisciplineCards so each discipline tile is wrapped in (or links to) `/tech/benchmarks#discipline-{slug}` where slug = discipline name with underscores → hyphens.
+
+    **Scope handling (MAJOR-3):** Based on the precheck count, this task may need to update TWO files:
+    1. `src/components/tech/methodology-discipline-cards.tsx` — wrap tiles in Link (always required).
+    2. `src/app/(tech)/tech/about/page.tsx` (or wherever the `disciplines` prop is constructed) — IF current count < 13, expand to pass all 13 disciplines with discipline-name + bprEligible flag matching the rubric. Use BPR_ELIGIBLE_DISCIPLINES from rubric-map.ts as the source of truth for the bprEligible flag per tile.
+
+    The cross-link wiring itself is the same regardless of count:
 
     The implementation pattern depends on what the current component looks like. Most likely:
 
@@ -155,8 +166,12 @@ Output: One updated component (MethodologyDisciplineCards) + one Playwright spec
     <automated>pnpm tsc --noEmit && pnpm lint</automated>
   </verify>
   <acceptance_criteria>
-    - `grep -q "/tech/benchmarks#discipline-" src/components/tech/methodology-discipline-cards.tsx` succeeds (at least one occurrence — could be a template literal).
+    - `grep -q "/tech/benchmarks#discipline-" src/components/tech/methodology-discipline-cards.tsx` succeeds (at least one occurrence — template literal).
     - `grep -q "import Link" src/components/tech/methodology-discipline-cards.tsx` succeeds (Link is now imported).
+    - **MAJOR-3 coverage:** the rendered methodology page must yield ≥13 `/tech/benchmarks#discipline-` hrefs. Verify via either:
+        - (a) Static count in source: rendered output of MethodologyDisciplineCards must produce ≥13 anchor hrefs at runtime. If component is a `disciplines.map`, the parent must pass at least 13 entries — confirm by grepping the parent file:
+          `grep -c "slug:" src/app/\(tech\)/tech/about/page.tsx` returns ≥ 13 (one entry per discipline).
+        - (b) Runtime count via Playwright (covered in Task 2): `page.locator('a[href*="/tech/benchmarks#discipline-"]').count()` returns ≥ 13.
     - `pnpm tsc --noEmit` exits 0.
     - `pnpm lint` exits 0.
     - The methodology page `/tech/about` still server-renders without 500 (confirmed indirectly via `pnpm tsc` and via Playwright spec in Task 2).
@@ -199,11 +214,13 @@ Output: One updated component (MethodologyDisciplineCards) + one Playwright spec
 
       test("methodology disciplines link to benchmarks landing anchors", async ({ page }) => {
         await page.goto("/tech/about", { waitUntil: "networkidle" })
+        // MAJOR-3 fix: enforce coverage of all 13 disciplines.
         // Locate any link from methodology disciplines section that targets /tech/benchmarks#discipline-*
-        const disciplineLinks = page.locator('a[href^="/tech/benchmarks#discipline-"]')
-        // Expect at least one such link (likely 13 — one per discipline tile, possibly more if section header also links)
+        const disciplineLinks = page.locator('a[href*="/tech/benchmarks#discipline-"]')
+        // Must be at least 13 — one per discipline (cpu, gpu, memory, storage, llm, video, dev, python,
+        // games, thermal, battery_life, wireless, display). May be more if section header also links.
         const count = await disciplineLinks.count()
-        expect(count).toBeGreaterThanOrEqual(13)
+        expect(count, "All 13 disciplines must link to /tech/benchmarks#discipline-*").toBeGreaterThanOrEqual(13)
 
         // Verify the CPU-discipline link specifically resolves to the right anchor target on the landing page.
         const cpuLink = disciplineLinks.filter({ hasText: /CPU/i }).first()

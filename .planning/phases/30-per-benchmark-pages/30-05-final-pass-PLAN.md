@@ -258,6 +258,8 @@ Output: One Playwright spec + commit-ready repository.
 - `pnpm build` exits 0
 - `grep -rn "GlitchTek" src/app/\(tech\)/tech/benchmarks/ src/components/tech/benchmark-leaderboard-table.tsx src/components/tech/methodology-discipline-cards.tsx src/lib/tech/benchmark-slug.ts src/lib/tech/benchmark-leaderboard.ts tests/30-*.spec.ts` returns nothing (no output / exit 1)
 - `pnpm exec playwright test tests/30-01-benchmark-slug.spec.ts tests/30-02-benchmarks-landing.spec.ts tests/30-03-benchmark-detail.spec.ts tests/30-04-cross-links.spec.ts tests/30-05-final-pass.spec.ts --project=desktop` passes
+
+**Test artifact note (clarification per checker minor item):** Playwright's `playwright.config.ts` does NOT define a `webServer.command` — it connects to the existing server listening at `baseURL` (default http://localhost:3004, persistent dev server via PM2). Therefore the final-pass Playwright run tests the **dev artifact**, not the production-built artifact. The `pnpm build` step verifies that the production build succeeds and prerenders all 43 detail pages, but the spec assertions themselves run against the dev server output. To test the built artifact specifically, run `pnpm start` on a separate port and override `PLAYWRIGHT_BASE_URL` — out of scope for this plan but document the gap in 30-05-SUMMARY.md.
 </verification>
 
 <success_criteria>

@@ -405,7 +405,7 @@ export function slugFromRubricKey(key: string): string
         await expect(
           page.getByText(/GlitchTech runs 43 benchmarks across 13 disciplines/),
         ).toBeVisible()
-        // Brand spelling enforcement: never GlitchTek
+        // Brand spelling enforcement: never GlitchTek (intentional: spec asserts the typo is absent)
         await expect(page.locator("body")).not.toContainText("GlitchTek")
       })
 
@@ -452,14 +452,16 @@ export function slugFromRubricKey(key: string): string
       })
 
       test("known sample tiles link to expected slug routes", async ({ page }) => {
-        await expect(page.getByRole("link", { name: /Geekbench 6 Multi-Core/ })).toHaveAttribute(
-          "href",
-          "/tech/benchmarks/cpu-geekbench6-multi",
-        )
-        await expect(page.getByRole("link", { name: /Video loop/ })).toHaveAttribute(
-          "href",
-          "/tech/benchmarks/battery-life-video-loop-hours",
-        )
+        // MAJOR-2 fix: GlitchHeading wraps the tile name with mirror text nodes for the
+        // RGB-split effect, which can make accessible-name computation brittle. Use href-based
+        // locators as the primary assertion and toContainText for the name check.
+        const cpuTile = page.locator('a[href="/tech/benchmarks/cpu-geekbench6-multi"]')
+        await expect(cpuTile).toBeVisible()
+        await expect(cpuTile).toContainText(/Geekbench 6 Multi-Core/i)
+
+        const batteryTile = page.locator('a[href="/tech/benchmarks/battery-life-video-loop-hours"]')
+        await expect(batteryTile).toBeVisible()
+        await expect(batteryTile).toContainText(/Video loop/i)
       })
 
       test("old empty-state copy is gone", async ({ page }) => {
