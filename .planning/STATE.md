@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
 status: Ready to plan
-stopped_at: Phase 30 context gathered
-last_updated: "2026-04-27T22:43:41.820Z"
+stopped_at: Phase 30 UI-SPEC approved
+last_updated: "2026-04-27T22:56:17.668Z"
 last_activity: 2026-04-27
 progress:
   total_phases: 6
@@ -198,9 +198,9 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-27T22:43:41.813Z
-Stopped at: Phase 30 context gathered
-Resume file: .planning/phases/30-per-benchmark-pages/30-CONTEXT.md
+Last session: 2026-04-27T22:56:17.662Z
+Stopped at: Phase 30 UI-SPEC approved
+Resume file: .planning/phases/30-per-benchmark-pages/30-UI-SPEC.md
 Next session entry point: commit Phase 29.3 closure (leaderboard-table.tsx + leaderboard-filter-sidebar.tsx + tests/audit-2026-04-27-leaderboard.spec.ts), then `/gsd:transition` 29.3 → next phase
 
 Last activity: 2026-04-27
