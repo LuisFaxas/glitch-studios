@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
 import styles from "@/components/tiles/logo-tile.module.css"
 import { NewsletterForm } from "@/components/forms/newsletter-form"
@@ -14,6 +17,7 @@ const navLinks = [
 ]
 
 export function Footer() {
+  const [hovered, setHovered] = useState(false)
   return (
     <footer className="mt-16 border-t border-[#222222] bg-[#0a0a0a]">
       {/* Single condensed row */}
@@ -21,11 +25,20 @@ export function Footer() {
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-6">
           {/* Left: Logo + tagline + nav */}
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <div className="w-16">
+            <div
+              className="w-16"
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+            >
               <div className={styles.glitchWrapper}>
                 <div className={styles.glitchImg} />
-                <div className={styles.glitchLayer1} aria-hidden="true" />
-                <div className={styles.glitchLayer2} aria-hidden="true" />
+                {/* Phase 29.3 Suspect #1 fix: mirror logo-tile.tsx hover-gate (mix-blend-mode + filter forces GPU layer when mounted, even at opacity:0). */}
+                {hovered && (
+                  <>
+                    <div className={styles.glitchLayer1} aria-hidden="true" />
+                    <div className={styles.glitchLayer2} aria-hidden="true" />
+                  </>
+                )}
               </div>
             </div>
             <p className="font-mono text-[10px] uppercase tracking-[0.05em] text-[#555555]">
@@ -36,6 +49,15 @@ export function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
+                  // prefetch=false — these are studios-brand routes
+                  // (/services, /portfolio, /artists, /blog). On glitchtech.io
+                  // host they 404, and Next.js's automatic Link prefetcher was
+                  // firing 4 RSC requests per page render, all 404. Every chip
+                  // click re-rendered → re-fired prefetches → cascaded into
+                  // a network/retry storm that crashed macOS Safari + Firefox
+                  // (Chrome tolerated it). Confirmed via user's Network tab.
+                  // Disabling auto-prefetch eliminates the storm.
+                  prefetch={false}
                   className="font-mono text-[10px] uppercase tracking-[0.05em] text-[#555555] transition-colors hover:text-[#f5f5f0]"
                 >
                   {link.label}
