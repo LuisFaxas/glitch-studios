@@ -6,6 +6,7 @@ import {
   useState,
   useRef,
   useCallback,
+  useMemo,
   useEffect,
   type ReactNode,
   type RefObject,
@@ -140,19 +141,40 @@ export function AudioPlayerProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const value: AudioPlayerContextValue = {
-    currentBeat,
-    isPlaying,
-    currentTime,
-    duration,
-    isMinimized,
-    audioRef,
-    play,
-    pause,
-    toggle,
-    seek,
-    setMinimized: setMinimizedState,
-  }
+  // Phase 29.3 Suspect #4 fix: memoize context value so consumers
+  // (PlayerBar, WidgetNowPlaying) don't re-render on every parent render.
+  // Without this, ANY parent re-render (e.g., usePathname change in
+  // (tech)/layout.tsx, sidebar collapse) cascades a fresh value object →
+  // re-renders WidgetNowPlaying which has a <canvas> waveform. Compounds
+  // with chip-click churn on the leaderboard.
+  // audioRef is a stable ref so it is intentionally NOT in deps.
+  const value = useMemo<AudioPlayerContextValue>(
+    () => ({
+      currentBeat,
+      isPlaying,
+      currentTime,
+      duration,
+      isMinimized,
+      audioRef,
+      play,
+      pause,
+      toggle,
+      seek,
+      setMinimized: setMinimizedState,
+    }),
+    [
+      currentBeat,
+      isPlaying,
+      currentTime,
+      duration,
+      isMinimized,
+      play,
+      pause,
+      toggle,
+      seek,
+      setMinimizedState,
+    ],
+  )
 
   return (
     <AudioPlayerContext.Provider value={value}>
