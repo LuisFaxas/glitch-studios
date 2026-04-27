@@ -7,7 +7,7 @@ import {
 import { ReviewsFilterBar } from "@/components/tech/reviews-filter-bar"
 import { ReviewsGrid } from "@/components/tech/reviews-grid"
 import { ReviewsLoadMore } from "@/components/tech/reviews-load-more"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
+import { TechHero } from "@/components/tech/tech-hero"
 import { TechNewsletter } from "@/components/home/tech-newsletter"
 
 export const metadata: Metadata = {
@@ -64,14 +64,14 @@ export default async function TechReviewsPage({ searchParams }: Props) {
   return (
     <NuqsAdapter>
       <main className="min-h-screen bg-black">
-        <section className="mx-auto max-w-7xl px-4 pt-16 pb-8 md:px-6 md:pt-24">
-          <h1 className="font-mono text-4xl font-bold uppercase tracking-tight text-[#f5f5f0] md:text-5xl">
-            <GlitchHeading text="Reviews">Reviews</GlitchHeading>
-          </h1>
-          <p className="mt-3 font-sans text-[15px] text-[#888]">
-            In-depth product reviews from Glitch Tech.
-          </p>
-        </section>
+        <TechHero
+          eyebrow="ALL REVIEWS"
+          title="Reviews"
+          subhead="Every laptop, phone, and PC we've tested — honest, data-driven, no sponsored rankings."
+          ctaLabel="Browse latest"
+          ctaHref="#latest"
+          tone="cyan"
+        />
 
         <section className="mx-auto max-w-7xl px-4 md:px-6">
           <ReviewsFilterBar
@@ -80,6 +80,7 @@ export default async function TechReviewsPage({ searchParams }: Props) {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12">
+          <span id="latest" />
           <ReviewsGrid reviews={reviews} hasActiveFilter={hasActiveFilter} />
           {nextCursor && <ReviewsLoadMore cursor={nextCursor} />}
           <span id="reviews-end" />
