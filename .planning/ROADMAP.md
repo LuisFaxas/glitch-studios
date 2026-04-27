@@ -349,13 +349,13 @@ Plans:
 - Touching `/tech/about`, `/tech/reviews`, hero rollout, methodology editorial (Phase 29.2 territory)
 - Studios-side pages, auth, payment, beats
 
-**Plans:** 3/5 plans executed
+**Plans:** 4/5 plans executed
 
 Plans:
 - [x] 29.3-01-PLAN.md — GPU baseline + render-cycle fixes (5 tasks: Footer hover-gate, AudioPlayerProvider value memo, WidgetNowPlaying canvas conditional, columns useMemo deps cleanup, table min-width reduction)
 - [x] 29.3-02-PLAN.md — Vercel preview deploy + macOS BASELINE verification (HUMAN GATE — filter still hidden; user verifies sort header click does not crash tab on real Safari + Firefox; if it crashes, STOP for more investigation; if it works, proceed to Plan 03)
 - [x] 29.3-03-PLAN.md — Re-mount `<LeaderboardFilters>` and `<LeaderboardFilterSheet>` in `leaderboard-table.tsx`; remove atomic-fix comment block; leave `filteredRows.length === 0` branch untouched; no changes to filter logic
-- [ ] 29.3-04-PLAN.md — Playwright crash-repro test on Webkit + Firefox (adds projects to `playwright.config.ts` if missing); 20× rapid chip clicks; locator-based panel-close gate; DOM node delta within ±2
+- [x] 29.3-04-PLAN.md — Playwright crash-repro test on Webkit + Firefox (adds projects to `playwright.config.ts` if missing); 20× rapid chip clicks; locator-based panel-close gate; DOM node delta within ±2
 - [ ] 29.3-05-PLAN.md — Vercel preview deploy + macOS FINAL verification (HUMAN GATE — chip click on real Safari + Firefox); phase does not close until user posts pass
 
 **Wave layout:** Sequential only — waves 1-5. Plan 02 is a checkpoint plan (human gate) gating the remaining work; if user reports chip-equivalent (sort) still crashes, the phase pauses for investigation and Plans 03-05 do not start. Plan 05 is the final human gate; phase does not mark complete until user confirms macOS chip click works.

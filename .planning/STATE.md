@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
 status: Ready to execute
-stopped_at: Completed 29.3-03-PLAN.md (filter UI re-mounted)
-last_updated: "2026-04-27T02:01:32.678Z"
+stopped_at: Completed 29.3-04-PLAN.md (Playwright crash-repro test passes on webkit/firefox/chromium)
+last_updated: "2026-04-27T02:44:47.463Z"
 last_activity: 2026-04-27
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 43
-  completed_plans: 31
+  completed_plans: 32
 ---
 
 # Project State
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 ## Current Position
 
 Phase: 29.3 (Reduce Filter-Path GPU Baseline + Re-Enable Filter) — EXECUTING
-Plan: 3 of 5
+Plan: 4 of 5
 
 Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to ROADMAP. 10 production bugs caught (6 auth fixed live during audit; 4 broken admin pages + mobile checkout + mobile nav + /forgot-password routes + /about bundled into Phase 23 debug).
 
@@ -79,6 +79,7 @@ Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to R
 | Phase 16 P04 | 19 | 2 tasks | 6 files |
 | Phase 29.3 P01 | 7 | 5 tasks | 4 files |
 | Phase 29.3 P03 | 5min | 1 tasks | 2 files |
+| Phase 29.3 P04 | 45min | 1 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -134,6 +135,9 @@ Recent decisions affecting current work:
 - [Phase 29.3]: Phase 29.3 Plan 01: Columns useMemo eslint-disable retained — SortHeader receives currentSort/currentDir as JSX props but ignores them at destructure; ESLint can't see the dead-prop pattern
 - [Phase 29.3]: Phase 29.3 Plan 03: Discarded an in-progress unstaged CustomDropdown rewrite of leaderboard-filter-sidebar.tsx — abandoned earlier rebuild attempt that violates phase boundary (CONTEXT explicitly defers chip-bar rewrite). Reset file to HEAD before applying single data-testid edit.
 - [Phase 29.3]: Phase 29.3 Plan 03: Did NOT touch the SortHeader atomic-fix at leaderboard-table.tsx:146 — sort onClick re-enable is sibling work to filter remount, but out-of-scope this plan. Revisit after Plan 05 verifies chip-click safety on macOS.
+- [Phase 29.3]: Phase 29.3 Plan 04: Spec uses dispatchEvent('click') for ALL clicks (5 trigger + 21 chip clicks) — Playwright natural .click() and keyboard.press hang for 30s on Chromium / throw 'Page closed' on Webkit when fired during/after the chip-bar's setFilters re-render schedule
+- [Phase 29.3]: Phase 29.3 Plan 04: DOM leak guard scoped to [data-base-ui-portal] subtree (~10 nodes, ±2 tolerance), NOT body subtree (337-node delta on chromium = false positive from table reflow when filter narrows row count)
+- [Phase 29.3]: Phase 29.3 Plan 04: playwright.config.ts baseURL honors PLAYWRIGHT_BASE_URL env override — needed because the Codebox prod server (port 3004) runs a stale build predating Plan 03's data-testid; user's separate dev server on port 3010 has current source
 
 ### Roadmap Evolution
 
@@ -176,8 +180,8 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-27T02:01:17.868Z
-Stopped at: Completed 29.3-03-PLAN.md (filter UI re-mounted)
+Last session: 2026-04-27T02:44:47.446Z
+Stopped at: Completed 29.3-04-PLAN.md (Playwright crash-repro test passes on webkit/firefox/chromium)
 Resume file: None
 
 Last activity: 2026-04-27
