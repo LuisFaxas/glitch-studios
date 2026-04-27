@@ -5,7 +5,7 @@ import {
   getBenchmarkRunsForProducts,
 } from "@/lib/tech/queries"
 import { ComparePageClient } from "@/components/tech/compare-page-client"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
+import { TechHero } from "@/components/tech/tech-hero"
 import { TechNewsletter } from "@/components/home/tech-newsletter"
 
 export const metadata: Metadata = {
@@ -39,15 +39,16 @@ export default async function TechComparePage({ searchParams }: Props) {
 
   return (
     <main className="min-h-screen bg-black">
-      <section className="mx-auto max-w-7xl px-4 pt-16 pb-4 md:px-6 md:pt-24">
-        <h1 className="font-mono text-4xl font-bold uppercase tracking-tight text-[#f5f5f0] md:text-5xl">
-          <GlitchHeading text="COMPARE">COMPARE</GlitchHeading>
-        </h1>
-        <p className="mt-3 font-sans text-[15px] text-[#888]">
-          Select 2&ndash;4 products to compare specs, benchmarks, and value.
-        </p>
-      </section>
+      <TechHero
+        eyebrow="COMPARE"
+        title="Compare Devices"
+        subhead="Put any two devices side-by-side. Benchmark for benchmark, score for score."
+        ctaLabel="Pick devices"
+        ctaHref="#compare-picker"
+        tone="cyan"
+      />
 
+      <span id="compare-picker" />
       <ComparePageClient
         initialProducts={resolvedProducts}
         pickerOptions={pickerOptions}
