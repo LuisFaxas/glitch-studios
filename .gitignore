@@ -50,3 +50,11 @@ test-results/
 # Local creative assets (beat sessions, stems, etc.) — not source code
 _RESOURECES/
 
+# brand-engine render output
+exports/
+
+# Local Praxis tooling install (lint script lives outside the repo)
+.praxis/
+
+# Sister-project handoff docs (delivered out-of-tree, kept here for editor visibility only)
+GLITCH-VIDEO-OPS-HANDOFF.md
