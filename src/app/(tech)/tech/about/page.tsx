@@ -5,7 +5,7 @@ import { MethodologyChangelog } from "@/components/tech/methodology-changelog"
 import { MethodologyDisciplineCards } from "@/components/tech/methodology-discipline-cards"
 import { MethodologyExclusionPolicy } from "@/components/tech/methodology-exclusion-policy"
 import { MethodologyFormula } from "@/components/tech/methodology-formula"
-import { MethodologyMedalTable } from "@/components/tech/methodology-medal-table"
+import { MethodologyMedalLadder } from "@/components/tech/methodology-medal-ladder"
 import { MethodologyGlitchmark } from "@/components/tech/methodology-glitchmark"
 import { getMethodologyData, getGlitchmarkBaselines } from "@/lib/tech/methodology"
 
@@ -112,7 +112,7 @@ export default async function TechAboutPage() {
 
       <MethodologyFormula formula={data.bprFormula} />
       <MethodologyDisciplineCards disciplines={data.disciplines} />
-      <MethodologyMedalTable thresholds={data.medalThresholds} />
+      <MethodologyMedalLadder thresholds={data.medalThresholds} />
       <MethodologyGlitchmark baselines={glitchmarkBaselines} />
       <MethodologyExclusionPolicy />
       <MethodologyChangelog entries={data.rubricChangelog} />
