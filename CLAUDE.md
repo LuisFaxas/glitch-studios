@@ -1,3 +1,23 @@
+## Praxis Context Handoff
+
+Praxis is now the primary orchestration layer for multi-agent work on this project.
+
+- **Role split:** Codex is manager/code reviewer; Claude Code is the primary implementation engineer.
+- **Session start read order:**
+  1. `dev/source_of_truth.md`
+  2. `dev/context_capsule.md`
+  3. `dev/checkpoint.md`
+  4. Pending Claude work orders in `dev/work-orders/wo_claude/`
+  5. Relevant approved/draft plans in `dev/planning/master-plan/`
+- **Session end write order:**
+  1. Update `dev/context_capsule.md`
+  2. Update `dev/checkpoint.md` for completed milestones
+  3. Update `dev/source_of_truth.md` only for new durable decisions
+- **MCP:** Use the `praxis` MCP tools when available, especially `session_start`, `lint`, `read_work_order`, `update_capsule`, and `update_checkpoint`.
+- **Triangle rule:** For non-trivial work orders, write the implementation plan first and wait for Codex review before implementation.
+- **Risk gate:** Use work orders for production bugs, browser/performance work, deployments, auth/cart/payment/data changes, multi-file refactors, and any Claude handoff. Tiny typo/content/CSS fixes can proceed without a work order when explicitly scoped.
+- **Ranking filter safety:** Do not reintroduce synchronous React state updates inside native input/focus/visibility event paths on `/tech/rankings/laptops`.
+
 <!-- GSD:project-start source:PROJECT.md -->
 ## Project
 

@@ -1,5 +1,12 @@
 {
   "mcpServers": {
+    "praxis": {
+      "command": "node",
+      "args": ["/home/faxas/workspaces/tools/praxis/praxis-mcp/build/index.js"],
+      "env": {
+        "PRAXIS_PROJECT_DIR": "/home/faxas/workspaces/projects/personal/glitch_studios"
+      }
+    },
     "shadcn": {
       "command": "npx",
       "args": ["shadcn@latest", "mcp"]
