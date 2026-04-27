@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
 status: Ready to execute
-stopped_at: Completed 29.3-01-PLAN.md (5 baseline GPU/render fixes)
-last_updated: "2026-04-27T01:20:35.298Z"
+stopped_at: Completed 29.3-03-PLAN.md (filter UI re-mounted)
+last_updated: "2026-04-27T02:01:32.678Z"
 last_activity: 2026-04-27
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 43
-  completed_plans: 29
+  completed_plans: 31
 ---
 
 # Project State
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 ## Current Position
 
 Phase: 29.3 (Reduce Filter-Path GPU Baseline + Re-Enable Filter) — EXECUTING
-Plan: 2 of 5
+Plan: 3 of 5
 
 Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to ROADMAP. 10 production bugs caught (6 auth fixed live during audit; 4 broken admin pages + mobile checkout + mobile nav + /forgot-password routes + /about bundled into Phase 23 debug).
 
@@ -78,6 +78,7 @@ Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to R
 | Phase 16 P03 | 14 | 1 tasks | 2 files |
 | Phase 16 P04 | 19 | 2 tasks | 6 files |
 | Phase 29.3 P01 | 7 | 5 tasks | 4 files |
+| Phase 29.3 P03 | 5min | 1 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -131,6 +132,8 @@ Recent decisions affecting current work:
 - [Phase 29.3]: Phase 29.3 Plan 01: Footer marked 'use client' (NewsletterForm child already client) — chosen over <FooterLogo> island for smaller blast radius
 - [Phase 29.3]: Phase 29.3 Plan 01: Table min-width 1280px (laptop standard) chosen over 100% — Codebox VM cannot validate column legibility on real macOS browsers; Plan 29.3-02 will A/B if needed
 - [Phase 29.3]: Phase 29.3 Plan 01: Columns useMemo eslint-disable retained — SortHeader receives currentSort/currentDir as JSX props but ignores them at destructure; ESLint can't see the dead-prop pattern
+- [Phase 29.3]: Phase 29.3 Plan 03: Discarded an in-progress unstaged CustomDropdown rewrite of leaderboard-filter-sidebar.tsx — abandoned earlier rebuild attempt that violates phase boundary (CONTEXT explicitly defers chip-bar rewrite). Reset file to HEAD before applying single data-testid edit.
+- [Phase 29.3]: Phase 29.3 Plan 03: Did NOT touch the SortHeader atomic-fix at leaderboard-table.tsx:146 — sort onClick re-enable is sibling work to filter remount, but out-of-scope this plan. Revisit after Plan 05 verifies chip-click safety on macOS.
 
 ### Roadmap Evolution
 
@@ -173,8 +176,8 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-27T01:20:27.155Z
-Stopped at: Completed 29.3-01-PLAN.md (5 baseline GPU/render fixes)
+Last session: 2026-04-27T02:01:17.868Z
+Stopped at: Completed 29.3-03-PLAN.md (filter UI re-mounted)
 Resume file: None
 
 Last activity: 2026-04-27
