@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { TechHero } from "@/components/tech/tech-hero"
 
 export const metadata: Metadata = {
   title: "Benchmarks",
@@ -12,11 +13,16 @@ export const metadata: Metadata = {
 export default function TechBenchmarksPage() {
   return (
     <main className="min-h-screen bg-black">
-      <section className="mx-auto max-w-3xl px-4 py-24">
-        <h1 className="font-mono text-3xl font-bold uppercase tracking-[0.05em] text-[#f5f5f0] md:text-4xl">
-          Benchmarks
-        </h1>
-        <p className="mt-6 font-sans text-sm leading-relaxed text-[#888]">
+      <TechHero
+        eyebrow="BENCHMARKS"
+        title="Benchmarks"
+        subhead="Every test we run, explained. See what each benchmark measures and why it matters."
+        ctaLabel="Read methodology"
+        ctaHref="/tech/about#methodology"
+        tone="cyan"
+      />
+      <section className="mx-auto max-w-3xl px-4 py-12">
+        <p className="font-sans text-sm leading-relaxed text-[#888]">
           No benchmarks published yet. Data lands on this page as new reviews
           are scored — every product we test contributes one row to a
           cross-category leaderboard.
