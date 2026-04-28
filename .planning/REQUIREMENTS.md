@@ -88,13 +88,13 @@
 
 *Status: carried over from v3.0 unchanged; execution re-planned inside v4.0.*
 
-- [ ] **RANK-01** `/tech/categories/[slug]/rankings` route — server-rendered table, one row per published review; columns: rank, product name, BPR medal, BPR score, GlitchMark, key benchmarks, year, price. Default sort: GlitchMark descending (CHANGED — was BPR descending; audit may revise).
-- [ ] **RANK-02** Sort on every column — `nuqs` URL state.
-- [ ] **RANK-03** Filter sidebar — price, year, CPU kind, RAM, storage, medal tier; mobile `Sheet`.
-- [ ] **RANK-04** "Not tested" cells render `—` with tooltip (from `tech_review_discipline_exclusions`).
-- [ ] **RANK-05** Mobile `< 768px` card layout.
-- [ ] **RANK-06** Empty state with methodology CTA.
-- [ ] **RANK-07** Column header → methodology anchor in new tab.
+- [x] **RANK-01** `/tech/categories/[slug]/rankings` route — server-rendered table, one row per published review; columns: rank, product name, BPR medal, BPR score, GlitchMark, key benchmarks, year, price. Default sort: GlitchMark descending (CHANGED — was BPR descending; audit may revise).
+- [x] **RANK-02** Sort on every column — `nuqs` URL state.
+- [x] **RANK-03** Filter sidebar — price, year, CPU kind, RAM, storage, medal tier; mobile `Sheet`.
+- [x] **RANK-04** "Not tested" cells render `—` with tooltip (from `tech_review_discipline_exclusions`).
+- [x] **RANK-05** Mobile `< 768px` card layout.
+- [x] **RANK-06** Empty state with methodology CTA.
+- [x] **RANK-07** Column header → methodology anchor in new tab.
 
 ### Carry-over from v3.0 — Flagship Review (FLAG-*)
 

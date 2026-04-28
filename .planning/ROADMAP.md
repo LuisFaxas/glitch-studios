@@ -100,11 +100,11 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 3. Reconcile `STATE.md` with actual current focus and roadmap status.
 4. Re-run audit evidence extraction to confirm missing-verification gaps are either closed or intentionally carried to Phase 48.
 
-**Plans:** 3 plans
+**Plans:** 2/3 plans executed
 
 Plans:
-- [ ] 47-01-PLAN.md — Backfill 22/23/24/25 phase-level verification, with Phase 24/25 blockers explicit.
-- [ ] 47-02-PLAN.md — Backfill 29.1/29.3 verification and repair Phase 29.3 roadmap close-state.
+- [x] 47-01-PLAN.md — Backfill 22/23/24/25 phase-level verification, with Phase 24/25 blockers explicit.
+- [x] 47-02-PLAN.md — Backfill 29.1/29.3 verification and repair Phase 29.3 roadmap close-state.
 - [ ] 47-03-PLAN.md — Normalize STATE/REQUIREMENTS/ROADMAP and write the audit recheck checklist.
 
 #### Phase 48: Launch Blocker Proof Pass
