@@ -32,13 +32,13 @@
 
 ### Performance (PERF-*) — Launch Blocker
 
-- [ ] **PERF-01** Admin Studios ⇄ Tech context switcher completes in < 500 ms (currently 3–4 s).
-- [ ] **PERF-02** Admin edit-page → ingest-wizard navigation completes in < 500 ms (currently ~4 s).
-- [ ] **PERF-03** Public route cold-nav p95 < 1.5 s TTFB on Vercel.
-- [ ] **PERF-04** Mobile LCP on `/` and `/tech` < 2.5 s on mid-tier device.
-- [ ] **PERF-05** Image pipeline audit — every `<img>` uses `<Image>` with correct `sizes`; no 2 MB hero art served unoptimized.
-- [ ] **PERF-06** Bundle audit — identify + remove any client-only bundles > 200 KB gzipped that aren't route-critical.
-- [ ] **PERF-07** Database query audit for the 5 slowest pages; add indexes or rework queries.
+- [x] **PERF-01** Admin Studios ⇄ Tech context switcher completes in < 500 ms (currently 3–4 s).
+- [x] **PERF-02** Admin edit-page → ingest-wizard navigation completes in < 500 ms (currently ~4 s).
+- [x] **PERF-03** Public route cold-nav p95 < 1.5 s TTFB on Vercel.
+- [x] **PERF-04** Mobile LCP on `/` and `/tech` < 2.5 s on mid-tier device.
+- [x] **PERF-05** Image pipeline audit — every `<img>` uses `<Image>` with correct `sizes`; no 2 MB hero art served unoptimized.
+- [x] **PERF-06** Bundle audit — identify + remove any client-only bundles > 200 KB gzipped that aren't route-critical.
+- [x] **PERF-07** Database query audit for the 5 slowest pages; add indexes or rework queries.
 
 ### Auth UI Redesign (AUTH-*) — Phase 26
 
@@ -69,7 +69,7 @@
 - [x] **AUTH-25** New SVGs `GoogleIcon`, `MetaIcon`, `GitHubIcon` in `src/components/icons/social-icons.tsx`.
 - [ ] **AUTH-26** Email-verification soft gate at the layout level. Authenticated unverified users redirected from any page EXCEPT `/verify-email`, `/api/auth/*`, sign-out.
 - [x] **AUTH-27** `/verify-email` route: pending / success / expired states resolved server-side by token validity. All states share AuthShell.
-- [ ] **AUTH-28** Grandfather migration: one-shot SQL update sets `user.emailVerified = true` for users created BEFORE Phase 26 deploy. Drizzle migration with re-run guard.
+- [x] **AUTH-28** Grandfather migration: one-shot SQL update sets `user.emailVerified = true` for users created BEFORE Phase 26 deploy. Drizzle migration with re-run guard.
 - [ ] **AUTH-29** Branded `forgot-password` + `reset-password` end-to-end pass. Phase 24 template reused.
 - [x] **AUTH-30** `src/app/(auth)/layout.tsx` becomes server component reading `host` from `next/headers` and rendering `<div data-brand={brand}>`. Default 'studios' for unknown hosts. Mirrors middleware fall-through.
 - [x] **AUTH-31** All page H1s wrap `<HoverGlitchHeading>`. Hover-only; never auto-runs. Reduced-motion honored.
@@ -176,9 +176,10 @@
 |--------|----------|-------|--------|
 | AUDIT-01 through AUDIT-04 | Audit verification closure | **47** (source phase 22) | Complete - normalized by Phase 47 |
 | EMAIL-01 through EMAIL-08 | Email launch proof | **48** (source phase 24) | Pending |
-| PERF-01 through PERF-07 | Performance launch proof | **48** (source phase 25) | Pending |
+| PERF-01 through PERF-07 | Performance launch proof | **48** (source phase 25) | Complete - Phase 48 verified |
 | AUTH-01 through AUTH-13, AUTH-23 through AUTH-25, AUTH-27, AUTH-30 through AUTH-31 | Auth UI implementation | **26** | Complete |
-| AUTH-14 through AUTH-22, AUTH-26, AUTH-28, AUTH-29, AUTH-32 | Auth launch proof | **48** | Pending |
+| AUTH-28 | Auth launch proof | **48** | Complete - Phase 48 verified migration |
+| AUTH-14 through AUTH-22, AUTH-26, AUTH-29, AUTH-32 | Auth launch proof | **48** | Pending - Phase 48 found OAuth/admin/email-command gaps |
 | (media foundation, no REQ-IDs yet — derived from pivots #2, #9) | Media/Video | **27** | Complete |
 | GLITCHMARK-01 through GLITCHMARK-03, GLITCHMARK-06 through GLITCHMARK-08 | GlitchMark core | **28** | Complete |
 | GLITCHMARK-04 | GlitchMark leaderboard surface | **29** | Complete |

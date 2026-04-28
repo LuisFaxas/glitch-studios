@@ -84,7 +84,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 
 **🧯 Audit gap closure:**
 - [x] **Phase 47: Verification Backfill + Planning State Repair** — missing phase-level VERIFICATION.md artifacts for 22/23/24/25/29.1/29.3 created, ROADMAP.md + STATE.md drift reconciled, 29.3 roadmap state closed, and requirement evidence normalized against `.planning/v4.0-MILESTONE-AUDIT.md`. (completed 2026-04-28)
-- [ ] **Phase 48: Launch Blocker Proof Pass** — close the launch-blocker proof gaps called out by the milestone audit: Resend/domain deliverability, auth/OAuth/admin-invite smoke, mobile checkout purchase proof, and performance evidence for PERF-03/04/06.
+- [ ] **Phase 48: Launch Blocker Proof Pass** — close the launch-blocker proof gaps called out by the milestone audit: Resend/domain deliverability, auth/OAuth/admin-invite smoke, mobile checkout purchase proof, and performance evidence for PERF-03/04/06. (verification gaps_found 2026-04-28)
 
 #### Phase 47: Verification Backfill + Planning State Repair
 
@@ -122,13 +122,15 @@ Plans:
 4. Capture performance evidence for PERF-03, PERF-04, and PERF-06, and fold any small fixes needed for the launch threshold into this phase.
 
 **Plans:**
-5/6 plans executed
+6/6 plans complete
 - [x] 48-01-PLAN.md — Baseline evidence inventory and artifact scaffold.
 - [x] 48-02-PLAN.md — Resend domains and transactional email proof (HUMAN GATE).
 - [x] 48-03-PLAN.md — Auth/OAuth/admin application launch smoke (HUMAN GATE).
 - [x] 48-04-PLAN.md — Mobile checkout purchase proof on real iOS Safari and desktop (HUMAN GATE).
 - [x] 48-05-PLAN.md — PERF-03/PERF-04/PERF-06 evidence and small threshold fixes.
-- [ ] 48-06-PLAN.md — Final verification rollup and conservative requirement state update.
+- [x] 48-06-PLAN.md — Final verification rollup and conservative requirement state update.
+
+Phase 48 verification status: `gaps_found`. Remaining blocked rows are EMAIL-01..08, AUTH-14..22 except AUTH-28, AUTH-26, AUTH-29, AUTH-32, and MOBILE-CHECKOUT-PROOF real iOS Safari.
 
 #### Phase 26: Brand-Aware Auth UI Redesign
 

@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
-status: Executing Phase 48 launch proof; 5/6 plans summarized
-stopped_at: Next plan is 48-06 final rollup; remaining human proof checkpoints are Google OAuth env/redirects, admin credentials/actions, email inbox/event proof, and real iOS Safari checkout proof
-last_updated: "2026-04-28T09:31:03.000Z"
+status: Phase 48 verification gaps_found; launch proof blockers explicit
+stopped_at: Resolve blocked rows from 48-VERIFICATION.md: EMAIL-01..08, AUTH-14..22 except AUTH-28, AUTH-26, AUTH-29, AUTH-32, and MOBILE-CHECKOUT-PROOF iOS Safari
+last_updated: "2026-04-28T09:33:12.000Z"
 last_activity: 2026-04-28
 progress:
   total_phases: 8
   completed_phases: 7
   total_plans: 58
-  completed_plans: 57
+  completed_plans: 58
 ---
 
 # Project State
@@ -24,19 +24,19 @@ See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 
 ## Current Position
 
-Phase: 48 (launch-blocker-proof-pass) — EXECUTING
-Plan: 5 of 6 executed; 48-06 final verification rollup is next
+Phase: 48 (launch-blocker-proof-pass) — GAPS_FOUND
+Plan: 6 of 6 executed; final verification kept Phase 48 open because launch proof still has blocked rows
 Gap closure phases 47-48 were added after `.planning/v4.0-MILESTONE-AUDIT.md` returned `gaps_found`.
-Next phase: 48 — Launch Blocker Proof Pass.
+Next phase: Phase 48 follow-up proof/fixes for the blocked launch rows.
 
 Phase 30 is complete and verified. Phase 29.3 Plan 06 passed real macOS Safari + Firefox; Phase 47 promoted missing verification backfills into phase-level close artifacts, repaired the ROADMAP checkbox for Phase 29.3, normalized AUDIT/RANK requirements traceability, and left unresolved launch proof visible for Phase 48.
 
-Phase 48 carry-forward blockers:
+Phase 48 carry-forward blockers after rollup:
 
-- Resend/domain deliverability (single-domain testing unblocked on `glitchtech.io`; full two-brand proof deferred)
-- auth/OAuth/admin-invite smoke (browser/env/DB proof captured; Google OAuth/admin actions/email events remain blocked)
-- mobile checkout purchase proof (desktop production checkout passed; real iOS Safari row remains blocked)
-- PERF-03/PERF-04/PERF-06 performance evidence (Phase 48-05 summarized)
+- EMAIL-01..08: single-domain testing is unblocked on `glitchtech.io`, but real Resend event/inbox/link proof, `glitchstudios.io`, and DMARC remain open.
+- AUTH-14..22 except AUTH-28, AUTH-26, AUTH-29, AUTH-32: browser/env/DB proof captured, but Google OAuth env/redirects, admin credentials/actions, email events, and command pass remain blocked.
+- MOBILE-CHECKOUT-PROOF: desktop production checkout passed; real iOS Safari row remains blocked.
+- PERF-01..07 and AUTH-28 are evidence-backed passed in `48-VERIFICATION.md`.
 
 **Root cause identified 2026-04-27T00:48Z (commit 6af8177):** Native pointer/style feedback loop on synchronous React state updates inside native input event handlers. Codex reproduced locally on headless Chromium with real-mouse input. Fix defers `setFilters` + `setOpen` via `setTimeout(0)` out of the native-event task. User verified the final 29.3-06 preview on real macOS Safari + Firefox; Phase 47-02 now records that evidence in `.planning/phases/29.3-rebuild-filter/29.3-VERIFICATION.md`.
 
@@ -114,6 +114,7 @@ Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to R
 | Phase 48-launch-blocker-proof-pass P03 | 40min | 3 tasks | 8 artifacts |
 | Phase 48-launch-blocker-proof-pass P04 | 55min | 2 tasks | 15 files |
 | Phase 48-launch-blocker-proof-pass P05 | 15min | 3 tasks | 6 files |
+| Phase 48-launch-blocker-proof-pass P06 | 15min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -184,6 +185,7 @@ Recent decisions affecting current work:
 - [Phase 48-launch-blocker-proof-pass]: 48-03 records auth/OAuth/admin launch smoke truth: both brand auth surfaces render, Meta/GitHub buttons are correctly hidden while unconfigured, public artist/contributor applications create pending DB rows, and AUTH-28 migration proof passed; Google OAuth, email-dependent auth, admin review actions, and AUTH-32 command pass remain blocked.
 - [Phase 48-launch-blocker-proof-pass]: 48-04 desktop checkout proof passed end-to-end after configuring a Stripe test-mode webhook endpoint and aligning the app with production `order_items.price_cents`; physical iOS Safari proof remains blocked until a real-device run is provided.
 - [Phase 48-launch-blocker-proof-pass]: 48-05 closes PERF-03/PERF-04/PERF-06 with deployed timing, mobile LCP p75, and bundle gzip evidence.
+- [Phase 48-launch-blocker-proof-pass]: 48-06 final verification is `gaps_found`. REQUIREMENTS now marks only PERF-01..07 and AUTH-28 passed; Phase 48 top-level ROADMAP remains unchecked until EMAIL, Google OAuth/admin auth, AUTH-32, and iOS checkout proof pass.
 
 ### Roadmap Evolution
 
