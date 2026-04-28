@@ -12,18 +12,20 @@ import Link from "next/link"
 // D-01/D-02 (Phase 16.1): Cross-brand navigation MUST stay in the same tab.
 // Known limitation: `<audio>` elements cannot persist across origins,
 // so any currently-playing beat will stop mid-song when this link is clicked.
-// Do NOT re-introduce target="_blank" — revisit only if brands unify origins
+// Do NOT re-introduce new-tab navigation — revisit only if brands unify origins
 // (tracked as "audio continuity across brands" in deferred ideas).
 export function TechCrossLinkTile() {
   const [href, setHref] = useState("/tech")
 
   useEffect(() => {
     const h = window.location.hostname.toLowerCase()
-    if (h === "glitchstudios.io" || h === "www.glitchstudios.io") {
+    if (h !== "glitchstudios.io" && h !== "www.glitchstudios.io") return
+
+    const timeoutId = window.setTimeout(() => {
       setHref("https://glitchtech.io/")
-    } else {
-      setHref("/tech")
-    }
+    }, 0)
+
+    return () => window.clearTimeout(timeoutId)
   }, [])
 
   // Cross-link tile is by definition "not where you are" — never show

@@ -34,16 +34,13 @@ export function SplashOverlay({
   // and lets us safely read sessionStorage).
   const [splashState, setSplashState] = useState<
     "pending" | "playing" | "exiting" | "done"
-  >("pending")
+  >(mode === "never" ? "done" : "pending")
 
   useEffect(() => {
     // Admin-controlled — no OS reduce-motion bypass here. The individual
     // motion.div animations inside still honor prefers-reduced-motion
     // because motion/react does that automatically.
-    if (mode === "never") {
-      setSplashState("done")
-      return
-    }
+    if (mode === "never") return
 
     if (mode === "first_visit") {
       // D-03/D-04 (Phase 16.1): per-brand sessionStorage keys so each
@@ -59,8 +56,10 @@ export function SplashOverlay({
         // Private mode / sessionStorage unavailable — treat as first visit.
       }
       if (seen) {
-        setSplashState("done")
-        return
+        const timeoutId = window.setTimeout(() => {
+          setSplashState("done")
+        }, 0)
+        return () => window.clearTimeout(timeoutId)
       }
       try {
         sessionStorage.setItem(storageKey, "1")
@@ -69,10 +68,13 @@ export function SplashOverlay({
       }
     }
 
-    setSplashState("playing")
+    const timeoutId = window.setTimeout(() => {
+      setSplashState("playing")
+    }, 0)
     document.body.style.overflow = "hidden"
 
     return () => {
+      window.clearTimeout(timeoutId)
       document.body.style.overflow = ""
     }
   }, [mode, brand])

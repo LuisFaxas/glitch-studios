@@ -32,9 +32,13 @@ export function ServiceTabs({ services }: ServiceTabsProps) {
   // Support deep-linking via URL hash
   useEffect(() => {
     const hash = window.location.hash.slice(1)
-    if (hash && services.some((s) => s.slug === hash)) {
+    if (!hash || !services.some((s) => s.slug === hash)) return
+
+    const timeoutId = window.setTimeout(() => {
       setActiveTab(hash)
-    }
+    }, 0)
+
+    return () => window.clearTimeout(timeoutId)
   }, [services])
 
   if (services.length === 0) {

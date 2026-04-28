@@ -47,11 +47,14 @@ export function PortfolioCarousel({ items }: { items: PortfolioItem[] }) {
 
   useEffect(() => {
     if (!emblaApi) return
-    onSelect()
-    setScrollSnaps(emblaApi.scrollSnapList())
+    const timeoutId = window.setTimeout(() => {
+      onSelect()
+      setScrollSnaps(emblaApi.scrollSnapList())
+    }, 0)
     emblaApi.on("select", onSelect)
     emblaApi.on("reInit", onSelect)
     return () => {
+      window.clearTimeout(timeoutId)
       emblaApi.off("select", onSelect)
       emblaApi.off("reInit", onSelect)
     }
@@ -59,10 +62,12 @@ export function PortfolioCarousel({ items }: { items: PortfolioItem[] }) {
 
   // Reset carousel when filter changes
   useEffect(() => {
-    if (emblaApi) {
+    if (!emblaApi) return
+    const timeoutId = window.setTimeout(() => {
       emblaApi.reInit()
       setScrollSnaps(emblaApi.scrollSnapList())
-    }
+    }, 0)
+    return () => window.clearTimeout(timeoutId)
   }, [activeFilter, emblaApi])
 
   return (

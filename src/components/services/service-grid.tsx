@@ -276,10 +276,14 @@ export function ServiceGrid({
 
   useEffect(() => {
     const hash = window.location.hash.slice(1)
-    if (hash && services.some((s) => s.slug === hash)) {
+    if (!hash || !services.some((s) => s.slug === hash)) return
+
+    const timeoutId = window.setTimeout(() => {
       setSelectedSlug(hash)
       setExpandedSlug(hash)
-    }
+    }, 0)
+
+    return () => window.clearTimeout(timeoutId)
   }, [services])
 
   const selectedService = services.find((s) => s.slug === selectedSlug)
