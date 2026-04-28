@@ -1,26 +1,29 @@
 # Resend Account Review
 
 Captured: 2026-04-28T05:31:00Z
+Updated: 2026-04-28T05:42:00Z
 
 ## API Key Findings
 
 | Source | Result |
 | --- | --- |
-| Local `.env.local` `RESEND_API_KEY` | Valid Resend API key |
+| Local `.env.local` `RESEND_API_KEY` | Valid Resend API key, rotated after first review |
 | Vercel Production `RESEND_API_KEY` | Invalid Resend API key according to `GET https://api.resend.com/domains` |
 | Key comparison | Local and production keys are different |
 
 No API key values were printed or stored in this artifact.
 
-## Domains Visible To Valid Local Resend Key
+## Domains Visible To Current Valid Local Resend Key
 
 | domain | Resend status | sending | receiving | region |
 | --- | --- | --- | --- | --- |
-| `glitchstudios.io` | verified | enabled | disabled | us-east-1 |
+| `glitchtech.io` | verified | enabled | disabled | us-east-1 |
 
-`glitchtech.io` is not visible from the valid local Resend API key.
+`glitchstudios.io` is not visible from the current valid local Resend API key.
 
-## Resend Domain Detail For `glitchstudios.io`
+Earlier review note: the previous local key saw only `glitchstudios.io`. The newly supplied local key sees only `glitchtech.io`. This strongly indicates the two domains currently belong to different Resend account/team contexts or API-key contexts.
+
+## Resend Domain Detail For `glitchtech.io`
 
 Visible verified records:
 
@@ -59,7 +62,10 @@ Those sends are likely to fail or be rejected unless `glitchstudios.com` is also
 
 ## Recommended Next Actions
 
-1. Replace the Vercel Production `RESEND_API_KEY` with a valid key from the intended Resend account.
-2. Decide whether the intended Resend account should contain both `glitchstudios.io` and `glitchtech.io`.
-3. Add DMARC TXT records for both `.io` domains.
-4. Align app sender addresses away from unverified `@glitchstudios.com` senders, or verify `glitchstudios.com` too.
+1. Do not update Vercel Production to the current local key yet; it only sees `glitchtech.io` and the app sends from `glitchstudios.io`.
+2. Pick one Resend account/team to be canonical for launch.
+3. In that same canonical account/team, make both `glitchstudios.io` and `glitchtech.io` visible and verified.
+4. Create a fresh API key from that canonical account/team and use it for both local and Vercel Production.
+5. Replace the Vercel Production `RESEND_API_KEY` only after the key sees both domains.
+6. Add DMARC TXT records for both `.io` domains.
+7. Align app sender addresses away from unverified `@glitchstudios.com` senders, or verify `glitchstudios.com` too.
