@@ -34,7 +34,7 @@ const DIAGNOSTIC_FN = () => {
     inert: el.hasAttribute('inert'),
     pointerEvents: getComputedStyle(el).pointerEvents,
     rect: el.getBoundingClientRect(),
-    visible: el.offsetParent !== null,
+    visible: el instanceof HTMLElement ? el.offsetParent !== null : false,
   }));
   return {
     elementsAtYearTriggerPoint: elementsAtPoint,

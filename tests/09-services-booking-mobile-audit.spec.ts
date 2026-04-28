@@ -1,4 +1,4 @@
-import { test, type Page, type BrowserContext } from "@playwright/test"
+import { test, type Page, type Browser, type BrowserContext } from "@playwright/test"
 import path from "path"
 import fs from "fs"
 
@@ -12,7 +12,7 @@ fs.mkdirSync(screenshotDir, { recursive: true })
 const MOBILE_UA =
   "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
 
-async function mobileContext(browser: any): Promise<BrowserContext> {
+async function mobileContext(browser: Browser): Promise<BrowserContext> {
   return browser.newContext({
     viewport: { width: 375, height: 812 },
     isMobile: true,

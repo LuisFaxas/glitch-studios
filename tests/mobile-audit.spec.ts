@@ -1,4 +1,4 @@
-import { test, expect, type BrowserContext } from "@playwright/test"
+import { test, expect, type Browser, type BrowserContext } from "@playwright/test"
 import path from "path"
 import fs from "fs"
 
@@ -31,7 +31,7 @@ const pages = [
 ]
 
 async function createMobileContext(
-  browser: any,
+  browser: Browser,
   vp: (typeof viewports)[number]
 ): Promise<BrowserContext> {
   return browser.newContext({
