@@ -52,7 +52,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [x] **Phase 29.1: Master Leaderboard Polish (INSERTED)** — top-level `/tech/rankings` route + sidebar nav button next to Blog, hero sections on rankings + category pages, horizontal-scroll fix, filter UI rework (top bar vs collapsible sidebar), mobile view toggle (cards ↔ table), GlitchMark scale display revisit. Sequential execution, Playwright-driven visual verification each step. (completed 2026-04-26)
 - [x] **Phase 29.2: Site-Wide Hero Rollout + Methodology Editorial Upgrade (INSERTED)** — TechHero on every remaining /tech/* surface (about, reviews, categories hub, compare, benchmarks, blog); methodology page editorial upgrade (stat cards, discipline-card grid, medal-tier ladder, glitchy table treatment); category tile imagery (real thumbnails or hero-sized icons replacing the empty-box look); /tech/blog page build-out beyond stub. Methodology data already audited and accurate (no rubric fix needed). Sequential execution, Playwright-driven verification per plan. See `.planning/phases/29.2-site-wide-hero-rollout/29.2-CONTEXT.md`. (completed 2026-04-27)
 - [ ] **Phase 29.3: Reduce Filter-Path GPU Baseline + Re-Enable Filter (INSERTED — URGENT)** — chip clicks on `/tech/rankings/laptops` crashed macOS Safari + Firefox tabs. 4-agent code audit on 2026-04-26 revealed the original "rebuild the dropdown" plan was targeting the wrong layer: cost is dominantly in the persistent baseline (Footer mounts LogoTile glitchLayer1/2 unguarded — same `mix-blend-mode + filter` pattern that was fixed in `logo-tile.tsx` was missed in `footer.tsx`; AudioPlayerProvider ships fresh `value` object every render → re-renders WidgetNowPlaying which always renders a `<canvas>` waveform; columns useMemo has stale `filters.sort/dir` deps that rebuild all column defs on sort; table has `min-width: 1600px` overflow surface). All independent of dropdown architecture. This phase fixes the baseline first, deploys to preview with filter still hidden so user can verify on macOS Safari + Firefox via sort-header click (same `setFilters` write path), THEN re-mounts the existing filter UI as-is. NO dropdown rebuild unless baseline fixes fail. Investigation artifact: `.planning/debug/filter-chip-crash-mac-browsers.md`. Audit findings: this phase's CONTEXT.md.
-- [ ] **Phase 30: Per-Benchmark Pages** — `/tech/benchmarks` landing + `/tech/benchmarks/[slug]` cross-category leaderboard per benchmark
+- [x] **Phase 30: Per-Benchmark Pages** — `/tech/benchmarks` landing + `/tech/benchmarks/[slug]` cross-category leaderboard per benchmark (completed 2026-04-28)
 - [ ] **Phase 31: Category Detail Editorial Reframe** — pivot `/tech/categories/[slug]` from ranked product list to curated editorial hub with "best for" cards
 
 **🎨 Artist platform BETA:**
@@ -406,13 +406,13 @@ Plans:
 - Search/filter on the landing page beyond discipline grouping (defer to a later polish phase if needed)
 - Real content writing for "what this measures" / "why it matters" beyond minimal placeholder copy (full editorial pass is a separate content phase)
 
-**Plans:** 5 plans (sequential, one wave each)
+**Plans:** 5/5 plans complete
 
-- [ ] 30-01-slug-data-layer-PLAN.md — Slug helpers (slugFromRubricKey/rubricKeyFromSlug/getAllBenchmarkSlugs) + getLeaderboardForBenchmark server query + vitest + Playwright spec
-- [ ] 30-02-landing-page-rebuild-PLAN.md — Replace /tech/benchmarks empty-state with 13 discipline sections + 43 tile index + jump-nav + Playwright spec
-- [ ] 30-03-detail-page-route-PLAN.md — Create /tech/benchmarks/[slug]/page.tsx (TechHero + metadata chips + what-this-measures + sortable leaderboard table OR empty-state) + generateStaticParams for 43 slugs + Playwright spec
-- [ ] 30-04-cross-links-PLAN.md — Wire MethodologyDisciplineCards discipline tiles to /tech/benchmarks#discipline-{slug}; verify all Phase 30 cross-links resolve via Playwright
-- [ ] 30-05-final-pass-PLAN.md — pnpm build clean (43 prerendered detail pages); GlitchTek typo sweep returns zero; sidebar one-screen verification on landing + detail; full Phase 30 spec batch passes against built artifact
+- [x] 30-01-slug-data-layer-PLAN.md — Slug helpers (slugFromRubricKey/rubricKeyFromSlug/getAllBenchmarkSlugs) + getLeaderboardForBenchmark server query + vitest + Playwright spec
+- [x] 30-02-landing-page-rebuild-PLAN.md — Replace /tech/benchmarks empty-state with 13 discipline sections + 43 tile index + jump-nav + Playwright spec
+- [x] 30-03-detail-page-route-PLAN.md — Create /tech/benchmarks/[slug]/page.tsx (TechHero + metadata chips + what-this-measures + sortable leaderboard table OR empty-state) + generateStaticParams for 43 slugs + Playwright spec
+- [x] 30-04-cross-links-PLAN.md — Wire MethodologyDisciplineCards discipline tiles to /tech/benchmarks#discipline-{slug}; verify all Phase 30 cross-links resolve via Playwright
+- [x] 30-05-final-pass-PLAN.md — pnpm build clean (43 prerendered detail pages); GlitchTek typo sweep returns zero; sidebar one-screen verification on landing + detail; full Phase 30 spec batch passes against built artifact
 
 ---
 
@@ -738,7 +738,7 @@ v4.0: 22 (audit done) → 23/24/25 (launch blockers, parallel) → 26 → 27 →
 | 27. Media/Video Strategy Foundation | v4.0 | 7/7 | Complete    | 2026-04-25 |
 | 28. GlitchMark System | v4.0 | 4/4 | Complete    | 2026-04-25 |
 | 29. Master Leaderboard | v4.0 | 0/tbd | Complete    | 2026-04-25 |
-| 30. Per-Benchmark Pages | v4.0 | 0/tbd | Not started | - |
+| 30. Per-Benchmark Pages | v4.0 | 5/5 | Complete    | 2026-04-28 |
 | 31. Category Detail Editorial Reframe | v4.0 | 0/tbd | Not started | - |
 | 32. Artist Platform Admin-Invite BETA | v4.0 | 0/tbd | Not started | - |
 | 33. Beat Licensing Model Redesign | v4.0 | 0/tbd | Not started | - |

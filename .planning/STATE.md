@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
-status: Ready to plan
+status: Milestone complete
 stopped_at: Phase 30 UI-SPEC approved
-last_updated: "2026-04-27T22:56:17.668Z"
-last_activity: 2026-04-27
+last_updated: "2026-04-28T00:12:08.350Z"
+last_activity: 2026-04-28
 progress:
   total_phases: 6
-  completed_phases: 5
-  total_plans: 44
-  completed_plans: 44
+  completed_phases: 6
+  total_plans: 49
+  completed_plans: 49
 ---
 
 # Project State
@@ -20,11 +20,11 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 
 **Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience. Tech readers trust GlitchTech's hardware scorecards.
-**Current focus:** Phase 29.2 — site-wide-hero-rollout
+**Current focus:** Phase 30 — per-benchmark-pages
 
 ## Current Position
 
-Phase: 29.3
+Phase: 30
 Plan: Not started
 Plans: 6 plans, 6 summaries (01 passed, 02 skipped, 03 passed, 04 passed, 05 failed_superseded, 06 passed)
 Filter UI ships visible on `/tech/rankings/laptops` — verified on real macOS Safari + Firefox.
@@ -203,4 +203,4 @@ Stopped at: Phase 30 UI-SPEC approved
 Resume file: .planning/phases/30-per-benchmark-pages/30-UI-SPEC.md
 Next session entry point: commit Phase 29.3 closure (leaderboard-table.tsx + leaderboard-filter-sidebar.tsx + tests/audit-2026-04-27-leaderboard.spec.ts), then `/gsd:transition` 29.3 → next phase
 
-Last activity: 2026-04-27
+Last activity: 2026-04-28
