@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
 status: Ready to execute
-stopped_at: Completed 48-15-PLAN.md
-last_updated: "2026-04-28T11:42:25.532Z"
+stopped_at: Completed 48-07-PLAN.md
+last_updated: "2026-04-28T11:46:38.045Z"
 last_activity: 2026-04-28
 progress:
   total_phases: 8
   completed_phases: 7
   total_plans: 68
-  completed_plans: 63
+  completed_plans: 64
 ---
 
 # Project State
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 ## Current Position
 
 Phase: 48 (launch-blocker-proof-pass) — EXECUTING
-Plan: 8 of 16 executed; running gap closure plans 48-07 through 48-16
+Plan: 9 of 16 executed; running gap closure plans 48-07 through 48-16
 Gap closure phases 47-48 were added after `.planning/v4.0-MILESTONE-AUDIT.md` returned `gaps_found`.
 Next step: execute Phase 48 gap closure plans 48-07 through 48-16.
 
@@ -117,6 +117,7 @@ Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to R
 | Phase 48-launch-blocker-proof-pass P06 | 15min | 2 tasks | 5 files |
 | Phase 48-launch-blocker-proof-pass P16 | 4min | 1 tasks | 7 files |
 | Phase 48-launch-blocker-proof-pass P15 | 4min | 1 tasks | 8 files |
+| Phase 48-launch-blocker-proof-pass P07 | 9min | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -191,6 +192,8 @@ Recent decisions affecting current work:
 - [Phase 48-launch-blocker-proof-pass]: 48-07 through 48-16 are gap-closure execution plans for AUTH-32 lint/command pass, single-domain `glitchtech.io` email smoke, Google OAuth/admin auth proof, iOS checkout proof, and final conservative verification rollup. EMAIL-08 multi-domain/DMARC remains deferred unless the user later chooses to pay for/verify the second Resend domain.
 - [Phase 48-launch-blocker-proof-pass]: 48-16 kept cross-brand links same-tab and retained relative href defaults outside matching production hosts.
 - [Phase 48-launch-blocker-proof-pass]: 48-16 deferred React state writes from effect bodies with zero-delay timers and cleanup instead of disabling compiler rules.
+- [Phase 48-launch-blocker-proof-pass]: 48-07 ignores invalid admin booking status filters unless they match the BookingStatus union.
+- [Phase 48-launch-blocker-proof-pass]: 48-07 raw SQL row interfaces extend Record<string, unknown> so Drizzle RowList assertions stay TypeScript-valid without any casts.
 
 ### Roadmap Evolution
 
@@ -233,8 +236,8 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-28T11:42:25.526Z
-Stopped at: Completed 48-15-PLAN.md
+Last session: 2026-04-28T11:46:38.039Z
+Stopped at: Completed 48-07-PLAN.md
 Resume file: None
 Next session entry point: Execute Phase 48 Plan 04 for real iOS Safari + desktop checkout proof, then Phase 48 Plan 03 for auth/OAuth/admin application smoke. Keep email rows blocked until real Resend event, inbox, and link proof exists.
 
