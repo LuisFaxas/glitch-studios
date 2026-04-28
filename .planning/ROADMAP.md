@@ -83,7 +83,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [ ] **Phase 46: Production Deploy Hardening** — glitchtech.io custom domain + SSL, UAT admin cleanup (DEPLOY-05), env audit, error tracking (Sentry), analytics, backup verification, 301 www→apex — DEPLOY-01..09
 
 **🧯 Audit gap closure:**
-- [ ] **Phase 47: Verification Backfill + Planning State Repair** — create missing phase-level VERIFICATION.md artifacts for 22/23/24/25/29.1/29.3, reconcile ROADMAP.md + STATE.md drift, close 29.3 roadmap state, and normalize requirement evidence against `.planning/v4.0-MILESTONE-AUDIT.md`.
+- [x] **Phase 47: Verification Backfill + Planning State Repair** — missing phase-level VERIFICATION.md artifacts for 22/23/24/25/29.1/29.3 created, ROADMAP.md + STATE.md drift reconciled, 29.3 roadmap state closed, and requirement evidence normalized against `.planning/v4.0-MILESTONE-AUDIT.md`. (completed 2026-04-28)
 - [ ] **Phase 48: Launch Blocker Proof Pass** — close the launch-blocker proof gaps called out by the milestone audit: Resend/domain deliverability, auth/OAuth/admin-invite smoke, mobile checkout purchase proof, and performance evidence for PERF-03/04/06.
 
 #### Phase 47: Verification Backfill + Planning State Repair
@@ -100,12 +100,12 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 3. Reconcile `STATE.md` with actual current focus and roadmap status.
 4. Re-run audit evidence extraction to confirm missing-verification gaps are either closed or intentionally carried to Phase 48.
 
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans executed
 
 Plans:
 - [x] 47-01-PLAN.md — Backfill 22/23/24/25 phase-level verification, with Phase 24/25 blockers explicit.
 - [x] 47-02-PLAN.md — Backfill 29.1/29.3 verification and repair Phase 29.3 roadmap close-state.
-- [ ] 47-03-PLAN.md — Normalize STATE/REQUIREMENTS/ROADMAP and write the audit recheck checklist.
+- [x] 47-03-PLAN.md — Normalize STATE/REQUIREMENTS/ROADMAP and write the audit recheck checklist.
 
 #### Phase 48: Launch Blocker Proof Pass
 
