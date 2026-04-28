@@ -121,7 +121,7 @@ Plans:
 3. Verify mobile checkout end-to-end on real iOS Safari and desktop with a Stripe test-card purchase; fix any diagnosed runtime/env issue.
 4. Capture performance evidence for PERF-03, PERF-04, and PERF-06, and fold any small fixes needed for the launch threshold into this phase.
 
-**Plans:** 14/16 plans executed
+**Plans:** 15/16 plans executed
 - [x] 48-01-PLAN.md — Baseline evidence inventory and artifact scaffold.
 - [x] 48-02-PLAN.md — Resend domains and transactional email proof (HUMAN GATE).
 - [x] 48-03-PLAN.md — Auth/OAuth/admin application launch smoke (HUMAN GATE).
@@ -132,7 +132,7 @@ Plans:
 - [x] 48-08-PLAN.md — AUTH-32 React compiler lint fixes.
 - [x] 48-09-PLAN.md — AUTH-32 final lint cleanup and command proof.
 - [x] 48-10-PLAN.md — Single-domain `glitchtech.io` email smoke proof.
-- [ ] 48-11-PLAN.md — Google OAuth configuration and both-brand auth smoke.
+- [x] 48-11-PLAN.md — Google OAuth configuration and both-brand auth smoke.
 - [x] 48-12-PLAN.md — Admin application action and invite/request-info proof.
 - [x] 48-13-PLAN.md — Physical iOS Safari checkout proof.
 - [ ] 48-14-PLAN.md — Gap-closure final verification rollup.
