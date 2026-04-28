@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
-status: Phase 48 verification gaps_found; launch proof blockers explicit
-stopped_at: Resolve blocked rows from 48-VERIFICATION.md: EMAIL-01..08, AUTH-14..22 except AUTH-28, AUTH-26, AUTH-29, AUTH-32, and MOBILE-CHECKOUT-PROOF iOS Safari
-last_updated: "2026-04-28T09:33:12.000Z"
+status: Phase 48 gap closure plans ready; 6/16 plans executed
+stopped_at: Execute Phase 48 gap closure plans 48-07 through 48-16 for EMAIL, AUTH, and mobile checkout proof blockers
+last_updated: "2026-04-28T11:06:17.000Z"
 last_activity: 2026-04-28
 progress:
   total_phases: 8
   completed_phases: 7
-  total_plans: 58
+  total_plans: 68
   completed_plans: 58
 ---
 
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 ## Current Position
 
 Phase: 48 (launch-blocker-proof-pass) — GAPS_FOUND
-Plan: 6 of 6 executed; final verification kept Phase 48 open because launch proof still has blocked rows
+Plan: 6 of 16 executed; final verification kept Phase 48 open because launch proof still has blocked rows, and Plans 48-07 through 48-16 are ready for gap-closure execution
 Gap closure phases 47-48 were added after `.planning/v4.0-MILESTONE-AUDIT.md` returned `gaps_found`.
-Next phase: Phase 48 follow-up proof/fixes for the blocked launch rows.
+Next step: execute Phase 48 gap closure plans 48-07 through 48-16.
 
 Phase 30 is complete and verified. Phase 29.3 Plan 06 passed real macOS Safari + Firefox; Phase 47 promoted missing verification backfills into phase-level close artifacts, repaired the ROADMAP checkbox for Phase 29.3, normalized AUDIT/RANK requirements traceability, and left unresolved launch proof visible for Phase 48.
 
@@ -186,6 +186,7 @@ Recent decisions affecting current work:
 - [Phase 48-launch-blocker-proof-pass]: 48-04 desktop checkout proof passed end-to-end after configuring a Stripe test-mode webhook endpoint and aligning the app with production `order_items.price_cents`; physical iOS Safari proof remains blocked until a real-device run is provided.
 - [Phase 48-launch-blocker-proof-pass]: 48-05 closes PERF-03/PERF-04/PERF-06 with deployed timing, mobile LCP p75, and bundle gzip evidence.
 - [Phase 48-launch-blocker-proof-pass]: 48-06 final verification is `gaps_found`. REQUIREMENTS now marks only PERF-01..07 and AUTH-28 passed; Phase 48 top-level ROADMAP remains unchecked until EMAIL, Google OAuth/admin auth, AUTH-32, and iOS checkout proof pass.
+- [Phase 48-launch-blocker-proof-pass]: 48-07 through 48-16 are gap-closure execution plans for AUTH-32 lint/command pass, single-domain `glitchtech.io` email smoke, Google OAuth/admin auth proof, iOS checkout proof, and final conservative verification rollup. EMAIL-08 multi-domain/DMARC remains deferred unless the user later chooses to pay for/verify the second Resend domain.
 
 ### Roadmap Evolution
 
