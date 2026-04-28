@@ -9,11 +9,23 @@ Browser artifact:
 DB artifact:
 `.planning/phases/48-launch-blocker-proof-pass/artifacts/auth/auth-db-proof.json`
 
+## Admin Proof Prerequisites
+
+- admin_credentials_available: blocked: no production admin username/password or live admin session available in local executor context
+- admin_host_tested: blocked: no admin session available to test `https://glitchstudios.io/admin/applications` or `https://glitchtech.io/admin/applications`
+- resend_dashboard_available: blocked: no Resend dashboard event/log access available in local executor context
+- applicant_test_inbox_available: blocked: no applicant/test inbox access available in local executor context
+- admin_notification_recipient: fallback studio inbox `office@glitchstudios.io` from `src/actions/artist-applications.ts`; `ADMIN_NOTIFICATION_EMAIL` is missing in Vercel Production and no Resend/inbox proof was captured
+
+Plan 48-12 did not receive admin credentials, Resend dashboard evidence, or
+applicant inbox evidence. Rows below remain blocked unless real admin/browser,
+DB/status, Resend event, inbox, and link/no-email proof exists.
+
 ## Status Lines For Plan Acceptance
 
 - artist application submission | passed
 - artist application DB row | passed
-- artist application admin notification email | blocked: ADMIN_NOTIFICATION_EMAIL missing and no Resend event/inbox proof captured
+- artist application admin notification email | blocked: ADMIN_NOTIFICATION_EMAIL missing; fallback recipient is office@glitchstudios.io, but no Resend event/inbox proof captured
 - list | blocked: no production admin browser credentials supplied
 - detail drawer | blocked: no production admin browser credentials supplied
 - approve | blocked: no production admin browser credentials supplied
@@ -71,4 +83,3 @@ reviewer note visible only in an internal admin artifact.
 AUTH-17 proof still needs application `status='info_requested'`, an
 admin-composed email Resend event, and `status='pending'` after applicant
 reply/manual triage return.
-

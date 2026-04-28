@@ -14,6 +14,10 @@ recipient/admin inbox evidence are human-only proof surfaces that were not
 available from local context. The current matrix therefore records the exact
 blocked state for each launch email path instead of inventing proof.
 
+Plan 48-12 kept the admin application email rows blocked because no production
+admin session, Resend dashboard event/log access, or applicant/test inbox access
+was available from local executor context.
+
 | flow | trigger | recipient | resend_event_or_screenshot | inbox_result | content_assertions | link_result | status | requirements |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | password reset | `/forgot-password` | user inbox | blocked: no Resend event/log or screenshot available from local context | blocked: recipient inbox delivery not captured | reset email content and reset link required | blocked: reset link click, password reset, and successful login not proven | blocked: awaiting Resend dashboard and inbox proof | EMAIL-02, EMAIL-03, AUTH-29 |
@@ -26,8 +30,8 @@ blocked state for each launch email path instead of inventing proof.
 | admin contact notification | `/contact` submission | admin notification inbox | blocked: no Resend event/log or screenshot available from local context | blocked: admin notification inbox delivery not captured | submitted name, email, subject, message, admin link if present | blocked: admin link not proven | blocked: awaiting admin contact notification smoke | EMAIL-07 |
 | newsletter broadcast | admin newsletter compose/send | test subscriber | blocked: no Resend event/log or screenshot available from local context | blocked: subscriber inbox delivery not captured | newsletter body content and unsubscribe link | blocked: unsubscribe token not proven | blocked: awaiting newsletter broadcast smoke | EMAIL-06 |
 | newsletter unsubscribe | unsubscribe token link | test subscriber | blocked: no Resend event/log or screenshot available from local context | blocked: unsubscribe confirmation or subscriber inactive state not captured | unsubscribe token and confirmation state required | blocked: subscriber inactive state not proven | blocked: awaiting newsletter unsubscribe proof | EMAIL-06 |
-| artist approval invite | admin application approve flow | artist applicant | blocked: approval invite inbox proof not captured | blocked | invite copy and password setup link required | blocked: invite link not proven | blocked: awaiting admin application smoke | AUTH-18, AUTH-19 |
-| request more info | admin application request-info flow | artist applicant | blocked: request-info inbox proof not captured | blocked | admin-composed request content required | blocked: reply/status return not proven | blocked: awaiting admin application smoke | AUTH-18, AUTH-19 |
+| artist approval invite | admin application approve flow | artist applicant | blocked: no admin approval run, no Resend event/log screenshot, and no dashboard proof available from local context | blocked: applicant test inbox access not available from local context | invite copy and password setup link required | blocked: invite/password setup link and approved applicant sign-in not proven | blocked: awaiting real admin session, Resend dashboard proof, and applicant inbox proof | AUTH-18, AUTH-19 |
+| request more info | admin application request-info flow | artist applicant | blocked: no request-info action run, no Resend event/log screenshot, and no dashboard proof available from local context | blocked: applicant test inbox access not available from local context | admin-composed request content required | blocked: reply/status return not proven | blocked: awaiting real admin session, Resend dashboard proof, and applicant inbox proof | AUTH-18, AUTH-19 |
 
 ## Requirement Impact
 
