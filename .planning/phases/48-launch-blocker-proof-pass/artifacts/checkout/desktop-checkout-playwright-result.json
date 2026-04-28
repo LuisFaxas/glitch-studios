@@ -1,0 +1,42 @@
+{
+  "capturedAt": "2026-04-28T09:19:38.089Z",
+  "deployment": "dpl_FYLgaug69x7GQvfSd3kTy54rotJi",
+  "checkoutUrl": "https://glitchstudios.io/checkout",
+  "browser": "Playwright Chromium desktop",
+  "testCard": "4242 4242 4242 4242",
+  "aiCheckboxPresent": 1,
+  "aiCheckboxChecked": true,
+  "cart": "[{\"beatId\":\"00000000-0000-4000-a000-000000000001\",\"beatTitle\":\"BREAK 5\",\"beatSlug\":\"break-5\",\"coverArtUrl\":\"https://pub-c326ae21e0b34cb6ab88c62df98dbd7f.r2.dev\\n/beats/covers/break-5-cover.png\",\"licenseTier\":\"mp3_lease\",\"licenseTierDisplay\":\"MP3 Lease\",\"price\":29}]",
+  "apiResponses": [
+    {
+      "url": "https://glitchstudios.io/api/checkout",
+      "status": 200,
+      "bodySnippet": "{\"clientSecret\":\"cs_test_a1ZFhgKjiKxLNDmjNlz899GAzCYU4gVUzSsY9Tssz9Z3SB7lOjU9p5idKD_secret_fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSdwbEhqYWAnPydmcHZxamgneCUl\"}",
+      "at": "2026-04-28T09:19:22.515Z"
+    },
+    {
+      "url": "https://glitchstudios.io/api/checkout/session-status?session_id=cs_test_a1ZFhgKjiKxLNDmjNlz899GAzCYU4gVUzSsY9Tssz9Z3SB7lOjU9p5idKD",
+      "status": 200,
+      "bodySnippet": "{\"status\":\"complete\",\"customerEmail\":\"phase48-checkout-test@example.com\",\"paymentStatus\":\"paid\"}",
+      "at": "2026-04-28T09:19:31.447Z"
+    },
+    {
+      "url": "https://glitchstudios.io/api/checkout/session-status?session_id=cs_test_a1ZFhgKjiKxLNDmjNlz899GAzCYU4gVUzSsY9Tssz9Z3SB7lOjU9p5idKD",
+      "status": 200,
+      "bodySnippet": "{\"status\":\"complete\",\"customerEmail\":\"phase48-checkout-test@example.com\",\"paymentStatus\":\"paid\"}",
+      "at": "2026-04-28T09:19:33.846Z"
+    }
+  ],
+  "finalUrl": "https://glitchstudios.io/checkout/success?session_id=cs_test_a1ZFhgKjiKxLNDmjNlz899GAzCYU4gVUzSsY9Tssz9Z3SB7lOjU9p5idKD",
+  "redirectedToSuccess": true,
+  "terminal": "order_confirmed",
+  "sessionIdFromUrl": "cs_test_a1ZFhgKjiKxLNDmjNlz899GAzCYU4gVUzSsY9Tssz9Z3SB7lOjU9p5idKD",
+  "sessionIdFromClientSecret": "cs_test_a1ZFhgKjiKxLNDmjNlz899GAzCYU4gVUzSsY9Tssz9Z3SB7lOjU9p5idKD",
+  "bodyTextSnippet": "BEATS\nSERVICES\nBOOK SESSION\nPORTFOLIO\nARTISTS\nBLOG\nCONTACT\nSIGN IN\nNO TRACK PLAYING\n0:00 / 0:00\n---\nSTUDIO CLOSED\nNext available: Today at 10am\nLATEST\n5 Vocal Recording Tips for Home Studios\nMar 10, 2026\nGLITCH TECH\nORDER CONFIRMED\n\nOrder #55f194e3\n\nBREAK 5\n\nmp3_lease — $29.00\n\nMP3\nLICENSE PDF\n\nDownload links expire in 24 hours. Access your purchases anytime from your account dashboard.\n\nCreate an account to access your downloads anytime and track future purchases.\n\nCREATE ACCOUNT\n\nDownload failed? Your files are safe — try again from your purchase history.\n\nMUSIC. VIDEO. VISION.\n\nSERVICES\nPORTFOLIO\nARTISTS\nBLOG\n|\n\nSTAY IN THE LOOP\n\nSUBSCRIBE\n\n© 2026 GLITCH STUDIOS",
+  "screenshots": {
+    "beforeSubmit": ".planning/phases/48-launch-blocker-proof-pass/artifacts/checkout/screenshots/desktop-checkout-before-submit.png",
+    "afterSubmit": ".planning/phases/48-launch-blocker-proof-pass/artifacts/checkout/screenshots/desktop-checkout-after-submit.png",
+    "successInitial": ".planning/phases/48-launch-blocker-proof-pass/artifacts/checkout/screenshots/desktop-checkout-success.png",
+    "successFinal": ".planning/phases/48-launch-blocker-proof-pass/artifacts/checkout/screenshots/desktop-checkout-success-final.png"
+  }
+}

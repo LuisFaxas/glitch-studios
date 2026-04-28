@@ -6,11 +6,16 @@ Use this when the workflow asks for proof artifacts. Do not paste API keys, pass
 
 Performance proof is complete. You do not need to gather Vercel Speed Insights or Lighthouse evidence for Phase 48 anymore.
 
+Desktop Stripe checkout proof is complete. You do not need to run the desktop
+test-card path again unless you want to spot-check it personally.
+
 Completed files:
 
 - `artifacts/perf/perf-evidence-matrix.md`
 - `artifacts/perf/bundle-audit.md`
 - `48-05-SUMMARY.md`
+- `artifacts/checkout/mobile-checkout-proof.md` (desktop row passed, iOS row blocked)
+- `artifacts/checkout/desktop-checkout-stripe-db-proof.json`
 
 ## Remaining 1: Email Smoke On The Single Verified Resend Domain
 
@@ -68,9 +73,7 @@ Steps:
    - Any order/receipt page shown by the app
 6. Tell Codex the approximate time you ran it and the screenshot filenames. Codex can help pull matching Vercel `[checkout]` logs.
 
-Desktop checkout can be run the same way from Chrome or Safari on a computer.
-
-Codex will then create:
+Codex will then update:
 
 - `artifacts/checkout/mobile-checkout-proof.md`
 
@@ -87,7 +90,3 @@ After an email smoke test is complete:
 After iOS checkout is complete:
 
 > I did the iOS checkout at [time]. Screenshots are [names].
-
-After desktop checkout is complete:
-
-> I did the desktop checkout at [time]. Screenshots are [names].

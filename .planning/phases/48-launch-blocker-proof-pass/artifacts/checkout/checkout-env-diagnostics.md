@@ -70,3 +70,36 @@ Post-fix proof:
 Remaining proof gap:
 
 - The server/browser session-creation error is fixed. The original carry-forward still needs a real physical iOS Safari test-card payment and a desktop test-card payment recorded in `mobile-checkout-proof.md`.
+
+## 2026-04-28 Desktop Purchase Proof Fix
+
+Additional root causes found during real desktop purchase proof:
+
+- The Stripe test account had no webhook endpoint, so paid sessions never created
+  app orders.
+- After creating the webhook endpoint, production order creation failed because
+  the app used `order_items.price` while production DB uses
+  `order_items.price_cents`.
+
+Fixes applied:
+
+- Created Stripe test-mode webhook endpoint:
+  `https://glitchstudios.io/api/webhooks/stripe`.
+- Updated Vercel Production `STRIPE_WEBHOOK_SECRET` and redeployed.
+- Aligned checkout order code to `price_cents`.
+- Added idempotent beat-purchase webhook handling for Stripe retries.
+- Applied `0010_order_items_price_cents.sql`.
+
+Post-fix proof:
+
+- Production deployment: `dpl_FYLgaug69x7GQvfSd3kTy54rotJi`.
+- Desktop Stripe session:
+  `cs_test_a1ZFhgKjiKxLNDmjNlz899GAzCYU4gVUzSsY9Tssz9Z3SB7lOjU9p5idKD`.
+- Stripe payment status: `paid`.
+- Webhook event: `evt_1TR7nh2KEYdA76dATySX7ThK`, pending webhooks `0`.
+- Vercel log: `POST /api/webhooks/stripe` returned `200`.
+- App result: `Order Confirmed`, order `55f194e3`, MP3 + License PDF links visible.
+
+Remaining proof gap:
+
+- Real physical iOS Safari checkout proof is still required.
