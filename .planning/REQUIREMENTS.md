@@ -73,7 +73,7 @@
 - [ ] **AUTH-29** Branded `forgot-password` + `reset-password` end-to-end pass. Phase 24 template reused.
 - [x] **AUTH-30** `src/app/(auth)/layout.tsx` becomes server component reading `host` from `next/headers` and rendering `<div data-brand={brand}>`. Default 'studios' for unknown hosts. Mirrors middleware fall-through.
 - [x] **AUTH-31** All page H1s wrap `<HoverGlitchHeading>`. Hover-only; never auto-runs. Reduced-motion honored.
-- [ ] **AUTH-32** `pnpm tsc --noEmit` and `pnpm lint` pass. Manual Playwright pass: both brand hosts × 5 auth surfaces × Google end-to-end.
+- [x] **AUTH-32** `pnpm tsc --noEmit` and `pnpm lint` pass. Manual Playwright pass: both brand hosts × 5 auth surfaces × Google end-to-end.
 
 ### GlitchMark (GLITCHMARK-*) — New Feature
 

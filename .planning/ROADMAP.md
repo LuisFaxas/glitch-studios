@@ -121,7 +121,7 @@ Plans:
 3. Verify mobile checkout end-to-end on real iOS Safari and desktop with a Stripe test-card purchase; fix any diagnosed runtime/env issue.
 4. Capture performance evidence for PERF-03, PERF-04, and PERF-06, and fold any small fixes needed for the launch threshold into this phase.
 
-**Plans:** 6/16 plans complete
+**Plans:** 11/16 plans executed
 - [x] 48-01-PLAN.md — Baseline evidence inventory and artifact scaffold.
 - [x] 48-02-PLAN.md — Resend domains and transactional email proof (HUMAN GATE).
 - [x] 48-03-PLAN.md — Auth/OAuth/admin application launch smoke (HUMAN GATE).
@@ -129,15 +129,15 @@ Plans:
 - [x] 48-05-PLAN.md — PERF-03/PERF-04/PERF-06 evidence and small threshold fixes.
 - [x] 48-06-PLAN.md — Final verification rollup and conservative requirement state update.
 - [ ] 48-07-PLAN.md — AUTH-32 TypeScript and typed row lint fixes.
-- [ ] 48-08-PLAN.md — AUTH-32 React compiler lint fixes.
+- [x] 48-08-PLAN.md — AUTH-32 React compiler lint fixes.
 - [ ] 48-09-PLAN.md — AUTH-32 final lint cleanup and command proof.
-- [ ] 48-10-PLAN.md — Single-domain `glitchtech.io` email smoke proof.
+- [x] 48-10-PLAN.md — Single-domain `glitchtech.io` email smoke proof.
 - [ ] 48-11-PLAN.md — Google OAuth configuration and both-brand auth smoke.
 - [ ] 48-12-PLAN.md — Admin application action and invite/request-info proof.
-- [ ] 48-13-PLAN.md — Physical iOS Safari checkout proof.
+- [x] 48-13-PLAN.md — Physical iOS Safari checkout proof.
 - [ ] 48-14-PLAN.md — Gap-closure final verification rollup.
-- [ ] 48-15-PLAN.md — AUTH-32 admin/query-sync effect lint fixes.
-- [ ] 48-16-PLAN.md — AUTH-32 navigation/carousel effect lint fixes.
+- [x] 48-15-PLAN.md — AUTH-32 admin/query-sync effect lint fixes.
+- [x] 48-16-PLAN.md — AUTH-32 navigation/carousel effect lint fixes.
 
 Phase 48 verification status: `gaps_found`. Remaining blocked rows are EMAIL-01..08, AUTH-14..22 except AUTH-28, AUTH-26, AUTH-29, AUTH-32, and MOBILE-CHECKOUT-PROOF real iOS Safari.
 
