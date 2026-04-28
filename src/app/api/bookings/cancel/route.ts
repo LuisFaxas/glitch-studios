@@ -8,6 +8,7 @@ import { stripe } from "@/lib/stripe"
 import { canCancel, getRefundAmount } from "@/lib/booking/policy"
 import { sendBookingModificationEmail } from "@/lib/email/send-booking-modification"
 import { NextResponse } from "next/server"
+import type { BookingStatus, RefundPolicy } from "@/types/booking"
 
 const cancelSchema = z.object({
   bookingId: z.string().uuid(),
@@ -116,7 +117,7 @@ export async function POST(request: Request) {
   }
 
   const cancelResult = canCancel(
-    { date: booking.date, startTime: booking.startTime, status: booking.status as any },
+    { date: booking.date, startTime: booking.startTime, status: booking.status as BookingStatus },
     { cancellationWindowHours: config.cancellationWindowHours ?? 48 }
   )
 
@@ -132,7 +133,7 @@ export async function POST(request: Request) {
     const depositCents = Math.round(parseFloat(booking.depositAmount) * 100)
     refundAmount = getRefundAmount(
       depositCents,
-      (config.refundPolicy as any) ?? "full",
+      (config.refundPolicy ?? "full") as RefundPolicy,
       true
     )
 

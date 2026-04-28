@@ -3,6 +3,7 @@
 import { eq, and, gte, lte, ilike, or, desc, ne } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { bookings, services, rooms, serviceBookingConfig } from "@/db/schema"
+import type { BookingStatus } from "@/types/booking"
 
 export type AdminBookingRow = {
   id: string
@@ -26,6 +27,18 @@ export type AdminBookingRow = {
   createdAt: Date
   cancelledAt: Date | null
   cancellationReason: string | null
+}
+
+const BOOKING_STATUSES: readonly BookingStatus[] = [
+  "pending",
+  "confirmed",
+  "cancelled",
+  "completed",
+  "no_show",
+]
+
+function isBookingStatus(value: string): value is BookingStatus {
+  return BOOKING_STATUSES.includes(value as BookingStatus)
 }
 
 /**
@@ -89,8 +102,12 @@ export async function getBookingsFiltered(filters: {
 }): Promise<AdminBookingRow[]> {
   const conditions = []
 
-  if (filters.status && filters.status !== "all") {
-    conditions.push(eq(bookings.status, filters.status as any))
+  if (
+    filters.status &&
+    filters.status !== "all" &&
+    isBookingStatus(filters.status)
+  ) {
+    conditions.push(eq(bookings.status, filters.status))
   }
 
   if (filters.search) {

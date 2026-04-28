@@ -8,6 +8,7 @@ import { getAvailableSlots } from "@/lib/booking/slots"
 import { canReschedule } from "@/lib/booking/policy"
 import { sendBookingModificationEmail } from "@/lib/email/send-booking-modification"
 import { NextResponse } from "next/server"
+import type { BookingStatus } from "@/types/booking"
 
 const rescheduleSchema = z.object({
   bookingId: z.string().uuid(),
@@ -82,7 +83,7 @@ export async function POST(request: Request) {
     }
 
     const rescheduleResult = canReschedule(
-      { date: booking.date, startTime: booking.startTime, status: booking.status as any },
+      { date: booking.date, startTime: booking.startTime, status: booking.status as BookingStatus },
       { cancellationWindowHours: config.cancellationWindowHours ?? 48 }
     )
 
