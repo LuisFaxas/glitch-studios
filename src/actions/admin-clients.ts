@@ -3,7 +3,6 @@
 import { sql } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { requirePermission } from "@/lib/permissions"
-import { orders, orderItems, beats, bookings, services, rooms } from "@/db/schema"
 
 export interface ClientRecord {
   id: string
@@ -24,6 +23,75 @@ interface ClientListResult {
 
 const PAGE_SIZE = 20
 
+type SqlDateValue = string | Date
+type SqlNumberValue = string | number
+
+interface RegisteredClientRow {
+  id: string
+  name: string | null
+  email: string
+  type: "registered"
+  created_at: SqlDateValue | null
+  purchase_count: SqlNumberValue | null
+  total_spend: SqlNumberValue | null
+  booking_count: SqlNumberValue | null
+}
+
+interface GuestOrderRow {
+  email: string
+  purchase_count: SqlNumberValue | null
+  total_spend: SqlNumberValue | null
+  created_at: SqlDateValue | null
+}
+
+interface GuestBookingRow {
+  email: string
+  name: string | null
+  booking_count: SqlNumberValue | null
+  created_at: SqlDateValue | null
+}
+
+interface ClientOrderStatsRow {
+  cnt: SqlNumberValue | null
+  total: SqlNumberValue | null
+  first: SqlDateValue | null
+}
+
+interface ClientBookingStatsRow {
+  cnt: SqlNumberValue | null
+  guest_name: string | null
+  first: SqlDateValue | null
+}
+
+interface ClientUserRow {
+  id: string
+  name: string | null
+  email: string
+  created_at: SqlDateValue
+}
+
+interface ClientCountRow {
+  cnt: SqlNumberValue | null
+}
+
+interface ClientPurchaseRow {
+  id: string
+  created_at: SqlDateValue
+  total_cents: SqlNumberValue
+  status: string
+  items: string | null
+}
+
+interface ClientBookingRow {
+  id: string
+  service_name: string | null
+  date: string
+  start_time: string
+  end_time: string
+  status: string
+  room_name: string | null
+}
+
 export async function getClients(filters?: {
   search?: string
   type?: "all" | "registered" | "guest"
@@ -36,7 +104,7 @@ export async function getClients(filters?: {
   const page = filters?.page ?? 1
 
   // Step 1: Registered users with purchase/booking counts
-  const registeredRows = await db.execute(sql`
+  const registeredRows = (await db.execute(sql`
     SELECT
       u.id,
       u.name,
@@ -56,10 +124,10 @@ export async function getClients(filters?: {
       FROM bookings WHERE user_id IS NOT NULL GROUP BY user_id
     ) b ON b.user_id = u.id
     WHERE u.role = 'user'
-  `)
+  `)) as RegisteredClientRow[]
 
   // Step 2: Guest emails from orders (no user account)
-  const guestOrderRows = await db.execute(sql`
+  const guestOrderRows = (await db.execute(sql`
     SELECT
       guest_email as email,
       COUNT(*)::int as purchase_count,
@@ -68,10 +136,10 @@ export async function getClients(filters?: {
     FROM orders
     WHERE user_id IS NULL AND guest_email IS NOT NULL
     GROUP BY guest_email
-  `)
+  `)) as GuestOrderRow[]
 
   // Step 3: Guest emails from bookings (no user account)
-  const guestBookingRows = await db.execute(sql`
+  const guestBookingRows = (await db.execute(sql`
     SELECT
       guest_email as email,
       guest_name as name,
@@ -80,21 +148,21 @@ export async function getClients(filters?: {
     FROM bookings
     WHERE user_id IS NULL AND guest_email IS NOT NULL
     GROUP BY guest_email, guest_name
-  `)
+  `)) as GuestBookingRow[]
 
   // Build registered user map by email for merging
   const registeredEmails = new Set<string>()
   const clientMap = new Map<string, ClientRecord>()
 
-  for (const row of registeredRows as any[]) {
-    const email = row.email as string
+  for (const row of registeredRows) {
+    const email = row.email
     registeredEmails.add(email.toLowerCase())
     clientMap.set(email.toLowerCase(), {
-      id: row.id as string,
-      name: (row.name as string) || email.split("@")[0],
+      id: row.id,
+      name: row.name || email.split("@")[0],
       email,
       type: "registered",
-      createdAt: row.created_at ? new Date(row.created_at as string).toISOString() : new Date().toISOString(),
+      createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
       purchaseCount: Number(row.purchase_count) || 0,
       totalSpend: Number(row.total_spend) || 0,
       bookingCount: Number(row.booking_count) || 0,
@@ -102,8 +170,8 @@ export async function getClients(filters?: {
   }
 
   // Step 4: Merge guest orders
-  for (const row of guestOrderRows as any[]) {
-    const email = (row.email as string).toLowerCase()
+  for (const row of guestOrderRows) {
+    const email = row.email.toLowerCase()
     if (registeredEmails.has(email)) {
       // Attach to registered record
       const existing = clientMap.get(email)!
@@ -117,10 +185,10 @@ export async function getClients(filters?: {
       } else {
         clientMap.set(email, {
           id: `guest-${row.email}`,
-          name: (row.email as string).split("@")[0],
-          email: row.email as string,
+          name: row.email.split("@")[0],
+          email: row.email,
           type: "guest",
-          createdAt: row.created_at ? new Date(row.created_at as string).toISOString() : new Date().toISOString(),
+          createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
           purchaseCount: Number(row.purchase_count) || 0,
           totalSpend: Number(row.total_spend) || 0,
           bookingCount: 0,
@@ -130,8 +198,8 @@ export async function getClients(filters?: {
   }
 
   // Merge guest bookings
-  for (const row of guestBookingRows as any[]) {
-    const email = (row.email as string).toLowerCase()
+  for (const row of guestBookingRows) {
+    const email = row.email.toLowerCase()
     if (registeredEmails.has(email)) {
       const existing = clientMap.get(email)!
       existing.bookingCount += Number(row.booking_count) || 0
@@ -141,15 +209,15 @@ export async function getClients(filters?: {
         existing.bookingCount += Number(row.booking_count) || 0
         // Update name if guest booking has a real name
         if (row.name && existing.name === existing.email.split("@")[0]) {
-          existing.name = row.name as string
+          existing.name = row.name
         }
       } else {
         clientMap.set(email, {
           id: `guest-${row.email}`,
-          name: (row.name as string) || (row.email as string).split("@")[0],
-          email: row.email as string,
+          name: row.name || row.email.split("@")[0],
+          email: row.email,
           type: "guest",
-          createdAt: row.created_at ? new Date(row.created_at as string).toISOString() : new Date().toISOString(),
+          createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
           purchaseCount: 0,
           totalSpend: 0,
           bookingCount: Number(row.booking_count) || 0,
@@ -227,67 +295,67 @@ export async function getClientDetail(
 
   if (isGuest) {
     // Build client from orders/bookings
-    const orderRows = await db.execute(sql`
+    const orderRows = (await db.execute(sql`
       SELECT COUNT(*)::int as cnt, COALESCE(SUM(total_cents), 0) as total, MIN(created_at) as first
       FROM orders WHERE guest_email = ${guestEmail}
-    `)
-    const bookingRows = await db.execute(sql`
+    `)) as ClientOrderStatsRow[]
+    const bookingRows = (await db.execute(sql`
       SELECT COUNT(*)::int as cnt, guest_name, MIN(created_at) as first
       FROM bookings WHERE guest_email = ${guestEmail}
       GROUP BY guest_name
-    `)
+    `)) as ClientBookingStatsRow[]
 
-    const oRow = (orderRows as any[])[0] || {}
-    const bRow = (bookingRows as any[])[0] || {}
+    const oRow = orderRows[0]
+    const bRow = bookingRows[0]
 
     client = {
       id: clientId,
-      name: (bRow.guest_name as string) || guestEmail!.split("@")[0],
+      name: bRow?.guest_name || guestEmail!.split("@")[0],
       email: guestEmail!,
       type: "guest",
-      createdAt: oRow.first
-        ? new Date(oRow.first as string).toISOString()
-        : bRow.first
-          ? new Date(bRow.first as string).toISOString()
+      createdAt: oRow?.first
+        ? new Date(oRow.first).toISOString()
+        : bRow?.first
+          ? new Date(bRow.first).toISOString()
           : new Date().toISOString(),
-      purchaseCount: Number(oRow.cnt) || 0,
-      totalSpend: Number(oRow.total) || 0,
-      bookingCount: Number(bRow.cnt) || 0,
+      purchaseCount: Number(oRow?.cnt) || 0,
+      totalSpend: Number(oRow?.total) || 0,
+      bookingCount: Number(bRow?.cnt) || 0,
     }
   } else {
     // Registered user
-    const userRows = await db.execute(sql`
+    const userRows = (await db.execute(sql`
       SELECT id, name, email, "createdAt" as created_at FROM "user" WHERE id = ${clientId}
-    `)
-    const uRow = (userRows as any[])[0]
+    `)) as ClientUserRow[]
+    const uRow = userRows[0]
     if (!uRow) return null
 
-    const orderStats = await db.execute(sql`
+    const orderStats = (await db.execute(sql`
       SELECT COUNT(*)::int as cnt, COALESCE(SUM(total_cents), 0) as total
       FROM orders WHERE user_id = ${clientId}
-    `)
-    const bookingStats = await db.execute(sql`
+    `)) as ClientOrderStatsRow[]
+    const bookingStats = (await db.execute(sql`
       SELECT COUNT(*)::int as cnt FROM bookings WHERE user_id = ${clientId}
-    `)
-    const os = (orderStats as any[])[0] || {}
-    const bs = (bookingStats as any[])[0] || {}
+    `)) as ClientCountRow[]
+    const os = orderStats[0]
+    const bs = bookingStats[0]
 
     client = {
-      id: uRow.id as string,
-      name: (uRow.name as string) || (uRow.email as string).split("@")[0],
-      email: uRow.email as string,
+      id: uRow.id,
+      name: uRow.name || uRow.email.split("@")[0],
+      email: uRow.email,
       type: "registered",
-      createdAt: new Date(uRow.created_at as string).toISOString(),
-      purchaseCount: Number(os.cnt) || 0,
-      totalSpend: Number(os.total) || 0,
-      bookingCount: Number(bs.cnt) || 0,
+      createdAt: new Date(uRow.created_at).toISOString(),
+      purchaseCount: Number(os?.cnt) || 0,
+      totalSpend: Number(os?.total) || 0,
+      bookingCount: Number(bs?.cnt) || 0,
     }
   }
 
   // Fetch purchases
-  let purchaseQuery
+  let purchaseQuery: ClientPurchaseRow[]
   if (isGuest) {
-    purchaseQuery = await db.execute(sql`
+    purchaseQuery = (await db.execute(sql`
       SELECT o.id, o.created_at, o.total_cents, o.status,
         STRING_AGG(b.title, ', ') as items
       FROM orders o
@@ -297,9 +365,9 @@ export async function getClientDetail(
       GROUP BY o.id, o.created_at, o.total_cents, o.status
       ORDER BY o.created_at DESC
       LIMIT 20
-    `)
+    `)) as ClientPurchaseRow[]
   } else {
-    purchaseQuery = await db.execute(sql`
+    purchaseQuery = (await db.execute(sql`
       SELECT o.id, o.created_at, o.total_cents, o.status,
         STRING_AGG(b.title, ', ') as items
       FROM orders o
@@ -309,21 +377,21 @@ export async function getClientDetail(
       GROUP BY o.id, o.created_at, o.total_cents, o.status
       ORDER BY o.created_at DESC
       LIMIT 20
-    `)
+    `)) as ClientPurchaseRow[]
   }
 
-  const purchases: ClientDetailOrder[] = (purchaseQuery as any[]).map((r) => ({
-    id: r.id as string,
-    date: new Date(r.created_at as string).toLocaleDateString(),
-    items: (r.items as string) || "Unknown items",
+  const purchases: ClientDetailOrder[] = purchaseQuery.map((r) => ({
+    id: r.id,
+    date: new Date(r.created_at).toLocaleDateString(),
+    items: r.items || "Unknown items",
     total: `$${(Number(r.total_cents) / 100).toFixed(2)}`,
-    status: r.status as string,
+    status: r.status,
   }))
 
   // Fetch bookings
-  let bookingQuery
+  let bookingQuery: ClientBookingRow[]
   if (isGuest) {
-    bookingQuery = await db.execute(sql`
+    bookingQuery = (await db.execute(sql`
       SELECT bk.id, bk.date, bk.start_time, bk.end_time, bk.status,
         s.name as service_name, rm.name as room_name
       FROM bookings bk
@@ -332,9 +400,9 @@ export async function getClientDetail(
       WHERE bk.guest_email = ${guestEmail}
       ORDER BY bk.date DESC
       LIMIT 20
-    `)
+    `)) as ClientBookingRow[]
   } else {
-    bookingQuery = await db.execute(sql`
+    bookingQuery = (await db.execute(sql`
       SELECT bk.id, bk.date, bk.start_time, bk.end_time, bk.status,
         s.name as service_name, rm.name as room_name
       FROM bookings bk
@@ -343,18 +411,18 @@ export async function getClientDetail(
       WHERE bk.user_id = ${clientId}
       ORDER BY bk.date DESC
       LIMIT 20
-    `)
+    `)) as ClientBookingRow[]
   }
 
-  const clientBookings: ClientDetailBooking[] = (bookingQuery as any[]).map(
+  const clientBookings: ClientDetailBooking[] = bookingQuery.map(
     (r) => ({
-      id: r.id as string,
-      serviceName: (r.service_name as string) || "Unknown",
-      date: r.date as string,
-      startTime: r.start_time as string,
-      endTime: r.end_time as string,
-      status: r.status as string,
-      roomName: (r.room_name as string) || "Unknown",
+      id: r.id,
+      serviceName: r.service_name || "Unknown",
+      date: r.date,
+      startTime: r.start_time,
+      endTime: r.end_time,
+      status: r.status,
+      roomName: r.room_name || "Unknown",
     })
   )
 

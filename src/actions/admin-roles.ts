@@ -1,6 +1,6 @@
 "use server"
 
-import { eq, ne, sql } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { adminRoles, adminRolePermissions } from "@/db/schema"
 import { requirePermission, type Permission } from "@/lib/permissions"
@@ -22,6 +22,26 @@ export interface AdminMember {
 }
 
 const DEFAULT_ROLES = ["owner", "editor", "manager"]
+
+type SqlDateValue = string | Date
+type SqlNumberValue = string | number
+
+interface AdminMemberRow {
+  id: string
+  name: string | null
+  email: string
+  role: string
+  created_at: SqlDateValue
+}
+
+interface TargetUserRow {
+  id: string
+  role: string | null
+}
+
+interface CountRow {
+  cnt: SqlNumberValue
+}
 
 export async function getRoles(): Promise<RoleWithPermissions[]> {
   const roles = await db.query.adminRoles.findMany({
@@ -156,19 +176,19 @@ export async function updateRolePermissions(
 export async function getAdminMembers(): Promise<AdminMember[]> {
   await requirePermission("manage_roles")
 
-  const rows = await db.execute(sql`
+  const rows = (await db.execute(sql`
     SELECT id, name, email, role, "createdAt" as created_at
     FROM "user"
     WHERE role != 'user'
     ORDER BY "createdAt" ASC
-  `)
+  `)) as AdminMemberRow[]
 
-  return (rows as any[]).map((r) => ({
-    id: r.id as string,
-    name: (r.name as string) || (r.email as string).split("@")[0],
-    email: r.email as string,
-    role: r.role as string,
-    createdAt: new Date(r.created_at as string).toISOString(),
+  return rows.map((r) => ({
+    id: r.id,
+    name: r.name || r.email.split("@")[0],
+    email: r.email,
+    role: r.role,
+    createdAt: new Date(r.created_at).toISOString(),
   }))
 }
 
@@ -176,13 +196,13 @@ export async function assignRole(
   userId: string,
   roleName: string
 ): Promise<{ success: boolean; error?: string }> {
-  const session = await requirePermission("manage_roles")
+  await requirePermission("manage_roles")
 
   // Cannot change another owner's role (only one owner)
-  const targetUser = await db.execute(
+  const targetUser = (await db.execute(
     sql`SELECT id, role FROM "user" WHERE id = ${userId}`
-  )
-  const target = (targetUser as any[])[0]
+  )) as TargetUserRow[]
+  const target = targetUser[0]
   if (!target) return { success: false, error: "User not found" }
 
   if (target.role === "owner" && roleName !== "owner") {
@@ -213,17 +233,17 @@ export async function removeAdminAccess(
   }
 
   // Cannot remove the last owner
-  const targetUser = await db.execute(
+  const targetUser = (await db.execute(
     sql`SELECT id, role FROM "user" WHERE id = ${userId}`
-  )
-  const target = (targetUser as any[])[0]
+  )) as TargetUserRow[]
+  const target = targetUser[0]
   if (!target) return { success: false, error: "User not found" }
 
   if (target.role === "owner") {
-    const ownerCount = await db.execute(
+    const ownerCount = (await db.execute(
       sql`SELECT COUNT(*)::int as cnt FROM "user" WHERE role = 'owner'`
-    )
-    if (Number((ownerCount as any[])[0]?.cnt) <= 1) {
+    )) as CountRow[]
+    if (Number(ownerCount[0]?.cnt) <= 1) {
       return { success: false, error: "Cannot remove the last owner" }
     }
   }

@@ -18,7 +18,9 @@ const TYPE_TABS = [
   { label: "All", value: "all" },
   { label: "Registered", value: "registered" },
   { label: "Guest", value: "guest" },
-] as const
+] as const satisfies ReadonlyArray<{ label: string; value: ClientTypeFilter }>
+
+type ClientTypeFilter = "all" | "registered" | "guest"
 
 function TypeBadge({ type }: { type: "registered" | "guest" }) {
   const isRegistered = type === "registered"
@@ -47,9 +49,7 @@ export function ClientListTable({
   const [clients, setClients] = useState(initialClients)
   const [totalPages, setTotalPages] = useState(initialTotalPages)
   const [page, setPage] = useState(1)
-  const [typeFilter, setTypeFilter] = useState<"all" | "registered" | "guest">(
-    "all"
-  )
+  const [typeFilter, setTypeFilter] = useState<ClientTypeFilter>("all")
   const [search, setSearch] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -62,7 +62,7 @@ export function ClientListTable({
   const fetchClients = useCallback(
     async (opts: {
       search?: string
-      type?: "all" | "registered" | "guest"
+      type?: ClientTypeFilter
       page?: number
     }) => {
       setLoading(true)
@@ -83,7 +83,7 @@ export function ClientListTable({
     []
   )
 
-  function handleTypeChange(type: "all" | "registered" | "guest") {
+  function handleTypeChange(type: ClientTypeFilter) {
     setTypeFilter(type)
     setPage(1)
     fetchClients({ search, type, page: 1 })
@@ -116,7 +116,7 @@ export function ClientListTable({
         {TYPE_TABS.map((tab) => (
           <button
             key={tab.value}
-            onClick={() => handleTypeChange(tab.value as any)}
+            onClick={() => handleTypeChange(tab.value)}
             className={`rounded-none border px-3 py-1 font-mono text-xs uppercase transition-colors ${
               typeFilter === tab.value
                 ? "border-[#f5f5f0] bg-[#f5f5f0] text-[#000]"
