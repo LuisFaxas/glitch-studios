@@ -380,3 +380,9 @@
   border-top: 1px solid #222;
   margin: 2rem 0;
 }
+
+@media (max-width: 767px) {
+  iframe[src*="elements-inner-easel"] {
+    bottom: calc(var(--tab-bar-height) + 8px) !important;
+  }
+}
