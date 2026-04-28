@@ -7,6 +7,7 @@ import { addDays, format } from "date-fns"
 import { Resend } from "resend"
 import { BookingReminderEmail } from "@/lib/email/booking-reminder"
 import { sendSms } from "@/lib/sms"
+import { BOOKING_EMAIL_FROM } from "@/lib/email/senders"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -57,7 +58,7 @@ export async function GET(request: Request) {
       // Send reminder email
       if (process.env.RESEND_API_KEY) {
         await resend.emails.send({
-          from: "Glitch Studios <bookings@glitchstudios.com>",
+          from: BOOKING_EMAIL_FROM,
           to: booking.guestEmail,
           subject: `Reminder: ${booking.serviceName} session tomorrow at ${booking.startTime}`,
           react: BookingReminderEmail({

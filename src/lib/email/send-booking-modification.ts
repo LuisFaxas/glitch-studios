@@ -4,9 +4,9 @@ import { Resend } from "resend"
 import { db } from "@/lib/db"
 import { services } from "@/db/schema"
 import { BookingModificationEmail } from "@/lib/email/booking-modification"
+import { BOOKING_EMAIL_FROM } from "@/lib/email/senders"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const EMAIL_FROM = "Glitch Studios <noreply@glitchstudios.io>"
 
 interface BookingForEmail {
   id: string
@@ -60,7 +60,7 @@ export async function sendBookingModificationEmail(
           : opts.newDate
 
     const { error } = await resend.emails.send({
-      from: EMAIL_FROM,
+      from: BOOKING_EMAIL_FROM,
       to: recipient,
       subject:
         newDate === null

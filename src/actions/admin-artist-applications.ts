@@ -9,9 +9,9 @@ import { Resend } from "resend"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { artistApplications, user } from "@/db/schema"
+import { TRANSACTIONAL_EMAIL_FROM } from "@/lib/email/senders"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const EMAIL_FROM = "Glitch Studios <noreply@glitchstudios.io>"
 
 async function requireAdmin() {
   const session = await auth.api.getSession({ headers: await headers() })
@@ -132,7 +132,7 @@ export async function requestMoreInfoOnApplication(input: {
     .where(eq(artistApplications.id, app.id))
 
   await resend.emails.send({
-    from: EMAIL_FROM,
+    from: TRANSACTIONAL_EMAIL_FROM,
     to: app.email,
     subject: parsed.data.emailSubject,
     text: parsed.data.emailBody,

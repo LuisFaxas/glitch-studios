@@ -19,6 +19,7 @@ import { BookingConfirmationEmail } from "@/lib/email/booking-confirmation"
 import { sendSms } from "@/lib/sms"
 import { DEFAULT_LICENSE_TIERS } from "@/types/beats"
 import { tagSubscriberOnEvent } from "@/actions/admin-newsletter"
+import { BOOKING_EMAIL_FROM, TRANSACTIONAL_EMAIL_FROM } from "@/lib/email/senders"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -123,7 +124,7 @@ export async function POST(request: Request) {
           const address = process.env.STUDIO_ADDRESS || "Glitch Studios"
 
           await resend.emails.send({
-            from: "Glitch Studios <bookings@glitchstudios.com>",
+            from: BOOKING_EMAIL_FROM,
             to: bookingDetails.guestEmail,
             subject: `Booking Confirmed: ${bookingDetails.serviceName} at Glitch Studios`,
             react: BookingConfirmationEmail({
@@ -151,7 +152,7 @@ export async function POST(request: Request) {
           // Notify admin
           if (process.env.ADMIN_EMAIL) {
             await resend.emails.send({
-              from: "Glitch Studios <bookings@glitchstudios.com>",
+              from: BOOKING_EMAIL_FROM,
               to: process.env.ADMIN_EMAIL,
               subject: `New Booking: ${bookingDetails.serviceName} on ${bookingDetails.date}`,
               text: `New booking from ${bookingDetails.guestName} (${bookingDetails.guestEmail})\nService: ${bookingDetails.serviceName}\nDate: ${bookingDetails.date}\nTime: ${bookingDetails.startTime} - ${bookingDetails.endTime}\nRoom: ${bookingDetails.roomName}`,
@@ -258,7 +259,7 @@ export async function POST(request: Request) {
       })
 
       await resend.emails.send({
-        from: "Glitch Studios <noreply@glitchstudios.com>",
+        from: TRANSACTIONAL_EMAIL_FROM,
         to: customerEmail,
         subject: `Your Glitch Studios Order #${order.id.slice(0, 8)}`,
         react: PurchaseReceiptEmail({

@@ -10,9 +10,9 @@ import * as schema from "@/db/schema"
 import { PasswordResetEmail } from "@/lib/email/password-reset"
 import { AccountVerificationEmail } from "@/lib/email/account-verification"
 import { ArtistApprovalInviteEmail } from "@/lib/email/artist-approval-invite"
+import { TRANSACTIONAL_EMAIL_FROM } from "@/lib/email/senders"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const EMAIL_FROM = "Glitch Studios <noreply@glitchstudios.io>"
 
 const ac = createAccessControl(defaultStatements)
 const ownerAc = ac.newRole({
@@ -75,7 +75,7 @@ export const auth = betterAuth({
         : "studios"
       try {
         const { error } = await resend.emails.send({
-          from: EMAIL_FROM,
+          from: TRANSACTIONAL_EMAIL_FROM,
           to: user.email,
           subject: isInvite
             ? "You're approved — set your password."
@@ -102,7 +102,7 @@ export const auth = betterAuth({
     sendVerificationEmail: async ({ user, url }) => {
       try {
         const { error } = await resend.emails.send({
-          from: EMAIL_FROM,
+          from: TRANSACTIONAL_EMAIL_FROM,
           to: user.email,
           subject: "Verify your Glitch Studios email",
           react: AccountVerificationEmail({ name: user.name, url }),

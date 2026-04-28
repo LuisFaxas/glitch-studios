@@ -5,6 +5,7 @@ import { contactSubmissions } from "@/db/schema"
 import { z } from "zod/v4"
 import { Resend } from "resend"
 import { AdminContactNotificationEmail } from "@/lib/email/admin-contact-notification"
+import { TRANSACTIONAL_EMAIL_FROM } from "@/lib/email/senders"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -43,7 +44,7 @@ export async function submitContactForm(formData: FormData) {
     // Send admin notification email (failure should NOT break form submission)
     try {
       await resend.emails.send({
-        from: "Glitch Studios <noreply@glitchstudios.com>",
+        from: TRANSACTIONAL_EMAIL_FROM,
         to: process.env.ADMIN_EMAIL || "admin@glitchstudios.com",
         subject: `New Contact: ${result.data.name} - ${result.data.serviceInterest || "General Inquiry"}`,
         react: AdminContactNotificationEmail({

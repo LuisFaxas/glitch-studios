@@ -5,6 +5,7 @@ import { contactSubmissions, contactReplies } from "@/db/schema"
 import { requirePermission } from "@/lib/permissions"
 import { eq, desc, count, sql } from "drizzle-orm"
 import { Resend } from "resend"
+import { TRANSACTIONAL_EMAIL_FROM, ADMIN_REPLY_TO_EMAIL } from "@/lib/email/senders"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -101,11 +102,10 @@ export async function replyToMessage(submissionId: string, body: string) {
   })
 
   // Send reply email via Resend with proper replyTo header
-  const adminEmail = process.env.ADMIN_EMAIL || "admin@glitchstudios.com"
   await resend.emails.send({
-    from: `Glitch Studios <${adminEmail}>`,
+    from: TRANSACTIONAL_EMAIL_FROM,
     to: submission.email,
-    replyTo: adminEmail,
+    replyTo: ADMIN_REPLY_TO_EMAIL,
     subject: `Re: ${submission.serviceInterest || "Your message"} - Glitch Studios`,
     text: body,
   })

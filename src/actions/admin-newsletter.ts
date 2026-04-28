@@ -10,6 +10,7 @@ import {
 import { requirePermission } from "@/lib/permissions"
 import { generateUnsubscribeUrl } from "@/actions/newsletter"
 import { NewsletterBroadcastEmail } from "@/lib/email/newsletter-broadcast"
+import { NEWSLETTER_EMAIL_FROM } from "@/lib/email/senders"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const PAGE_SIZE_SUBSCRIBERS = 50
@@ -159,7 +160,7 @@ export async function sendNewsletter(data: {
         batch.map(async (subscriber) => {
           const unsubscribeUrl = await generateUnsubscribeUrl(subscriber.email)
           return {
-            from: "Glitch Studios <newsletter@glitchstudios.com>",
+            from: NEWSLETTER_EMAIL_FROM,
             to: subscriber.email,
             subject: data.subject,
             react: NewsletterBroadcastEmail({

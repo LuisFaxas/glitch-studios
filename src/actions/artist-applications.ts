@@ -5,6 +5,7 @@ import { Resend } from "resend"
 import { db } from "@/lib/db"
 import { artistApplications } from "@/db/schema"
 import { GENRE_TAGS, FOCUS_TAGS } from "@/lib/types/artist-application"
+import { TRANSACTIONAL_EMAIL_FROM } from "@/lib/email/senders"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -20,8 +21,6 @@ const submitSchema = z.object({
 const ALL_VALID_TAGS = new Set<string>([...GENRE_TAGS, ...FOCUS_TAGS])
 
 const ADMIN_FALLBACK_EMAIL = "office@glitchstudios.io"
-// Mirrors EMAIL_FROM in src/lib/auth.ts (Phase 24 sender pattern).
-const EMAIL_FROM = "Glitch Studios <noreply@glitchstudios.io>"
 
 export type SubmitArtistApplicationResult =
   | { ok: true; applicationId: string }
@@ -62,7 +61,7 @@ export async function submitArtistApplication(
 
     try {
       await resend.emails.send({
-        from: EMAIL_FROM,
+        from: TRANSACTIONAL_EMAIL_FROM,
         to: adminEmail,
         subject: `New ${brandName} application: ${data.name}`,
         html: `<p><strong>${escapeHtml(data.name)}</strong> (${escapeHtml(data.email)}) submitted a ${brandName} application.</p>
