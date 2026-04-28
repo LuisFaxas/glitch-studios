@@ -1,0 +1,31 @@
+captured_at=2026-04-28T05:26:25Z
+source=public DNS dig checks from Codex workspace
+
+=== glitchstudios.io ===
+-- MX send.glitchstudios.io
+10 feedback-smtp.us-east-1.amazonses.com.
+-- TXT send.glitchstudios.io
+"v=spf1 include:amazonses.com ~all"
+-- DKIM TXT resend._domainkey.glitchstudios.io
+"p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC4xe9wL1bE+kZLwz+cLdSAeoKIYR1Y4QTo+zRKVfG7um+4I3OUYh/wd6JVAyjv5/GNYiapgBZ0ulj2NR6DFMRejceeMpWsEWyldxl/c99NNW3ir5rPcpBLNeZisYoi9Ab3S3eitSy7zsXzvB/rR6+2huwTf3gGwzVzski79sleowIDAQAB"
+-- DKIM CNAME resend._domainkey.glitchstudios.io
+-- DKIM TXT resend2._domainkey.glitchstudios.io
+-- DKIM CNAME resend2._domainkey.glitchstudios.io
+-- DKIM TXT resend3._domainkey.glitchstudios.io
+-- DKIM CNAME resend3._domainkey.glitchstudios.io
+-- DMARC TXT _dmarc.glitchstudios.io
+
+=== glitchtech.io ===
+-- MX send.glitchtech.io
+10 feedback-smtp.us-east-1.amazonses.com.
+-- TXT send.glitchtech.io
+"v=spf1 include:amazonses.com ~all"
+-- DKIM TXT resend._domainkey.glitchtech.io
+"p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJKESEwGKFZp6LptmtYEPgMEXIP6l7PDDIg2AZxrORY2blsEr/OlDS/aplWNAGRSr9TCjVgJNRWHX6zsfStD6ld0gDG20cFlZwpJqzf8EaNegP73EapOFpMfG+k7UHItmMb85Aa7DKMdAc7xVH6Eib3qBhwVx7KnvOiIgnsezN5wIDAQAB"
+-- DKIM CNAME resend._domainkey.glitchtech.io
+-- DKIM TXT resend2._domainkey.glitchtech.io
+-- DKIM CNAME resend2._domainkey.glitchtech.io
+-- DKIM TXT resend3._domainkey.glitchtech.io
+-- DKIM CNAME resend3._domainkey.glitchtech.io
+-- DMARC TXT _dmarc.glitchtech.io
+
