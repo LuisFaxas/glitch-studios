@@ -10,9 +10,9 @@ import {
   rooms,
   serviceBookingConfig,
 } from "@/db/schema"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { generateLicensePdf } from "@/lib/pdf-license"
-import { getUploadUrl, getDownloadUrl } from "@/lib/r2"
+import { getUploadUrl } from "@/lib/r2"
 import { Resend } from "resend"
 import { PurchaseReceiptEmail } from "@/lib/email/purchase-receipt"
 import { BookingConfirmationEmail } from "@/lib/email/booking-confirmation"
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
       signature,
       cleanStripeEnv(process.env.STRIPE_WEBHOOK_SECRET),
     )
-  } catch (err) {
+  } catch {
     return new Response("Webhook signature verification failed", {
       status: 400,
     })
@@ -183,16 +183,25 @@ export async function POST(request: Request) {
     const customerName = session.customer_details?.name ?? "Customer"
     const cartItems = JSON.parse(session.metadata?.items ?? "[]")
 
-    // 1. Create order
-    const [order] = await db
-      .insert(orders)
-      .values({
-        stripeSessionId: session.id,
-        guestEmail: customerEmail,
-        status: "completed",
-        totalCents: session.amount_total!,
-      })
-      .returning()
+    const [existingOrder] = await db
+      .select()
+      .from(orders)
+      .where(eq(orders.stripeSessionId, session.id))
+      .limit(1)
+
+    // 1. Create or resume order. Stripe may retry webhook delivery after a
+    // partial failure, so the beat-purchase path must be idempotent.
+    const [order] = existingOrder
+      ? [existingOrder]
+      : await db
+          .insert(orders)
+          .values({
+            stripeSessionId: session.id,
+            guestEmail: customerEmail,
+            status: "completed",
+            totalCents: session.amount_total!,
+          })
+          .returning()
 
     // 2. Create order items + generate PDFs
     for (const item of cartItems) {
@@ -220,14 +229,28 @@ export async function POST(request: Request) {
         headers: { "Content-Type": "application/pdf" },
       })
 
-      // Insert order item
-      await db.insert(orderItems).values({
-        orderId: order.id,
-        beatId: item.beatId,
-        licenseTier: item.licenseTier,
-        price: item.price.toFixed(2),
-        licensePdfKey: pdfKey,
-      })
+      const [existingItem] = await db
+        .select({ id: orderItems.id })
+        .from(orderItems)
+        .where(
+          and(
+            eq(orderItems.orderId, order.id),
+            eq(orderItems.beatId, item.beatId),
+            eq(orderItems.licenseTier, item.licenseTier)
+          )
+        )
+        .limit(1)
+
+      // Insert order item once, even when Stripe retries this webhook.
+      if (!existingItem) {
+        await db.insert(orderItems).values({
+          orderId: order.id,
+          beatId: item.beatId,
+          licenseTier: item.licenseTier,
+          priceCents: Math.round(Number(item.price) * 100),
+          licensePdfKey: pdfKey,
+        })
+      }
 
       // Mark exclusive as sold
       if (item.licenseTier === "exclusive") {
@@ -244,7 +267,7 @@ export async function POST(request: Request) {
         .select({
           beatTitle: beats.title,
           licenseTier: orderItems.licenseTier,
-          price: orderItems.price,
+          priceCents: orderItems.priceCents,
         })
         .from(orderItems)
         .innerJoin(beats, eq(orderItems.beatId, beats.id))
@@ -258,7 +281,7 @@ export async function POST(request: Request) {
         return {
           beatTitle: dbItem.beatTitle,
           licenseTier: itemTierDef?.displayName ?? dbItem.licenseTier,
-          price: Number(dbItem.price),
+          price: dbItem.priceCents / 100,
           downloadUrl: `${getSiteUrl()}/checkout/success?session_id=${session.id}`,
         }
       })

@@ -131,7 +131,7 @@ export function PurchaseHistory({ orders }: PurchaseHistoryProps) {
                         item.licenseTier}
                     </TableCell>
                     <TableCell className="font-mono text-[13px] text-[#f5f5f0]">
-                      ${Number(item.price).toFixed(2)}
+                      ${(item.priceCents / 100).toFixed(2)}
                     </TableCell>
                     <TableCell>
                       {dl?.urls ? (

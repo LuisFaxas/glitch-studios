@@ -339,9 +339,10 @@ export const orderItems = pgTable(
       .references(() => beats.id)
       .notNull(),
     licenseTier: licenseTierEnum("license_tier").notNull(),
-    price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+    priceCents: integer("price_cents").notNull(),
     licensePdfKey: text("license_pdf_key"),
     downloadCount: integer("download_count").default(0),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (t) => [
     index("idx_order_items_order").on(t.orderId),

@@ -17,7 +17,7 @@ export async function getOrderBySessionId(sessionId: string) {
       id: orderItems.id,
       beatId: orderItems.beatId,
       licenseTier: orderItems.licenseTier,
-      price: orderItems.price,
+      priceCents: orderItems.priceCents,
       licensePdfKey: orderItems.licensePdfKey,
       beatTitle: beats.title,
       beatSlug: beats.slug,
@@ -30,7 +30,13 @@ export async function getOrderBySessionId(sessionId: string) {
     .innerJoin(beats, eq(orderItems.beatId, beats.id))
     .where(eq(orderItems.orderId, order.id))
 
-  return { ...order, items }
+  return {
+    ...order,
+    items: items.map((item) => ({
+      ...item,
+      price: (item.priceCents / 100).toFixed(2),
+    })),
+  }
 }
 
 export async function getOrderDownloadUrls(orderId: string, itemId: string) {
@@ -86,9 +92,10 @@ export async function getUserOrders(userId: string) {
       orderId: orderItems.orderId,
       beatId: orderItems.beatId,
       licenseTier: orderItems.licenseTier,
-      price: orderItems.price,
+      priceCents: orderItems.priceCents,
       licensePdfKey: orderItems.licensePdfKey,
       downloadCount: orderItems.downloadCount,
+      createdAt: orderItems.createdAt,
       beatTitle: beats.title,
       beatSlug: beats.slug,
       coverArtKey: beats.coverArtKey,
@@ -106,9 +113,10 @@ export async function getUserOrders(userId: string) {
         orderId: i.orderId,
         beatId: i.beatId,
         licenseTier: i.licenseTier,
-        price: i.price,
+        priceCents: i.priceCents,
         licensePdfKey: i.licensePdfKey,
         downloadCount: i.downloadCount,
+        createdAt: i.createdAt,
         beat: {
           id: i.beatId,
           title: i.beatTitle,
