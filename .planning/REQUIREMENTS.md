@@ -12,10 +12,10 @@
 
 ### Audit & Discovery (AUDIT-*)
 
-- [ ] **AUDIT-01** Phase 22 produces a populated `.planning/phases/22-visual-audit-discovery/22-AUDIT.md` with user feedback on every public route, admin surface, global component, and cross-page flow; each item tagged `[BLOCK]`, `[POLISH]`, `[BACKLOG]`, or `[OK]`.
-- [ ] **AUDIT-02** Phase 22 output triages every v3.0 carry-over item — each pending phase/backlog entry assigned to `[IN v4.0]`, `[BACKLOG]`, or `[DROP]` with rationale.
-- [ ] **AUDIT-03** GlitchMark design decisions captured in audit Section I — formula, scope (per-device/category), relationship to BPR, UI surfaces, methodology transparency, versioning strategy.
-- [ ] **AUDIT-04** Post-audit, ROADMAP.md phases 23+ are derived from audit findings and re-presented to user for approval before execution starts.
+- [x] **AUDIT-01** Phase 22 produces a populated `.planning/phases/22-visual-audit-discovery/22-AUDIT.md` with user feedback on every public route, admin surface, global component, and cross-page flow; each item tagged `[BLOCK]`, `[POLISH]`, `[BACKLOG]`, or `[OK]`.
+- [x] **AUDIT-02** Phase 22 output triages every v3.0 carry-over item — each pending phase/backlog entry assigned to `[IN v4.0]`, `[BACKLOG]`, or `[DROP]` with rationale.
+- [x] **AUDIT-03** GlitchMark design decisions captured in audit Section I — formula, scope (per-device/category), relationship to BPR, UI surfaces, methodology transparency, versioning strategy.
+- [x] **AUDIT-04** Post-audit, ROADMAP.md phases 23+ are derived from audit findings and re-presented to user for approval before execution starts.
 
 ### Email Delivery (EMAIL-*) — Launch Blocker
 
@@ -171,7 +171,7 @@
 
 | REQ-ID | Category | Phase | Status |
 |--------|----------|-------|--------|
-| AUDIT-01 through AUDIT-04 | Audit verification closure | **47** (source phase 22) | Pending |
+| AUDIT-01 through AUDIT-04 | Audit verification closure | **47** (source phase 22) | Complete |
 | EMAIL-01 through EMAIL-08 | Email launch proof | **48** (source phase 24) | Pending |
 | PERF-01 through PERF-07 | Performance launch proof | **48** (source phase 25) | Pending |
 | AUTH-01 through AUTH-13, AUTH-23 through AUTH-25, AUTH-27, AUTH-30 through AUTH-31 | Auth UI implementation | **26** | Complete |

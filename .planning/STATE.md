@@ -99,6 +99,7 @@ Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to R
 | Phase 29.3 P01 | 7 | 5 tasks | 4 files |
 | Phase 29.3 P03 | 5min | 1 tasks | 2 files |
 | Phase 29.3 P04 | 45min | 1 tasks | 2 files |
+| Phase 47 P01 | 5min | 2 tasks | 4 files |
 | Phase 47 P02 | 4min | 2 tasks | 3 files |
 
 ## Accumulated Context
@@ -158,6 +159,8 @@ Recent decisions affecting current work:
 - [Phase 29.3]: Phase 29.3 Plan 04: Spec uses dispatchEvent('click') for ALL clicks (5 trigger + 21 chip clicks) — Playwright natural .click() and keyboard.press hang for 30s on Chromium / throw 'Page closed' on Webkit when fired during/after the chip-bar's setFilters re-render schedule
 - [Phase 29.3]: Phase 29.3 Plan 04: DOM leak guard scoped to [data-base-ui-portal] subtree (~10 nodes, ±2 tolerance), NOT body subtree (337-node delta on chromium = false positive from table reflow when filter narrows row count)
 - [Phase 29.3]: Phase 29.3 Plan 04: playwright.config.ts baseURL honors PLAYWRIGHT_BASE_URL env override — needed because the Codebox prod server (port 3004) runs a stale build predating Plan 03's data-testid; user's separate dev server on port 3010 has current source
+- [Phase 47]: Phase 22 verification is passed for AUDIT-01 through AUDIT-04; the missing artifact was the only audit gap for that group.
+- [Phase 47]: Phases 23, 24, and 25 remain gaps_found to preserve mobile checkout, email deliverability, and PERF proof carry-forwards for Phase 48.
 - [Phase 47]: Phase 29 remains the formal RANK-01 through RANK-07 implementation evidence; Phase 29.1 contributes polish evidence only.
 - [Phase 47]: Phase 29.3 is phase-level passed from 29.3-06 real macOS Safari and Firefox verification, while 29.3-05 remains failed_superseded for timeline truth.
 
