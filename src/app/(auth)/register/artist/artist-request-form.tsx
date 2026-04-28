@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import type { Brand } from "@/lib/brand"
 import { submitArtistApplication } from "@/actions/artist-applications"
 import { getTagsForBrand } from "@/lib/types/artist-application"
@@ -220,18 +221,18 @@ export function ArtistRequestForm({ brand, stats }: ArtistRequestFormProps) {
           </div>
 
           <div className="flex flex-col gap-3">
-            <a
+            <Link
               href="/"
               className="inline-flex h-11 items-center justify-center rounded-lg bg-[var(--foreground)] px-6 font-sans text-[15px] font-semibold text-black"
             >
               Back to home
-            </a>
-            <a
+            </Link>
+            <Link
               href="/contact"
               className="text-center font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--muted-foreground)] hover:text-[#f5f5f0]"
             >
               Forgot to add something? Contact us
-            </a>
+            </Link>
           </div>
         </div>
       </AuthSplitFrame>

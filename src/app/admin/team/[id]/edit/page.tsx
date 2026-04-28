@@ -10,18 +10,20 @@ export default async function EditTeamMemberPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  let member: Awaited<ReturnType<typeof getTeamMember>>
 
   try {
-    const member = await getTeamMember(id)
-    return (
-      <div className="p-6 max-w-5xl mx-auto">
-        <h1 className="font-mono font-bold text-[28px] uppercase tracking-[0.05em] mb-8">
-          Edit Team Member
-        </h1>
-        <TeamMemberForm member={member} />
-      </div>
-    )
+    member = await getTeamMember(id)
   } catch {
     notFound()
   }
+
+  return (
+    <div className="p-6 max-w-5xl mx-auto">
+      <h1 className="font-mono font-bold text-[28px] uppercase tracking-[0.05em] mb-8">
+        Edit Team Member
+      </h1>
+      <TeamMemberForm member={member} />
+    </div>
+  )
 }

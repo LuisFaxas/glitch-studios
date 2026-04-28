@@ -115,8 +115,8 @@ export function AdminPackageManager({
         <div className="text-[#888] font-mono text-sm space-y-2">
           <p>No packages configured.</p>
           <p className="text-[#555] text-[11px]">
-            Examples: "4-Session Pack" 15% off, "8-Session Pack" 25% off,
-            "12-Session Pack" 30% off
+            Examples: &quot;4-Session Pack&quot; 15% off, &quot;8-Session Pack&quot; 25% off,
+            &quot;12-Session Pack&quot; 30% off
           </p>
         </div>
       ) : (
