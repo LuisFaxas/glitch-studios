@@ -84,7 +84,7 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 
 **🧯 Audit gap closure:**
 - [x] **Phase 47: Verification Backfill + Planning State Repair** — missing phase-level VERIFICATION.md artifacts for 22/23/24/25/29.1/29.3 created, ROADMAP.md + STATE.md drift reconciled, 29.3 roadmap state closed, and requirement evidence normalized against `.planning/v4.0-MILESTONE-AUDIT.md`. (completed 2026-04-28)
-- [ ] **Phase 48: Launch Blocker Proof Pass** — close the launch-blocker proof gaps called out by the milestone audit: Resend/domain deliverability, auth/OAuth/admin-invite smoke, mobile checkout purchase proof, and performance evidence for PERF-03/04/06. (verification gaps_found 2026-04-28)
+- [ ] **Phase 48: Launch Blocker Proof Pass** — close the launch-blocker proof gaps called out by the milestone audit: Resend/domain deliverability, auth/OAuth/admin-invite smoke, mobile checkout purchase proof, and performance evidence for PERF-03/04/06. (plans 16/16 executed; verification gaps_found 2026-04-28)
 
 #### Phase 47: Verification Backfill + Planning State Repair
 
@@ -121,7 +121,7 @@ Plans:
 3. Verify mobile checkout end-to-end on real iOS Safari and desktop with a Stripe test-card purchase; fix any diagnosed runtime/env issue.
 4. Capture performance evidence for PERF-03, PERF-04, and PERF-06, and fold any small fixes needed for the launch threshold into this phase.
 
-**Plans:** 15/16 plans executed
+**Plans:** 16/16 plans executed
 - [x] 48-01-PLAN.md — Baseline evidence inventory and artifact scaffold.
 - [x] 48-02-PLAN.md — Resend domains and transactional email proof (HUMAN GATE).
 - [x] 48-03-PLAN.md — Auth/OAuth/admin application launch smoke (HUMAN GATE).
@@ -135,11 +135,11 @@ Plans:
 - [x] 48-11-PLAN.md — Google OAuth configuration and both-brand auth smoke.
 - [x] 48-12-PLAN.md — Admin application action and invite/request-info proof.
 - [x] 48-13-PLAN.md — Physical iOS Safari checkout proof.
-- [ ] 48-14-PLAN.md — Gap-closure final verification rollup.
+- [x] 48-14-PLAN.md — Gap-closure final verification rollup.
 - [x] 48-15-PLAN.md — AUTH-32 admin/query-sync effect lint fixes.
 - [x] 48-16-PLAN.md — AUTH-32 navigation/carousel effect lint fixes.
 
-Phase 48 verification status: `gaps_found`. Remaining blocked rows are EMAIL-01..08, AUTH-14..22 except AUTH-28, AUTH-26, AUTH-29, AUTH-32, and MOBILE-CHECKOUT-PROOF real iOS Safari.
+Phase 48 verification status: `gaps_found`. Remaining blocked rows are EMAIL-01..07, AUTH-14..22 except AUTH-28, AUTH-26, AUTH-29, AUTH-32 manual auth smoke, and MOBILE-CHECKOUT-PROOF real iOS Safari. EMAIL-08 remains deferred for `glitchstudios.io` multi-domain Resend verification and DMARC by user decision; do not mark it passed without new proof.
 
 #### Phase 26: Brand-Aware Auth UI Redesign
 

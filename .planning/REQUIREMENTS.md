@@ -73,7 +73,7 @@
 - [ ] **AUTH-29** Branded `forgot-password` + `reset-password` end-to-end pass. Phase 24 template reused.
 - [x] **AUTH-30** `src/app/(auth)/layout.tsx` becomes server component reading `host` from `next/headers` and rendering `<div data-brand={brand}>`. Default 'studios' for unknown hosts. Mirrors middleware fall-through.
 - [x] **AUTH-31** All page H1s wrap `<HoverGlitchHeading>`. Hover-only; never auto-runs. Reduced-motion honored.
-- [x] **AUTH-32** `pnpm tsc --noEmit` and `pnpm lint` pass. Manual Playwright pass: both brand hosts × 5 auth surfaces × Google end-to-end.
+- [ ] **AUTH-32** `pnpm tsc --noEmit` and `pnpm lint` pass. Manual Playwright pass: both brand hosts × 5 auth surfaces × Google end-to-end.
 
 ### GlitchMark (GLITCHMARK-*) — New Feature
 
@@ -179,7 +179,7 @@
 | PERF-01 through PERF-07 | Performance launch proof | **48** (source phase 25) | Complete - Phase 48 verified |
 | AUTH-01 through AUTH-13, AUTH-23 through AUTH-25, AUTH-27, AUTH-30 through AUTH-31 | Auth UI implementation | **26** | Complete |
 | AUTH-28 | Auth launch proof | **48** | Complete - Phase 48 verified migration |
-| AUTH-14 through AUTH-22, AUTH-26, AUTH-29, AUTH-32 | Auth launch proof | **48** | Pending - Phase 48 found OAuth/admin/email-command gaps |
+| AUTH-14 through AUTH-22, AUTH-26, AUTH-29, AUTH-32 | Auth launch proof | **48** | Pending - Phase 48 found OAuth/admin/email/manual-smoke gaps |
 | (media foundation, no REQ-IDs yet — derived from pivots #2, #9) | Media/Video | **27** | Complete |
 | GLITCHMARK-01 through GLITCHMARK-03, GLITCHMARK-06 through GLITCHMARK-08 | GlitchMark core | **28** | Complete |
 | GLITCHMARK-04 | GlitchMark leaderboard surface | **29** | Complete |
