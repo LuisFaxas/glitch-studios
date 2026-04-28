@@ -26,7 +26,7 @@ const DEFAULT_ROLES = ["owner", "editor", "manager"]
 type SqlDateValue = string | Date
 type SqlNumberValue = string | number
 
-interface AdminMemberRow {
+interface AdminMemberRow extends Record<string, unknown> {
   id: string
   name: string | null
   email: string
@@ -34,12 +34,12 @@ interface AdminMemberRow {
   created_at: SqlDateValue
 }
 
-interface TargetUserRow {
+interface TargetUserRow extends Record<string, unknown> {
   id: string
   role: string | null
 }
 
-interface CountRow {
+interface CountRow extends Record<string, unknown> {
   cnt: SqlNumberValue
 }
 

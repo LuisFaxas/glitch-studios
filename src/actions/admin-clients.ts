@@ -26,7 +26,7 @@ const PAGE_SIZE = 20
 type SqlDateValue = string | Date
 type SqlNumberValue = string | number
 
-interface RegisteredClientRow {
+interface RegisteredClientRow extends Record<string, unknown> {
   id: string
   name: string | null
   email: string
@@ -37,44 +37,44 @@ interface RegisteredClientRow {
   booking_count: SqlNumberValue | null
 }
 
-interface GuestOrderRow {
+interface GuestOrderRow extends Record<string, unknown> {
   email: string
   purchase_count: SqlNumberValue | null
   total_spend: SqlNumberValue | null
   created_at: SqlDateValue | null
 }
 
-interface GuestBookingRow {
+interface GuestBookingRow extends Record<string, unknown> {
   email: string
   name: string | null
   booking_count: SqlNumberValue | null
   created_at: SqlDateValue | null
 }
 
-interface ClientOrderStatsRow {
+interface ClientOrderStatsRow extends Record<string, unknown> {
   cnt: SqlNumberValue | null
   total: SqlNumberValue | null
   first: SqlDateValue | null
 }
 
-interface ClientBookingStatsRow {
+interface ClientBookingStatsRow extends Record<string, unknown> {
   cnt: SqlNumberValue | null
   guest_name: string | null
   first: SqlDateValue | null
 }
 
-interface ClientUserRow {
+interface ClientUserRow extends Record<string, unknown> {
   id: string
   name: string | null
   email: string
   created_at: SqlDateValue
 }
 
-interface ClientCountRow {
+interface ClientCountRow extends Record<string, unknown> {
   cnt: SqlNumberValue | null
 }
 
-interface ClientPurchaseRow {
+interface ClientPurchaseRow extends Record<string, unknown> {
   id: string
   created_at: SqlDateValue
   total_cents: SqlNumberValue
@@ -82,7 +82,7 @@ interface ClientPurchaseRow {
   items: string | null
 }
 
-interface ClientBookingRow {
+interface ClientBookingRow extends Record<string, unknown> {
   id: string
   service_name: string | null
   date: string
