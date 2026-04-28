@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { useQueryState, parseAsString, parseAsInteger } from "nuqs"
 import { Search } from "lucide-react"
 import {
@@ -52,10 +52,19 @@ export function FilterBar({
   )
 
   const [localSearch, setLocalSearch] = useState(query ?? "")
+  const localSearchRef = useRef(localSearch)
+
+  useEffect(() => {
+    localSearchRef.current = localSearch
+  }, [localSearch])
 
   // Sync external query changes to local state
   useEffect(() => {
-    setLocalSearch(query ?? "")
+    const nextSearch = query ?? ""
+    if (localSearchRef.current === nextSearch) return
+
+    const timer = window.setTimeout(() => setLocalSearch(nextSearch), 0)
+    return () => window.clearTimeout(timer)
   }, [query])
 
   // Debounced update to URL (300ms)
@@ -94,10 +103,20 @@ export function FilterBar({
   }
 
   const [localBpm, setLocalBpm] = useState([bpmMin ?? 60, bpmMax ?? 200])
+  const localBpmRef = useRef(localBpm)
+
+  useEffect(() => {
+    localBpmRef.current = localBpm
+  }, [localBpm])
 
   // Sync from URL -> local when URL changes (e.g., clear filters)
   useEffect(() => {
-    setLocalBpm([bpmMin ?? 60, bpmMax ?? 200])
+    const nextBpm = [bpmMin ?? 60, bpmMax ?? 200]
+    const [currentMin, currentMax] = localBpmRef.current
+    if (currentMin === nextBpm[0] && currentMax === nextBpm[1]) return
+
+    const timer = window.setTimeout(() => setLocalBpm(nextBpm), 0)
+    return () => window.clearTimeout(timer)
   }, [bpmMin, bpmMax])
 
   return (

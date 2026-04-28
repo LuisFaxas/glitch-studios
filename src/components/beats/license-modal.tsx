@@ -27,11 +27,12 @@ interface LicenseModalProps {
 }
 
 function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState(false)
+  const [matches, setMatches] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(query).matches
+  )
 
   useEffect(() => {
     const mql = window.matchMedia(query)
-    setMatches(mql.matches)
 
     function handleChange(e: MediaQueryListEvent) {
       setMatches(e.matches)

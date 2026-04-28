@@ -80,13 +80,37 @@ export function ProductForm({ mode, productId, tree, initial }: ProductFormProps
   }, [name, slug])
 
   useEffect(() => {
-    if (!categoryId) { setTemplate(null); return }
     let cancelled = false
-    setLoadingTemplate(true)
+    let finished = false
+    let syncTimer: ReturnType<typeof window.setTimeout> | null = null
+
+    if (!categoryId) {
+      syncTimer = window.setTimeout(() => {
+        if (!cancelled) {
+          setTemplate(null)
+          setLoadingTemplate(false)
+        }
+      }, 0)
+      return () => {
+        cancelled = true
+        if (syncTimer !== null) window.clearTimeout(syncTimer)
+      }
+    }
+
+    syncTimer = window.setTimeout(() => {
+      if (!cancelled && !finished) setLoadingTemplate(true)
+    }, 0)
+
     getSpecTemplate(categoryId)
       .then((data) => { if (!cancelled) setTemplate(data) })
-      .finally(() => { if (!cancelled) setLoadingTemplate(false) })
-    return () => { cancelled = true }
+      .finally(() => {
+        finished = true
+        if (!cancelled) setLoadingTemplate(false)
+      })
+    return () => {
+      cancelled = true
+      if (syncTimer !== null) window.clearTimeout(syncTimer)
+    }
   }, [categoryId])
 
   const hasFilledSpecs = Object.values(specs).some(

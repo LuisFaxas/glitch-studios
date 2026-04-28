@@ -19,8 +19,6 @@ import {
 import type {
   ClientRecord,
   ClientDetail,
-  ClientDetailOrder,
-  ClientDetailBooking,
 } from "@/actions/admin-clients"
 import { getClientDetail } from "@/actions/admin-clients"
 
@@ -73,14 +71,36 @@ export function ClientDetailSheet({
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    let cancelled = false
+    let syncTimer: ReturnType<typeof window.setTimeout> | null = null
+
     if (client && open) {
-      setLoading(true)
+      syncTimer = window.setTimeout(() => {
+        if (!cancelled) setLoading(true)
+      }, 0)
+
       getClientDetail(client.id)
-        .then((d) => setDetail(d))
-        .catch(() => setDetail(null))
-        .finally(() => setLoading(false))
+        .then((d) => {
+          if (!cancelled) setDetail(d)
+        })
+        .catch(() => {
+          if (!cancelled) setDetail(null)
+        })
+        .finally(() => {
+          if (!cancelled) setLoading(false)
+        })
     } else {
-      setDetail(null)
+      syncTimer = window.setTimeout(() => {
+        if (!cancelled) {
+          setDetail(null)
+          setLoading(false)
+        }
+      }, 0)
+    }
+
+    return () => {
+      cancelled = true
+      if (syncTimer !== null) window.clearTimeout(syncTimer)
     }
   }, [client, open])
 

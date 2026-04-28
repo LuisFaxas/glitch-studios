@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { useQueryState, parseAsString } from "nuqs"
 import { Search } from "lucide-react"
 
@@ -10,10 +10,19 @@ export function BeatSearch() {
     parseAsString.withOptions({ shallow: false })
   )
   const [localValue, setLocalValue] = useState(query ?? "")
+  const localValueRef = useRef(localValue)
+
+  useEffect(() => {
+    localValueRef.current = localValue
+  }, [localValue])
 
   // Sync external query changes to local state
   useEffect(() => {
-    setLocalValue(query ?? "")
+    const nextValue = query ?? ""
+    if (localValueRef.current === nextValue) return
+
+    const timer = window.setTimeout(() => setLocalValue(nextValue), 0)
+    return () => window.clearTimeout(timer)
   }, [query])
 
   // Debounced update to URL

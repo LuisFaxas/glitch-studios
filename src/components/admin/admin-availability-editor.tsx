@@ -32,7 +32,6 @@ import {
   TableCell,
 } from "@/components/ui/table"
 import { toast } from "sonner"
-import type { RoomInfo } from "@/types/booking"
 
 interface RoomRow {
   id: string
@@ -92,11 +91,17 @@ export function AdminAvailabilityEditor({ rooms }: { rooms: RoomRow[] }) {
 
   useEffect(() => {
     if (!selectedRoomId) return
-    setIsLoading(true)
+    let cancelled = false
+    let finished = false
+    const loadingTimer = window.setTimeout(() => {
+      if (!cancelled && !finished) setIsLoading(true)
+    }, 0)
+
     Promise.all([
       getWeeklySchedule(selectedRoomId),
       getOverrides(selectedRoomId),
     ]).then(([weeklyData, overrideData]) => {
+      if (cancelled) return
       if (weeklyData.length > 0) {
         setSchedule(
           DAY_NAMES.map((_, i) => {
@@ -115,8 +120,15 @@ export function AdminAvailabilityEditor({ rooms }: { rooms: RoomRow[] }) {
         setSchedule([...DEFAULT_SCHEDULE])
       }
       setOverrides(overrideData as Override[])
-      setIsLoading(false)
+    }).finally(() => {
+      finished = true
+      if (!cancelled) setIsLoading(false)
     })
+
+    return () => {
+      cancelled = true
+      window.clearTimeout(loadingTimer)
+    }
   }, [selectedRoomId])
 
   function updateDay(dayOfWeek: number, field: keyof DaySchedule, value: string | boolean) {

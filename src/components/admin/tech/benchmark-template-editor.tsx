@@ -52,7 +52,11 @@ export function BenchmarkTemplateEditor({
 
   useEffect(() => {
     let cancelled = false
-    setLoading(true)
+    let finished = false
+    const loadingTimer = window.setTimeout(() => {
+      if (!cancelled && !finished) setLoading(true)
+    }, 0)
+
     getBenchmarkTemplate(categoryId)
       .then((data) => {
         if (cancelled) return
@@ -66,8 +70,14 @@ export function BenchmarkTemplateEditor({
           }))
         )
       })
-      .finally(() => { if (!cancelled) setLoading(false) })
-    return () => { cancelled = true }
+      .finally(() => {
+        finished = true
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+      window.clearTimeout(loadingTimer)
+    }
   }, [categoryId])
 
   const addTest = () => setTests((prev) => [...prev, makeEmpty()])
