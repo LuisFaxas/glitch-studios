@@ -4,6 +4,8 @@
 
 **Process note:** This requirements list is **seed-only**. Concrete per-page requirements (POLISH-*) are populated from Phase 22's visual audit. REQ-IDs get allocated as the audit captures issues.
 
+**Audit coverage (2026-04-28):** `.planning/v4.0-MILESTONE-AUDIT.md` found `gaps_found` with 6/86 strict three-source requirements satisfied. Gap closure phases 47-48 now own missing verification/state repair and launch-blocker proof. Existing planned phases 35, 36, 40, and 46 still own blog, flagship/trailer, polish, and deploy requirements.
+
 ---
 
 ## v4.0 Requirements (Active)
@@ -51,25 +53,25 @@
 - [x] **AUTH-11** `/register?role=artist` renders `<ArtistRequestForm>` — single page, on-page success state.
 - [x] **AUTH-12** New Drizzle table `artistApplication` (uuid pk, brand, name, email, bio, portfolioUrl, focusTags jsonb, status enum, submittedAt, reviewedAt, reviewedBy fk, reviewerNote).
 - [x] **AUTH-13** Artist request form: same shape both brands; brand auto-set from host. Studios = genre tags; Tech = focus areas. Stored in `focusTags` jsonb.
-- [x] **AUTH-14** New admin page `/admin/applications` with list + detail drawer + Approve / Reject / Request more info actions.
-- [x] **AUTH-15** Approve flow: creates `user` row (`emailVerified=true`, role 'artist' or 'contributor'), sets application status='approved', triggers Better Auth password-reset-style invite email.
-- [x] **AUTH-16** Reject flow: silent (no applicant email). Reviewer note is internal-only.
-- [x] **AUTH-17** Request-more-info flow: status='info_requested', sends admin-composed email via Resend; status returns to 'pending' on applicant reply (manual triage).
-- [x] **AUTH-18** New admin notification email on every artist-application submission (`ADMIN_NOTIFICATION_EMAIL` env, fallback to studio inbox).
-- [x] **AUTH-19** New email template `artist-approval-invite.tsx` under `src/lib/email/` reusing Phase 24 layout.
-- [x] **AUTH-20** Social login row: 3 OAuth buttons (Google / Meta / GitHub) above email/password on `/login` and `/register?role=customer`.
-- [x] **AUTH-21** Google live end-to-end on both brand hosts at v4.0 launch. Meta + GitHub plugins wired in code; buttons hide entirely if env vars missing.
-- [x] **AUTH-22** Better Auth `socialProviders` block in `src/lib/auth.ts`. Callback `/api/auth/callback/{provider}`. Env: `GOOGLE_CLIENT_ID/SECRET`, `META_CLIENT_ID/SECRET`, `GITHUB_CLIENT_ID/SECRET`.
+- [ ] **AUTH-14** New admin page `/admin/applications` with list + detail drawer + Approve / Reject / Request more info actions.
+- [ ] **AUTH-15** Approve flow: creates `user` row (`emailVerified=true`, role 'artist' or 'contributor'), sets application status='approved', triggers Better Auth password-reset-style invite email.
+- [ ] **AUTH-16** Reject flow: silent (no applicant email). Reviewer note is internal-only.
+- [ ] **AUTH-17** Request-more-info flow: status='info_requested', sends admin-composed email via Resend; status returns to 'pending' on applicant reply (manual triage).
+- [ ] **AUTH-18** New admin notification email on every artist-application submission (`ADMIN_NOTIFICATION_EMAIL` env, fallback to studio inbox).
+- [ ] **AUTH-19** New email template `artist-approval-invite.tsx` under `src/lib/email/` reusing Phase 24 layout.
+- [ ] **AUTH-20** Social login row: 3 OAuth buttons (Google / Meta / GitHub) above email/password on `/login` and `/register?role=customer`.
+- [ ] **AUTH-21** Google live end-to-end on both brand hosts at v4.0 launch. Meta + GitHub plugins wired in code; buttons hide entirely if env vars missing.
+- [ ] **AUTH-22** Better Auth `socialProviders` block in `src/lib/auth.ts`. Callback `/api/auth/callback/{provider}`. Env: `GOOGLE_CLIENT_ID/SECRET`, `META_CLIENT_ID/SECRET`, `GITHUB_CLIENT_ID/SECRET`.
 - [x] **AUTH-23** `accountLinking.enabled: false` for v4.0. Conflict copy directs user to existing-method sign-in.
 - [x] **AUTH-24** Social-signup T&Cs: inline microcopy "By continuing, you agree to the Terms and Privacy Policy." Newsletter defaults FALSE for OAuth signups.
 - [x] **AUTH-25** New SVGs `GoogleIcon`, `MetaIcon`, `GitHubIcon` in `src/components/icons/social-icons.tsx`.
-- [x] **AUTH-26** Email-verification soft gate at the layout level. Authenticated unverified users redirected from any page EXCEPT `/verify-email`, `/api/auth/*`, sign-out.
+- [ ] **AUTH-26** Email-verification soft gate at the layout level. Authenticated unverified users redirected from any page EXCEPT `/verify-email`, `/api/auth/*`, sign-out.
 - [x] **AUTH-27** `/verify-email` route: pending / success / expired states resolved server-side by token validity. All states share AuthShell.
-- [x] **AUTH-28** Grandfather migration: one-shot SQL update sets `user.emailVerified = true` for users created BEFORE Phase 26 deploy. Drizzle migration with re-run guard.
-- [x] **AUTH-29** Branded `forgot-password` + `reset-password` end-to-end pass. Phase 24 template reused.
+- [ ] **AUTH-28** Grandfather migration: one-shot SQL update sets `user.emailVerified = true` for users created BEFORE Phase 26 deploy. Drizzle migration with re-run guard.
+- [ ] **AUTH-29** Branded `forgot-password` + `reset-password` end-to-end pass. Phase 24 template reused.
 - [x] **AUTH-30** `src/app/(auth)/layout.tsx` becomes server component reading `host` from `next/headers` and rendering `<div data-brand={brand}>`. Default 'studios' for unknown hosts. Mirrors middleware fall-through.
 - [x] **AUTH-31** All page H1s wrap `<HoverGlitchHeading>`. Hover-only; never auto-runs. Reduced-motion honored.
-- [x] **AUTH-32** `pnpm tsc --noEmit` and `pnpm lint` pass. Manual Playwright pass: both brand hosts × 5 auth surfaces × Google end-to-end.
+- [ ] **AUTH-32** `pnpm tsc --noEmit` and `pnpm lint` pass. Manual Playwright pass: both brand hosts × 5 auth surfaces × Google end-to-end.
 
 ### GlitchMark (GLITCHMARK-*) — New Feature
 
@@ -165,35 +167,38 @@
 
 ## Traceability
 
-*Phases 23-46 derived from Phase 22 audit output (committed 2026-04-24).*
+*Phases 23-48 derived from Phase 22 audit output and v4.0 milestone audit gaps.*
 
-| REQ-ID | Category | Phase |
-|--------|----------|-------|
-| AUDIT-01 through AUDIT-04 | Audit | **22** (complete) |
-| EMAIL-01 through EMAIL-08 | Email | **24** |
-| PERF-01 through PERF-07 | Performance | **25** |
-| AUTH-01 through AUTH-32 | Auth UI | **26** |
-| (media foundation, no REQ-IDs yet — derived from pivots #2, #9) | Media/Video | **27** |
-| GLITCHMARK-01 through GLITCHMARK-08 | GlitchMark | **28** |
-| RANK-01 through RANK-07 | Leaderboard | **29** |
-| (per-benchmark pages, no REQ-IDs yet — derived from B.9 IA) | Per-benchmark lens | **30** |
-| (category editorial reframe, no REQ-IDs yet — derived from B.5) | Category editorial | **31** |
-| (artist platform, no REQ-IDs yet — derived from pivot #10 Wave 1) | Artist BETA | **32** |
-| (licensing model, no REQ-IDs yet — derived from pivot #7) | Licensing | **33** |
-| (custom beats + services, no REQ-IDs yet — derived from pivots #1, #8) | Custom Beats + Services | **34** |
-| BLOG-01 through BLOG-05 | Blog | **35** |
-| FLAG-01 through FLAG-04 | Flagship review | **36** |
-| VIDEO-01 through VIDEO-02 | Trailer videos | **36** (bundled with flagship) |
-| (mobile-native sweep, no REQ-IDs yet — derived from pivots #12, #22) | Mobile native feel | **37** |
-| (GlitchTech polish, no REQ-IDs yet — derived from pivots #13, #15, #16) | GlitchTech polish | **38** |
-| (admin list pattern, no REQ-IDs yet — derived from pivot #21) | Admin list pattern | **39** |
-| POLISH-* | Public per-page polish | **40** |
-| (affiliate marketing, no REQ-IDs yet — derived from pivot #14) | Affiliate marketing | **41** |
-| (AI agents discovery, no REQ-IDs yet — derived from pivot #19) | AI agents discovery | **42** |
-| (AI agents impl + newsletter automation, no REQ-IDs yet — pivots #19, #24) | AI agents impl | **43** |
-| (Glitchy mascot, no REQ-IDs yet — derived from pivot #25) | Glitchy 3D mascot | **44** |
-| (SEO infrastructure, no REQ-IDs yet — derived from pivot #17) | SEO | **45** |
-| DEPLOY-01 through DEPLOY-09 | Deploy hardening | **46** |
+| REQ-ID | Category | Phase | Status |
+|--------|----------|-------|--------|
+| AUDIT-01 through AUDIT-04 | Audit verification closure | **47** (source phase 22) | Pending |
+| EMAIL-01 through EMAIL-08 | Email launch proof | **48** (source phase 24) | Pending |
+| PERF-01 through PERF-07 | Performance launch proof | **48** (source phase 25) | Pending |
+| AUTH-01 through AUTH-13, AUTH-23 through AUTH-25, AUTH-27, AUTH-30 through AUTH-31 | Auth UI implementation | **26** | Complete |
+| AUTH-14 through AUTH-22, AUTH-26, AUTH-28, AUTH-29, AUTH-32 | Auth launch proof | **48** | Pending |
+| (media foundation, no REQ-IDs yet — derived from pivots #2, #9) | Media/Video | **27** | Complete |
+| GLITCHMARK-01 through GLITCHMARK-03, GLITCHMARK-06 through GLITCHMARK-08 | GlitchMark core | **28** | Complete |
+| GLITCHMARK-04 | GlitchMark leaderboard surface | **29** | Complete |
+| GLITCHMARK-05 | GlitchMark review detail surface | **36** | Pending |
+| RANK-01 through RANK-07 | Leaderboard | **29** | Complete |
+| (per-benchmark pages, no REQ-IDs yet — derived from B.9 IA) | Per-benchmark lens | **30** | Complete |
+| (category editorial reframe, no REQ-IDs yet — derived from B.5) | Category editorial | **31** | Pending |
+| (artist platform, no REQ-IDs yet — derived from pivot #10 Wave 1) | Artist BETA | **32** | Pending |
+| (licensing model, no REQ-IDs yet — derived from pivot #7) | Licensing | **33** | Pending |
+| (custom beats + services, no REQ-IDs yet — derived from pivots #1, #8) | Custom Beats + Services | **34** | Pending |
+| BLOG-01 through BLOG-05 | Blog | **35** | Pending |
+| FLAG-01 through FLAG-04 | Flagship review | **36** | Pending |
+| VIDEO-01 through VIDEO-02 | Trailer videos | **36** (bundled with flagship) | Pending |
+| (mobile-native sweep, no REQ-IDs yet — derived from pivots #12, #22) | Mobile native feel | **37** | Pending |
+| (GlitchTech polish, no REQ-IDs yet — derived from pivots #13, #15, #16) | GlitchTech polish | **38** | Pending |
+| (admin list pattern, no REQ-IDs yet — derived from pivot #21) | Admin list pattern | **39** | Pending |
+| POLISH-* | Public per-page polish | **40** | Pending |
+| (affiliate marketing, no REQ-IDs yet — derived from pivot #14) | Affiliate marketing | **41** | Pending |
+| (AI agents discovery, no REQ-IDs yet — derived from pivot #19) | AI agents discovery | **42** | Pending |
+| (AI agents impl + newsletter automation, no REQ-IDs yet — pivots #19, #24) | AI agents impl | **43** | Pending |
+| (Glitchy mascot, no REQ-IDs yet — derived from pivot #25) | Glitchy 3D mascot | **44** | Pending |
+| (SEO infrastructure, no REQ-IDs yet — derived from pivot #17) | SEO | **45** | Pending |
+| DEPLOY-01 through DEPLOY-09 | Deploy hardening | **46** | Pending |
 
 **Note:** Phase-specific REQ-IDs (auth, media, artist, licensing, custom-beats, mobile, polish, admin, affiliate, AI, Glitchy, SEO) get generated during each phase's `/gsd:discuss-phase` step before planning. The seeded requirements above (EMAIL, PERF, GLITCHMARK, RANK, FLAG, BLOG, VIDEO, POLISH, DEPLOY) were already defined when v4.0 milestone was initialized.
 

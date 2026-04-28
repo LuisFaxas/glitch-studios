@@ -82,6 +82,38 @@ See `.planning/milestones/v2.0-ROADMAP.md`
 - [ ] **Phase 45: SEO + Growth Infrastructure** — structured data on all surfaces, meta/OG per route, per-brand sitemaps, canonical URLs, internal linking sweep, Core Web Vitals, rich results validation
 - [ ] **Phase 46: Production Deploy Hardening** — glitchtech.io custom domain + SSL, UAT admin cleanup (DEPLOY-05), env audit, error tracking (Sentry), analytics, backup verification, 301 www→apex — DEPLOY-01..09
 
+**🧯 Audit gap closure:**
+- [ ] **Phase 47: Verification Backfill + Planning State Repair** — create missing phase-level VERIFICATION.md artifacts for 22/23/24/25/29.1/29.3, reconcile ROADMAP.md + STATE.md drift, close 29.3 roadmap state, and normalize requirement evidence against `.planning/v4.0-MILESTONE-AUDIT.md`.
+- [ ] **Phase 48: Launch Blocker Proof Pass** — close the launch-blocker proof gaps called out by the milestone audit: Resend/domain deliverability, auth/OAuth/admin-invite smoke, mobile checkout purchase proof, and performance evidence for PERF-03/04/06.
+
+#### Phase 47: Verification Backfill + Planning State Repair
+
+**Goal:** Repair audit-blocking planning/evidence drift so the milestone has trustworthy phase-level verification artifacts and current state before the next completion audit.
+
+**Requirements:** AUDIT-01..04 evidence normalization; RANK-01..07 evidence normalization; 29.3 filter recovery phase close-state.
+
+**Gap Closure:** Closes missing phase-level verification artifacts for phases 22, 23, 24, 25, 29.1, and 29.3; reconciles `STATE.md` saying "Milestone complete" while the roadmap still has unchecked scope; updates ROADMAP/REQUIREMENTS traceability as needed.
+
+**Tasks:**
+1. Write phase-level verification reports for 22, 23, 24, 25, 29.1, and 29.3 from existing summaries and evidence, marking remaining blockers explicitly where they are not functionally closed.
+2. Mark Phase 29.3 complete in ROADMAP only if 29.3 phase-level verification confirms the 29.3-06 user macOS pass is sufficient.
+3. Reconcile `STATE.md` with actual current focus and roadmap status.
+4. Re-run audit evidence extraction to confirm missing-verification gaps are either closed or intentionally carried to Phase 48.
+
+#### Phase 48: Launch Blocker Proof Pass
+
+**Goal:** Turn the launch-blocker cluster from "implemented or partially implemented" into verified end-to-end production-ready flows.
+
+**Requirements:** EMAIL-01..08, PERF-01..07, AUTH-14..22, AUTH-26, AUTH-28, AUTH-29, AUTH-32.
+
+**Gap Closure:** Closes the audit's critical launch-flow gaps: Resend DNS/domain verification; password reset and email verification smoke; Google OAuth on both brands; artist request approval/invite smoke; mobile checkout test-card purchase on the original failing device path; public route cold-nav, mobile LCP, and bundle evidence.
+
+**Tasks:**
+1. Complete Resend domain setup and DNS verification for both brands, then smoke password reset, verification email, booking/order/contact/newsletter sends.
+2. Complete auth launch smoke: Google OAuth on both brands, unverified-user soft gate, grandfather migration, admin application approve/reject/request-info flows, and invite email delivery.
+3. Verify mobile checkout end-to-end on real iOS Safari and desktop with a Stripe test-card purchase; fix any diagnosed runtime/env issue.
+4. Capture performance evidence for PERF-03, PERF-04, and PERF-06, and fold any small fixes needed for the launch threshold into this phase.
+
 #### Phase 26: Brand-Aware Auth UI Redesign
 
 **Goal:** Replace the generic email+password auth surfaces (login, register, forgot-password, reset-password, verify-email) with brand-aware, production-grade flows that theme by host (`glitchstudios.io` vs `glitchtech.io`), split registration by role (customer wizard vs artist request), and add social login (Google + Meta + GitHub). Auth must feel like a real product on both brands, not a scaffold.

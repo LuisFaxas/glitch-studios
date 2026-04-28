@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
-status: Milestone complete
-stopped_at: Phase 30 UI-SPEC approved
-last_updated: "2026-04-28T00:12:08.350Z"
+status: Gap closure planned
+stopped_at: Phase 47 ready for planning
+last_updated: "2026-04-28T01:07:54.025Z"
 last_activity: 2026-04-28
 progress:
   total_phases: 6
@@ -20,30 +20,31 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 
 **Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience. Tech readers trust GlitchTech's hardware scorecards.
-**Current focus:** Phase 30 — per-benchmark-pages
+**Current focus:** Phase 47 — verification backfill + planning state repair
 
 ## Current Position
 
-Phase: 30
+Phase: 47
 Plan: Not started
-Plans: 6 plans, 6 summaries (01 passed, 02 skipped, 03 passed, 04 passed, 05 failed_superseded, 06 passed)
-Filter UI ships visible on `/tech/rankings/laptops` — verified on real macOS Safari + Firefox.
-Next phase: 29.2 — Site-Wide Hero Rollout + Methodology Editorial Upgrade (10 plans drafted, 0 executed)
+Gap closure phases 47-48 were added after `.planning/v4.0-MILESTONE-AUDIT.md` returned `gaps_found`.
+Next phase: 47 — Verification Backfill + Planning State Repair.
 
-**Root cause identified 2026-04-27T00:48Z (commit 6af8177):** Native pointer/style feedback loop on synchronous React state updates inside native input event handlers. Codex reproduced locally on headless Chromium with real-mouse input. Fix defers `setFilters` + `setOpen` via `setTimeout(0)` out of the native-event task. Verified Codex-side on Chromium + Firefox + WebKit. Awaiting real macOS retest.
+Phase 30 is complete and verified. Phase 29.3 Plan 06 passed real macOS Safari + Firefox, but still needs phase-level close-state repair in Phase 47.
 
-Post-root-cause gating commits: `6af8177` (root cause), `12214c7` (price slider commit-on-release), `ba1e747` (PriceRangeSlider replaces Base UI Slider, defer mobile sheet open), `c9d8c60` (cross-engine timeline test). Uncommitted: `bpr-medal.tsx` (Tooltip → native title), `leaderboard-table.tsx`, `leaderboard-filter-sidebar.tsx` (lifecycle close handler).
+**Root cause identified 2026-04-27T00:48Z (commit 6af8177):** Native pointer/style feedback loop on synchronous React state updates inside native input event handlers. Codex reproduced locally on headless Chromium with real-mouse input. Fix defers `setFilters` + `setOpen` via `setTimeout(0)` out of the native-event task. User verified the final 29.3-06 preview on real macOS Safari + Firefox; Phase 47 needs to promote that plan-level pass into phase-level close artifacts.
+
+Post-root-cause gating commits: `6af8177` (root cause), `12214c7` (price slider commit-on-release), `ba1e747` (PriceRangeSlider replaces Base UI Slider, defer mobile sheet open), `c9d8c60` (cross-engine timeline test), and the 29.3-06 gating/docs commits recorded in `29.3-06-VERIFICATION.md`.
 
 Active debug session: .planning/debug/filter-chip-crash-mac-browsers.md (Current Focus updated to native-event hypothesis; historical image/drop-shadow/min-width hypotheses retained below as superseded).
-Phase 29.2 (Site-Wide Hero Rollout) gated on Plan 06 macOS verification result.
+Phase 29.2 (Site-Wide Hero Rollout) shipped after the 29.3-06 macOS verification pass.
 
 Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to ROADMAP. 10 production bugs caught (6 auth fixed live during audit; 4 broken admin pages + mobile checkout + mobile nav + /forgot-password routes + /about bundled into Phase 23 debug).
 
 **2026-04-27 audit (.planning/audit-screenshots/2026-04-27/AUDIT-FINDINGS.md):**
 
 - Dev server (`pnpm dev` :3010) renders `/tech/rankings/laptops` clean on desktop + mobile, 4/4 Playwright visual tests pass with zero console/page errors
-- Filter UI is **rendering** in working tree (`<LeaderboardFilters>` + `<LeaderboardFilterSheet>` mounted) — STATE note about it being hidden is now stale
-- Uncommitted Phase 29.3 closure: `leaderboard-table.tsx (+173/-69)`, `leaderboard-filter-sidebar.tsx (+26/-9)`, plus a new audit test
+- Filter UI is **rendering** in working tree (`<LeaderboardFilters>` + `<LeaderboardFilterSheet>` mounted) and passed the 29.3-06 real macOS verification path.
+- Phase 29.3 still needs ROADMAP checkbox and phase-level verification reconciliation in Phase 47.
 - 🚨 Local prod (`pm2 glitch_studios_prod` :3004) has a missing build chunk and is misleading any visual check against it. Fix: `pnpm build && pm2 restart glitch_studios_prod`. Vercel prod unaffected.
 - Visual flags for human review: BPR medal `1%` suffix consistency, GlitchMark Acer row outlier (8,400 vs 800–1200 cluster)
 
@@ -167,7 +168,7 @@ Recent decisions affecting current work:
 - Phase 07.6 inserted after Phase 7: Reviews display & comparison tables (INSERTED) — Public review page template with YouTube embed, comparison tables with Recharts.
 - v3.0 Milestone started: Phases 15-21 added (2026-04-20) — GlitchTek Launch: methodology lock, JSONL ingest, BPR medal, category leaderboard, flagship review, tech blog, deploy hardening.
 - Phase 29.1 inserted after Phase 29 (2026-04-26): Master Leaderboard Polish (INSERTED) — top-level /tech/rankings route + sidebar nav button next to Blog, hero sections on rankings + category pages, horizontal-scroll fix, filter UI rework, mobile view toggle, GlitchMark scale display revisit. Sequential execution with Playwright verification per task. From user UAT immediately after Phase 29 ship.
-- Phase 29.3 inserted after Phase 29.2 (2026-04-26): Rebuild Leaderboard Filter (URGENT). Filter chip clicks on `/tech/rankings/laptops` crashed macOS Safari + Firefox tabs across 15+ deploy attempts that addressed sticky cells, mix-blend-mode layers, framer-motion, Base UI Popover, Tooltip portals, startTransition, BottomTabBar prefetch, Footer 404 RSC prefetches, drop-shadow GPU layer, and image decode cost. Atomic fix: filter UI is currently HIDDEN in `leaderboard-table.tsx` so the page is usable. Phase 29.3 = proper rebuild with constraints (no URL state, no Base UI, no framer-motion, bounded DOM mutations, cross-engine Playwright tests on Webkit + Firefox). Investigation artifact: `.planning/debug/filter-chip-crash-mac-browsers.md`. Re-enable filter render in `leaderboard-table.tsx` when phase ships.
+- Phase 29.3 inserted after Phase 29.2 (2026-04-26): Reduce Filter-Path GPU Baseline + Re-Enable Filter (URGENT). Filter chip clicks on `/tech/rankings/laptops` crashed macOS Safari + Firefox tabs across 15+ deploy attempts. Final 29.3-06 verification passed on real macOS Safari + Firefox; investigation artifact: `.planning/debug/filter-chip-crash-mac-browsers.md`. Phase 47 needs to reconcile stale roadmap/state artifacts and write phase-level verification.
 
 ### Pending Todos
 
