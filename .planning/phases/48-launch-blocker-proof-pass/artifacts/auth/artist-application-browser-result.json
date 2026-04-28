@@ -1,0 +1,55 @@
+{
+  "capturedAt": "2026-04-28T09:27:45.130Z",
+  "results": [
+    {
+      "host": "glitchstudios.io",
+      "path": "/register/artist",
+      "requestedUrl": "https://glitchstudios.io/register/artist",
+      "initialStatus": 200,
+      "finalUrl": "https://glitchstudios.io/register/artist",
+      "applicantName": "Phase 48 Studios 20260428092741",
+      "applicantEmail": "phase48-studios-20260428092741@example.com",
+      "selectedTag": "Hip-hop",
+      "terminalText": "request received",
+      "screenshots": {
+        "before": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchstudios-io-artist-application-before-submit.png",
+        "after": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchstudios-io-artist-application-submitted.png"
+      },
+      "responseStatuses": [
+        {
+          "url": "https://glitchstudios.io/register/artist",
+          "status": 200
+        },
+        {
+          "url": "https://glitchstudios.io/register/artist",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "host": "glitchtech.io",
+      "path": "/register/artist",
+      "requestedUrl": "https://glitchtech.io/register/artist",
+      "initialStatus": 200,
+      "finalUrl": "https://glitchtech.io/register/artist",
+      "applicantName": "Phase 48 Tech 20260428092741",
+      "applicantEmail": "phase48-tech-20260428092741@example.com",
+      "selectedTag": "CPUs",
+      "terminalText": "request received",
+      "screenshots": {
+        "before": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchtech-io-artist-application-before-submit.png",
+        "after": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchtech-io-artist-application-submitted.png"
+      },
+      "responseStatuses": [
+        {
+          "url": "https://glitchtech.io/register/artist",
+          "status": 200
+        },
+        {
+          "url": "https://glitchtech.io/register/artist",
+          "status": 200
+        }
+      ]
+    }
+  ]
+}

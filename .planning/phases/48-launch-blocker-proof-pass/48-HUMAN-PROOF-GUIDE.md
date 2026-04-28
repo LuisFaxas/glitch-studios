@@ -9,6 +9,9 @@ Performance proof is complete. You do not need to gather Vercel Speed Insights o
 Desktop Stripe checkout proof is complete. You do not need to run the desktop
 test-card path again unless you want to spot-check it personally.
 
+Auth page/browser smoke and grandfather migration DB proof are captured. Google
+OAuth and admin review actions are not launch-passed yet.
+
 Completed files:
 
 - `artifacts/perf/perf-evidence-matrix.md`
@@ -16,6 +19,8 @@ Completed files:
 - `48-05-SUMMARY.md`
 - `artifacts/checkout/mobile-checkout-proof.md` (desktop row passed, iOS row blocked)
 - `artifacts/checkout/desktop-checkout-stripe-db-proof.json`
+- `artifacts/auth/auth-smoke-matrix.md`
+- `artifacts/auth/grandfather-migration.md`
 
 ## Remaining 1: Email Smoke On The Single Verified Resend Domain
 
@@ -49,7 +54,33 @@ Useful official docs:
 - Resend DMARC: https://resend.com/docs/dashboard/domains/dmarc
 - Cloudflare DNS records: https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/
 
-## Remaining 2: Real iOS Safari Checkout
+## Remaining 2: Auth/OAuth/Admin Proof
+
+You need access to:
+
+- Vercel Production env or another deployment env manager
+- Google Cloud Console OAuth credentials
+- A production admin account
+- Resend dashboard and applicant/test inboxes
+
+Current auth blockers:
+
+- `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are missing in Vercel
+  Production, so Google OAuth is hidden and cannot pass.
+- Google Cloud Console redirect URIs still need dashboard confirmation for:
+  - `https://glitchstudios.io/api/auth/callback/google`
+  - `https://glitchtech.io/api/auth/callback/google`
+- Admin application approve/reject/request-more-info needs a real admin login.
+- Invite, request-more-info, reset, and verification email flows need Resend
+  event IDs plus inbox/link proof.
+
+Codex can then update:
+
+- `artifacts/auth/oauth-env-redirects.md`
+- `artifacts/auth/auth-smoke-matrix.md`
+- `artifacts/auth/admin-application-smoke.md`
+
+## Remaining 3: Real iOS Safari Checkout
 
 You need:
 
@@ -86,6 +117,10 @@ Useful official docs:
 After an email smoke test is complete:
 
 > I tested [flow] at [time]. Resend event/screenshot is [id/name]. Inbox result was [result]. Link result was [result].
+
+After Google OAuth/admin proof is ready:
+
+> I configured Google OAuth/admin access. Test it now.
 
 After iOS checkout is complete:
 

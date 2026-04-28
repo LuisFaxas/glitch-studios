@@ -1,0 +1,281 @@
+{
+  "capturedAt": "2026-04-28T09:26:37.975Z",
+  "results": [
+    {
+      "host": "glitchstudios.io",
+      "path": "/login",
+      "requestedUrl": "https://glitchstudios.io/login",
+      "finalUrl": "https://glitchstudios.io/login",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "WELCOME BACK\nWELCOME BACK\nWELCOME BACK\nEMAIL\nPASSWORD\nSign In\n\nForgot your password?\n\nNew here? Create an account",
+      "buttonLabels": [
+        "Sign In",
+        "Forgot your password?",
+        "Create an account"
+      ],
+      "screenshot": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchstudios-io-login.png"
+    },
+    {
+      "host": "glitchstudios.io",
+      "path": "/register?role=customer",
+      "requestedUrl": "https://glitchstudios.io/register?role=customer",
+      "finalUrl": "https://glitchstudios.io/register?role=customer",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "JOIN THE STUDIO\nJOIN THE STUDIO\nJOIN THE STUDIO\nMEMBER\nI'M IN!\n\nOne account. Studio time, beats, receipts — all in one place.\n\nBrowse and license beats\nBook studio sessions\nTrack orders and downloads\nCONTINUE →\nARTIST\nSHOW OFF!\n\nWe build the roster slowly. Bring your A material.\n\nUpload beats\nGrow a producer roster\nEarn from licenses\nCONTINUE →\n\nAlready have an account? Sign in",
+      "buttonLabels": [
+        "ACCESS LVL ░ 01Member01I'M IN.«ONE ACCOUNT · STUDIO · BEATS · RECEIPTS»BOOK ROOMS · STREAM DROPS · OWN MASTERSN° 0001PUNCH IN →",
+        "MemberI'm in!One account. Studio time, beats, receipts — all in one place.Browse and license beatsBook studio sessionsTrack orders and downloadsContinue →",
+        "ACCESS LVL ░ 02Artist02SHOW OFF.«ROSTER · CATALOG · ROYALTIES»UPLOAD BEATS · GROW ROSTER · EARN LICENSESN° 0002AUDITION →",
+        "ArtistShow off!We build the roster slowly. Bring your A material.Upload beatsGrow a producer rosterEarn from licensesContinue →",
+        "Sign in"
+      ],
+      "screenshot": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchstudios-io-register-role-customer.png"
+    },
+    {
+      "host": "glitchstudios.io",
+      "path": "/register/customer",
+      "requestedUrl": "https://glitchstudios.io/register/customer",
+      "finalUrl": "https://glitchstudios.io/register/customer",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "JOIN THE STUDIO\nJOIN THE STUDIO\nJOIN THE STUDIO\nMEMBER BENEFITS\nWHAT YOU GET WITH A GLITCH ACCOUNT\nLicense the catalog\nBrowse, preview, and license beats in any tier — MP3 lease through exclusive.\nBook studio time\nReserve sessions, mixing, mastering, or video at the rooms that fit.\nOne place for everything\nReceipts, downloads, license PDFs, booking history — all under one login.\n1\nBEATS\n2\nROOMS\n0\nSPAM EMAILS\n\nSTEP 1 OF 3: IDENTITY\n\nCREATE YOUR ACCOUNT\n\nWe'll send a verification email before your account is active.\n\nNAME\nEMAIL\nPASSWORD\nContinue",
+      "buttonLabels": [
+        "Continue"
+      ],
+      "screenshot": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchstudios-io-register-customer.png"
+    },
+    {
+      "host": "glitchstudios.io",
+      "path": "/forgot-password",
+      "requestedUrl": "https://glitchstudios.io/forgot-password",
+      "finalUrl": "https://glitchstudios.io/forgot-password",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "FORGOT YOUR PASSWORD?\n\nEnter the email on your account. If we recognize it, we'll send a reset link.\n\nEMAIL\nSend reset link\n\nBack to sign in",
+      "buttonLabels": [
+        "Send reset link",
+        "Back to sign in"
+      ],
+      "screenshot": null
+    },
+    {
+      "host": "glitchstudios.io",
+      "path": "/reset-password",
+      "requestedUrl": "https://glitchstudios.io/reset-password",
+      "finalUrl": "https://glitchstudios.io/reset-password",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "SET A NEW PASSWORD\nThis reset link expired. Request a new one.\nSend a new link",
+      "buttonLabels": [
+        "Send a new link"
+      ],
+      "screenshot": null
+    },
+    {
+      "host": "glitchstudios.io",
+      "path": "/verify-email",
+      "requestedUrl": "https://glitchstudios.io/verify-email",
+      "finalUrl": "https://glitchstudios.io/verify-email",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "ALMOST THERE\nALMOST THERE\nALMOST THERE\nWHILE YOU WAIT\nWHAT'S HAPPENING BEHIND THE SCENES\nWe just sent the link\nShould land within 60 seconds. Check spam if it's not in inbox by then.\nClick it from any device\nSame browser, phone, work laptop — doesn't matter where you click.\nOne click and you're in\nAfter clicking, this page swaps to a confirmation and routes you home.\nAWAITING VERIFICATION\nCHECK YOUR INBOX\n\nWe sent a verification link to:\n\nyour email address\n\nSENT\nVerification email is on its way.\nYOU — CLICK THE LINK\nTap it from any device. The page will redirect when it lands.\nACCOUNT ACTIVE\n",
+      "buttonLabels": [],
+      "screenshot": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchstudios-io-verify-email.png"
+    },
+    {
+      "host": "glitchstudios.io",
+      "path": "/dashboard",
+      "requestedUrl": "https://glitchstudios.io/dashboard",
+      "finalUrl": "https://glitchstudios.io/login",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "WELCOME BACK\nWELCOME BACK\nWELCOME BACK\nEMAIL\nPASSWORD\nSign In\n\nForgot your password?\n\nNew here? Create an account",
+      "buttonLabels": [
+        "Sign In",
+        "Forgot your password?",
+        "Create an account"
+      ],
+      "screenshot": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchstudios-io-dashboard.png"
+    },
+    {
+      "host": "glitchstudios.io",
+      "path": "api checks",
+      "apiResults": [
+        {
+          "endpoint": "/api/auth/get-session",
+          "status": 200,
+          "ok": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "host": "glitchtech.io",
+      "path": "/login",
+      "requestedUrl": "https://glitchtech.io/login",
+      "finalUrl": "https://glitchtech.io/login",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "WELCOME BACK\nWELCOME BACK\nWELCOME BACK\nEMAIL\nPASSWORD\nSign In\n\nForgot your password?\n\nNew here? Create an account",
+      "buttonLabels": [
+        "Sign In",
+        "Forgot your password?",
+        "Create an account"
+      ],
+      "screenshot": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchtech-io-login.png"
+    },
+    {
+      "host": "glitchtech.io",
+      "path": "/register?role=customer",
+      "requestedUrl": "https://glitchtech.io/register?role=customer",
+      "finalUrl": "https://glitchtech.io/register?role=customer",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "JOIN GLITCHTECH\nJOIN GLITCHTECH\nJOIN GLITCHTECH\nMEMBER\nI'M IN!\n\nOne account. Studio time, beats, receipts — all in one place.\n\nBrowse and license beats\nBook studio sessions\nTrack orders and downloads\nCONTINUE →\nCONTRIBUTOR\nSHOW OFF!\n\nWe publish what holds up. Bring receipts.\n\nPublish reviews\nSubmit benchmark data\nBuild your contributor profile\nCONTINUE →\n\nAlready have an account? Sign in",
+      "buttonLabels": [
+        "ACCESS LVL ░ 01Member01I'M IN.«ONE ACCOUNT · STUDIO · BEATS · RECEIPTS»BOOK ROOMS · STREAM DROPS · OWN MASTERSN° 0001PUNCH IN →",
+        "MemberI'm in!One account. Studio time, beats, receipts — all in one place.Browse and license beatsBook studio sessionsTrack orders and downloadsContinue →",
+        "ACCESS LVL ░ 02Contributor02SHOW OFF.«BENCHMARKS · TEARDOWNS · BYLINES»PUBLISH REVIEWS · SUBMIT DATA · BUILD A BYLINEN° 0002AUDITION →",
+        "ContributorShow off!We publish what holds up. Bring receipts.Publish reviewsSubmit benchmark dataBuild your contributor profileContinue →",
+        "Sign in"
+      ],
+      "screenshot": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchtech-io-register-role-customer.png"
+    },
+    {
+      "host": "glitchtech.io",
+      "path": "/register/customer",
+      "requestedUrl": "https://glitchtech.io/register/customer",
+      "finalUrl": "https://glitchtech.io/register/customer",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "JOIN THE STUDIO\nJOIN THE STUDIO\nJOIN THE STUDIO\nMEMBER BENEFITS\nWHAT YOU GET WITH A GLITCH ACCOUNT\nLicense the catalog\nBrowse, preview, and license beats in any tier — MP3 lease through exclusive.\nBook studio time\nReserve sessions, mixing, mastering, or video at the rooms that fit.\nOne place for everything\nReceipts, downloads, license PDFs, booking history — all under one login.\n1\nBEATS\n2\nROOMS\n0\nSPAM EMAILS\n\nSTEP 1 OF 3: IDENTITY\n\nCREATE YOUR ACCOUNT\n\nWe'll send a verification email before your account is active.\n\nNAME\nEMAIL\nPASSWORD\nContinue",
+      "buttonLabels": [
+        "Continue"
+      ],
+      "screenshot": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchtech-io-register-customer.png"
+    },
+    {
+      "host": "glitchtech.io",
+      "path": "/forgot-password",
+      "requestedUrl": "https://glitchtech.io/forgot-password",
+      "finalUrl": "https://glitchtech.io/forgot-password",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "FORGOT YOUR PASSWORD?\n\nEnter the email on your account. If we recognize it, we'll send a reset link.\n\nEMAIL\nSend reset link\n\nBack to sign in",
+      "buttonLabels": [
+        "Send reset link",
+        "Back to sign in"
+      ],
+      "screenshot": null
+    },
+    {
+      "host": "glitchtech.io",
+      "path": "/reset-password",
+      "requestedUrl": "https://glitchtech.io/reset-password",
+      "finalUrl": "https://glitchtech.io/reset-password",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "SET A NEW PASSWORD\nThis reset link expired. Request a new one.\nSend a new link",
+      "buttonLabels": [
+        "Send a new link"
+      ],
+      "screenshot": null
+    },
+    {
+      "host": "glitchtech.io",
+      "path": "/verify-email",
+      "requestedUrl": "https://glitchtech.io/verify-email",
+      "finalUrl": "https://glitchtech.io/verify-email",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "ALMOST THERE\nALMOST THERE\nALMOST THERE\nWHILE YOU WAIT\nWHAT'S HAPPENING BEHIND THE SCENES\nWe just sent the link\nShould land within 60 seconds. Check spam if it's not in inbox by then.\nClick it from any device\nSame browser, phone, work laptop — doesn't matter where you click.\nOne click and you're in\nAfter clicking, this page swaps to a confirmation and routes you home.\nAWAITING VERIFICATION\nCHECK YOUR INBOX\n\nWe sent a verification link to:\n\nyour email address\n\nSENT\nVerification email is on its way.\nYOU — CLICK THE LINK\nTap it from any device. The page will redirect when it lands.\nACCOUNT ACTIVE\n",
+      "buttonLabels": [],
+      "screenshot": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchtech-io-verify-email.png"
+    },
+    {
+      "host": "glitchtech.io",
+      "path": "/dashboard",
+      "requestedUrl": "https://glitchtech.io/dashboard",
+      "finalUrl": "https://glitchtech.io/login",
+      "status": 200,
+      "title": "Glitch Studios",
+      "providerLabelsVisible": [],
+      "hasGoogle": false,
+      "hasMeta": false,
+      "hasGitHub": false,
+      "bodySnippet": "WELCOME BACK\nWELCOME BACK\nWELCOME BACK\nEMAIL\nPASSWORD\nSign In\n\nForgot your password?\n\nNew here? Create an account",
+      "buttonLabels": [
+        "Sign In",
+        "Forgot your password?",
+        "Create an account"
+      ],
+      "screenshot": ".planning/phases/48-launch-blocker-proof-pass/artifacts/auth/screenshots/glitchtech-io-dashboard.png"
+    },
+    {
+      "host": "glitchtech.io",
+      "path": "api checks",
+      "apiResults": [
+        {
+          "endpoint": "/api/auth/get-session",
+          "status": 200,
+          "ok": true,
+          "error": null
+        }
+      ]
+    }
+  ]
+}

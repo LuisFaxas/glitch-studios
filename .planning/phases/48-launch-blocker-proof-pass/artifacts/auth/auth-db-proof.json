@@ -1,0 +1,48 @@
+{
+  "capturedAt": "2026-04-28T09:28:09.010Z",
+  "applicationRows": [
+    {
+      "id": "bdc7e1f5-feaa-4aac-b4b9-642a632a68db",
+      "brand": "studios",
+      "name": "Phase 48 Studios 20260428092741",
+      "email": "phase48-studios-20260428092741@example.com",
+      "status": "pending",
+      "submitted_at": "2026-04-28T13:27:42.731Z"
+    },
+    {
+      "id": "ceb5211b-d2af-4830-90cd-9aafa4aefb12",
+      "brand": "tech",
+      "name": "Phase 48 Tech 20260428092741",
+      "email": "phase48-tech-20260428092741@example.com",
+      "status": "pending",
+      "submitted_at": "2026-04-28T13:27:44.731Z"
+    }
+  ],
+  "migration": [
+    {
+      "key": "grandfather_email_verified",
+      "value": "2026-04-25 04:51:00.645522+00",
+      "created_at": "2026-04-25T08:51:00.645Z"
+    }
+  ],
+  "unverified": [
+    {
+      "count": 0
+    }
+  ],
+  "reg": [
+    {
+      "table_name": "artist_applications"
+    }
+  ],
+  "adminCount": [
+    {
+      "role": "admin",
+      "count": 1
+    },
+    {
+      "role": "owner",
+      "count": 1
+    }
+  ]
+}
