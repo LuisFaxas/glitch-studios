@@ -92,19 +92,48 @@ export default function MagicRings({
   fitMax = false,
 }) {
   const mountRef = useRef(null);
-  const propsRef = useRef(null);
+  const propsRef = useRef({
+    color, colorTwo, speed, ringCount, attenuation, lineThickness,
+    baseRadius, radiusStep, scaleRate, opacity, noiseAmount,
+    rotation, ringGap, fadeIn, fadeOut, followMouse, mouseInfluence,
+    hoverScale, parallax, clickBurst, fitMax,
+  });
   const mouseRef = useRef([0, 0]);
   const smoothMouseRef = useRef([0, 0]);
   const hoverAmountRef = useRef(0);
   const isHoveredRef = useRef(false);
   const burstRef = useRef(0);
 
-  propsRef.current = {
-    color, colorTwo, speed, ringCount, attenuation, lineThickness,
-    baseRadius, radiusStep, scaleRate, opacity, noiseAmount,
-    rotation, ringGap, fadeIn, fadeOut, followMouse, mouseInfluence,
-    hoverScale, parallax, clickBurst, fitMax,
-  };
+  useEffect(() => {
+    propsRef.current = {
+      color, colorTwo, speed, ringCount, attenuation, lineThickness,
+      baseRadius, radiusStep, scaleRate, opacity, noiseAmount,
+      rotation, ringGap, fadeIn, fadeOut, followMouse, mouseInfluence,
+      hoverScale, parallax, clickBurst, fitMax,
+    };
+  }, [
+    attenuation,
+    baseRadius,
+    clickBurst,
+    color,
+    colorTwo,
+    fadeIn,
+    fadeOut,
+    fitMax,
+    followMouse,
+    hoverScale,
+    lineThickness,
+    mouseInfluence,
+    noiseAmount,
+    opacity,
+    parallax,
+    radiusStep,
+    ringCount,
+    ringGap,
+    rotation,
+    scaleRate,
+    speed,
+  ]);
 
   useEffect(() => {
     const mount = mountRef.current;

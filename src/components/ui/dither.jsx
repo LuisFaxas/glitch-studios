@@ -1,4 +1,4 @@
-import { useRef, useEffect, forwardRef } from 'react';
+import { useRef, useEffect, useMemo, forwardRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { EffectComposer, wrapEffect } from '@react-three/postprocessing';
 import { Effect } from 'postprocessing';
@@ -177,11 +177,12 @@ function DitheredWaves({
   onReady
 }) {
   const mesh = useRef(null);
+  const shaderMaterialRef = useRef(null);
   const mouseRef = useRef(new THREE.Vector2());
   const readyFired = useRef(false);
   const { viewport, size, gl } = useThree();
 
-  const waveUniformsRef = useRef({
+  const waveUniforms = useMemo(() => ({
     time: new THREE.Uniform(0),
     resolution: new THREE.Uniform(new THREE.Vector2(0, 0)),
     waveSpeed: new THREE.Uniform(waveSpeed),
@@ -191,13 +192,16 @@ function DitheredWaves({
     mousePos: new THREE.Uniform(new THREE.Vector2(0, 0)),
     enableMouseInteraction: new THREE.Uniform(enableMouseInteraction ? 1 : 0),
     mouseRadius: new THREE.Uniform(mouseRadius)
-  });
+  }), [enableMouseInteraction, mouseRadius, waveAmplitude, waveColor, waveFrequency, waveSpeed]);
 
   useEffect(() => {
+    const material = shaderMaterialRef.current;
+    if (!material) return;
+
     const dpr = gl.getPixelRatio();
     const w = Math.floor(size.width * dpr),
       h = Math.floor(size.height * dpr);
-    const res = waveUniformsRef.current.resolution.value;
+    const res = material.uniforms.resolution.value;
     if (res.x !== w || res.y !== h) {
       res.set(w, h);
     }
@@ -205,13 +209,16 @@ function DitheredWaves({
 
   const prevColor = useRef([...waveColor]);
   useFrame(({ clock }) => {
+    const material = shaderMaterialRef.current;
+    if (!material) return;
+
     // Signal ready after first frame so parent can fade in
     if (!readyFired.current && onReady) {
       readyFired.current = true;
       onReady();
     }
 
-    const u = waveUniformsRef.current;
+    const u = material.uniforms;
 
     if (!disableAnimation) {
       u.time.value = clock.getElapsedTime();
@@ -246,9 +253,10 @@ function DitheredWaves({
       <mesh ref={mesh} scale={[viewport.width, viewport.height, 1]}>
         <planeGeometry args={[1, 1]} />
         <shaderMaterial
+          ref={shaderMaterialRef}
           vertexShader={waveVertexShader}
           fragmentShader={waveFragmentShader}
-          uniforms={waveUniformsRef.current}
+          uniforms={waveUniforms}
         />
       </mesh>
 
