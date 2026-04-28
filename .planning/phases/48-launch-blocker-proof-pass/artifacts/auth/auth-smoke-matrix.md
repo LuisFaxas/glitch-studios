@@ -1,7 +1,8 @@
 # Auth Smoke Matrix
 
 Captured: 2026-04-28T09:26:37Z
-Plan: 48-03 auth/OAuth/admin smoke
+Rechecked: 2026-04-28T11:58:31Z
+Plan: 48-03 auth/OAuth/admin smoke; 48-11 Google OAuth/auth smoke checkpoint recheck
 
 Browser artifact:
 `.planning/phases/48-launch-blocker-proof-pass/artifacts/auth/auth-browser-smoke-result.json`
@@ -18,6 +19,28 @@ Screenshots:
 - `screenshots/glitchtech-io-register-customer.png`
 - `screenshots/glitchtech-io-verify-email.png`
 - `screenshots/glitchtech-io-dashboard.png`
+
+## Plan 48-11 Recheck
+
+No rows were promoted to `passed` in Plan 48-11. The executor found no safe
+Google OAuth proof source:
+
+- `vercel env ls production` did not list `GOOGLE_CLIENT_ID` or
+  `GOOGLE_CLIENT_SECRET`; no secret values were printed or pulled.
+- `gcloud` is not present, and no Google Cloud Console redirect screenshot or
+  event evidence was supplied.
+- Production fetch checks for `https://glitchstudios.io/login`,
+  `https://glitchtech.io/login`,
+  `https://glitchstudios.io/register/customer`, and
+  `https://glitchtech.io/register/customer` all returned HTTP 200 with no
+  Google text in the rendered HTML. This supports the blocked/hidden Google
+  state, but it is not OAuth browser proof.
+- `auth-command-output.md` now records `pnpm tsc --noEmit --pretty false` and
+  `pnpm lint` with `exit status: 0`, but AUTH-32 manual smoke remains blocked
+  because Google OAuth, production email/password sign-in, email verification,
+  reset-password links, and unverified-user session sign-out were not proven.
+- `email-smoke-matrix.md` keeps password reset and account verification blocked
+  because Resend event, inbox, content, and link evidence is unavailable.
 
 | brand_host | surface_or_flow | evidence | status | requirements |
 | --- | --- | --- | --- | --- |
@@ -59,4 +82,3 @@ Screenshots:
 AUTH-20/AUTH-21/AUTH-22 provider behavior is documented, but Google cannot be
 launch-passed until the Google provider env and Google Cloud Console redirect
 URIs are configured.
-
