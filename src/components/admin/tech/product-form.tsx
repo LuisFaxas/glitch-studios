@@ -82,7 +82,7 @@ export function ProductForm({ mode, productId, tree, initial }: ProductFormProps
   useEffect(() => {
     let cancelled = false
     let finished = false
-    let syncTimer: ReturnType<typeof window.setTimeout> | null = null
+    let syncTimer: number | null = null
 
     if (!categoryId) {
       syncTimer = window.setTimeout(() => {

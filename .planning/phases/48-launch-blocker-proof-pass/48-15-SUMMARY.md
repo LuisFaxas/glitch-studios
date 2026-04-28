@@ -62,6 +62,7 @@ completed: 2026-04-28
 - Converted beat search/filter URL-to-local synchronization to guarded deferred updates, including BPM local range sync.
 - Initialized license modal media-query state lazily from `window.matchMedia(query).matches` and removed the synchronous effect setter.
 - Removed scoped unused imports surfaced by the same ESLint run.
+- Follow-up Wave 2 preflight fixed DOM timeout handles in `client-detail-sheet.tsx` and `product-form.tsx` from Node `Timeout` inference to browser `number` handles.
 
 ## TDD / Verification Flow
 
@@ -116,6 +117,7 @@ None - plan executed exactly as written.
 
 - Initial scoped ESLint red run failed with the expected React compiler `set-state-in-effect` errors in the plan-owned files.
 - Parallel executors created other phase summaries during this run; this executor touched only the 48-15 source files and 48-15 summary before GSD shared-state updates.
+- The orchestrator's post-wave `pnpm tsc --noEmit --pretty false` preflight found DOM timer handles inferred as Node `Timeout` in two plan-owned files; those handles were narrowed to `number`.
 
 ## Known Stubs
 

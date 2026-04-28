@@ -72,7 +72,7 @@ export function ClientDetailSheet({
 
   useEffect(() => {
     let cancelled = false
-    let syncTimer: ReturnType<typeof window.setTimeout> | null = null
+    let syncTimer: number | null = null
 
     if (client && open) {
       syncTimer = window.setTimeout(() => {
