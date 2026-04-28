@@ -70,7 +70,12 @@ export async function POST(request: Request) {
 
     const session = await stripe.checkout.sessions.create({
       ui_mode: "custom",
-      payment_method_types: ["card"],
+      excluded_payment_method_types: [
+        "cashapp",
+        "crypto",
+        "klarna",
+        "revolut_pay",
+      ],
       line_items,
       discounts,
       mode: "payment",

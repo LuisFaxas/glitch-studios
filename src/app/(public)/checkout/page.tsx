@@ -1,10 +1,15 @@
 "use client"
 
-import { FormEvent, useMemo, useState } from "react"
+import { FormEvent, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import type { StripeCheckoutOptions } from "@stripe/stripe-js"
+import type {
+  StripeCheckoutOptions,
+  StripeExpressCheckoutElementConfirmEvent,
+  StripeExpressCheckoutElementReadyEvent,
+} from "@stripe/stripe-js"
 import {
   CheckoutProvider,
+  ExpressCheckoutElement,
   PaymentElement,
   useCheckout,
 } from "@stripe/react-stripe-js/checkout"
@@ -79,20 +84,37 @@ const checkoutAppearance: NonNullable<
   },
 }
 
-const paymentElementOptions = {
+const expressCheckoutOptions = {
+  buttonHeight: 48,
+  buttonTheme: {
+    applePay: "white-outline" as const,
+    googlePay: "white" as const,
+    paypal: "black" as const,
+  },
+  buttonType: {
+    applePay: "buy" as const,
+    googlePay: "buy" as const,
+    paypal: "pay" as const,
+  },
   layout: {
-    type: "tabs" as const,
-    paymentMethodLogoPosition: "end" as const,
+    maxColumns: 2,
+    maxRows: 2,
+    overflow: "auto" as const,
   },
-  paymentMethodOrder: ["card"],
-  wallets: {
-    applePay: "never" as const,
-    googlePay: "never" as const,
-    link: "never" as const,
+  paymentMethodOrder: undefined,
+  paymentMethods: {
+    amazonPay: "auto" as const,
+    applePay: "auto" as const,
+    googlePay: "auto" as const,
+    klarna: "auto" as const,
+    link: "auto" as const,
+    paypal: "auto" as const,
   },
-  terms: {
-    card: "never" as const,
-  },
+}
+
+function getIsMobileCheckout() {
+  if (typeof window === "undefined") return false
+  return window.matchMedia("(max-width: 767px)").matches
 }
 
 function formatCurrency(value: number) {
@@ -143,11 +165,65 @@ function CheckoutForm({ total }: { total: number }) {
   const [email, setEmail] = useState("")
   const [message, setMessage] = useState("")
   const [isPaying, setIsPaying] = useState(false)
+  const [hasExpressCheckout, setHasExpressCheckout] = useState<boolean | null>(
+    null
+  )
+  const [isMobileCheckout, setIsMobileCheckout] = useState(getIsMobileCheckout)
 
   const canSubmit = checkoutState.type === "success" && !isPaying
+  const paymentElementOptions = useMemo(
+    () => ({
+      layout: isMobileCheckout
+        ? {
+            type: "auto" as const,
+            paymentMethodLogoPosition: "end" as const,
+          }
+        : {
+            type: "accordion" as const,
+            defaultCollapsed: false,
+            radios: "if_multiple" as const,
+            spacedAccordionItems: false,
+            visibleAccordionItemsCount: 5,
+            paymentMethodLogoPosition: "end" as const,
+          },
+      ...(isMobileCheckout
+        ? {
+            paymentMethodOrder: ["card"],
+            wallets: {
+              applePay: "never" as const,
+              googlePay: "never" as const,
+              link: "never" as const,
+            },
+            terms: {
+              card: "never" as const,
+            },
+          }
+        : {}),
+    }),
+    [isMobileCheckout]
+  )
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)")
+    const updateIsMobile = () => setIsMobileCheckout(mediaQuery.matches)
+
+    updateIsMobile()
+    mediaQuery.addEventListener("change", updateIsMobile)
+    return () => mediaQuery.removeEventListener("change", updateIsMobile)
+  }, [])
+
+  function handleExpressReady(event: StripeExpressCheckoutElementReadyEvent) {
+    setHasExpressCheckout(
+      Boolean(
+        event.availablePaymentMethods &&
+        Object.values(event.availablePaymentMethods).some(Boolean)
+      )
+    )
+  }
+
+  async function confirmPayment(options?: {
+    expressCheckoutConfirmEvent?: StripeExpressCheckoutElementConfirmEvent
+  }) {
     setMessage("")
 
     if (checkoutState.type === "loading") return
@@ -157,18 +233,38 @@ function CheckoutForm({ total }: { total: number }) {
     }
 
     setIsPaying(true)
-    const result = await checkoutState.checkout.confirm({ email })
+    const confirmEmail =
+      email || options?.expressCheckoutConfirmEvent?.billingDetails?.email
+    const result = await checkoutState.checkout.confirm({
+      ...options,
+      ...(confirmEmail ? { email: confirmEmail } : {}),
+    })
 
     if (result.type === "error") {
       setMessage(result.error.message)
+      options?.expressCheckoutConfirmEvent?.paymentFailed({
+        reason: "fail",
+        message: result.error.message,
+      })
       setIsPaying(false)
     }
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    await confirmPayment()
+  }
+
+  async function handleExpressConfirm(
+    event: StripeExpressCheckoutElementConfirmEvent
+  ) {
+    await confirmPayment({ expressCheckoutConfirmEvent: event })
   }
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto max-w-[520px] space-y-5"
+      className="mx-auto max-w-[640px] space-y-5"
       aria-label="Beat checkout"
     >
       <div className="space-y-2">
@@ -190,7 +286,25 @@ function CheckoutForm({ total }: { total: number }) {
         />
       </div>
 
-      <div className="rounded-[2px] border border-[#303030] bg-[#090909] p-3 sm:p-4">
+      <div
+        className={
+          hasExpressCheckout === false
+            ? "hidden"
+            : "space-y-3 border-b border-[#202020] pb-5"
+        }
+      >
+        <ExpressCheckoutElement
+          options={expressCheckoutOptions}
+          onReady={handleExpressReady}
+          onConfirm={handleExpressConfirm}
+          onLoadError={() => setHasExpressCheckout(false)}
+        />
+        <p className="font-mono text-[11px] font-bold text-[#777] uppercase">
+          Or use payment details
+        </p>
+      </div>
+
+      <div className="rounded-[2px] border border-[#303030] bg-[#090909] p-3 max-[767px]:-mx-4 sm:p-4">
         <PaymentElement id="payment-element" options={paymentElementOptions} />
       </div>
 
