@@ -1,18 +1,20 @@
 # Resend Domain Verification
 
-Captured: 2026-04-28T08:55:00Z
-Plan: 48-02 Resend email proof
+Captured: 2026-04-28T11:36:37Z
+Plan: 48-10 single-domain email smoke
 
 ## Scope Decision
 
 The original launch criterion asked for both `glitchstudios.io` and
 `glitchtech.io` to be verified in Resend. During execution, the user chose not
-to pay for or continue multi-domain Resend setup right now. The current testing
+to pay for or continue multi-domain Resend setup right now. The current proof
 scope is therefore:
 
 - `glitchtech.io`: available verified Resend domain for transactional testing.
-- `glitchstudios.io`: deferred until the user upgrades/pays or consolidates the
-  domain into the active Resend account/team.
+- `glitchstudios.io`: deferred: user does not want to pay for multi-domain
+  Resend right now.
+- Full DMARC proof: deferred_or_blocked: not required for current single-domain
+  smoke; do not mark EMAIL-08 passed.
 
 This artifact does not claim full EMAIL-08 completion.
 
@@ -29,7 +31,8 @@ This artifact does not claim full EMAIL-08 completion.
 ## Domain: glitchstudios.io
 
 - domain: glitchstudios.io
-- resend_status: blocked: not visible to the current valid Resend API key; paid/multi-domain setup deferred by user decision
+- resend_status: deferred
+- deferred_reason: user does not want to pay for multi-domain Resend right now
 - spf_record: `send.glitchstudios.io TXT "v=spf1 include:amazonses.com ~all"` and `send.glitchstudios.io MX 10 feedback-smtp.us-east-1.amazonses.com.` are present in public DNS
 - dkim_records: `resend._domainkey.glitchstudios.io TXT` public key present in `dns-after.txt`
 - dmarc_record: blocked: no public DMARC TXT returned for `_dmarc.glitchstudios.io`
@@ -43,3 +46,5 @@ This artifact does not claim full EMAIL-08 completion.
   any secret key values.
 - Full two-brand deliverability remains open until both domains are verified in
   the same usable Resend context and DMARC is documented.
+- EMAIL-08 remains partial/deferred for this plan; do not mark EMAIL-08 passed
+  without real `glitchstudios.io` Resend verification and DMARC proof.

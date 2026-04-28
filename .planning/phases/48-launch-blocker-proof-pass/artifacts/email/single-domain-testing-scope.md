@@ -1,6 +1,14 @@
 # Single-Domain Email Testing Scope
 
-Captured: 2026-04-28T05:45:00Z
+Captured: 2026-04-28T11:36:37Z
+
+## Current Testing Scope
+
+- sender_domain: glitchtech.io
+- allowed_sender: Glitch Studios <noreply@glitchtech.io>
+- resend_scope: single verified Resend domain only
+- glitchstudios.io: deferred: user does not want to pay for multi-domain Resend right now
+- full_dmarc_proof: deferred_or_blocked: not required for current single-domain smoke; do not mark EMAIL-08 passed
 
 ## Decision
 
@@ -29,8 +37,8 @@ This does not fully satisfy the original two-domain EMAIL-08 launch criterion. I
 Final Phase 48 verification should report:
 
 - `glitchtech.io` Resend proof: available for testing
-- `glitchstudios.io` Resend paid multi-domain proof: deferred by user decision
-- Full two-brand sender-domain proof: not claimed until the user decides to pay/upgrade or consolidate domains into one Resend account
+- `glitchstudios.io` Resend paid multi-domain proof: deferred: user does not want to pay for multi-domain Resend right now
+- Full two-brand sender-domain and DMARC proof: deferred_or_blocked: not required for current single-domain smoke; do not mark EMAIL-08 passed
 
 ## Code Change
 
