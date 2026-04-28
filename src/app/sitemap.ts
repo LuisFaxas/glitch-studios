@@ -4,10 +4,10 @@ import { MetadataRoute } from "next"
 import { db } from "@/lib/db"
 import { blogPosts, portfolioItems, teamMembers } from "@/db/schema"
 import { eq } from "drizzle-orm"
+import { getSiteUrl } from "@/lib/site-url"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://glitchstudios.com"
+  const baseUrl = getSiteUrl()
 
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [

@@ -20,6 +20,7 @@ import { sendSms } from "@/lib/sms"
 import { DEFAULT_LICENSE_TIERS } from "@/types/beats"
 import { tagSubscriberOnEvent } from "@/actions/admin-newsletter"
 import { BOOKING_EMAIL_FROM, TRANSACTIONAL_EMAIL_FROM } from "@/lib/email/senders"
+import { getSiteUrl } from "@/lib/site-url"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -123,7 +124,7 @@ export async function POST(request: Request) {
           .limit(1)
 
         if (bookingDetails) {
-          const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://glitchstudios.com"
+          const siteUrl = getSiteUrl()
           const icsUrl = `${siteUrl}/api/bookings/ics?bookingId=${bookingId}`
           const address = process.env.STUDIO_ADDRESS || "Glitch Studios"
 
@@ -258,7 +259,7 @@ export async function POST(request: Request) {
           beatTitle: dbItem.beatTitle,
           licenseTier: itemTierDef?.displayName ?? dbItem.licenseTier,
           price: Number(dbItem.price),
-          downloadUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?session_id=${session.id}`,
+          downloadUrl: `${getSiteUrl()}/checkout/success?session_id=${session.id}`,
         }
       })
 

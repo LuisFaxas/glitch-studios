@@ -4,6 +4,7 @@ import crypto from "crypto"
 import { db } from "@/lib/db"
 import { newsletterSubscribers } from "@/db/schema"
 import { eq } from "drizzle-orm"
+import { getSiteUrl } from "@/lib/site-url"
 
 export type NewsletterSource =
   | "footer"
@@ -73,8 +74,7 @@ function generateHmacToken(email: string): string {
  */
 export async function generateUnsubscribeUrl(email: string): Promise<string> {
   const token = generateHmacToken(email)
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://glitchstudios.com"
+  const siteUrl = getSiteUrl()
   return `${siteUrl}/unsubscribe?email=${encodeURIComponent(email)}&token=${token}`
 }
 

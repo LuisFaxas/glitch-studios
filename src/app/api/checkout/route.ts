@@ -1,6 +1,7 @@
 import { stripe } from "@/lib/stripe"
 import { NextResponse } from "next/server"
 import { calculateBundleDiscount } from "@/actions/bundles"
+import { getSiteUrl } from "@/lib/site-url"
 
 export async function POST(request: Request) {
   try {
@@ -22,7 +23,8 @@ export async function POST(request: Request) {
     // Env validation — surface specific missing vars so Vercel logs name the culprit.
     const missing: string[] = []
     if (!process.env.STRIPE_SECRET_KEY) missing.push("STRIPE_SECRET_KEY")
-    if (!process.env.NEXT_PUBLIC_SITE_URL) missing.push("NEXT_PUBLIC_SITE_URL")
+    const siteUrl = getSiteUrl()
+    if (!siteUrl) missing.push("NEXT_PUBLIC_SITE_URL")
     if (missing.length) {
       console.error("[checkout] missing env vars:", missing)
       return NextResponse.json(
@@ -74,7 +76,7 @@ export async function POST(request: Request) {
       line_items,
       discounts,
       mode: "payment",
-      return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${siteUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       metadata: {
         items: JSON.stringify(
           (items as Array<Record<string, unknown>>).map((i) => ({

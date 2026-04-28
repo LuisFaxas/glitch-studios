@@ -17,6 +17,7 @@ import {
   validateSeriesAvailability,
   calculatePackagePrice,
 } from "@/lib/booking/recurring"
+import { getSiteUrl } from "@/lib/site-url"
 import type { DepositType } from "@/types/booking"
 
 const bookingCreateSchema = z.object({
@@ -253,7 +254,7 @@ export async function POST(request: Request) {
         startTime: data.startTime,
         isRecurring: "true",
       },
-      return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/book/confirmation?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${getSiteUrl()}/book/confirmation?session_id={CHECKOUT_SESSION_ID}`,
     })
 
     // Update series with stripe session id
@@ -313,7 +314,7 @@ export async function POST(request: Request) {
       date: data.date,
       startTime: data.startTime,
     },
-    return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/book/confirmation?session_id={CHECKOUT_SESSION_ID}`,
+    return_url: `${getSiteUrl()}/book/confirmation?session_id={CHECKOUT_SESSION_ID}`,
   })
 
   // Store stripe session id on booking
