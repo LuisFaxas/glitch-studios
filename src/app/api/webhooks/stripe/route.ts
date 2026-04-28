@@ -23,6 +23,10 @@ import { BOOKING_EMAIL_FROM, TRANSACTIONAL_EMAIL_FROM } from "@/lib/email/sender
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+function cleanStripeEnv(value: string | undefined): string {
+  return (value ?? "").replace(/\\n/g, "").trim()
+}
+
 export async function POST(request: Request) {
   const body = await request.text()
   const signature = request.headers.get("stripe-signature")!
@@ -32,7 +36,7 @@ export async function POST(request: Request) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      cleanStripeEnv(process.env.STRIPE_WEBHOOK_SECRET),
     )
   } catch (err) {
     return new Response("Webhook signature verification failed", {
