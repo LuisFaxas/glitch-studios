@@ -47,11 +47,15 @@ See `dns-after.txt` for raw `dig` output.
 | `glitchstudios.io` | present | present | missing |
 | `glitchtech.io` | present | present | missing |
 
-This means both domains have Resend-style DNS records published, but only `glitchstudios.io` is visible to the valid local Resend API key. `glitchtech.io` may belong to a different Resend account/API key or may be visible only in a different dashboard context.
+This means both domains have Resend-style DNS records published, but only
+`glitchtech.io` is visible to the current valid local Resend API key. Full
+`glitchstudios.io` proof is deferred until the user upgrades/pays or
+consolidates the domain into the active Resend account/team.
 
 ## App Sender Mismatch
 
-Code search found several senders using `@glitchstudios.com`, while the valid Resend key only exposes `glitchstudios.io`.
+Original code search found several senders using `@glitchstudios.com`, while
+the valid Resend key only exposes `glitchtech.io`.
 
 Examples:
 
@@ -60,7 +64,10 @@ Examples:
 - `src/app/api/webhooks/stripe/route.ts` uses `bookings@glitchstudios.com` and `noreply@glitchstudios.com`
 - `src/app/api/cron/booking-reminders/route.ts` uses `bookings@glitchstudios.com`
 
-Those sends are likely to fail or be rejected unless `glitchstudios.com` is also verified in the active Resend account. The safer launch fix is to align app sender addresses to verified `.io` domains or verify `glitchstudios.com` as an additional Resend domain.
+Those sends were likely to fail or be rejected unless `glitchstudios.com` was
+also verified in the active Resend account. The launch-testing fix was to align
+app sender addresses to the verified `glitchtech.io` domain via
+`src/lib/email/senders.ts`.
 
 ## Recommended Next Actions
 

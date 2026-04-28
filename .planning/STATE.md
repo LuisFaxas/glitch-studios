@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
-status: Blocked on Phase 48 human proof checkpoints
-stopped_at: Wave 2 checkpoints awaiting Resend, checkout, and performance proof
-last_updated: "2026-04-28T04:01:04.153Z"
+status: Executing Phase 48 launch proof; 3/6 plans summarized
+stopped_at: Remaining human proof checkpoints: real iOS checkout, auth/OAuth/admin app smoke, and email inbox/event proof
+last_updated: "2026-04-28T08:55:00.000Z"
 last_activity: 2026-04-28
 progress:
   total_phases: 8
   completed_phases: 7
   total_plans: 58
-  completed_plans: 53
+  completed_plans: 55
 ---
 
 # Project State
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 ## Current Position
 
 Phase: 48 (launch-blocker-proof-pass) — EXECUTING
-Plan: 2 of 6
+Plan: 4 of 6
 Gap closure phases 47-48 were added after `.planning/v4.0-MILESTONE-AUDIT.md` returned `gaps_found`.
 Next phase: 48 — Launch Blocker Proof Pass.
 
@@ -33,10 +33,10 @@ Phase 30 is complete and verified. Phase 29.3 Plan 06 passed real macOS Safari +
 
 Phase 48 carry-forward blockers:
 
-- Resend/domain deliverability
+- Resend/domain deliverability (single-domain testing unblocked on `glitchtech.io`; full two-brand proof deferred)
 - auth/OAuth/admin-invite smoke
 - mobile checkout purchase proof
-- PERF-03/PERF-04/PERF-06 performance evidence
+- PERF-03/PERF-04/PERF-06 performance evidence (Phase 48-05 summarized)
 
 **Root cause identified 2026-04-27T00:48Z (commit 6af8177):** Native pointer/style feedback loop on synchronous React state updates inside native input event handlers. Codex reproduced locally on headless Chromium with real-mouse input. Fix defers `setFilters` + `setOpen` via `setTimeout(0)` out of the native-event task. User verified the final 29.3-06 preview on real macOS Safari + Firefox; Phase 47-02 now records that evidence in `.planning/phases/29.3-rebuild-filter/29.3-VERIFICATION.md`.
 
@@ -110,6 +110,8 @@ Progress: Phase 22 audit complete 2026-04-24. 25 phases derived + committed to R
 | Phase 47 P02 | 4min | 2 tasks | 3 files |
 | Phase 47-verification-backfill-planning-state-repair P03 | 4min | 3 tasks | 4 files |
 | Phase 48-launch-blocker-proof-pass P01 | 5min | 2 tasks | 3 files |
+| Phase 48-launch-blocker-proof-pass P02 | 25min | 2 tasks | 16 files |
+| Phase 48-launch-blocker-proof-pass P05 | 15min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -176,6 +178,8 @@ Recent decisions affecting current work:
 - [Phase 47]: Phase 48 remains the owner for Resend/domain deliverability, auth/OAuth/admin-invite smoke, mobile checkout purchase proof, and PERF-03/PERF-04/PERF-06 performance evidence.
 - [Phase 48-launch-blocker-proof-pass]: 48-01 records baseline evidence only; EMAIL, PERF, and AUTH requirements remain open until dashboard, inbox, deployed URL, or real-device proof exists.
 - [Phase 48-launch-blocker-proof-pass]: 48-01 Vercel env inventory records encrypted variable presence only and intentionally excludes secret values.
+- [Phase 48-launch-blocker-proof-pass]: 48-02 records the user-approved single-domain Resend testing scope. `glitchtech.io` is the verified active testing sender; `glitchstudios.io`, DMARC, and all real inbox/event smoke rows remain blocked/deferred rather than launch-passed.
+- [Phase 48-launch-blocker-proof-pass]: 48-05 closes PERF-03/PERF-04/PERF-06 with deployed timing, mobile LCP p75, and bundle gzip evidence.
 
 ### Roadmap Evolution
 
@@ -221,6 +225,6 @@ Recent decisions affecting current work:
 Last session: 2026-04-28T03:10:26.432Z
 Stopped at: Completed 48-01-PLAN.md
 Resume file: None
-Next session entry point: Plan Phase 48 to prove Resend/domain deliverability, auth/OAuth/admin-invite smoke, mobile checkout purchase proof, and PERF-03/PERF-04/PERF-06 performance evidence.
+Next session entry point: Execute Phase 48 Plan 04 for real iOS Safari + desktop checkout proof, then Phase 48 Plan 03 for auth/OAuth/admin application smoke. Keep email rows blocked until real Resend event, inbox, and link proof exists.
 
 Last activity: 2026-04-28

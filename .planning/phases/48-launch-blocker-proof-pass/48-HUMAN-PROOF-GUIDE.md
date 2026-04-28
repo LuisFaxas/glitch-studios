@@ -12,33 +12,31 @@ Completed files:
 - `artifacts/perf/bundle-audit.md`
 - `48-05-SUMMARY.md`
 
-## Remaining 1: Resend + Cloudflare Domain Verification
+## Remaining 1: Email Smoke On The Single Verified Resend Domain
 
 You need access to:
 
 - Resend dashboard
-- Cloudflare dashboard for `glitchstudios.io`
-- Cloudflare dashboard for `glitchtech.io`
+- An inbox you control for each test recipient
+
+Current scope:
+
+- `glitchtech.io` is the verified/available Resend domain for testing.
+- `glitchstudios.io` multi-domain proof is deferred until you decide to pay,
+  upgrade, or move the domain into the same Resend account/team.
 
 Steps:
 
-1. Open Resend Domains: `https://resend.com/domains`
-2. Add `glitchstudios.io` if it is not already there.
-3. Add `glitchtech.io` if it is not already there.
-4. Open each domain in Resend and copy the DNS records it shows. Usually this includes SPF and DKIM records.
-5. In Cloudflare, open the matching domain, then go to DNS -> Records -> Add record.
-6. Add each Resend record exactly as Resend shows it.
-7. Add a DMARC TXT record for each domain:
-   - Type: `TXT`
-   - Name: `_dmarc`
-   - Content: `v=DMARC1; p=none; rua=mailto:<an inbox you control>;`
-8. Go back to Resend and click Verify for each domain.
-9. When Resend shows both domains as verified, tell Codex: `Resend is verified`.
+1. Trigger each email path from the live site or admin UI.
+2. In Resend, open the email event/log and capture the event ID or screenshot.
+3. In the recipient inbox, confirm the message arrived.
+4. Click any required link, such as reset, verify, invite, unsubscribe, or download.
+5. Tell Codex the flow name, approximate time, recipient inbox, event ID or
+   screenshot name, and whether the link worked.
 
-Codex can then run the DNS commands and create:
+Codex can then update:
 
-- `artifacts/email/resend-domain-verification.md`
-- `artifacts/email/dns-after.txt`
+- `artifacts/email/email-smoke-matrix.md`
 
 Useful official docs:
 
@@ -82,9 +80,9 @@ Useful official docs:
 
 ## What To Say To Codex
 
-After Resend is verified:
+After an email smoke test is complete:
 
-> Resend is verified. Run the DNS proof.
+> I tested [flow] at [time]. Resend event/screenshot is [id/name]. Inbox result was [result]. Link result was [result].
 
 After iOS checkout is complete:
 
