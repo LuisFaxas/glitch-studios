@@ -1,0 +1,44 @@
+route=/ url=https://glitchstudios.io/ captured_at=2026-04-28T05:15:36Z
+sample=1 status=200 dns=0.118909 connect=0.131336 tls=0.186138 ttfb=1.572092 total=1.588211
+sample=2 status=200 dns=0.005346 connect=0.014141 tls=0.085334 ttfb=1.348137 total=1.372336
+sample=3 status=200 dns=0.006002 connect=0.014517 tls=0.115858 ttfb=0.732192 total=0.754335
+sample=4 status=200 dns=0.005190 connect=0.012081 tls=0.071595 ttfb=0.681155 total=0.706238
+sample=5 status=200 dns=0.005529 connect=0.013361 tls=0.069939 ttfb=0.669399 total=0.690583
+sample=6 status=200 dns=0.006463 connect=0.016398 tls=0.074102 ttfb=0.758947 total=0.779542
+sample=7 status=200 dns=0.005260 connect=0.016167 tls=0.072617 ttfb=0.674257 total=0.696312
+sample=8 status=200 dns=0.005531 connect=0.015124 tls=0.068639 ttfb=0.663133 total=0.684296
+sample=9 status=200 dns=0.005385 connect=0.019431 tls=0.078779 ttfb=0.679304 total=0.700594
+sample=10 status=200 dns=0.005394 connect=0.015359 tls=0.074695 ttfb=0.666675 total=0.689531
+sample=11 status=200 dns=0.005844 connect=0.014623 tls=0.071054 ttfb=0.675494 total=0.697992
+sample=12 status=200 dns=0.007723 connect=0.017497 tls=0.076194 ttfb=0.659302 total=0.679733
+sample=13 status=200 dns=0.005140 connect=0.013013 tls=0.076600 ttfb=0.671032 total=0.695209
+sample=14 status=200 dns=0.005807 connect=0.013421 tls=0.073415 ttfb=0.665276 total=0.700767
+sample=15 status=200 dns=0.003970 connect=0.011011 tls=0.066106 ttfb=0.665948 total=0.688126
+sample=16 status=200 dns=0.005470 connect=0.014319 tls=0.070749 ttfb=0.658397 total=0.679707
+sample=17 status=200 dns=0.006684 connect=0.016392 tls=0.118449 ttfb=0.703465 total=0.724600
+sample=18 status=200 dns=0.007362 connect=0.014874 tls=0.069109 ttfb=0.669459 total=0.690257
+sample=19 status=200 dns=0.006104 connect=0.016559 tls=0.069714 ttfb=0.671397 total=0.692809
+sample=20 status=200 dns=0.005174 connect=0.013672 tls=0.073380 ttfb=0.670475 total=0.705650
+
+route=/tech url=https://glitchtech.io/ captured_at=2026-04-28T05:15:52Z
+sample=1 status=200 dns=0.055765 connect=0.064668 tls=0.123001 ttfb=0.245355 total=0.252441
+sample=2 status=200 dns=0.004614 connect=0.013409 tls=0.069844 ttfb=0.167088 total=0.176237
+sample=3 status=200 dns=0.003561 connect=0.010585 tls=0.069947 ttfb=0.126743 total=0.135433
+sample=4 status=200 dns=0.007440 connect=0.015791 tls=0.075469 ttfb=0.146635 total=0.155643
+sample=5 status=200 dns=0.005761 connect=0.014107 tls=0.072367 ttfb=0.132879 total=0.142111
+sample=6 status=200 dns=0.005770 connect=0.012386 tls=0.070183 ttfb=0.131499 total=0.139501
+sample=7 status=200 dns=0.005554 connect=0.011573 tls=0.066803 ttfb=0.153472 total=0.160506
+sample=8 status=200 dns=0.005199 connect=0.014100 tls=0.072647 ttfb=0.134136 total=0.142158
+sample=9 status=200 dns=0.005909 connect=0.012501 tls=0.133213 ttfb=0.190522 total=0.195670
+sample=10 status=200 dns=0.009968 connect=0.021126 tls=0.072904 ttfb=0.128469 total=0.135568
+sample=11 status=200 dns=0.005251 connect=0.016151 tls=0.079646 ttfb=0.142603 total=0.148652
+sample=12 status=200 dns=0.005921 connect=0.013683 tls=0.069208 ttfb=0.138364 total=0.145573
+sample=13 status=200 dns=0.005683 connect=0.015515 tls=0.068935 ttfb=0.130133 total=0.135283
+sample=14 status=200 dns=0.005620 connect=0.015487 tls=0.072920 ttfb=0.128914 total=0.135393
+sample=15 status=200 dns=0.005409 connect=0.014221 tls=0.073461 ttfb=0.136118 total=0.143132
+sample=16 status=200 dns=0.005538 connect=0.015519 tls=0.068806 ttfb=0.123274 total=0.131540
+sample=17 status=200 dns=0.004627 connect=0.010514 tls=0.074630 ttfb=0.135478 total=0.141553
+sample=18 status=200 dns=0.005653 connect=0.014829 tls=0.070610 ttfb=0.196527 total=0.202513
+sample=19 status=200 dns=0.005690 connect=0.016451 tls=0.075692 ttfb=0.130450 total=0.138533
+sample=20 status=200 dns=0.005642 connect=0.016886 tls=0.071165 ttfb=0.129430 total=0.135680
+

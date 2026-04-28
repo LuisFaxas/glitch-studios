@@ -1,0 +1,196 @@
+{
+  "captured_at": "2026-04-28T05:17:32.228Z",
+  "device": "iPhone 14 emulation via Playwright Chromium",
+  "results": [
+    {
+      "route": "/",
+      "url": "https://glitchstudios.io/",
+      "sample": 1,
+      "captured_at": "2026-04-28T05:16:32.986Z",
+      "status": 200,
+      "lcp_ms": 2652,
+      "last_entry": {
+        "startTime": 2652,
+        "renderTime": 2652,
+        "loadTime": 1135.7000002861023,
+        "size": 16320,
+        "id": "",
+        "url": "https://glitchstudios.io/logo-white.png",
+        "element": "DIV"
+      },
+      "observer_error": null,
+      "error": null
+    },
+    {
+      "route": "/",
+      "url": "https://glitchstudios.io/",
+      "sample": 2,
+      "captured_at": "2026-04-28T05:16:39.526Z",
+      "status": 200,
+      "lcp_ms": 1064,
+      "last_entry": {
+        "startTime": 1064,
+        "renderTime": 1064,
+        "loadTime": 829.8000001907349,
+        "size": 22928,
+        "id": "",
+        "url": "https://glitchstudios.io/logo-white.png",
+        "element": "DIV"
+      },
+      "observer_error": null,
+      "error": null
+    },
+    {
+      "route": "/",
+      "url": "https://glitchstudios.io/",
+      "sample": 3,
+      "captured_at": "2026-04-28T05:16:45.640Z",
+      "status": 200,
+      "lcp_ms": 2436,
+      "last_entry": {
+        "startTime": 2436,
+        "renderTime": 2436,
+        "loadTime": 955.3000001907349,
+        "size": 16320,
+        "id": "",
+        "url": "https://glitchstudios.io/logo-white.png",
+        "element": "DIV"
+      },
+      "observer_error": null,
+      "error": null
+    },
+    {
+      "route": "/",
+      "url": "https://glitchstudios.io/",
+      "sample": 4,
+      "captured_at": "2026-04-28T05:16:51.881Z",
+      "status": 200,
+      "lcp_ms": 1160,
+      "last_entry": {
+        "startTime": 1160,
+        "renderTime": 1160,
+        "loadTime": 975.8000001907349,
+        "size": 22928,
+        "id": "",
+        "url": "https://glitchstudios.io/logo-white.png",
+        "element": "DIV"
+      },
+      "observer_error": null,
+      "error": null
+    },
+    {
+      "route": "/",
+      "url": "https://glitchstudios.io/",
+      "sample": 5,
+      "captured_at": "2026-04-28T05:16:58.065Z",
+      "status": 200,
+      "lcp_ms": 2328,
+      "last_entry": {
+        "startTime": 2328,
+        "renderTime": 2328,
+        "loadTime": 841.8999996185303,
+        "size": 16320,
+        "id": "",
+        "url": "https://glitchstudios.io/logo-white.png",
+        "element": "DIV"
+      },
+      "observer_error": null,
+      "error": null
+    },
+    {
+      "route": "/tech",
+      "url": "https://glitchtech.io/",
+      "sample": 1,
+      "captured_at": "2026-04-28T05:17:04.207Z",
+      "status": 200,
+      "lcp_ms": 468,
+      "last_entry": {
+        "startTime": 468,
+        "renderTime": 468,
+        "loadTime": 304.8999996185303,
+        "size": 23185,
+        "id": "",
+        "url": "https://glitchtech.io/logo-white.png",
+        "element": "DIV"
+      },
+      "observer_error": null,
+      "error": null
+    },
+    {
+      "route": "/tech",
+      "url": "https://glitchtech.io/",
+      "sample": 2,
+      "captured_at": "2026-04-28T05:17:09.821Z",
+      "status": 200,
+      "lcp_ms": 1792,
+      "last_entry": {
+        "startTime": 1792,
+        "renderTime": 1792,
+        "loadTime": 280.40000009536743,
+        "size": 16320,
+        "id": "",
+        "url": "https://glitchtech.io/logo-white.png",
+        "element": "DIV"
+      },
+      "observer_error": null,
+      "error": null
+    },
+    {
+      "route": "/tech",
+      "url": "https://glitchtech.io/",
+      "sample": 3,
+      "captured_at": "2026-04-28T05:17:15.419Z",
+      "status": 200,
+      "lcp_ms": 456,
+      "last_entry": {
+        "startTime": 456,
+        "renderTime": 456,
+        "loadTime": 291.7000002861023,
+        "size": 23261,
+        "id": "",
+        "url": "https://glitchtech.io/logo-white.png",
+        "element": "DIV"
+      },
+      "observer_error": null,
+      "error": null
+    },
+    {
+      "route": "/tech",
+      "url": "https://glitchtech.io/",
+      "sample": 4,
+      "captured_at": "2026-04-28T05:17:21.026Z",
+      "status": 200,
+      "lcp_ms": 496,
+      "last_entry": {
+        "startTime": 496,
+        "renderTime": 496,
+        "loadTime": 334.09999990463257,
+        "size": 23185,
+        "id": "",
+        "url": "https://glitchtech.io/logo-white.png",
+        "element": "DIV"
+      },
+      "observer_error": null,
+      "error": null
+    },
+    {
+      "route": "/tech",
+      "url": "https://glitchtech.io/",
+      "sample": 5,
+      "captured_at": "2026-04-28T05:17:26.684Z",
+      "status": 200,
+      "lcp_ms": 440,
+      "last_entry": {
+        "startTime": 440,
+        "renderTime": 440,
+        "loadTime": 233.5,
+        "size": 23151,
+        "id": "",
+        "url": "https://glitchtech.io/logo-white.png",
+        "element": "DIV"
+      },
+      "observer_error": null,
+      "error": null
+    }
+  ]
+}
