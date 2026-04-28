@@ -1,18 +1,26 @@
 # OAuth Env And Redirect Evidence
 
 Captured: 2026-04-28T09:26:00Z
-Plan: 48-03 auth/OAuth/admin smoke
+Rechecked: 2026-04-28T11:58:31Z
+Plan: 48-03 auth/OAuth/admin smoke; 48-11 Google OAuth checkpoint recheck
 
 Secrets were not printed or stored. Vercel Production env was checked with
 `vercel env pull --environment=production` into a temporary file that was
 deleted after presence parsing.
 
+Plan 48-11 rechecked the production env-name listing with
+`vercel env ls production` and did not print or pull secret values. The listing
+still does not include `GOOGLE_CLIENT_ID` or `GOOGLE_CLIENT_SECRET`. `gcloud` is
+not present in the executor environment, and no Google Cloud Console screenshot
+or event evidence was supplied, so Google redirect configuration remains
+unconfirmed.
+
 ## Vercel Env
 
 | env_var | status | evidence |
 | --- | --- | --- |
-| GOOGLE_CLIENT_ID | missing | Vercel Production env presence parse |
-| GOOGLE_CLIENT_SECRET | missing | Vercel Production env presence parse |
+| GOOGLE_CLIENT_ID | missing | Vercel Production env presence parse; Plan 48-11 `vercel env ls production` name listing did not include this env var |
+| GOOGLE_CLIENT_SECRET | missing | Vercel Production env presence parse; Plan 48-11 `vercel env ls production` name listing did not include this env var |
 | META_CLIENT_ID | missing | Vercel Production env presence parse |
 | META_CLIENT_SECRET | missing | Vercel Production env presence parse |
 | GITHUB_CLIENT_ID | missing | Vercel Production env presence parse |
@@ -26,8 +34,8 @@ deleted after presence parsing.
 
 | redirect_uri | status | evidence |
 | --- | --- | --- |
-| `https://glitchstudios.io/api/auth/callback/google` | status: blocked: Google provider env is missing in Vercel Production, so live OAuth cannot be exercised and Google Console redirect presence is not dashboard-confirmed | Vercel env parse; no Google dashboard screenshot supplied |
-| `https://glitchtech.io/api/auth/callback/google` | status: blocked: Google provider env is missing in Vercel Production, so live OAuth cannot be exercised and Google Console redirect presence is not dashboard-confirmed | Vercel env parse; no Google dashboard screenshot supplied |
+| `https://glitchstudios.io/api/auth/callback/google` | status: blocked: Google provider env is missing in Vercel Production, so live OAuth cannot be exercised and Google Console redirect presence is not dashboard-confirmed | Vercel env parse; Plan 48-11 env-name listing still missing Google env; `gcloud` unavailable; no Google dashboard screenshot supplied |
+| `https://glitchtech.io/api/auth/callback/google` | status: blocked: Google provider env is missing in Vercel Production, so live OAuth cannot be exercised and Google Console redirect presence is not dashboard-confirmed | Vercel env parse; Plan 48-11 env-name listing still missing Google env; `gcloud` unavailable; no Google dashboard screenshot supplied |
 
 ## Better Auth Base URL
 
@@ -62,4 +70,3 @@ AUTH-20/AUTH-22 status:
 - Google OAuth cannot pass until Google env values and Google Cloud Console
   redirect URIs are configured.
 - Meta and GitHub are correctly hidden while their env values are missing.
-
