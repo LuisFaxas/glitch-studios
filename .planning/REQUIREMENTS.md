@@ -12,6 +12,8 @@
 
 ### Audit & Discovery (AUDIT-*)
 
+*Status normalized by Phase 47 from Phase 22 verification evidence.*
+
 - [x] **AUDIT-01** Phase 22 produces a populated `.planning/phases/22-visual-audit-discovery/22-AUDIT.md` with user feedback on every public route, admin surface, global component, and cross-page flow; each item tagged `[BLOCK]`, `[POLISH]`, `[BACKLOG]`, or `[OK]`.
 - [x] **AUDIT-02** Phase 22 output triages every v3.0 carry-over item — each pending phase/backlog entry assigned to `[IN v4.0]`, `[BACKLOG]`, or `[DROP]` with rationale.
 - [x] **AUDIT-03** GlitchMark design decisions captured in audit Section I — formula, scope (per-device/category), relationship to BPR, UI surfaces, methodology transparency, versioning strategy.
@@ -87,6 +89,7 @@
 ### Carry-over from v3.0 — Category Leaderboards (RANK-*)
 
 *Status: carried over from v3.0 unchanged; execution re-planned inside v4.0.*
+*Status normalized by Phase 47 from Phase 29 verification plus Phase 29.1 and Phase 29.3 evidence normalization.*
 
 - [x] **RANK-01** `/tech/categories/[slug]/rankings` route — server-rendered table, one row per published review; columns: rank, product name, BPR medal, BPR score, GlitchMark, key benchmarks, year, price. Default sort: GlitchMark descending (CHANGED — was BPR descending; audit may revise).
 - [x] **RANK-02** Sort on every column — `nuqs` URL state.
@@ -171,7 +174,7 @@
 
 | REQ-ID | Category | Phase | Status |
 |--------|----------|-------|--------|
-| AUDIT-01 through AUDIT-04 | Audit verification closure | **47** (source phase 22) | Complete |
+| AUDIT-01 through AUDIT-04 | Audit verification closure | **47** (source phase 22) | Complete - normalized by Phase 47 |
 | EMAIL-01 through EMAIL-08 | Email launch proof | **48** (source phase 24) | Pending |
 | PERF-01 through PERF-07 | Performance launch proof | **48** (source phase 25) | Pending |
 | AUTH-01 through AUTH-13, AUTH-23 through AUTH-25, AUTH-27, AUTH-30 through AUTH-31 | Auth UI implementation | **26** | Complete |
@@ -180,7 +183,7 @@
 | GLITCHMARK-01 through GLITCHMARK-03, GLITCHMARK-06 through GLITCHMARK-08 | GlitchMark core | **28** | Complete |
 | GLITCHMARK-04 | GlitchMark leaderboard surface | **29** | Complete |
 | GLITCHMARK-05 | GlitchMark review detail surface | **36** | Pending |
-| RANK-01 through RANK-07 | Leaderboard | **29** | Complete |
+| RANK-01 through RANK-07 | Leaderboard | **29** | Complete - normalized by Phase 47 |
 | (per-benchmark pages, no REQ-IDs yet — derived from B.9 IA) | Per-benchmark lens | **30** | Complete |
 | (category editorial reframe, no REQ-IDs yet — derived from B.5) | Category editorial | **31** | Pending |
 | (artist platform, no REQ-IDs yet — derived from pivot #10 Wave 1) | Artist BETA | **32** | Pending |
