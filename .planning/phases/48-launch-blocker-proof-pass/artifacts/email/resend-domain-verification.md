@@ -11,8 +11,8 @@ to pay for or continue multi-domain Resend setup right now. The current proof
 scope is therefore:
 
 - `glitchtech.io`: available verified Resend domain for transactional testing.
-- `glitchstudios.io`: deferred: user does not want to pay for multi-domain
-  Resend right now.
+- `glitchstudios.io`: deferred: user does not want to pay for more than one
+  Resend domain right now.
 - Full DMARC proof: deferred_or_blocked: not required for current single-domain
   smoke; do not mark EMAIL-08 passed.
 
@@ -32,7 +32,7 @@ This artifact does not claim full EMAIL-08 completion.
 
 - domain: glitchstudios.io
 - resend_status: deferred
-- deferred_reason: user does not want to pay for multi-domain Resend right now
+- deferred_reason: user does not want to pay for more than one Resend domain right now
 - spf_record: `send.glitchstudios.io TXT "v=spf1 include:amazonses.com ~all"` and `send.glitchstudios.io MX 10 feedback-smtp.us-east-1.amazonses.com.` are present in public DNS
 - dkim_records: `resend._domainkey.glitchstudios.io TXT` public key present in `dns-after.txt`
 - dmarc_record: blocked: no public DMARC TXT returned for `_dmarc.glitchstudios.io`
@@ -48,3 +48,14 @@ This artifact does not claim full EMAIL-08 completion.
   the same usable Resend context and DMARC is documented.
 - EMAIL-08 remains partial/deferred for this plan; do not mark EMAIL-08 passed
   without real `glitchstudios.io` Resend verification and DMARC proof.
+
+## 48-17 Evidence Contract
+
+- `glitchtech.io` remains the verified/current testing domain because dashboard
+  or API evidence exists in `resend-account-review.md`.
+- `glitchstudios.io` remains deferred: user does not want to pay for more than
+  one Resend domain right now.
+- DMARC proof for the full two-brand launch criterion remains deferred or
+  blocked.
+- Do not mark EMAIL-08 passed until real `glitchstudios.io` Resend verification
+  and full DMARC proof exist.

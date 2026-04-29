@@ -7,6 +7,29 @@ The app is configured for single-domain testing through
 `Glitch Studios <noreply@glitchtech.io>`. These rows stay blocked until a real
 send, Resend event/log proof, inbox proof, and link/content proof are captured.
 
+## 48-17 Evidence Contract
+
+Every passed email row must use the single verified sender,
+`Glitch Studios <noreply@glitchtech.io>`, and must fill these fields with
+secret-safe evidence:
+
+- flow
+- tested_at
+- trigger_url_or_action
+- recipient_inbox_alias
+- resend_event_id_or_screenshot
+- inbox_screenshot
+- content_assertions
+- link_result
+- blocked_reason
+- status
+
+Rows may only move to `status: passed` when `resend_event_id_or_screenshot`,
+`inbox_screenshot`, `content_assertions`, and `link_result` are concrete for
+that flow. If any field is unavailable, keep `status: blocked` and provide a
+specific `blocked_reason`. Do not store API keys, OAuth secrets, passwords,
+tokens, full cookies, or real card numbers in this artifact.
+
 ## Proof Boundary
 
 No row was changed to `passed` in Plan 48-10. Resend dashboard evidence and
