@@ -1,14 +1,17 @@
 ---
-status: awaiting_human_verify
+status: superseded-wrong-framing
 trigger: "/tech/rankings/laptops freezes when idle (no interaction); freeze propagates site-wide after ~1 minute. Reported 2026-05-01 — separate fault class from the prior click-path crash."
 created: 2026-05-01T00:00:00Z
-updated: 2026-05-01T04:50:00Z
+updated: 2026-05-01T05:55:00Z
+superseded_by: .planning/debug/rankings-categories-filter-crash.md (the actual user-reproducible trigger is interaction, not idle)
 related_session: .planning/debug/filter-chip-crash-mac-browsers.md (resolved 2026-04-27, click-path — different fault class)
 fault_class: idle-freeze-with-site-wide-propagation
 fix_commits:
   - c5b488b test(48-22): add idle-freeze repro harness for /tech/rankings/laptops
   - f840245 fix(48-22): remove useDesktopLayout to close idle-freeze vector on /tech/rankings/laptops
 ---
+
+> **STATUS UPDATE 2026-05-01T05:55Z — framing was wrong.** The user's 2026-05-01 reproduction proved this is NOT an idle freeze. It is a deterministic interaction-triggered crash on clicking the "Categories" navigation tile from /tech/rankings/laptops. Investigation continues in `.planning/debug/rankings-categories-filter-crash.md`. The f840245 useDesktopLayout removal IS still defensible standalone (consistent with the architectural rule of no setState in matchMedia/visibility/focus handlers on this route) and is being kept per Codex Round 1 of the new session.
 
 > **Related (different fault class):** `.planning/debug/filter-chip-crash-mac-browsers.md` was the click-path freeze on the same surface, resolved 2026-04-27 via deferred-update pattern (commit 6af8177). The architectural constraint from that session — **no synchronous React state in native input/focus/visibility event handlers** — must be preserved by any fix produced here.
 
