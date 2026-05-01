@@ -1,5 +1,6 @@
 "use client"
 
+import { memo, type ReactNode } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import {
   LogIn,
@@ -13,7 +14,6 @@ import { WidgetNowPlaying } from "@/components/tiles/widget-now-playing"
 import { WidgetStudioStatus } from "@/components/tiles/widget-studio-status"
 import { WidgetSocial } from "@/components/tiles/widget-social"
 import { signOut, useSession } from "@/lib/auth-client"
-import type { ReactNode } from "react"
 import { useCart } from "@/components/cart/cart-provider"
 import { useSidebar } from "@/components/layout/sidebar-context"
 import Link from "next/link"
@@ -45,6 +45,72 @@ function resolveHref(href: string, bookingLive: boolean): string {
   return !bookingLive && href === "/book" ? "/services" : href
 }
 
+// Per-item subcomponents own their own pathname subscription. The parent
+// `TileNav` no longer reads pathname, so route changes do not re-render the
+// entire shell — only the individual nav items whose isActive flips.
+//
+// Why this exists: see debug/rankings-categories-filter-crash (2026-05-01).
+// Real macOS Safari/Firefox can wedge during the same task as a route-changing
+// click if the entire shell tree re-renders synchronously. Per-item pathname
+// subscription scopes that work down to N tiny components.
+
+interface CollapsedNavTileProps {
+  href: string
+  label: string
+  Icon: NavItem["icon"]
+}
+
+const CollapsedNavTile = memo(function CollapsedNavTile({
+  href,
+  label,
+  Icon,
+}: CollapsedNavTileProps) {
+  const pathname = usePathname()
+  const isActive = isTechPathActive(href, pathname)
+  return (
+    <Link
+      href={href}
+      data-active={isActive ? "true" : "false"}
+      className={`flex items-center justify-center p-3 border border-[#222] transition-colors duration-200 ${
+        isActive
+          ? "bg-[#f5f5f0] border-[#f5f5f0] text-[#000]"
+          : "bg-[#111] hover:bg-[#1a1a1a] text-[#f5f5f0]"
+      }`}
+      aria-label={label}
+      {...(isActive ? { "aria-current": "page" as const } : {})}
+    >
+      <Icon className="h-5 w-5" />
+    </Link>
+  )
+})
+
+interface ExpandedNavTileProps {
+  href: string
+  label: string
+  size: NavItem["desktopSize"]
+  Icon: NavItem["icon"]
+}
+
+const ExpandedNavTile = memo(function ExpandedNavTile({
+  href,
+  label,
+  size,
+  Icon,
+}: ExpandedNavTileProps) {
+  const pathname = usePathname()
+  const isActive = isTechPathActive(href, pathname)
+  return (
+    <Tile
+      size={size}
+      label={label}
+      icon={<Icon className="h-9 w-9" />}
+      isActive={isActive}
+      href={href}
+      layout="horizontal"
+    />
+  )
+})
+
 export function TileNav({
   navItems,
   topLogoTile,
@@ -53,7 +119,11 @@ export function TileNav({
   latestPostSlot,
   bookingLive = true,
 }: TileNavProps) {
-  const pathname = usePathname()
+  // NOTE: TileNav intentionally does NOT call usePathname here. Per-tile
+  // active-state is handled inside CollapsedNavTile / ExpandedNavTile so a
+  // route change does not re-render this entire component (which would
+  // re-render every widget, the cart button, the auth tile, the cross-link
+  // tile, etc.). See debug/rankings-categories-filter-crash.
   const router = useRouter()
   const { data: session } = useSession()
   const { collapsed, setCollapsed } = useSidebar()
@@ -81,28 +151,16 @@ export function TileNav({
       {collapsed ? (
         /* ---- Collapsed: icon strip ---- */
         <>
-          {/* Nav icons */}
+          {/* Nav icons — each tile owns its own pathname subscription. */}
           <nav aria-label="Main navigation" className="mt-1 flex flex-col gap-1 w-full">
-            {navItems.map((item) => {
-              const resolvedHref = resolveHref(item.href, bookingLive)
-              const isActive = isTechPathActive(item.href, pathname)
-              return (
-                <Link
-                  key={item.href}
-                  href={resolvedHref}
-                  data-active={isActive ? "true" : "false"}
-                  className={`flex items-center justify-center p-3 border border-[#222] transition-colors duration-200 ${
-                    isActive
-                      ? "bg-[#f5f5f0] border-[#f5f5f0] text-[#000]"
-                      : "bg-[#111] hover:bg-[#1a1a1a] text-[#f5f5f0]"
-                  }`}
-                  aria-label={item.label}
-                  {...(isActive ? { "aria-current": "page" as const } : {})}
-                >
-                  <item.icon className="h-5 w-5" />
-                </Link>
-              )
-            })}
+            {navItems.map((item) => (
+              <CollapsedNavTile
+                key={item.href}
+                href={resolveHref(item.href, bookingLive)}
+                label={item.label}
+                Icon={item.icon}
+              />
+            ))}
           </nav>
 
           {/* D-07/D-08 (Phase 16.1): native <button> — full-tile click target,
@@ -186,24 +244,18 @@ export function TileNav({
           {/* Logo tile */}
           {topLogoTile ?? <LogoTile />}
 
-          {/* Navigation tiles */}
+          {/* Navigation tiles — each tile owns its own pathname subscription. */}
           <nav aria-label="Main navigation" className="mt-1">
             <div className="grid grid-cols-2 gap-1">
-              {navItems.map((item) => {
-                const resolvedHref = resolveHref(item.href, bookingLive)
-                const isActive = isTechPathActive(item.href, pathname)
-                return (
-                  <Tile
-                    key={item.href}
-                    size={item.desktopSize}
-                    label={item.label}
-                    icon={<item.icon className="h-9 w-9" />}
-                    isActive={isActive}
-                    href={resolvedHref}
-                    layout="horizontal"
-                  />
-                )
-              })}
+              {navItems.map((item) => (
+                <ExpandedNavTile
+                  key={item.href}
+                  href={resolveHref(item.href, bookingLive)}
+                  label={item.label}
+                  size={item.desktopSize}
+                  Icon={item.icon}
+                />
+              ))}
             </div>
           </nav>
 

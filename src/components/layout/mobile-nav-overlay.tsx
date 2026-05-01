@@ -1,6 +1,7 @@
 "use client"
 
 import {
+  memo,
   useEffect,
   useCallback,
   useRef,
@@ -70,6 +71,69 @@ const ROW_STAGGER = [
   { delay: 0.20, y: 10 },
 ] as const
 
+// RouteChangeCloser — isolates the pathname subscription so the outer
+// MobileNavOverlay no longer re-renders on every route change. When the user
+// navigates while the overlay is open, this child sees the pathname change
+// and dispatches a deferred close. See debug/rankings-categories-filter-crash.
+interface RouteChangeCloserProps {
+  isOpen: boolean
+  onClose: () => void
+}
+const RouteChangeCloser = memo(function RouteChangeCloser({
+  isOpen,
+  onClose,
+}: RouteChangeCloserProps) {
+  const pathname = usePathname()
+  const previousPathnameRef = useRef(pathname)
+  useEffect(() => {
+    // Always update the ref on pathname change — even when closed. Otherwise a
+    // route change while closed leaves a stale ref, and the NEXT open would
+    // see pathname !== previousPathnameRef.current and immediately close.
+    // Per Codex post-fix Round 2 review.
+    if (pathname === previousPathnameRef.current) return
+    const wasOpen = isOpen
+    previousPathnameRef.current = pathname
+    if (wasOpen) {
+      // Defer out of the route-change task so we never trigger a synchronous
+      // setState in the same task as the navigation event. Mirrors the
+      // architectural rule from the 2026-04-27 click-path landmine.
+      window.setTimeout(() => onClose(), 0)
+    }
+  }, [pathname, isOpen, onClose])
+  return null
+})
+
+// OverlayNavTile — per-tile pathname subscription for the overlay's open-state
+// nav grid. Only rendered when the overlay is open, so the cost is paid only
+// when the user actually opens the menu.
+interface OverlayNavTileProps {
+  href: string
+  label: string
+  icon: ReactNode
+  onClick: () => void
+}
+const OverlayNavTile = memo(function OverlayNavTile({
+  href,
+  label,
+  icon,
+  onClick,
+}: OverlayNavTileProps) {
+  const pathname = usePathname()
+  const isActive = pathname === href || pathname.startsWith(href + "/")
+  return (
+    <Tile
+      size="medium"
+      label={label}
+      icon={icon}
+      isActive={isActive}
+      href={href}
+      onClick={onClick}
+      layout="horizontal"
+      className="!col-span-1 !px-3"
+    />
+  )
+})
+
 export function MobileNavOverlay({
   isOpen,
   onClose,
@@ -77,10 +141,15 @@ export function MobileNavOverlay({
   navItems,
   socialLinks,
 }: MobileNavOverlayProps) {
-  const pathname = usePathname()
+  // NOTE: MobileNavOverlay intentionally does NOT call usePathname at the
+  // outer level. Pathname-driven behavior is delegated to <RouteChangeCloser>
+  // (close-on-route-change) and <OverlayNavTile> (per-item active state),
+  // which only run their hooks when relevant. Previously, every route change
+  // re-rendered the entire overlay (with motion, dragControls, focus-trap
+  // setup) even when the overlay was closed and CSS-hidden on desktop.
+  // See debug/rankings-categories-filter-crash.
   const { data: session } = useSession()
   const overlayRef = useRef<HTMLDivElement>(null)
-  const previousPathnameRef = useRef(pathname)
   const wasOpenRef = useRef(false)
   const shouldReduceMotion = useReducedMotion()
   const dragY = useMotionValue(0)
@@ -142,13 +211,9 @@ export function MobileNavOverlay({
     return () => overlay.removeEventListener("keydown", handleTab)
   }, [isOpen])
 
-  // Close on route change
-  useEffect(() => {
-    if (pathname !== previousPathnameRef.current) {
-      previousPathnameRef.current = pathname
-      if (isOpen) handleDeferredClose()
-    }
-  }, [pathname, isOpen, handleDeferredClose])
+  // Close on route change is handled by <RouteChangeCloser> rendered inside
+  // the JSX below — see component definition above. That isolation prevents
+  // every pathname change from re-rendering this entire overlay.
 
   // Return focus to trigger on close
   useEffect(() => {
@@ -174,7 +239,11 @@ export function MobileNavOverlay({
   }
 
   return (
-    <AnimatePresence>
+    <>
+      {/* Pathname subscription is owned by RouteChangeCloser so the rest of
+          this component doesn't re-render on route changes. */}
+      <RouteChangeCloser isOpen={isOpen} onClose={onClose} />
+      <AnimatePresence>
       {isOpen && (
         <>
           {/* Fixed backdrop — dims and blurs the page behind, doesn't move with drag */}
@@ -276,24 +345,15 @@ export function MobileNavOverlay({
               {...stagger(1)}
             >
               <div className="grid grid-cols-2 gap-1">
-                {navItems.map((item) => {
-                  const isActive =
-                    pathname === item.href ||
-                    pathname.startsWith(item.href + "/")
-                  return (
-                    <Tile
-                      key={item.href}
-                      size="medium"
-                      label={item.label}
-                      icon={<item.icon className="h-5 w-5" />}
-                      isActive={isActive}
-                      href={item.href}
-                      onClick={handleDeferredClose}
-                      layout="horizontal"
-                      className="!col-span-1 !px-3"
-                    />
-                  )
-                })}
+                {navItems.map((item) => (
+                  <OverlayNavTile
+                    key={item.href}
+                    href={item.href}
+                    label={item.label}
+                    icon={<item.icon className="h-5 w-5" />}
+                    onClick={handleDeferredClose}
+                  />
+                ))}
               </div>
             </motion.nav>
 
@@ -383,6 +443,7 @@ export function MobileNavOverlay({
         </motion.div>
         </>
       )}
-    </AnimatePresence>
+      </AnimatePresence>
+    </>
   )
 }
