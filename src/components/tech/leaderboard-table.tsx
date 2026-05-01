@@ -1,5 +1,5 @@
 "use client"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import {
   useReactTable,
@@ -189,37 +189,29 @@ function deriveDisciplineFromRubricKey(key: string): string {
   return key.split(":")[0] ?? ""
 }
 
-function useDesktopLayout() {
-  const [isDesktop, setIsDesktop] = useState<boolean | null>(null)
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)")
-    let timeoutId: number | null = null
-    const sync = () => {
-      const next = mq.matches
-      if (timeoutId != null) window.clearTimeout(timeoutId)
-      timeoutId = window.setTimeout(() => {
-        setIsDesktop(next)
-        timeoutId = null
-      }, 0)
-    }
-
-    sync()
-    mq.addEventListener("change", sync)
-    return () => {
-      if (timeoutId != null) window.clearTimeout(timeoutId)
-      mq.removeEventListener("change", sync)
-    }
-  }, [])
-
-  return isDesktop
-}
+// PHASE-48 IDLE FREEZE FIX (2026-05-01):
+// Removed `useDesktopLayout` (matchMedia + setTimeout(0) + setState) and the
+// renderDesktop/renderMobile JS gates. Desktop vs. mobile rendering is now
+// controlled entirely by Tailwind responsive utilities (`hidden md:block` /
+// `block md:hidden`). The hidden subtree is `display: none` so the browser
+// does not paint or composite it. Both subtrees mount once on hydration and
+// stay there.
+//
+// Why: real macOS Safari/Firefox can fire spurious `change` events on tab
+// wake/refocus, system sleep recovery, external monitor DPR changes, or near-
+// breakpoint resize/zoom. Each spurious change ran setTimeout(0) → setState →
+// re-rendered the entire table tree. Headless Linux Chromium does not engage
+// these macOS lifecycle paths, which is why the freeze was invisible to the
+// Playwright harness in `tests/debug-rankings-idle-freeze.spec.ts`.
+// Investigation: `.planning/debug/rankings-laptops-idle-freeze.md`.
+//
+// Trade-off: both desktop and mobile DOM subtrees render on every page load.
+// They share the same upstream filter/sort state, so the duplicate is purely
+// presentational. The desktop one is `display: none` on small viewports, the
+// mobile one is `display: none` on md+ viewports — neither paints when hidden.
 
 export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
   const router = useRouter()
-  const isDesktopLayout = useDesktopLayout()
-  const renderDesktop = isDesktopLayout !== false
-  const renderMobile = isDesktopLayout !== true
 
   // Filter state is LOCAL React state, not URL state. Codex forensic review
   // identified the chip-click crash as: nuqs URL update → shallow URL replace
@@ -606,30 +598,26 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
   if (filteredRows.length === 0) {
     return (
       <div>
-        {renderDesktop && (
-          <div className="hidden md:block">
-            <LeaderboardFilters
-              state={filterState}
-              onChange={onFilterChange}
-              onReset={onResetFilters}
-              bounds={bounds}
-              layout="bar"
-            />
-          </div>
-        )}
-        <LeaderboardEmptyState
-          mode="no-results-filtered"
-          onResetFilters={onResetFilters}
-        />
-        {renderMobile && (
-          <LeaderboardFilterSheet
+        <div className="hidden md:block">
+          <LeaderboardFilters
             state={filterState}
             onChange={onFilterChange}
             onReset={onResetFilters}
             bounds={bounds}
-            activeCount={activeFilterCount}
+            layout="bar"
           />
-        )}
+        </div>
+        <LeaderboardEmptyState
+          mode="no-results-filtered"
+          onResetFilters={onResetFilters}
+        />
+        <LeaderboardFilterSheet
+          state={filterState}
+          onChange={onFilterChange}
+          onReset={onResetFilters}
+          bounds={bounds}
+          activeCount={activeFilterCount}
+        />
       </div>
     )
   }
@@ -642,18 +630,18 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
     <div>
       {/* Phase 29.3: filter re-mounted after baseline GPU/render fixes
           (Plan 29.3-01) and macOS Safari/Firefox sort-header verification
-          (Plan 29.3-02) confirmed the chip-bar is safe to render. */}
-      {renderDesktop && (
-        <div className="hidden md:block">
-          <LeaderboardFilters
-            state={filterState}
-            onChange={onFilterChange}
-            onReset={onResetFilters}
-            bounds={bounds}
-            layout="bar"
-          />
-        </div>
-      )}
+          (Plan 29.3-02) confirmed the chip-bar is safe to render.
+          Phase 48 idle-freeze fix (2026-05-01): visibility now controlled
+          purely by CSS responsive utilities; no JS matchMedia gate. */}
+      <div className="hidden md:block">
+        <LeaderboardFilters
+          state={filterState}
+          onChange={onFilterChange}
+          onReset={onResetFilters}
+          bounds={bounds}
+          layout="bar"
+        />
+      </div>
 
       <div>
         {/* Phase 29.1 D-17 — table markup is rendered both on desktop (always)
@@ -737,62 +725,60 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
 
           return (
             <>
-              {/* Desktop table — always visible at md+ */}
-              {renderDesktop && (
-                <div
-                  data-leaderboard-table
-                  className="hidden overflow-x-auto md:block"
-                  style={{ contain: "layout paint style" }}
-                >
-                  {tableMarkup}
-                </div>
-              )}
+              {/* Desktop table — visible at md+. `display: none` on mobile
+                  via Tailwind `hidden`; the browser does not paint or
+                  composite the hidden subtree. */}
+              <div
+                data-leaderboard-table
+                className="hidden overflow-x-auto md:block"
+                style={{ contain: "layout paint style" }}
+              >
+                {tableMarkup}
+              </div>
 
-              {/* Mobile — toggle between Cards and Table */}
-              {renderMobile && (
-                <div
-                  data-leaderboard-table-mobile-wrapper
-                  className="block md:hidden"
-                  style={{ contain: "layout paint style" }}
-                >
-                  <div className="mb-3 flex items-center justify-end">
-                    <LeaderboardViewToggle
-                      value={filters.view}
-                      onChange={onViewChange}
-                    />
-                  </div>
-                  {filters.view === "cards" ? (
-                    <div className="space-y-3">
-                      {sortedRows.map((row, i) => (
-                        <LeaderboardCard
-                          key={row.original.reviewId}
-                          row={row.original}
-                          rank={i + 1}
-                          benchmarkColumns={benchmarkColumns}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div data-leaderboard-table-mobile className="overflow-x-auto">
-                      {tableMarkup}
-                    </div>
-                  )}
+              {/* Mobile — Cards/Table toggle. `display: none` on md+. */}
+              <div
+                data-leaderboard-table-mobile-wrapper
+                className="block md:hidden"
+                style={{ contain: "layout paint style" }}
+              >
+                <div className="mb-3 flex items-center justify-end">
+                  <LeaderboardViewToggle
+                    value={filters.view}
+                    onChange={onViewChange}
+                  />
                 </div>
-              )}
+                {filters.view === "cards" ? (
+                  <div className="space-y-3">
+                    {sortedRows.map((row, i) => (
+                      <LeaderboardCard
+                        key={row.original.reviewId}
+                        row={row.original}
+                        rank={i + 1}
+                        benchmarkColumns={benchmarkColumns}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div data-leaderboard-table-mobile className="overflow-x-auto">
+                    {tableMarkup}
+                  </div>
+                )}
+              </div>
             </>
           )
         })()}
 
-        {/* Phase 29.3: mobile filter sheet re-mounted (re-enabled). */}
-        {renderMobile && (
-          <LeaderboardFilterSheet
-            state={filterState}
-            onChange={onFilterChange}
-            onReset={onResetFilters}
-            bounds={bounds}
-            activeCount={activeFilterCount}
-          />
-        )}
+        {/* Phase 29.3: mobile filter sheet — its trigger button is
+            `md:hidden`, so the entire Sheet stays display-hidden on
+            desktop. No JS gate needed. */}
+        <LeaderboardFilterSheet
+          state={filterState}
+          onChange={onFilterChange}
+          onReset={onResetFilters}
+          bounds={bounds}
+          activeCount={activeFilterCount}
+        />
       </div>
     </div>
   )
