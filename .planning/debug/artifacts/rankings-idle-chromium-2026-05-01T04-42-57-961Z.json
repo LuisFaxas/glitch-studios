@@ -1,0 +1,119 @@
+{
+  "url": "http://localhost:3050/tech/rankings/laptops",
+  "browser": "chromium",
+  "navigationMs": 6778,
+  "probeMs": 12,
+  "snapshots": [
+    {
+      "t": 2,
+      "usedJSHeapSize": 24500000,
+      "totalJSHeapSize": 33100000,
+      "activeTimers": {
+        "intervals": 1,
+        "timeouts": 18,
+        "rafs": 0
+      },
+      "activeObservers": {
+        "intersection": 1,
+        "resize": 1,
+        "mutation": 1
+      },
+      "webglContexts": 0,
+      "longTasks": {
+        "count": 2,
+        "totalDurationMs": 312,
+        "maxDurationMs": 208
+      },
+      "consoleErrors": 0,
+      "pageErrors": 0
+    },
+    {
+      "t": 30,
+      "usedJSHeapSize": 24500000,
+      "totalJSHeapSize": 33100000,
+      "activeTimers": {
+        "intervals": 1,
+        "timeouts": 18,
+        "rafs": 0
+      },
+      "activeObservers": {
+        "intersection": 1,
+        "resize": 1,
+        "mutation": 1
+      },
+      "webglContexts": 0,
+      "longTasks": {
+        "count": 2,
+        "totalDurationMs": 312,
+        "maxDurationMs": 208
+      },
+      "consoleErrors": 0,
+      "pageErrors": 0
+    },
+    {
+      "t": 60,
+      "usedJSHeapSize": 24500000,
+      "totalJSHeapSize": 33100000,
+      "activeTimers": {
+        "intervals": 1,
+        "timeouts": 18,
+        "rafs": 0
+      },
+      "activeObservers": {
+        "intersection": 1,
+        "resize": 1,
+        "mutation": 1
+      },
+      "webglContexts": 0,
+      "longTasks": {
+        "count": 2,
+        "totalDurationMs": 312,
+        "maxDurationMs": 208
+      },
+      "consoleErrors": 0,
+      "pageErrors": 0
+    },
+    {
+      "t": 90,
+      "usedJSHeapSize": 24500000,
+      "totalJSHeapSize": 33100000,
+      "activeTimers": {
+        "intervals": 1,
+        "timeouts": 18,
+        "rafs": 0
+      },
+      "activeObservers": {
+        "intersection": 1,
+        "resize": 1,
+        "mutation": 1
+      },
+      "webglContexts": 0,
+      "longTasks": {
+        "count": 2,
+        "totalDurationMs": 312,
+        "maxDurationMs": 208
+      },
+      "consoleErrors": 0,
+      "pageErrors": 0
+    }
+  ],
+  "consoleEvents": [
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    },
+    {
+      "type": "log",
+      "text": "[HMR] connected"
+    },
+    {
+      "type": "log",
+      "text": "[Fast Refresh] rebuilding"
+    },
+    {
+      "type": "log",
+      "text": "[Fast Refresh] done in 4094ms"
+    }
+  ],
+  "pageErrors": []
+}

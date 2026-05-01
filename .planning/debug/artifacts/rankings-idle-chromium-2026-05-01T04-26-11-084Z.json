@@ -1,0 +1,102 @@
+{
+  "url": "https://glitchtech.io/tech/rankings/laptops",
+  "browser": "chromium",
+  "navigationMs": 6269,
+  "probeMs": 16,
+  "snapshots": [
+    {
+      "t": 2,
+      "usedJSHeapSize": 18200000,
+      "totalJSHeapSize": 29400000,
+      "activeTimers": {
+        "intervals": 0,
+        "timeouts": 6,
+        "rafs": 0
+      },
+      "activeObservers": {
+        "intersection": 1,
+        "resize": 0,
+        "mutation": 0
+      },
+      "webglContexts": 0,
+      "longTasks": {
+        "count": 3,
+        "totalDurationMs": 174,
+        "maxDurationMs": 60
+      },
+      "consoleErrors": 0,
+      "pageErrors": 0
+    },
+    {
+      "t": 30,
+      "usedJSHeapSize": 18200000,
+      "totalJSHeapSize": 29400000,
+      "activeTimers": {
+        "intervals": 0,
+        "timeouts": 6,
+        "rafs": 0
+      },
+      "activeObservers": {
+        "intersection": 1,
+        "resize": 0,
+        "mutation": 0
+      },
+      "webglContexts": 0,
+      "longTasks": {
+        "count": 3,
+        "totalDurationMs": 174,
+        "maxDurationMs": 60
+      },
+      "consoleErrors": 0,
+      "pageErrors": 0
+    },
+    {
+      "t": 60,
+      "usedJSHeapSize": 18200000,
+      "totalJSHeapSize": 29400000,
+      "activeTimers": {
+        "intervals": 0,
+        "timeouts": 6,
+        "rafs": 0
+      },
+      "activeObservers": {
+        "intersection": 1,
+        "resize": 0,
+        "mutation": 0
+      },
+      "webglContexts": 0,
+      "longTasks": {
+        "count": 3,
+        "totalDurationMs": 174,
+        "maxDurationMs": 60
+      },
+      "consoleErrors": 0,
+      "pageErrors": 0
+    },
+    {
+      "t": 90,
+      "usedJSHeapSize": 18200000,
+      "totalJSHeapSize": 29400000,
+      "activeTimers": {
+        "intervals": 0,
+        "timeouts": 6,
+        "rafs": 0
+      },
+      "activeObservers": {
+        "intersection": 1,
+        "resize": 0,
+        "mutation": 0
+      },
+      "webglContexts": 0,
+      "longTasks": {
+        "count": 3,
+        "totalDurationMs": 174,
+        "maxDurationMs": 60
+      },
+      "consoleErrors": 0,
+      "pageErrors": 0
+    }
+  ],
+  "consoleEvents": [],
+  "pageErrors": []
+}
