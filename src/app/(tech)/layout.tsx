@@ -1,10 +1,12 @@
 "use client"
 
+import { Suspense } from "react"
 import { TileNav } from "@/components/layout/tile-nav"
 import { BottomTabBar } from "@/components/layout/bottom-tab-bar"
 import { Footer } from "@/components/layout/footer"
 import { MobileContentWrapper } from "@/components/layout/mobile-content-wrapper"
 import { SidebarProvider } from "@/components/layout/sidebar-context"
+import { DiagInstrumentation } from "@/components/debug/diag-instrumentation"
 import {
   techNavItems,
   techMobileTabItems,
@@ -26,6 +28,11 @@ export default function TechLayout({
 }) {
   return (
     <SidebarProvider>
+      {/* Diagnostic instrumentation — activates only when URL has ?diag=1.
+          See .planning/debug/rankings-categories-filter-crash.md */}
+      <Suspense fallback={null}>
+        <DiagInstrumentation />
+      </Suspense>
       <div data-brand="tech" className="flex min-h-screen">
         <TileNav
           navItems={techNavItems}

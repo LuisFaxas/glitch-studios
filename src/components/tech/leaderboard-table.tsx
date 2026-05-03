@@ -1,6 +1,7 @@
 "use client"
 import { memo, useCallback, useMemo, useState } from "react"
-import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
 import {
   useReactTable,
   getCoreRowModel,
@@ -784,7 +785,188 @@ function LeaderboardTableInner({ rows, benchmarkColumns }: Props) {
   )
 }
 
-// memo() prevents re-render when TechLayout re-renders for unrelated route
-// transitions. `rows` and `benchmarkColumns` come from a server component and
-// are referentially stable across the parent's pathname-driven re-renders.
-export const LeaderboardTable = memo(LeaderboardTableInner)
+// SIMPLE-MODE diagnostic implementation, gated behind `?simple=1`.
+// Same filter state setup as the full version, but renders a flat <ul> of
+// products instead of going through tanstack's `useReactTable`. The point is
+// to isolate whether tanstack's internal state churn (build/teardown of row
+// models on every filter-driven `data` prop change) is the wedge cause for
+// the rankings-categories-filter-crash on real macOS Safari/Firefox. If
+// `?simple=1` does NOT freeze on filter+reset+nav, tanstack is the wedge and
+// we permanently swap to this simple variant. If it still freezes, tanstack
+// is innocent and the wedge is elsewhere.
+//
+// Filter state is duplicated (not extracted to a hook) on purpose — to keep
+// the diagnostic change minimal and the existing tanstack path completely
+// untouched.
+//
+// Investigation: .planning/debug/rankings-categories-filter-crash.md
+function LeaderboardTableSimpleInner({ rows }: Props) {
+  type AllFilters = {
+    minPrice: number | null
+    maxPrice: number | null
+    year: number[]
+    cpu: string[]
+    ram: string[]
+    storage: string[]
+    medal: string[]
+    subcat: string[]
+  }
+  const [filters, setFiltersState] = useState<AllFilters>({
+    minPrice: null,
+    maxPrice: null,
+    year: [],
+    cpu: [],
+    ram: [],
+    storage: [],
+    medal: [],
+    subcat: [],
+  })
+  const setFilters = useCallback((patch: Partial<AllFilters>) => {
+    window.setTimeout(() => {
+      setFiltersState((prev) => ({ ...prev, ...patch }))
+    }, 0)
+  }, [])
+
+  const filterState: FilterState = useMemo(
+    () => ({
+      minPrice: filters.minPrice,
+      maxPrice: filters.maxPrice,
+      year: filters.year,
+      cpu: filters.cpu,
+      ram: filters.ram,
+      storage: filters.storage,
+      medal: filters.medal,
+      subcat: filters.subcat,
+    }),
+    [
+      filters.minPrice,
+      filters.maxPrice,
+      filters.year,
+      filters.cpu,
+      filters.ram,
+      filters.storage,
+      filters.medal,
+      filters.subcat,
+    ],
+  )
+
+  const bounds = useMemo<FilterCorpusBounds>(() => deriveBounds(rows), [rows])
+  const filteredRows = useMemo(
+    () => applyFilters(rows, filterState),
+    [rows, filterState],
+  )
+
+  const onFilterChange = useCallback(
+    (patch: Partial<FilterState>) => setFilters(patch as Partial<AllFilters>),
+    [setFilters],
+  )
+  const onResetFilters = useCallback(() => {
+    setFilters({
+      minPrice: null,
+      maxPrice: null,
+      year: [],
+      cpu: [],
+      ram: [],
+      storage: [],
+      medal: [],
+      subcat: [],
+    })
+  }, [setFilters])
+
+  const activeFilterCount = useMemo(() => {
+    let n = 0
+    if (filterState.minPrice !== null || filterState.maxPrice !== null) n++
+    n += filterState.year.length > 0 ? 1 : 0
+    n += filterState.cpu.length > 0 ? 1 : 0
+    n += filterState.ram.length > 0 ? 1 : 0
+    n += filterState.storage.length > 0 ? 1 : 0
+    n += filterState.medal.length > 0 ? 1 : 0
+    n += filterState.subcat.length > 0 ? 1 : 0
+    return n
+  }, [filterState])
+
+  return (
+    <div className="px-3 sm:px-4 lg:px-6 py-4">
+      {/* Banner so the user can see they're in simple mode */}
+      <div className="mb-3 border border-[#0f0]/30 bg-[#001a00] px-3 py-2 font-mono text-[11px] text-[#0f0]">
+        SIMPLE-MODE DIAGNOSTIC — tanstack-table replaced with flat list. Same filter
+        state, same sidebar. Strip-down test for rankings-categories-filter-crash.
+      </div>
+
+      <div className="hidden md:block">
+        <LeaderboardFilters
+          state={filterState}
+          onChange={onFilterChange}
+          onReset={onResetFilters}
+          bounds={bounds}
+          layout="bar"
+        />
+      </div>
+
+      {filteredRows.length === 0 ? (
+        <div className="border border-[#222] bg-[#0a0a0a] p-6 text-center font-mono text-sm text-[#888]">
+          No products match the current filters.
+        </div>
+      ) : (
+        <ul
+          role="list"
+          className="border border-[#222] bg-[#0a0a0a] divide-y divide-[#222]"
+        >
+          {filteredRows.map((row, i) => (
+            <li
+              key={row.reviewId}
+              className="flex items-center gap-3 px-3 py-2 font-mono text-[13px] text-[#f5f5f0]"
+            >
+              <span className="w-8 shrink-0 text-[#666] tabular-nums">
+                #{i + 1}
+              </span>
+              <Link
+                href={`/tech/reviews/${row.reviewSlug}`}
+                prefetch={false}
+                className="flex-1 truncate text-[#f5f5f0] hover:text-[#fff] hover:underline"
+              >
+                {row.productName}
+              </Link>
+              <span className="w-16 shrink-0 text-right text-[#888] uppercase">
+                {row.bprTier ?? "—"}
+              </span>
+              <span className="w-16 shrink-0 text-right text-[#888] tabular-nums">
+                {row.glitchmarkScore !== null
+                  ? formatGlitchmarkDisplay(row.glitchmarkScore)
+                  : "—"}
+              </span>
+              <span className="w-20 shrink-0 text-right text-[#888] tabular-nums">
+                {row.priceUsd !== null
+                  ? `$${row.priceUsd.toLocaleString()}`
+                  : "—"}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <LeaderboardFilterSheet
+        state={filterState}
+        onChange={onFilterChange}
+        onReset={onResetFilters}
+        bounds={bounds}
+        activeCount={activeFilterCount}
+      />
+    </div>
+  )
+}
+
+// Dispatcher — checks `?simple=1` and renders one of the two impls. memo()
+// prevents the dispatcher from re-rendering on TechLayout re-renders for
+// unrelated route transitions. Both inner components are self-contained.
+function LeaderboardTableDispatcher(props: Props) {
+  const searchParams = useSearchParams()
+  const isSimple = searchParams?.get("simple") === "1"
+  return isSimple ? (
+    <LeaderboardTableSimpleInner {...props} />
+  ) : (
+    <LeaderboardTableInner {...props} />
+  )
+}
+
+export const LeaderboardTable = memo(LeaderboardTableDispatcher)
