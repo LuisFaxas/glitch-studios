@@ -1,5 +1,5 @@
 "use client"
-import { useCallback, useMemo, useState } from "react"
+import { memo, useCallback, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import {
   useReactTable,
@@ -210,7 +210,7 @@ function deriveDisciplineFromRubricKey(key: string): string {
 // presentational. The desktop one is `display: none` on small viewports, the
 // mobile one is `display: none` on md+ viewports — neither paints when hidden.
 
-export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
+function LeaderboardTableInner({ rows, benchmarkColumns }: Props) {
   const router = useRouter()
 
   // Filter state is LOCAL React state, not URL state. Codex forensic review
@@ -783,3 +783,8 @@ export function LeaderboardTable({ rows, benchmarkColumns }: Props) {
     </div>
   )
 }
+
+// memo() prevents re-render when TechLayout re-renders for unrelated route
+// transitions. `rows` and `benchmarkColumns` come from a server component and
+// are referentially stable across the parent's pathname-driven re-renders.
+export const LeaderboardTable = memo(LeaderboardTableInner)

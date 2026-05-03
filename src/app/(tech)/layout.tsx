@@ -1,6 +1,5 @@
 "use client"
 
-import { usePathname } from "next/navigation"
 import { TileNav } from "@/components/layout/tile-nav"
 import { BottomTabBar } from "@/components/layout/bottom-tab-bar"
 import { Footer } from "@/components/layout/footer"
@@ -17,19 +16,16 @@ import { WidgetLatestReview } from "@/components/tiles/widget-latest-review"
 import { WidgetFeaturedProduct } from "@/components/tiles/widget-featured-product"
 import { WidgetSocialTech } from "@/components/tiles/widget-social-tech"
 
+// TechLayout is intentionally pathname-stable. Route navigation only
+// re-renders SidebarProvider (which owns the pathname read), not this
+// component or its children. See `.planning/debug/rankings-categories-filter-crash.md`.
 export default function TechLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const pathname = usePathname()
-  // On glitchtech.io, middleware rewrites "/" -> "/tech" internally but
-  // usePathname() reports the browser URL ("/"), so both paths are the
-  // tech homepage for layout-state purposes.
-  const isTechHome = pathname === "/tech" || pathname === "/"
-
   return (
-    <SidebarProvider defaultCollapsed={isTechHome} isHomepage={isTechHome}>
+    <SidebarProvider>
       <div data-brand="tech" className="flex min-h-screen">
         <TileNav
           navItems={techNavItems}

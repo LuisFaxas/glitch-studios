@@ -92,7 +92,10 @@ function CustomDropdown({ trigger, children }: CustomDropdownProps) {
       if (e.key === "Escape") setOpenAfterInput(false)
     }
     function closeBeforePageSuspends() {
-      setOpen(false)
+      // Defer out of the native lifecycle event task. A synchronous setState
+      // here during a route transition or visibility change can wedge the
+      // real-mac compositor (same fault class as the click-path crash).
+      setOpenAfterInput(false)
     }
     function onVisibilityChange() {
       if (document.visibilityState !== "visible") closeBeforePageSuspends()
