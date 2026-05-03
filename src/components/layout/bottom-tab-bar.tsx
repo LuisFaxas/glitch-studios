@@ -29,6 +29,7 @@ const TabBarLink = memo(function TabBarLink({ href, label, Icon }: TabBarLinkPro
   return (
     <Link
       href={href}
+      prefetch={false}
       aria-label={label}
       data-active={isActive ? "true" : "false"}
       className={clsx(

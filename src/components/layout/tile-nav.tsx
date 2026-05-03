@@ -70,6 +70,7 @@ const CollapsedNavTile = memo(function CollapsedNavTile({
   return (
     <Link
       href={href}
+      prefetch={false}
       data-active={isActive ? "true" : "false"}
       className={`flex items-center justify-center p-3 border border-[#222] transition-colors duration-200 ${
         isActive
@@ -106,6 +107,7 @@ const ExpandedNavTile = memo(function ExpandedNavTile({
       icon={<Icon className="h-9 w-9" />}
       isActive={isActive}
       href={href}
+      prefetch={false}
       layout="horizontal"
     />
   )

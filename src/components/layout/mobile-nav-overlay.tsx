@@ -128,6 +128,7 @@ const OverlayNavTile = memo(function OverlayNavTile({
       isActive={isActive}
       href={href}
       onClick={onClick}
+      prefetch={false}
       layout="horizontal"
       className="!col-span-1 !px-3"
     />

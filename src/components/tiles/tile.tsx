@@ -1,6 +1,6 @@
 "use client"
 
-import { type ReactNode, useState, useCallback } from "react"
+import { type ReactNode } from "react"
 import Link from "next/link"
 import clsx from "clsx"
 
@@ -22,6 +22,8 @@ export interface TileProps {
   compact?: boolean
   /** Denser presentation for space-constrained mobile layouts. */
   density?: "default" | "compact"
+  /** Only used when href is provided. Forwarded to Next's <Link prefetch>. */
+  prefetch?: boolean | "auto" | null
 }
 
 const sizeClasses: Record<TileSize, string> = {
@@ -31,6 +33,12 @@ const sizeClasses: Record<TileSize, string> = {
   large: "col-span-2 row-span-2",
 }
 
+// CSS-only hover (no React state). Closes the synchronous-setState-during-
+// pointer-event vector tracked in debug/rankings-categories-filter-crash:
+// previously each hover called setIsHovered → re-render → conditional mount
+// of the glitch overlay. The named group `group/tile` lets us drive the
+// overlay opacity + animation purely from `group-hover/tile:` selectors,
+// without the named scope colliding with any outer `.group` ancestor.
 export function Tile({
   size = "medium",
   label,
@@ -44,17 +52,9 @@ export function Tile({
   layout = "vertical",
   compact = false,
   density = "default",
+  prefetch,
 }: TileProps) {
-  const [isHovered, setIsHovered] = useState(false)
   const isInteractive = Boolean(href || onClick)
-
-  const handleMouseEnter = useCallback(() => {
-    if (!isActive && isInteractive) setIsHovered(true)
-  }, [isActive, isInteractive])
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false)
-  }, [])
 
   // Large tiles always use vertical layout regardless of prop
   const effectiveLayout = size === "large" ? "vertical" : layout
@@ -87,6 +87,8 @@ export function Tile({
     "transition-colors duration-200",
     // Focus
     "outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2",
+    // Named group — only when interactive and not active. Drives overlay below.
+    isInteractive && !isActive && "group/tile",
     // Active state: inverted white bg, black text, stronger glow
     isActive && [
       "bg-[#f5f5f0] border-[#f5f5f0] text-[#000000]",
@@ -97,10 +99,10 @@ export function Tile({
       "bg-[#111111] border-[#222222] text-[#f5f5f0]",
       isInteractive && "cursor-pointer",
     ],
-    // Hover state (when not active)
-    !isActive && isInteractive && isHovered && [
-      "bg-[#1a1a1a] border-[#444444]",
-    ],
+    // Hover state — pure CSS, no React state
+    !isActive &&
+      isInteractive &&
+      "hover:bg-[#1a1a1a] hover:border-[#444444]",
     // Pressed state
     !isActive &&
       isInteractive &&
@@ -110,10 +112,13 @@ export function Tile({
 
   const content = (
     <>
-      {/* Glitch hover overlay */}
-      {isHovered && isInteractive && !isActive && (
+      {/* Glitch hover overlay — ALWAYS mounted (was: conditionally rendered
+          based on isHovered useState). The opacity + animation are driven
+          purely by group-hover/tile: and group-focus-visible/tile: so React
+          never observes the pointer event. */}
+      {isInteractive && !isActive && (
         <div
-          className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 animate-glitch-hover motion-reduce:hidden"
+          className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 transition-opacity duration-150 group-hover/tile:opacity-100 group-hover/tile:animate-glitch-hover group-focus-visible/tile:opacity-100 motion-reduce:hidden"
           aria-hidden="true"
         />
       )}
@@ -170,8 +175,6 @@ export function Tile({
 
   const sharedProps = {
     className: baseClasses,
-    onMouseEnter: handleMouseEnter,
-    onMouseLeave: handleMouseLeave,
     "data-active": isActive ? "true" : "false",
     ...(isActive && { "aria-current": "page" as const }),
   }
@@ -179,7 +182,7 @@ export function Tile({
   // Render as Link if href provided
   if (href) {
     return (
-      <Link href={href} onClick={onClick} {...sharedProps}>
+      <Link href={href} onClick={onClick} prefetch={prefetch} {...sharedProps}>
         {content}
       </Link>
     )

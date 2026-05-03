@@ -1,7 +1,11 @@
 /* Hover-only RGB-split glitch effect for headings across the app.
- * Uses the same burst shape as the TECH wordmark (clip-path insets + translates)
- * but fires instantly on hover so the user sees it even on a brief mouse-over,
- * then repeats every 2s while held. */
+ *
+ * 2026-05-03 (debug/rankings-categories-filter-crash): removed mix-blend-mode
+ * and filter chain. Each heading was promoting a GPU compositor layer even
+ * with opacity 0 (mix-blend-mode forces layer allocation), and the filter
+ * chain added per-frame work. Now: flat colored text with the same clip-path
+ * keyframes for the burst shape, no compositor promotion, no filter.
+ */
 
 .wrapper {
   position: relative;
@@ -13,18 +17,17 @@
   position: absolute;
   inset: 0;
   opacity: 0;
-  mix-blend-mode: screen;
   pointer-events: none;
   white-space: nowrap;
 }
 
 .wrapper:hover .layer1 {
-  filter: hue-rotate(-40deg) saturate(3) brightness(1.2);
+  color: #ff66aa;
   animation: hover-glitch-1 2s linear infinite;
 }
 
 .wrapper:hover .layer2 {
-  filter: hue-rotate(40deg) saturate(3) brightness(1.2);
+  color: #66ffaa;
   animation: hover-glitch-2 2s linear infinite;
 }
 
