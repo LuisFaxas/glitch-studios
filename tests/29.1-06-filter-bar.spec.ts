@@ -19,22 +19,28 @@ test.describe("29.1-06 — Top filter bar (D-12/D-13/D-14) — dropdown facets (
     await expect(bar.locator('[data-reset-filters]')).toBeVisible()
   })
 
-  test("desktop: ?cpu=AMD URL state marks the CPU dropdown trigger active with (1) suffix", async ({ page }) => {
+  test("desktop: CPU chip toggles local active state and reset clears it", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 })
-    await page.goto("/tech/rankings/laptops?cpu=AMD")
+    await page.goto("/tech/rankings/laptops")
     const bar = page.locator('[data-leaderboard-filters][data-layout="bar"]')
     if ((await bar.count()) === 0) {
       test.skip(true, "No rows; bar not rendered")
     }
     await expect(bar).toBeVisible({ timeout: 5_000 })
     const cpuTrigger = bar.locator('[data-facet-dropdown="CPU"]')
-    // Trigger label shows the active count.
+    await expect(cpuTrigger).toContainText(/^CPU$/)
+    await cpuTrigger.click()
+    const panel = cpuTrigger.locator("xpath=following-sibling::div[@role='menu']")
+    await expect(panel).toBeVisible({ timeout: 3_000 })
+    await panel.locator("button[aria-pressed]").first().click()
     await expect(cpuTrigger).toContainText("CPU (1)")
+    await bar.locator("[data-reset-filters]").click()
+    await expect(cpuTrigger).toContainText(/^CPU$/)
   })
 
-  test("desktop: opening the CPU dropdown shows pressed chip for the URL-selected value", async ({ page }) => {
+  test("desktop: opening the CPU dropdown shows pressed chip for local selected value", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 })
-    await page.goto("/tech/rankings/laptops?cpu=AMD")
+    await page.goto("/tech/rankings/laptops")
     const bar = page.locator('[data-leaderboard-filters][data-layout="bar"]')
     if ((await bar.count()) === 0) {
       test.skip(true, "No rows; bar not rendered")
@@ -42,9 +48,11 @@ test.describe("29.1-06 — Top filter bar (D-12/D-13/D-14) — dropdown facets (
     const cpuTrigger = bar.locator('[data-facet-dropdown="CPU"]')
     await expect(cpuTrigger).toBeVisible({ timeout: 5_000 })
     await cpuTrigger.click()
-    // Popover renders inside a portal — search the whole page, not the bar.
-    const pressed = page.locator('button[aria-pressed="true"]')
-    await expect(pressed.first()).toBeVisible({ timeout: 3_000 })
+    const panel = cpuTrigger.locator("xpath=following-sibling::div[@role='menu']")
+    await expect(panel).toBeVisible({ timeout: 3_000 })
+    const chip = panel.locator("button[aria-pressed]").first()
+    await chip.click()
+    await expect(chip).toHaveAttribute("aria-pressed", "true")
   })
 
   test("desktop: price popover opens on click, contains a slider", async ({ page }) => {

@@ -43,7 +43,7 @@ async function stage<T>(
 }
 
 async function getRowCount(page: Page): Promise<number> {
-  return page.locator("[data-leaderboard-table] tbody tr").count()
+  return page.locator("[data-leaderboard-display] [data-leaderboard-row]").count()
 }
 
 async function openFacet(page: Page, label: string) {
@@ -78,7 +78,7 @@ test("comprehensive interaction timeline — chip clicks + cross-facet + slider 
   await stage(timings, "cold-load", async () => {
     await page.goto(ROUTE)
     await page
-      .locator("[data-leaderboard-table]")
+      .locator("[data-leaderboard-display]")
       .first()
       .waitFor({ state: "visible" })
     const rows = await getRowCount(page)
@@ -190,7 +190,7 @@ test("comprehensive interaction timeline — chip clicks + cross-facet + slider 
 
   // Page is still interactive at end
   await expect(page.locator("body")).toBeVisible()
-  await expect(page.locator("[data-leaderboard-table]").first()).toBeVisible()
+  await expect(page.locator("[data-leaderboard-display]").first()).toBeVisible()
 
   // Per-stage timing budgets (regression guard against freezes / hangs).
   // Stress runs 30 open/close cycles; everything else is a single interaction.

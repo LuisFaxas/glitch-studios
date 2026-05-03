@@ -20,13 +20,15 @@ test.describe("29.1-03 — Rankings routes + redirect (D-04/D-05/D-06/D-07)", ()
     }
   })
 
-  test("/tech/rankings/laptops renders the leaderboard heading + table or empty state", async ({ page }) => {
+  test("/tech/rankings/laptops renders the leaderboard heading + display or empty state", async ({ page }) => {
     await page.goto("/tech/rankings/laptops")
     await expect(
       page.getByRole("heading", { level: 1, name: /LAPTOPS RANKINGS/i }),
     ).toBeVisible({ timeout: 5_000 })
-    const tableOrEmpty = page.locator('table, [data-empty-state]')
-    await expect(tableOrEmpty.first()).toBeVisible({ timeout: 5_000 })
+    const displayOrEmpty = page.locator(
+      '[data-leaderboard-display], [data-empty-state]',
+    )
+    await expect(displayOrEmpty.first()).toBeVisible({ timeout: 5_000 })
   })
 
   test("/tech/categories/laptops/rankings redirects to /tech/rankings/laptops", async ({ page }) => {
