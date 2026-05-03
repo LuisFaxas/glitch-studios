@@ -103,11 +103,11 @@
 
 *Urgent launch-blocking stabilization added 2026-05-03 after real macOS testing proved `?simple=1` navigates cleanly while the default full rankings table still freezes.*
 
-- [ ] **RANK-STAB-01** `/tech/rankings/laptops` defaults to the stable custom rankings display; `?simple=1` is no longer required for safe filter-reset-nav behavior.
-- [ ] **RANK-STAB-02** The default rankings display does not import or execute `@tanstack/react-table`, `useReactTable`, `flexRender`, or the prior full table row-model path.
-- [ ] **RANK-STAB-03** Existing filter controls remain functional: desktop bar, mobile sheet, price, year, CPU, RAM, storage, medal, sub-category, and reset.
-- [ ] **RANK-STAB-04** Rankings still expose rank, product/review link, BPR tier/score, GlitchMark, key benchmark values or not-tested states, year, and price in a responsive custom display.
-- [ ] **RANK-STAB-05** Real macOS Safari and Firefox production verification passes: filter, optional reset, then tech sidebar nav does not freeze the tab or site.
+- [x] **RANK-STAB-01** `/tech/rankings/laptops` defaults to the stable custom rankings display; `?simple=1` is no longer required for safe filter-reset-nav behavior.
+- [x] **RANK-STAB-02** The default rankings display does not import or execute `@tanstack/react-table`, `useReactTable`, `flexRender`, or the prior full table row-model path.
+- [x] **RANK-STAB-03** Existing filter controls remain functional: desktop bar, mobile sheet, price, year, CPU, RAM, storage, medal, sub-category, and reset.
+- [x] **RANK-STAB-04** Rankings still expose rank, product/review link, BPR tier/score, GlitchMark, key benchmark values or not-tested states, year, and price in a responsive custom display.
+- [x] **RANK-STAB-05** Real macOS Safari and Firefox production verification passes: filter, optional reset, then tech sidebar nav does not freeze the tab or site.
 
 ### Carry-over from v3.0 — Flagship Review (FLAG-*)
 
@@ -195,7 +195,7 @@
 | GLITCHMARK-04 | GlitchMark leaderboard surface | **29** | Complete |
 | GLITCHMARK-05 | GlitchMark review detail surface | **36** | Pending |
 | RANK-01 through RANK-07 | Leaderboard | **29** | Complete - normalized by Phase 47 |
-| RANK-STAB-01 through RANK-STAB-05 | Rankings display stabilization | **48.1** | Pending |
+| RANK-STAB-01 through RANK-STAB-05 | Rankings display stabilization | **48.1** | Complete - Phase 48.1 verified |
 | (per-benchmark pages, no REQ-IDs yet — derived from B.9 IA) | Per-benchmark lens | **30** | Complete |
 | (category editorial reframe, no REQ-IDs yet — derived from B.5) | Category editorial | **31** | Pending |
 | (artist platform, no REQ-IDs yet — derived from pivot #10 Wave 1) | Artist BETA | **32** | Pending |

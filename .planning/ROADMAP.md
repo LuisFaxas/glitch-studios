@@ -146,18 +146,19 @@ Plans:
 
 Phase 48 verification status: `gaps_found`. Remaining proof-only gap plans target EMAIL-01..07, AUTH-14..22 except AUTH-28, AUTH-26, AUTH-29, AUTH-32 manual auth smoke, and MOBILE-CHECKOUT-PROOF real iOS Safari. EMAIL-08 remains deferred for `glitchstudios.io` multi-domain Resend verification and DMARC by user decision; do not mark it passed without new proof.
 
-### Phase 48.1: Rankings Display Stabilization (INSERTED)
+### Phase 48.1: Rankings Display Stabilization (INSERTED - COMPLETED 2026-05-03)
 
 **Goal:** Replace the unstable full rankings display path on `/tech/rankings/laptops` with the simpler custom display architecture proven stable by the live `?simple=1` diagnostic. Preserve the route, server data, filter controls, review links, and GlitchTech visual direction while removing the TanStack/full-table rendering path that freezes real macOS Safari/Firefox after filter activity plus nav.
 **Requirements**: RANK-STAB-01..05
 **Depends on:** Phase 48
-**Plans:** 3 plans
-**Dependency notes:** 48.1-01 must land before test rewrites in 48.1-02. 48.1-03 is manual-gated and cannot close until production Safari and Firefox real-Mac verification passes.
+**Plans:** 3/3 plans complete
+**Dependency notes:** 48.1-01 landed before test rewrites in 48.1-02. 48.1-03 closed after production real-Mac verification passed.
+**Completion note:** The default rankings display now uses the custom stable architecture proven by `?simple=1`; production filter-reset-nav no longer freezes on the affected Mac.
 
 Plans:
-- [ ] 48.1-01-PLAN.md - Promote stable custom rankings display and remove default TanStack path.
-- [ ] 48.1-02-PLAN.md - Update regression tests and diagnostic contracts for the custom display.
-- [ ] 48.1-03-PLAN.md - Production deploy, real macOS verification, and cleanup decision record.
+- [x] 48.1-01-PLAN.md - Promote stable custom rankings display and remove default TanStack path.
+- [x] 48.1-02-PLAN.md - Update regression tests and diagnostic contracts for the custom display.
+- [x] 48.1-03-PLAN.md - Production deploy, real macOS verification, and cleanup decision record.
 
 #### Phase 26: Brand-Aware Auth UI Redesign
 

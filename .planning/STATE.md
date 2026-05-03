@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Production Launch
 status: Executing Phase 48
-stopped_at: Completed 48-11-PLAN.md with terminal blocked OAuth/auth proof
-last_updated: "2026-05-03T17:46:10.471Z"
+stopped_at: Completed Phase 48.1 urgent rankings stabilization
+last_updated: "2026-05-03T17:54:17.000Z"
 last_activity: 2026-05-03
 progress:
-  total_phases: 9
-  completed_phases: 7
-  total_plans: 76
-  completed_plans: 70
+  total_phases: 10
+  completed_phases: 8
+  total_plans: 79
+  completed_plans: 73
   percent: 92
 ---
 
@@ -21,14 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-24 — v4.0 started)
 
 **Core value:** Clients can discover Glitch Studios' work and book services or buy beats in one seamless experience. Tech readers trust GlitchTech's hardware scorecards.
-**Current focus:** Phase 48.1 — Rankings Display Stabilization manual production verification
+**Current focus:** Phase 48 launch-blocker proof pass resumes after urgent Phase 48.1 stabilization
 
 ## Current Position
 
-Phase: 48.1 (rankings-display-stabilization) — WAITING FOR HUMAN VERIFICATION
-Plan: 3 of 3 — deployment recorded; Safari/Firefox manual gate pending
+Phase: 48.1 (rankings-display-stabilization) — COMPLETE
+Plan: 3 of 3 — production deployment and real-Mac verification passed
 Gap closure phases 47-48 were added after `.planning/v4.0-MILESTONE-AUDIT.md` returned `gaps_found`.
-Next step: On real macOS, test https://glitchtech.io/tech/rankings/laptops in Safari and Firefox: filter -> optional reset -> sidebar nav. Then record results in 48.1-03-VERIFICATION.md.
+Next step: Resume Phase 48 launch-blocker proof pass at the remaining proof-only plans 48-17 through 48-21.
+
+Phase 48.1 resolved the urgent rankings display freeze. The default `/tech/rankings/laptops` page now uses the stable custom display architecture proven by `?simple=1`; production testing on the affected real Mac confirmed filters, reset, and site navigation remain responsive.
 
 Phase 30 is complete and verified. Phase 29.3 Plan 06 passed real macOS Safari + Firefox; Phase 47 promoted missing verification backfills into phase-level close artifacts, repaired the ROADMAP checkbox for Phase 29.3, normalized AUDIT/RANK requirements traceability, and left unresolved launch proof visible for Phase 48.
 
@@ -215,7 +217,7 @@ Recent decisions affecting current work:
 - v3.0 Milestone started: Phases 15-21 added (2026-04-20) — GlitchTek Launch: methodology lock, JSONL ingest, BPR medal, category leaderboard, flagship review, tech blog, deploy hardening.
 - Phase 29.1 inserted after Phase 29 (2026-04-26): Master Leaderboard Polish (INSERTED) — top-level /tech/rankings route + sidebar nav button next to Blog, hero sections on rankings + category pages, horizontal-scroll fix, filter UI rework, mobile view toggle, GlitchMark scale display revisit. Sequential execution with Playwright verification per task. From user UAT immediately after Phase 29 ship.
 - Phase 29.3 inserted after Phase 29.2 (2026-04-26): Reduce Filter-Path GPU Baseline + Re-Enable Filter (URGENT). Filter chip clicks on `/tech/rankings/laptops` crashed macOS Safari + Firefox tabs across 15+ deploy attempts. Final 29.3-06 verification passed on real macOS Safari + Firefox; investigation artifact: `.planning/debug/filter-chip-crash-mac-browsers.md`. Phase 47-02 reconciled the stale roadmap/state artifacts and wrote phase-level verification.
-- Phase 48.1 inserted after Phase 48: Rankings Display Stabilization (URGENT)
+- Phase 48.1 inserted after Phase 48: Rankings Display Stabilization (URGENT) - completed 2026-05-03 after production real-Mac verification passed.
 
 ### Pending Todos
 
@@ -247,8 +249,8 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-28T12:02:05.218Z
-Stopped at: Completed 48-11-PLAN.md with terminal blocked OAuth/auth proof
+Stopped at: Completed Phase 48.1 urgent rankings stabilization
 Resume file: None
-Next session entry point: Resume Phase 48.1 Plan 03 after real macOS Safari/Firefox results are available.
+Next session entry point: Resume Phase 48 launch-blocker proof pass at 48-17 through 48-21.
 
 Last activity: 2026-05-03
