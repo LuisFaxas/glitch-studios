@@ -146,6 +146,19 @@ Plans:
 
 Phase 48 verification status: `gaps_found`. Remaining proof-only gap plans target EMAIL-01..07, AUTH-14..22 except AUTH-28, AUTH-26, AUTH-29, AUTH-32 manual auth smoke, and MOBILE-CHECKOUT-PROOF real iOS Safari. EMAIL-08 remains deferred for `glitchstudios.io` multi-domain Resend verification and DMARC by user decision; do not mark it passed without new proof.
 
+### Phase 48.1: Rankings Display Stabilization (INSERTED)
+
+**Goal:** Replace the unstable full rankings display path on `/tech/rankings/laptops` with the simpler custom display architecture proven stable by the live `?simple=1` diagnostic. Preserve the route, server data, filter controls, review links, and GlitchTech visual direction while removing the TanStack/full-table rendering path that freezes real macOS Safari/Firefox after filter activity plus nav.
+**Requirements**: RANK-STAB-01..05
+**Depends on:** Phase 48
+**Plans:** 3 plans
+**Dependency notes:** 48.1-01 must land before test rewrites in 48.1-02. 48.1-03 is manual-gated and cannot close until production Safari and Firefox real-Mac verification passes.
+
+Plans:
+- [ ] 48.1-01-PLAN.md - Promote stable custom rankings display and remove default TanStack path.
+- [ ] 48.1-02-PLAN.md - Update regression tests and diagnostic contracts for the custom display.
+- [ ] 48.1-03-PLAN.md - Production deploy, real macOS verification, and cleanup decision record.
+
 #### Phase 26: Brand-Aware Auth UI Redesign
 
 **Goal:** Replace the generic email+password auth surfaces (login, register, forgot-password, reset-password, verify-email) with brand-aware, production-grade flows that theme by host (`glitchstudios.io` vs `glitchtech.io`), split registration by role (customer wizard vs artist request), and add social login (Google + Meta + GitHub). Auth must feel like a real product on both brands, not a scaffold.
