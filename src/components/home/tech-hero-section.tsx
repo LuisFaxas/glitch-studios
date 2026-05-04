@@ -55,13 +55,13 @@ export function TechHeroSection() {
         <>
           <Link
             href="/tech/compare"
-            className="bg-[#111] text-[#f5f5f0] border border-[#444] px-3 py-2 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+            className="bg-[#111] text-[#f5f5f0] border border-[#444] px-3 py-1.5 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
           >
             Compare
           </Link>
           <Link
             href="/tech/benchmarks"
-            className="bg-[#111] text-[#f5f5f0] border border-[#444] px-3 py-2 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+            className="bg-[#111] text-[#f5f5f0] border border-[#444] px-3 py-1.5 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
           >
             Benchmarks
           </Link>

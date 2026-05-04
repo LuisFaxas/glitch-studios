@@ -103,11 +103,11 @@ export function HeroSection({
            giving more breathing room for the CTAs below. */}
       <div
         className={clsx(
-          "absolute inset-x-0 top-[42%] -translate-y-1/2 z-10 flex flex-col items-center justify-center pointer-events-none",
+          "absolute inset-x-0 top-[38%] -translate-y-1/2 z-10 flex flex-col items-center justify-center pointer-events-none",
           collapsed ? "md:-translate-x-8" : ""
         )}
       >
-        <p className="font-mono text-sm md:text-4xl text-[#f5f5f0] tracking-tight mb-3 md:mb-8 px-4 text-center">
+        <p className="font-mono text-[11px] md:text-4xl text-[#f5f5f0] tracking-tight mb-3 md:mb-8 px-2 md:px-4 text-center whitespace-nowrap">
           {subtitle}
         </p>
         {/* D-16 (Phase 16.1, post-UAT revision): stepped max-width ladder
@@ -117,7 +117,7 @@ export function HeroSection({
             horizontal clipping on ROG 13 — a 600px wordmark at 1.5× scale
             is 900px wide, which overshoots a 1280-1366 viewport minus the
             sidebar once the heartbeat pulse-line row is added. The ladder:
-              mobile: 320px cap
+              mobile: 78vw natural, 320px cap (cap activates on phones ≥411px wide)
               ≥md (768): 400px
               ≥lg (1024): 460px
               ≥xl (1280): 520px (13" laptop target — fits under splash 1.5×)
@@ -126,7 +126,7 @@ export function HeroSection({
             flex parents. `data-testid` is the regression anchor. */}
         <div
           data-testid="glitch-logo"
-          className="w-[60vw] max-w-[320px] md:w-[70vw] md:max-w-[400px] lg:w-[60vw] lg:max-w-[460px] xl:max-w-[520px] 2xl:max-w-[600px] min-w-0 pointer-events-auto flex justify-center"
+          className="w-[78vw] max-w-[320px] md:w-[70vw] md:max-w-[400px] lg:w-[60vw] lg:max-w-[460px] xl:max-w-[520px] 2xl:max-w-[600px] min-w-0 pointer-events-auto flex justify-center"
         >
           {wordmark ?? (
             <div className={styles.glitchWrapper}>
@@ -142,15 +142,15 @@ export function HeroSection({
            2-column grid on mobile: primary CTA full-width, secondary pair side by side. */}
       <div
         className={clsx(
-          "absolute z-10 inset-x-0 bottom-20 md:bottom-32 flex flex-col items-center gap-4 px-6 text-center pointer-events-none",
+          "absolute z-10 inset-x-0 bottom-28 md:bottom-32 flex flex-col items-center gap-4 px-6 text-center pointer-events-none",
           collapsed ? "md:-translate-x-8" : ""
         )}
       >
-        <div className="grid grid-cols-2 md:flex md:items-center md:justify-center gap-2 md:gap-3 w-full max-w-[260px] md:max-w-none md:w-auto pointer-events-auto">
+        <div className="grid grid-cols-2 md:flex md:items-center md:justify-center gap-2 md:gap-3 w-full max-w-[220px] md:max-w-none md:w-auto pointer-events-auto">
           <GlitchLink
             href={ctaLink}
             glitchColor="#000"
-            className="col-span-2 bg-[#f5f5f0] text-[#000] border border-[#f5f5f0] px-4 py-2.5 md:px-10 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[11px] md:text-sm hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
+            className="col-span-2 bg-[#f5f5f0] text-[#000] border border-[#f5f5f0] px-5 py-2 md:px-10 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[11px] md:text-sm hover:bg-[#000] hover:text-[#f5f5f0] hover:border-[#f5f5f0] transition-colors duration-200 text-center"
           >
             {ctaText}
           </GlitchLink>
@@ -159,14 +159,14 @@ export function HeroSection({
               <GlitchLink
                 href="/beats"
                 glitchColor="#f5f5f0"
-                className="bg-[#111] text-[#f5f5f0] border border-[#444] px-3 py-2 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+                className="bg-[#111] text-[#f5f5f0] border border-[#444] px-3 py-1.5 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
               >
                 Beats
               </GlitchLink>
               <GlitchLink
                 href="/portfolio"
                 glitchColor="#f5f5f0"
-                className="bg-[#111] text-[#f5f5f0] border border-[#444] px-3 py-2 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+                className="bg-[#111] text-[#f5f5f0] border border-[#444] px-3 py-1.5 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
               >
                 Portfolio
               </GlitchLink>
