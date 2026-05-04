@@ -49,7 +49,7 @@ export function StudiosHeroSection({
           <div className="flex w-full items-center gap-3 md:gap-4">
             <TechPulseLine delay={0} />
             <span
-              className={`${styles.glitchTextWrapper} font-mono text-lg md:text-3xl font-bold uppercase tracking-[0.5em] text-[#f5f5f0]`}
+              className={`${styles.glitchTextWrapper} font-mono text-[22px] md:text-3xl font-bold uppercase tracking-[0.4em] md:tracking-[0.5em] text-[#f5f5f0]`}
               aria-label="Studios"
             >
               STUDIOS
