@@ -245,6 +245,7 @@ Recent decisions affecting current work:
 | 260401-m19 | ElasticSlider volume control + BPM range slider jumpiness fix | 2026-04-01 | 708e323 | [260401-m19-elastic-slider-integration](./quick/260401-m19-elastic-slider-integration/) |
 | 260416-wav | Research animation libraries for React/Next.js ECG heartbeat pulse and cyberpunk motion effects | 2026-04-17 | — | [260416-wav-research-animation-libraries-for-react-n](./quick/260416-wav-research-animation-libraries-for-react-n/) |
 | 260423-rfu | Document rubric-map key/field short-form contract before 2026-04-25 Mac harness use | 2026-04-23 | 275fce0 | [260423-rfu-document-rubric-map-key-field-short-form](./quick/260423-rfu-document-rubric-map-key-field-short-form/) |
+| 260504-eq6 | Rebalance home + tech hero sections (mobile ratios) and make scroll arrow functional | 2026-05-04 | 5c3f299 | [260504-eq6-rebalance-home-tech-hero-sections-mobile](./quick/260504-eq6-rebalance-home-tech-hero-sections-mobile/) |
 
 ## Session Continuity
 
@@ -253,4 +254,4 @@ Stopped at: Completed Phase 48.1 urgent rankings stabilization
 Resume file: None
 Next session entry point: Resume Phase 48 launch-blocker proof pass at 48-17 through 48-21.
 
-Last activity: 2026-05-03
+Last activity: 2026-05-04 - Completed quick task 260504-eq6: Rebalance home + tech hero sections (mobile ratios) and make scroll arrow functional
