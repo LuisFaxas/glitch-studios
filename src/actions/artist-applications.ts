@@ -5,7 +5,9 @@ import { Resend } from "resend"
 import { db } from "@/lib/db"
 import { artistApplications } from "@/db/schema"
 import { GENRE_TAGS, FOCUS_TAGS } from "@/lib/types/artist-application"
-import { TRANSACTIONAL_EMAIL_FROM } from "@/lib/email/senders"
+import { ArtistApplicationConfirmationEmail } from "@/lib/email/artist-application-confirmation"
+import { getTransactionalEmailFrom } from "@/lib/email/senders"
+import { getBrandSiteUrl } from "@/lib/site-url"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -27,11 +29,14 @@ export type SubmitArtistApplicationResult =
   | { ok: false; error: string }
 
 export async function submitArtistApplication(
-  input: unknown,
+  input: unknown
 ): Promise<SubmitArtistApplicationResult> {
   const parsed = submitSchema.safeParse(input)
   if (!parsed.success) {
-    return { ok: false, error: "Please review the form for errors and try again." }
+    return {
+      ok: false,
+      error: "Please review the form for errors and try again.",
+    }
   }
   const data = parsed.data
 
@@ -49,19 +54,23 @@ export async function submitArtistApplication(
         email: data.email.toLowerCase(),
         bio: data.bio,
         portfolioUrl:
-          data.portfolioUrl && data.portfolioUrl.length > 0 ? data.portfolioUrl : null,
+          data.portfolioUrl && data.portfolioUrl.length > 0
+            ? data.portfolioUrl
+            : null,
         focusTags: safeFocusTags,
         status: "pending",
       })
       .returning({ id: artistApplications.id })
 
     const brandName = data.brand === "tech" ? "GlitchTech" : "Glitch Studios"
-    const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL ?? ADMIN_FALLBACK_EMAIL
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? ""
+    const sender = getTransactionalEmailFrom(data.brand)
+    const adminEmail =
+      process.env.ADMIN_NOTIFICATION_EMAIL ?? ADMIN_FALLBACK_EMAIL
+    const baseUrl = getBrandSiteUrl(data.brand)
 
     try {
       await resend.emails.send({
-        from: TRANSACTIONAL_EMAIL_FROM,
+        from: sender,
         to: adminEmail,
         subject: `New ${brandName} application: ${data.name}`,
         html: `<p><strong>${escapeHtml(data.name)}</strong> (${escapeHtml(data.email)}) submitted a ${brandName} application.</p>
@@ -74,10 +83,30 @@ ${data.portfolioUrl ? `<p>Portfolio: <a href="${escapeAttr(data.portfolioUrl)}">
       console.error("[artist-applications] admin notification failed", emailErr)
     }
 
+    try {
+      await resend.emails.send({
+        from: sender,
+        to: data.email,
+        subject: `We received your ${brandName} application`,
+        react: ArtistApplicationConfirmationEmail({
+          name: data.name,
+          brand: data.brand,
+        }),
+      })
+    } catch (emailErr) {
+      console.error(
+        "[artist-applications] applicant confirmation failed",
+        emailErr
+      )
+    }
+
     return { ok: true, applicationId: row.id }
   } catch (err) {
     console.error("[artist-applications] insert failed", err)
-    return { ok: false, error: "Something glitched on our side. Try again in a moment." }
+    return {
+      ok: false,
+      error: "Something glitched on our side. Try again in a moment.",
+    }
   }
 }
 

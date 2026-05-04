@@ -1,6 +1,5 @@
 import {
   Body,
-  Button,
   Container,
   Head,
   Heading,
@@ -14,38 +13,36 @@ import {
 import type { Brand } from "@/lib/brand"
 import { BRAND_DISPLAY_NAMES, BRAND_HOME_URLS } from "@/lib/brand"
 
-interface PasswordResetEmailProps {
+interface ArtistApplicationConfirmationEmailProps {
   name: string
-  url: string
-  brand?: Brand
+  brand: Brand
 }
 
-export function PasswordResetEmail({
+export function ArtistApplicationConfirmationEmail({
   name,
-  url,
-  brand = "studios",
-}: PasswordResetEmailProps) {
+  brand,
+}: ArtistApplicationConfirmationEmailProps) {
   const brandName = BRAND_DISPLAY_NAMES[brand]
   const homeUrl = BRAND_HOME_URLS[brand]
+  const role = brand === "tech" ? "contributor" : "artist"
 
   return (
     <Html>
       <Head />
-      <Preview>{`Reset your ${brandName} password — link expires in 1 hour.`}</Preview>
+      <Preview>{`We received your ${brandName} ${role} application.`}</Preview>
       <Body style={bodyStyle}>
         <Container style={containerStyle}>
           <Section>
-            <Heading style={headingStyle}>Reset password</Heading>
+            <Heading style={headingStyle}>Application received</Heading>
             <Text style={textStyle}>Hey {name || "there"},</Text>
             <Text style={textStyle}>
-              Someone requested a password reset for your {brandName} account.
-              If that was you, click the button below. Otherwise ignore this
-              email — your password will not change.
+              We received your {brandName} {role} application. A real person
+              will review it and reply by email if we approve, decline, or need
+              more information.
             </Text>
-            <Button href={url} style={buttonStyle}>
-              Reset Password
-            </Button>
-            <Text style={mutedTextStyle}>This link expires in 1 hour.</Text>
+            <Text style={mutedTextStyle}>
+              Expected review window: 1-3 business days.
+            </Text>
             <Hr style={hrStyle} />
             <Text style={footerStyle}>
               Sent by {brandName} ·{" "}
@@ -97,19 +94,6 @@ const mutedTextStyle = {
   margin: "16px 0 0",
 } as const
 
-const buttonStyle = {
-  backgroundColor: "#f5f5f0",
-  color: "#000000",
-  padding: "12px 24px",
-  fontSize: "13px",
-  fontWeight: 700,
-  letterSpacing: "0.05em",
-  textTransform: "uppercase",
-  textDecoration: "none",
-  display: "inline-block",
-  margin: "16px 0",
-} as const
-
 const hrStyle = {
   border: "none",
   borderTop: "1px solid #222",
@@ -127,4 +111,4 @@ const linkStyle = {
   textDecoration: "underline",
 } as const
 
-export default PasswordResetEmail
+export default ArtistApplicationConfirmationEmail

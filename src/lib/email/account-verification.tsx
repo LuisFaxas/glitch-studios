@@ -11,28 +11,38 @@ import {
   Section,
   Text,
 } from "@react-email/components"
+import type { Brand } from "@/lib/brand"
+import { BRAND_DISPLAY_NAMES, BRAND_HOME_URLS } from "@/lib/brand"
 
 interface AccountVerificationEmailProps {
   name: string
   url: string
+  brand?: Brand
 }
 
 export function AccountVerificationEmail({
   name,
   url,
+  brand = "studios",
 }: AccountVerificationEmailProps) {
+  const brandName = BRAND_DISPLAY_NAMES[brand]
+  const homeUrl = BRAND_HOME_URLS[brand]
+  const intro =
+    brand === "tech"
+      ? "Confirm your email to activate your account and continue on GlitchTech."
+      : "Confirm your email to activate your account and unlock beat downloads, bookings, and order history."
+
   return (
     <Html>
       <Head />
-      <Preview>Confirm your email to finish signing up for Glitch Studios.</Preview>
+      <Preview>{`Confirm your email to finish signing up for ${brandName}.`}</Preview>
       <Body style={bodyStyle}>
         <Container style={containerStyle}>
           <Section>
             <Heading style={headingStyle}>Verify email</Heading>
             <Text style={textStyle}>Hey {name || "there"},</Text>
             <Text style={textStyle}>
-              Welcome to Glitch Studios. Confirm your email to activate your
-              account and unlock beat downloads, bookings, and order history.
+              Welcome to {brandName}. {intro}
             </Text>
             <Button href={url} style={buttonStyle}>
               Verify Email
@@ -40,9 +50,9 @@ export function AccountVerificationEmail({
             <Text style={mutedTextStyle}>This link expires in 1 hour.</Text>
             <Hr style={hrStyle} />
             <Text style={footerStyle}>
-              Sent by Glitch Studios ·{" "}
-              <Link href="https://glitchstudios.io" style={linkStyle}>
-                glitchstudios.io
+              Sent by {brandName} ·{" "}
+              <Link href={homeUrl} style={linkStyle}>
+                {homeUrl.replace("https://", "")}
               </Link>
             </Text>
           </Section>

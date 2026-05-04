@@ -80,11 +80,13 @@ const HIGHLIGHT: Record<
     points: [
       {
         label: "New beat drops",
-        description: "First look at fresh catalog entries before they go public.",
+        description:
+          "First look at fresh catalog entries before they go public.",
       },
       {
         label: "Studio specials",
-        description: "Session-block discounts and seasonal mixing/mastering deals.",
+        description:
+          "Session-block discounts and seasonal mixing/mastering deals.",
       },
       {
         label: "No spam, no rentals",
@@ -116,14 +118,16 @@ const HIGHLIGHT: Record<
   },
 }
 
-const GENERIC_ERROR =
-  "Something glitched on our side. Try again in a moment."
+const GENERIC_ERROR = "Something glitched on our side. Try again in a moment."
 
-export function CustomerWizard({ availableProviders, stats }: CustomerWizardProps) {
+export function CustomerWizard({
+  availableProviders,
+  stats,
+}: CustomerWizardProps) {
   const router = useRouter()
   const [stepRaw, setStep] = useQueryState(
     "step",
-    parseAsInteger.withDefault(1).withOptions({ history: "push" }),
+    parseAsInteger.withDefault(1).withOptions({ history: "push" })
   )
   const step: 1 | 2 | 3 = stepRaw === 2 ? 2 : stepRaw === 3 ? 3 : 1
 
@@ -149,7 +153,7 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
 
     if (password.length < 8) {
       setError(
-        "Use at least 8 characters with a mix of letters, numbers, and symbols.",
+        "Use at least 8 characters with a mix of letters, numbers, and symbols."
       )
       return
     }
@@ -158,9 +162,7 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
     const result = await checkEmailUniqueness({ email })
     setPending(false)
     if (result.taken) {
-      setError(
-        "That email is already in use. Sign in, or reset your password.",
-      )
+      setError("That email is already in use. Sign in, or reset your password.")
       return
     }
     setIdentity({ name, email, password })
@@ -180,6 +182,7 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
         name: identity.name,
         email: identity.email,
         password: identity.password,
+        callbackURL: `${window.location.origin}/verify-email?status=success`,
       })
       if (result && "error" in result && result.error) {
         setError(GENERIC_ERROR)
@@ -209,7 +212,7 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
         <WizardProgress current={step} total={3} />
 
         <header className="flex flex-col gap-2">
-          <h1 className="font-mono text-[22px] uppercase leading-[1.15] tracking-[0.04em] font-semibold text-[#f5f5f0]">
+          <h1 className="font-mono text-[22px] leading-[1.15] font-semibold tracking-[0.04em] text-[#f5f5f0] uppercase">
             {STEP_HEADING[step]}
           </h1>
           <p className="font-sans text-[15px] leading-[1.5] text-[var(--muted-foreground)]">
@@ -224,18 +227,15 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
               callbackURL="/"
             />
             {availableProviders.length > 0 && (
-              <div className="flex items-center gap-3 my-2">
+              <div className="my-2 flex items-center gap-3">
                 <Separator className="flex-1" />
-                <span className="font-mono uppercase tracking-[0.08em] text-[12px] text-[var(--muted-foreground)]">
+                <span className="font-mono text-[12px] tracking-[0.08em] text-[var(--muted-foreground)] uppercase">
                   or continue with email
                 </span>
                 <Separator className="flex-1" />
               </div>
             )}
-            <form
-              onSubmit={handleStep1Submit}
-              className="flex flex-col gap-4"
-            >
+            <form onSubmit={handleStep1Submit} className="flex flex-col gap-4">
               <EnumSafeFormError message={error} />
               <div className="flex flex-col gap-2">
                 <Label htmlFor="name" className={LABEL_CLASS}>
@@ -280,7 +280,7 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
                 type="submit"
                 size="lg"
                 disabled={pending}
-                className="bg-[var(--foreground)] text-black font-sans"
+                className="bg-[var(--foreground)] font-sans text-black"
               >
                 {pending ? "Checking..." : "Continue"}
               </Button>
@@ -292,7 +292,7 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
           <div className="flex flex-col gap-4">
             <label
               htmlFor="beatDrops"
-              className="flex items-start gap-3 rounded-lg border border-[#222] bg-[#0a0a0a] p-4 text-[15px] font-sans cursor-pointer hover:border-[#333]"
+              className="flex cursor-pointer items-start gap-3 rounded-lg border border-[#222] bg-[#0a0a0a] p-4 font-sans text-[15px] hover:border-[#333]"
             >
               <Checkbox
                 id="beatDrops"
@@ -311,7 +311,7 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
 
             <label
               htmlFor="studioNews"
-              className="flex items-start gap-3 rounded-lg border border-[#222] bg-[#0a0a0a] p-4 text-[15px] font-sans cursor-pointer hover:border-[#333]"
+              className="flex cursor-pointer items-start gap-3 rounded-lg border border-[#222] bg-[#0a0a0a] p-4 font-sans text-[15px] hover:border-[#333]"
             >
               <Checkbox
                 id="studioNews"
@@ -323,12 +323,13 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
               <span className="flex flex-col gap-1">
                 <span className="text-[#f5f5f0]">Studio news & specials</span>
                 <span className="text-[13px] text-[var(--muted-foreground)]">
-                  Session-block discounts, mixing/mastering deals, studio updates.
+                  Session-block discounts, mixing/mastering deals, studio
+                  updates.
                 </span>
               </span>
             </label>
 
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
+            <p className="font-mono text-[11px] tracking-[0.12em] text-[var(--muted-foreground)] uppercase">
               Weekly at most · Unsubscribe one click
             </p>
 
@@ -347,7 +348,7 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
                 size="lg"
                 onClick={() => setStep(3)}
                 disabled={pending}
-                className="bg-[var(--foreground)] text-black font-sans"
+                className="bg-[var(--foreground)] font-sans text-black"
               >
                 Continue
               </Button>
@@ -361,19 +362,19 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
             <dl className="flex flex-col gap-3 rounded-lg border border-[#222] bg-[#0a0a0a] p-4">
               <div className="flex flex-col gap-1">
                 <dt className={LABEL_CLASS}>Name</dt>
-                <dd className="text-[16px] font-sans text-[#f5f5f0]">
+                <dd className="font-sans text-[16px] text-[#f5f5f0]">
                   {identity.name}
                 </dd>
               </div>
               <div className="flex flex-col gap-1">
                 <dt className={LABEL_CLASS}>Email</dt>
-                <dd className="text-[16px] font-sans text-[#f5f5f0]">
+                <dd className="font-sans text-[16px] text-[#f5f5f0]">
                   {identity.email}
                 </dd>
               </div>
               <div className="flex flex-col gap-1">
                 <dt className={LABEL_CLASS}>Newsletter</dt>
-                <dd className="text-[14px] font-sans text-[var(--muted-foreground)]">
+                <dd className="font-sans text-[14px] text-[var(--muted-foreground)]">
                   {beatDrops && studioNews
                     ? "Beat drops + studio news"
                     : beatDrops
@@ -386,7 +387,7 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
             </dl>
             <label
               htmlFor="tcs"
-              className="flex items-start gap-3 text-[15px] font-sans cursor-pointer"
+              className="flex cursor-pointer items-start gap-3 font-sans text-[15px]"
             >
               <Checkbox
                 id="tcs"
@@ -414,7 +415,7 @@ export function CustomerWizard({ availableProviders, stats }: CustomerWizardProp
                 type="submit"
                 size="lg"
                 disabled={pending || !tcsAccepted}
-                className="bg-[var(--foreground)] text-black font-sans"
+                className="bg-[var(--foreground)] font-sans text-black"
               >
                 {pending ? "Creating..." : "Create account"}
               </Button>

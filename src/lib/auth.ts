@@ -7,18 +7,27 @@ import { adminAc, defaultStatements } from "better-auth/plugins/admin/access"
 import { Resend } from "resend"
 import { db } from "./db"
 import * as schema from "@/db/schema"
+import { BRAND_DISPLAY_NAMES, getBrandFromUrl } from "@/lib/brand"
 import { PasswordResetEmail } from "@/lib/email/password-reset"
 import { AccountVerificationEmail } from "@/lib/email/account-verification"
 import { ArtistApprovalInviteEmail } from "@/lib/email/artist-approval-invite"
-import { TRANSACTIONAL_EMAIL_FROM } from "@/lib/email/senders"
+import { getTransactionalEmailFrom } from "@/lib/email/senders"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 const ac = createAccessControl(defaultStatements)
 const ownerAc = ac.newRole({
   user: [
-    "create", "list", "set-role", "ban", "impersonate",
-    "impersonate-admins", "delete", "set-password", "get", "update",
+    "create",
+    "list",
+    "set-role",
+    "ban",
+    "impersonate",
+    "impersonate-admins",
+    "delete",
+    "set-password",
+    "get",
+    "update",
   ],
   session: ["list", "revoke", "delete"],
 })
@@ -30,7 +39,9 @@ const ownerAc = ac.newRole({
 //
 // CRITICAL naming: AUTH-22 specifies env vars META_CLIENT_ID/SECRET, but
 // Better Auth's provider config key is `facebook` (covers FB + IG).
-const socialProviders: NonNullable<Parameters<typeof betterAuth>[0]["socialProviders"]> = {}
+const socialProviders: NonNullable<
+  Parameters<typeof betterAuth>[0]["socialProviders"]
+> = {}
 
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
   socialProviders.google = {
@@ -70,23 +81,22 @@ export const auth = betterAuth({
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
       const isInvite = url.includes("invite=1")
-      const brand: "studios" | "tech" = url.includes("brand=tech")
-        ? "tech"
-        : "studios"
+      const brand = getBrandFromUrl(url)
+      const brandName = BRAND_DISPLAY_NAMES[brand]
       try {
         const { error } = await resend.emails.send({
-          from: TRANSACTIONAL_EMAIL_FROM,
+          from: getTransactionalEmailFrom(brand),
           to: user.email,
           subject: isInvite
             ? "You're approved — set your password."
-            : "Reset your Glitch Studios password",
+            : `Reset your ${brandName} password`,
           react: isInvite
             ? ArtistApprovalInviteEmail({
                 name: user.name ?? "there",
                 url,
                 brand,
               })
-            : PasswordResetEmail({ name: user.name, url }),
+            : PasswordResetEmail({ name: user.name, url, brand }),
         })
         if (error) {
           console.error("[email:reset] Resend send failed:", error)
@@ -100,12 +110,14 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
+      const brand = getBrandFromUrl(url)
+      const brandName = BRAND_DISPLAY_NAMES[brand]
       try {
         const { error } = await resend.emails.send({
-          from: TRANSACTIONAL_EMAIL_FROM,
+          from: getTransactionalEmailFrom(brand),
           to: user.email,
-          subject: "Verify your Glitch Studios email",
-          react: AccountVerificationEmail({ name: user.name, url }),
+          subject: `Verify your ${brandName} email`,
+          react: AccountVerificationEmail({ name: user.name, url, brand }),
         })
         if (error) {
           console.error("[email:verify] Resend send failed:", error)

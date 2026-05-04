@@ -9,7 +9,7 @@ import { Resend } from "resend"
 import { auth } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { artistApplications, user } from "@/db/schema"
-import { TRANSACTIONAL_EMAIL_FROM } from "@/lib/email/senders"
+import { getTransactionalEmailFrom } from "@/lib/email/senders"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -24,7 +24,9 @@ async function requireAdmin() {
 
 const idSchema = z.object({ applicationId: z.string().uuid() })
 
-export async function approveArtistApplication(input: { applicationId: string }) {
+export async function approveArtistApplication(input: {
+  applicationId: string
+}) {
   const session = await requireAdmin()
   const parsed = idSchema.safeParse(input)
   if (!parsed.success) throw new Error("Invalid applicationId")
@@ -132,7 +134,7 @@ export async function requestMoreInfoOnApplication(input: {
     .where(eq(artistApplications.id, app.id))
 
   await resend.emails.send({
-    from: TRANSACTIONAL_EMAIL_FROM,
+    from: getTransactionalEmailFrom(app.brand),
     to: app.email,
     subject: parsed.data.emailSubject,
     text: parsed.data.emailBody,

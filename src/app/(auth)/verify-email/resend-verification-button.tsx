@@ -19,7 +19,10 @@ export function ResendVerificationButton({ email }: { email: string }) {
         }
       ).sendVerificationEmail
       if (typeof fn === "function") {
-        await fn({ email, callbackURL: "/verify-email?status=success" })
+        await fn({
+          email,
+          callbackURL: `${window.location.origin}/verify-email?status=success`,
+        })
       }
       toast.success("Verification email sent. Check your inbox.")
     } catch {
@@ -34,7 +37,7 @@ export function ResendVerificationButton({ email }: { email: string }) {
       onClick={handleResend}
       disabled={pending}
       size="lg"
-      className="bg-[var(--foreground)] text-black font-sans"
+      className="bg-[var(--foreground)] font-sans text-black"
     >
       {pending ? "Sending..." : "Resend verification email"}
     </Button>
