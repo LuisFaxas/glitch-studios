@@ -30,7 +30,7 @@ export function TechHeroSection() {
           <div className="flex w-full items-center gap-3 md:gap-4">
             <TechPulseLine delay={0} />
             <span
-              className={`${styles.glitchTextWrapper} font-mono text-lg md:text-3xl font-bold uppercase tracking-[0.5em] text-[#f5f5f0]`}
+              className={`${styles.glitchTextWrapper} font-mono text-[22px] md:text-3xl font-bold uppercase tracking-[0.4em] md:tracking-[0.5em] text-[#f5f5f0]`}
               aria-label="Tech"
             >
               TECH
@@ -55,13 +55,13 @@ export function TechHeroSection() {
         <>
           <Link
             href="/tech/compare"
-            className="bg-[#111] text-[#f5f5f0] border border-[#444] px-4 py-3 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+            className="bg-[#111] text-[#f5f5f0] border border-[#444] px-3 py-2 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
           >
             Compare
           </Link>
           <Link
             href="/tech/benchmarks"
-            className="bg-[#111] text-[#f5f5f0] border border-[#444] px-4 py-3 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-xs md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
+            className="bg-[#111] text-[#f5f5f0] border border-[#444] px-3 py-2 md:px-6 md:py-3 rounded-none font-mono font-bold uppercase tracking-[0.05em] text-[10px] md:text-sm hover:bg-[#1a1a1a] hover:border-[#666] transition-colors duration-200 text-center"
           >
             Benchmarks
           </Link>
