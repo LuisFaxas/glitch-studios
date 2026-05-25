@@ -30,6 +30,16 @@ that flow. If any field is unavailable, keep `status: blocked` and provide a
 specific `blocked_reason`. Do not store API keys, OAuth secrets, passwords,
 tokens, full cookies, or real card numbers in this artifact.
 
+### Plan 48-17 Task 1 Reconfirmation
+
+Reconfirmed 2026-05-25T17:27:29Z. The single-domain evidence contract above is
+the only basis on which any row may move from `blocked` to `passed` during
+Plan 48-17. EMAIL-08 must stay `deferred_not_passed`; do not introduce a
+second paid Resend domain into any row of this matrix. Tasks 2 and 3 of
+Plan 48-17 remain at `checkpoint:human-verify` because Resend dashboard
+event IDs and recipient inbox screenshots are human-only proof surfaces
+unavailable to the autonomous executor.
+
 ## Proof Boundary
 
 No row was changed to `passed` in Plan 48-10. Resend dashboard evidence and

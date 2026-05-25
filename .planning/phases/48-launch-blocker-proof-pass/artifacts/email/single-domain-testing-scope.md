@@ -1,10 +1,11 @@
 # Single-Domain Email Testing Scope
 
 Captured: 2026-04-28T11:36:37Z
+Reconfirmed (Plan 48-17 Task 1): 2026-05-25T17:27:29Z
 
 ## Current Testing Scope
 
-- tested_at: blocked: not yet tested
+- tested_at: blocked: not yet tested (Plan 48-17 Tasks 2 and 3 awaiting human Resend dashboard and inbox proof as of 2026-05-25T17:27:29Z)
 - sender_domain: glitchtech.io
 - allowed_sender: Glitch Studios <noreply@glitchtech.io>
 - resend_scope: single verified Resend domain only
@@ -28,6 +29,22 @@ Every email row marked `passed` in `email-smoke-matrix.md` must include a real
 Resend event ID or screenshot, inbox screenshot/filename, content assertions,
 and a link result where the flow includes a link. Rows without that proof remain
 `blocked` with a concrete `blocked_reason`.
+
+### Plan 48-17 Task 1 Reconfirmation
+
+Reconfirmed 2026-05-25T17:27:29Z:
+
+- Single-domain testing scope is `glitchtech.io` only.
+- No second paid Resend domain is required to complete Plan 48-17.
+- `glitchstudios.io` Resend verification and full DMARC proof remain deferred
+  per the user's cost decision recorded above.
+- EMAIL-08 must not be marked `passed`; final behavior stays
+  `deferred_not_passed`.
+- The evidence contract field set (`flow`, `tested_at`,
+  `trigger_url_or_action`, `recipient_inbox_alias`,
+  `resend_event_id_or_screenshot`, `inbox_screenshot`, `content_assertions`,
+  `link_result`, `blocked_reason`, `status`) is the only basis on which an
+  email-matrix row may move from `blocked` to `passed`.
 
 ## Decision
 

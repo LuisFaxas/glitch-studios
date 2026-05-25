@@ -59,3 +59,14 @@ This artifact does not claim full EMAIL-08 completion.
   blocked.
 - Do not mark EMAIL-08 passed until real `glitchstudios.io` Resend verification
   and full DMARC proof exist.
+
+### Plan 48-17 Task 1 Reconfirmation
+
+Reconfirmed 2026-05-25T17:27:29Z:
+
+- `glitchtech.io` is the only Resend domain in scope for Plan 48-17 evidence.
+- `glitchstudios.io` Resend addition remains deferred per the user's cost
+  decision; this plan must not add or pay for a second Resend domain.
+- EMAIL-08 stays `partial/deferred` (not passed) and the deferral reason
+  remains: `user does not want to pay for more than one Resend domain right
+  now`.
