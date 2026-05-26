@@ -170,12 +170,15 @@ Phase 48 verification status: `gaps_found`. Remaining proof-only gap plans targe
 3. `/gsd:plan-phase 48.4` breaks the spec into atomic plans.
 4. `/gsd:execute-phase 48.4` ships.
 
-**Requirements**: TBD (UI-* identifiers to be assigned during ui-phase)
+**Requirements**: UI-SVC-01 through UI-SVC-18 (services-page redesign — assigned during /gsd:plan-phase 48.4)
 **Depends on:** Phase 48 (no hard dep — paused phase doesn't block UI work on a different surface)
-**Plans:** 0 plans
+**Plans:** 4 plans
 
 Plans:
-- [ ] TBD (run `/gsd:ui-phase 48.4` first to produce UI-SPEC.md, then `/gsd:plan-phase 48.4`)
+- [ ] 48.4-01-PLAN.md — ServicesHeroCarousel (Embla autoplay, 4 slides, reduced-motion pause) [UI-SVC-01, UI-SVC-02, UI-SVC-12]
+- [ ] 48.4-02-PLAN.md — ServiceCard typography-driven primitive + price/duration chip helpers [UI-SVC-05, UI-SVC-06, UI-SVC-13, UI-SVC-17]
+- [ ] 48.4-03-PLAN.md — ServiceGrid + ServiceDetailOverlay + ServiceDetailPanel (deep-link hash, Drawer/Dialog responsive, Custom Request tile, empty state) [UI-SVC-04, UI-SVC-07, UI-SVC-08, UI-SVC-09, UI-SVC-10, UI-SVC-11, UI-SVC-16]
+- [ ] 48.4-04-PLAN.md — Page composition (hero + sticky eyebrow bar + grid + closing CTA), Playwright spec, delete dead service-tabs.tsx [UI-SVC-03, UI-SVC-14, UI-SVC-15, UI-SVC-18]
 
 ### Phase 48.1: Rankings Display Stabilization (INSERTED - COMPLETED 2026-05-03)
 
