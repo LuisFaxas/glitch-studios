@@ -146,6 +146,37 @@ Plans:
 
 Phase 48 verification status: `gaps_found`. Remaining proof-only gap plans target EMAIL-01..07, AUTH-14..22 except AUTH-28, AUTH-26, AUTH-29, AUTH-32 manual auth smoke, and MOBILE-CHECKOUT-PROOF real iOS Safari. EMAIL-08 remains deferred for `glitchstudios.io` multi-domain Resend verification and DMARC by user decision; do not mark it passed without new proof.
 
+### Phase 48.4: Services Page Industry-Leading Redesign (INSERTED)
+
+**Goal:** Rebuild `/services` from the ground up as a single-page, mobile-first, app-feeling surface — industry-leading UI/UX that matches and elevates the `/beats` DNA.
+
+**Scope:**
+- **Hero:** Embla autoplay carousel (NOT a static text hero) — slides featuring services / claims / CTAs with layered gradient backgrounds, dot indicators, autoplay-with-pause-on-hover. Same primitive pattern as the beats hero carousel.
+- **Cards:** Content-rich service cards with typography-driven or media-driven covers. Explicit anti-pattern: no icons-in-empty-frames (two prior attempts failed on this).
+- **Mobile layout:** Dedicated mobile design (NOT responsive desktop). 2-col app-feel grid. Drawer-from-bottom for detail. All-in-one-page — no long stack scroll, no walls of stacked content.
+- **Desktop layout:** Distinct from mobile. Hero carousel + control surface + card grid + closing CTA balanced for desktop reading.
+- **Detail UX:** Drawer (mobile) / Dialog (desktop) responsive overlay with sticky BOOK / GET QUOTE CTA. Reuses primitives from `/beats` license modal.
+- **Brand DNA:** Adheres to the beats-page rubric (`.planning/audits/2026-05-25-beats-page-rubric.md`) — literal hex palette, mono/sans typography pair, `rounded-none`, no shadows, motion ≤200ms, deep-link via URL hash.
+
+**Out of scope:**
+- Booking flow changes (booking system itself stays as-is)
+- New copywriting beyond what fits hero carousel slides + card chips
+- Real product photography (use brand-toned placeholders or typography-driven covers until real shots exist)
+- Admin UI for managing services (existing admin remains)
+
+**Process bar:**
+1. `/gsd:ui-phase 48.4` produces a UI-SPEC.md design contract with mobile + desktop wireframes, typography decisions, interaction states, motion specs.
+2. User reviews and signs off on UI-SPEC.md before any code.
+3. `/gsd:plan-phase 48.4` breaks the spec into atomic plans.
+4. `/gsd:execute-phase 48.4` ships.
+
+**Requirements**: TBD (UI-* identifiers to be assigned during ui-phase)
+**Depends on:** Phase 48 (no hard dep — paused phase doesn't block UI work on a different surface)
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run `/gsd:ui-phase 48.4` first to produce UI-SPEC.md, then `/gsd:plan-phase 48.4`)
+
 ### Phase 48.1: Rankings Display Stabilization (INSERTED - COMPLETED 2026-05-03)
 
 **Goal:** Replace the unstable full rankings display path on `/tech/rankings/laptops` with the simpler custom display architecture proven stable by the live `?simple=1` diagnostic. Preserve the route, server data, filter controls, review links, and GlitchTech visual direction while removing the TanStack/full-table rendering path that freezes real macOS Safari/Firefox after filter activity plus nav.
@@ -159,6 +190,28 @@ Plans:
 - [x] 48.1-01-PLAN.md - Promote stable custom rankings display and remove default TanStack path.
 - [x] 48.1-02-PLAN.md - Update regression tests and diagnostic contracts for the custom display.
 - [x] 48.1-03-PLAN.md - Production deploy, real macOS verification, and cleanup decision record.
+
+### Phase 48.2: Admin Team Access Stabilization (INSERTED)
+
+**Goal:** Make internal access boring and reliable: audit the current roles/admin-member flow, replace the incomplete "user must register first" invite path with a proper admin invite flow, and verify that a producer can receive an invite, set a password, sign in, and land in the dashboard with only the permissions they should have.
+**Requirements**: TBD during discussion/research
+**Depends on:** Phase 48, Phase 26
+**Plans:** 0 plans
+**Discussion focus:** producer access, role boundaries, brand-aware login return paths, whether admin invitations should create accounts immediately or only after acceptance, and how to keep the dashboard fast and simple for non-owner users.
+
+Plans:
+- [ ] TBD (run /gsd-discuss-phase 48.2 --all, then /gsd-plan-phase 48.2)
+
+### Phase 48.3: Admin Communication Center and Email Preview Governance (INSERTED)
+
+**Goal:** Turn the existing Communication area into a clear operating center for contact inbox, newsletters, and transactional email previews without making the dashboard convoluted. Add a brand-aware email preview and test-send workflow so Glitch Studios and GlitchTech email designs can be reviewed, approved, and trusted before future production use.
+**Requirements**: TBD during discussion/research
+**Depends on:** Phase 48.2, Phase 24, Phase 26
+**Plans:** 0 plans
+**Discussion focus:** dashboard information architecture, email template approval states, brand separation, test-send permissions, preview sample data, newsletter vs transactional email boundaries, and performance/UX expectations for the admin communication section.
+
+Plans:
+- [ ] TBD (run /gsd-discuss-phase 48.3 --all, then /gsd-plan-phase 48.3)
 
 #### Phase 26: Brand-Aware Auth UI Redesign
 
