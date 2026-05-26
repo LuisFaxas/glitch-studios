@@ -1,432 +1,164 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { motion, AnimatePresence } from "motion/react"
-import clsx from "clsx"
-import { GlitchHeading } from "@/components/ui/glitch-heading"
+import { ServiceCard } from "./service-card"
+import { ServiceDetailOverlay } from "./service-detail-overlay"
+import type { PortfolioItemLite, Service } from "./service-detail-panel"
 
-type Service = {
-  id: string
-  name: string
-  slug: string
-  type: string
-  description: string
-  shortDescription: string
-  priceLabel: string
-  features: string[] | null
-  ctaText: string | null
-  sortOrder: number | null
-  isActive: boolean | null
-  isBookable?: boolean
-  durationMinutes: number | null
-  depositType: "flat" | "percentage" | null
-  depositValue: number | null
-  cancellationWindowHours: number | null
-  refundPolicy: string | null
-  deliverables: string[]
-}
-
-interface PortfolioItemLite {
-  id: string
-  title: string
-  slug: string
-  type: string
-  category: string | null
-  thumbnailUrl: string | null
-}
+export type { Service, PortfolioItemLite } from "./service-detail-panel"
 
 interface ServiceGridProps {
   services: Service[]
   portfolioByServiceId: Record<string, PortfolioItemLite[]>
 }
 
-function formatDuration(minutes: number): string {
-  if (minutes >= 60) {
-    const h = minutes / 60
-    const rounded = h % 1 === 0 ? h.toString() : h.toFixed(1)
-    return `${rounded} hour${h === 1 ? "" : "s"}`
-  }
-  return `${minutes} minutes`
-}
-
-const PROCESS_STEPS = [
-  {
-    n: "01",
-    title: "PREP",
-    body: "We confirm your goals, tech requirements, and session brief.",
-  },
-  {
-    n: "02",
-    title: "SESSION",
-    body: "Full-focus studio time on the service you booked.",
-  },
-  {
-    n: "03",
-    title: "REVISIONS",
-    body: "Up to two revision passes on deliverables where applicable.",
-  },
-  {
-    n: "04",
-    title: "DELIVERY",
-    body: "Final files delivered digitally within the agreed window.",
-  },
-]
-
-function ServiceDetailPanel({
-  service,
-  portfolioItems,
-}: {
-  service: Service
-  portfolioItems: PortfolioItemLite[]
-}) {
-  const depositHint =
-    service.depositType && service.depositValue !== null
-      ? service.depositType === "flat"
-        ? `Deposit: $${service.depositValue.toFixed(2)} due at booking`
-        : `Deposit: ${service.depositValue}% due at booking`
-      : null
-
-  const depositPolicy =
-    service.depositType && service.depositValue !== null
-      ? service.depositType === "flat"
-        ? `Deposit: $${service.depositValue.toFixed(2)} secures your booking.`
-        : `Deposit: ${service.depositValue}% of total secures your booking.`
-      : null
-
-  const hasPolicies = service.cancellationWindowHours !== null
-  const portfolio = portfolioItems ?? []
-  const hasExamples = portfolio.length > 0
-
-  return (
-    <div className="border border-[#222222] bg-[#111111] p-6 md:p-8 rounded-none min-h-[300px] space-y-6">
-      {/* Section 1: Name */}
-      <h1
-        className="font-mono font-bold uppercase tracking-[0.05em] leading-[1.1] md:leading-[1.2] text-[#f5f5f0]"
-        style={{ fontSize: "clamp(28px, 5vw, 48px)" }}
-      >
-        <GlitchHeading text={service.name}>{service.name}</GlitchHeading>
-      </h1>
-
-      {/* Section 2: Description */}
-      <p className="font-sans text-[14px] leading-[1.5] text-[#f5f5f0] max-w-2xl">
-        {service.description || service.shortDescription}
-      </p>
-
-      {/* Section 3: Pricing */}
-      <section>
-        <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
-          PRICING
-        </h3>
-        <p
-          className="font-mono text-[20px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0]"
-          style={{ fontVariantNumeric: "tabular-nums" }}
-        >
-          {service.priceLabel}
-        </p>
-        {depositHint && (
-          <p className="font-sans text-[14px] leading-[1.5] text-[#888888] mt-1">
-            {depositHint}
-          </p>
-        )}
-      </section>
-
-      {/* Section 4: Duration & Includes */}
-      {service.durationMinutes !== null && (
-        <section>
-          <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
-            DURATION & INCLUDES
-          </h3>
-          <p className="font-sans text-[14px] leading-[1.5] text-[#f5f5f0] mb-3">
-            {formatDuration(service.durationMinutes)}
-          </p>
-          <ul className="space-y-1">
-            {service.deliverables.map((d) => (
-              <li
-                key={d}
-                className="font-sans text-[14px] leading-[1.5] text-[#f5f5f0] before:content-['›'] before:mr-2 before:text-[#888888]"
-              >
-                {d}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {/* Section 5: Highlights */}
-      {service.features && service.features.length > 0 && (
-        <section>
-          <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
-            HIGHLIGHTS
-          </h3>
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6">
-            {service.features.map((feature, i) => (
-              <li
-                key={i}
-                className="font-sans text-[14px] leading-[1.5] text-[#f5f5f0] before:content-['›'] before:mr-2 before:text-[#888888]"
-              >
-                {feature}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {/* Section 6: Process */}
-      <section>
-        <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
-          PROCESS
-        </h3>
-        <ol className="space-y-3">
-          {PROCESS_STEPS.map((step) => (
-            <li key={step.n} className="flex gap-3">
-              <span className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] min-w-[32px]">
-                {step.n}
-              </span>
-              <div>
-                <div className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0]">
-                  {step.title}
-                </div>
-                <p className="font-sans text-[14px] leading-[1.5] text-[#f5f5f0]">
-                  {step.body}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      {/* Section 7: Policies */}
-      {hasPolicies && (
-        <section>
-          <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
-            POLICIES
-          </h3>
-          <div className="space-y-2 font-sans text-[14px] leading-[1.5] text-[#f5f5f0]">
-            {depositPolicy && <p>{depositPolicy}</p>}
-            <p>
-              Cancel up to {service.cancellationWindowHours}h before your
-              session for a full refund.
-            </p>
-            {service.refundPolicy && <p>{service.refundPolicy}</p>}
-          </div>
-        </section>
-      )}
-
-      {/* Section 8: Example Work */}
-      {hasExamples && (
-        <section>
-          <h3 className="font-mono text-[12px] font-bold uppercase tracking-[0.05em] text-[#888888] mb-2">
-            EXAMPLE WORK
-          </h3>
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {portfolio.map((item) => (
-              <Link
-                key={item.id}
-                href={`/portfolio/${item.slug}`}
-                className="flex-shrink-0 w-[240px] bg-[#111111] border border-[#222222] hover:border-[#444444] p-4 transition-colors"
-              >
-                {item.thumbnailUrl && (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
-                    src={item.thumbnailUrl}
-                    alt={item.title}
-                    className="w-full aspect-video object-cover mb-2"
-                  />
-                )}
-                <p className="font-sans text-[14px] leading-[1.5] text-[#f5f5f0]">
-                  {item.title}
-                </p>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Section 9: CTA */}
-      <div className="flex flex-wrap gap-3 pt-2">
-        {service.isBookable ? (
-          <Link
-            href={`/book?service=${service.slug}`}
-            className="inline-flex items-center justify-center bg-[#f5f5f0] text-[#000000] font-mono font-bold text-[13px] uppercase tracking-[0.05em] px-8 py-3 rounded-none transition-colors duration-200 hover:bg-[#e5e5e0] outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2"
-          >
-            BOOK THIS SERVICE
-          </Link>
-        ) : (
-          <Link
-            href={`/contact?service=${service.slug}`}
-            className="inline-flex items-center justify-center bg-[#f5f5f0] text-[#000000] font-mono font-bold text-[13px] uppercase tracking-[0.05em] px-8 py-3 rounded-none transition-colors duration-200 hover:bg-[#e5e5e0] outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2"
-          >
-            CONTACT FOR QUOTE
-          </Link>
-        )}
-      </div>
-    </div>
-  )
-}
-
 export function ServiceGrid({
   services,
   portfolioByServiceId,
 }: ServiceGridProps) {
-  const firstSlug = services[0]?.slug ?? null
-  const [selectedSlug, setSelectedSlug] = useState<string | null>(firstSlug)
-  // B-01 fix: default mobile accordion to first service so content is visible on load
-  const [expandedSlug, setExpandedSlug] = useState<string | null>(firstSlug)
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
 
+  // Deep-link auto-open. setTimeout(0) deferral is LOAD-BEARING per
+  // RESEARCH §Pitfall 6 + CLAUDE.md ranking-filter-safety rule — defers
+  // setState out of the native-event task that would otherwise cascade.
   useEffect(() => {
+    if (typeof window === "undefined") return
     const hash = window.location.hash.slice(1)
     if (!hash || !services.some((s) => s.slug === hash)) return
 
     const timeoutId = window.setTimeout(() => {
       setSelectedSlug(hash)
-      setExpandedSlug(hash)
     }, 0)
 
     return () => window.clearTimeout(timeoutId)
   }, [services])
 
-  const selectedService = services.find((s) => s.slug === selectedSlug)
-
-  const handleTileClick = (slug: string) => {
+  const handleTileOpen = (slug: string) => {
     setSelectedSlug(slug)
-    window.history.replaceState(null, "", `#${slug}`)
-    setExpandedSlug((prev) => (prev === slug ? null : slug))
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", `#${slug}`)
+    }
   }
 
+  const handleOverlayClose = () => {
+    setSelectedSlug(null)
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", window.location.pathname)
+    }
+  }
+
+  const selectedService = selectedSlug
+    ? (services.find((s) => s.slug === selectedSlug) ?? null)
+    : null
+
+  // Empty state — UI-SPEC §10 / UI-SVC-16. One tile spans the grid.
   if (services.length === 0) {
     return (
-      <div className="border border-[#222222] bg-[#111111] p-12 text-center rounded-none">
-        <p className="text-[#888888] font-sans text-[15px]">
-          No services available at the moment.
-        </p>
-      </div>
+      <section
+        id="service-grid"
+        className="grid grid-cols-2 gap-1 md:grid-cols-3"
+      >
+        <div className="col-span-2 md:col-span-3 border border-[#222] bg-[#111] py-16 px-6 flex flex-col items-center text-center gap-4">
+          <h2 className="font-mono text-[20px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0]">
+            NO SERVICES LIVE YET
+          </h2>
+          <p className="font-sans text-[14px] max-w-md text-[#888]">
+            We&apos;re finishing the booking setup. In the meantime, send us a
+            message and we&apos;ll get back to you about your project.
+          </p>
+          <Link
+            href="/contact"
+            className="mt-2 border border-[#f5f5f0] px-6 py-2 font-mono text-[12px] uppercase tracking-[0.05em] text-[#f5f5f0] transition-colors duration-150 hover:bg-[#f5f5f0] hover:text-[#000]"
+          >
+            CONTACT US
+          </Link>
+        </div>
+      </section>
     )
   }
 
+  const customRequestIndex = String(services.length + 1).padStart(2, "0")
+
   return (
     <>
-      {/* Desktop: master-detail layout */}
-      <div className="hidden md:grid md:grid-cols-[1fr_1fr] md:gap-1">
-        <div className="grid grid-cols-2 gap-1">
-          {services.map((service) => {
-            const isSelected = service.slug === selectedSlug
-            return (
-              <button
-                key={service.slug}
-                type="button"
-                onClick={() => handleTileClick(service.slug)}
-                aria-selected={isSelected}
-                className={clsx(
-                  "group relative overflow-hidden flex flex-col items-start justify-start gap-2 p-4 border border-solid rounded-none",
-                  "transition-colors duration-200",
-                  "outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2",
-                  "min-h-[100px]",
-                  isSelected
-                    ? "bg-[#f5f5f0] border-[#f5f5f0] text-[#000000] shadow-[0_0_20px_rgba(255,255,255,0.08)]"
-                    : "bg-[#111111] border-[#222222] text-[#f5f5f0] cursor-pointer hover:bg-[#1a1a1a] hover:border-[#444444] active:bg-[#0a0a0a] active:scale-[0.97] active:duration-100"
-                )}
-              >
-                {!isSelected && (
-                  <span
-                    className="pointer-events-none absolute inset-0 bg-[#f5f5f0]/10 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden"
-                    aria-hidden="true"
-                  />
-                )}
-                <span className="font-mono font-bold text-lg uppercase tracking-[0.05em]">
-                  {service.name}
-                </span>
-                <span
-                  className={clsx(
-                    "font-sans text-[13px]",
-                    isSelected ? "text-[#000000]/70" : "text-[#888888]"
-                  )}
-                >
-                  {service.shortDescription}
-                </span>
-              </button>
-            )
-          })}
-        </div>
-
-        <div aria-live="polite">
-          <AnimatePresence mode="wait">
-            {selectedService && (
-              <motion.div
-                key={selectedService.slug}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                <ServiceDetailPanel
-                  service={selectedService}
-                  portfolioItems={
-                    portfolioByServiceId[selectedService.id] ?? []
-                  }
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-
-      {/* Mobile: accordion layout */}
-      <div className="md:hidden space-y-1">
-        {services.map((service) => {
-          const isExpanded = service.slug === expandedSlug
-          return (
-            <div
-              key={service.slug}
-              className="border border-[#222222] overflow-hidden"
+      <section
+        id="service-grid"
+        className="grid grid-cols-2 gap-1 md:grid-cols-3"
+      >
+        {services.map((service, i) => (
+          <ServiceCard
+            key={service.slug}
+            service={{
+              slug: service.slug,
+              name: service.name,
+              shortDescription: service.shortDescription,
+              priceLabel: service.priceLabel,
+              durationMinutes: service.durationMinutes,
+            }}
+            indexLabel={String(i + 1).padStart(2, "0")}
+            onOpen={handleTileOpen}
+          />
+        ))}
+        {/*
+          Custom Request tile at position N+1 (UI-SPEC §7, RESEARCH Open Question 3).
+          Rendered as a SIBLING <Link> (not a <ServiceCard>) because:
+            (a) click target differs — direct nav, NOT overlay open
+            (b) chip set is locked literals (CUSTOM + BY BRIEF), not formatted
+                from DB fields
+            (c) extracting a shared TileShell primitive for one extra tile is
+                over-engineering this phase
+          Visual styles mirror ServiceCard 1:1 to preserve "sixth equal option"
+          parity per UI-SPEC §7.
+        */}
+        <Link
+          href="/contact?service=custom"
+          data-testid="custom-request-tile"
+          className="group relative flex aspect-square w-full flex-col justify-between overflow-hidden md:aspect-auto md:min-h-[220px] border border-[#222] bg-[#111] p-3 md:p-5 text-left transition-colors duration-150 hover:border-[#444] hover:bg-[#1a1a1a] active:bg-[#0a0a0a] focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-[#f5f5f0] rounded-none"
+          style={{
+            backgroundImage:
+              "radial-gradient(rgba(245,245,240,0.025) 1px, transparent 1px)",
+            backgroundSize: "8px 8px",
+          }}
+        >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-10 bg-[#f5f5f0]/10 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden"
+          />
+          <div className="relative z-20 flex w-full items-start justify-between">
+            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-[#555]">
+              {customRequestIndex}
+            </span>
+            <span
+              aria-hidden
+              className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity duration-150 font-mono text-[14px] text-[#555] tracking-[0.2em]"
             >
-              <button
-                type="button"
-                onClick={() => handleTileClick(service.slug)}
-                aria-expanded={isExpanded}
-                className={clsx(
-                  "w-full flex flex-col items-start gap-2 p-4 border border-solid rounded-none",
-                  "transition-colors duration-200",
-                  "outline-none focus-visible:outline-1 focus-visible:outline-[#f5f5f0] focus-visible:outline-offset-2",
-                  "min-h-[48px]",
-                  isExpanded
-                    ? "bg-[#f5f5f0] border-[#f5f5f0] text-[#000000]"
-                    : "bg-[#111111] border-[#222222] text-[#f5f5f0] active:bg-[#0a0a0a]"
-                )}
-              >
-                <span className="font-mono font-bold text-lg uppercase tracking-[0.05em]">
-                  {service.name}
-                </span>
-                <span
-                  className={clsx(
-                    "font-sans text-[13px]",
-                    isExpanded ? "text-[#000000]/70" : "text-[#888888]"
-                  )}
-                >
-                  {service.shortDescription}
-                </span>
-              </button>
-
-              <AnimatePresence>
-                {isExpanded && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden"
-                  >
-                    <ServiceDetailPanel
-                      service={service}
-                      portfolioItems={portfolioByServiceId[service.id] ?? []}
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          )
-        })}
-      </div>
+              ··
+            </span>
+          </div>
+          <div className="relative z-20 flex flex-col gap-1">
+            <h3 className="font-mono font-bold uppercase tracking-[0.05em] text-[#f5f5f0] text-[16px] leading-[1.1] md:text-[22px] md:leading-[1.15]">
+              CUSTOM REQUEST
+            </h3>
+            <p className="font-sans text-[#888] text-[11px] line-clamp-1 md:text-[13px] md:line-clamp-2">
+              Anything we didn&apos;t list. Tell us what you need.
+            </p>
+          </div>
+          <div className="relative z-20 flex flex-wrap gap-1">
+            <span className="rounded-none border border-[#333] bg-[#222] px-1.5 py-0.5 font-mono text-[11px] uppercase text-[#f5f5f0] md:px-2 md:py-1">CUSTOM</span>
+            <span className="rounded-none border border-[#333] bg-[#222] px-1.5 py-0.5 font-mono text-[11px] uppercase text-[#f5f5f0] md:px-2 md:py-1">BY BRIEF</span>
+          </div>
+        </Link>
+      </section>
+      <ServiceDetailOverlay
+        service={selectedService}
+        portfolioItems={
+          selectedService
+            ? (portfolioByServiceId[selectedService.id] ?? [])
+            : []
+        }
+        onClose={handleOverlayClose}
+      />
     </>
   )
 }
