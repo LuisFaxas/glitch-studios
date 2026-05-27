@@ -59,7 +59,7 @@ export function ServiceCard({
         aria-expanded={isOpen}
         aria-controls={bodyId}
         aria-label={`${isOpen ? "Collapse" : "Expand"} ${service.name}`}
-        className="grid w-full grid-cols-[22px_1fr_auto_12px] items-center gap-[13px] px-[18px] py-[17px] text-left focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-[#f5f5f0]"
+        className="grid w-full grid-cols-[22px_1fr_auto_12px] items-center gap-[11px] px-[18px] py-[14px] text-left focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-[#f5f5f0]"
         style={{ minHeight: 56 }}
       >
         <span
@@ -71,11 +71,11 @@ export function ServiceCard({
             backgroundColor: isOpen ? accent : ICO_REST,
           }}
         />
-        <span className="min-w-0 truncate font-mono text-[13px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0]">
+        <span className="min-w-0 font-mono text-[12.5px] font-bold uppercase leading-[1.15] tracking-[0.02em] text-[#f5f5f0]">
           {service.name}
         </span>
         <span
-          className="whitespace-nowrap font-mono text-[11px] font-bold uppercase tracking-[0.05em] transition-colors duration-200"
+          className="whitespace-nowrap font-mono text-[10.5px] font-bold uppercase tracking-[0.04em] transition-colors duration-200"
           style={{ color: isOpen ? accent : "#8a8a8a" }}
         >
           {priceChip}

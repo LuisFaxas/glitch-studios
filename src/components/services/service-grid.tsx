@@ -160,7 +160,7 @@ export function ServiceGrid({ services }: ServiceGridProps) {
         {/* canvas — stable labelled region; content swaps with selection */}
         <div
           aria-labelledby={CANVAS_HEADING_ID}
-          className="relative overflow-hidden"
+          className="relative flex overflow-hidden"
           style={{
             borderTop: `4px solid ${desktopAccent}`,
             background: `radial-gradient(ellipse at 88% 0%, color-mix(in srgb, ${desktopAccent} 14%, transparent) 0%, transparent 58%), repeating-linear-gradient(0deg, transparent 0 4px, color-mix(in srgb, ${desktopAccent} 3%, transparent) 4px 5px), linear-gradient(160deg, #0b0b0b 0%, color-mix(in srgb, ${desktopAccent} 7%, #070707) 100%)`,

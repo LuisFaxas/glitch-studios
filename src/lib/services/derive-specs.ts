@@ -26,10 +26,11 @@ export function deriveSpecs(service: Service): ServiceSpec[] {
   }
 
   if (service.isBookable && service.depositValue != null) {
+    const n = service.depositValue
     const v =
       service.depositType === "percentage"
-        ? `${service.depositValue}%`
-        : `$${service.depositValue}`
+        ? `${n}%`
+        : `$${Number.isInteger(n) ? n : n.toFixed(2)}` // $25 · $37.50
     specs.push({ k: "Deposit", v })
   }
 

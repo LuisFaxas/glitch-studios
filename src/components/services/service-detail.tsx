@@ -51,14 +51,14 @@ export function ServiceDetail({
   const cellBorder = `color-mix(in srgb, ${accent} 18%, ${LINE})`
 
   return (
-    <div className={cn("relative overflow-hidden", isCanvas ? "p-[38px_40px]" : "px-[18px] pb-[20px] pt-[6px]")}>
+    <div className={cn("relative overflow-hidden", isCanvas ? "flex-1 p-[44px_40px]" : "px-[18px] pb-[20px] pt-[6px]")}>
       {/* faded pixel-icon watermark — the "media" graphic */}
       <span
         aria-hidden
         className={cn(
           "pointer-events-none absolute [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain]",
           isCanvas
-            ? "bottom-[-40px] right-[-30px] h-[340px] w-[340px] opacity-[0.06]"
+            ? "bottom-[-60px] right-[-50px] h-[440px] w-[440px] opacity-[0.07]"
             : "right-[-26px] top-1/2 h-[170px] w-[170px] -translate-y-1/2 opacity-[0.07]"
         )}
         style={{
@@ -119,13 +119,16 @@ export function ServiceDetail({
             {specs.map((s, i) => (
               <div
                 key={s.k}
-                className={cn(isCanvas ? "px-[22px] py-3" : "px-[14px] py-[9px]", i < specs.length - 1 && "border-r")}
+                className={cn(
+                  isCanvas ? "min-w-[96px] px-[22px] py-3" : "min-w-[74px] px-[14px] py-[9px]",
+                  i < specs.length - 1 && "border-r"
+                )}
                 style={i < specs.length - 1 ? { borderColor: cellBorder } : undefined}
               >
                 <div
                   className={cn(
-                    "mb-[5px] font-mono uppercase text-[#555]",
-                    isCanvas ? "text-[8.5px] tracking-[0.16em]" : "text-[8px] tracking-[0.14em]"
+                    "mb-[6px] font-mono uppercase text-[#6f6f6f]",
+                    isCanvas ? "text-[9px] tracking-[0.16em]" : "text-[8px] tracking-[0.14em]"
                   )}
                 >
                   {s.k}
@@ -133,7 +136,7 @@ export function ServiceDetail({
                 <div
                   className={cn(
                     "whitespace-nowrap font-mono font-bold text-white [font-variant-numeric:tabular-nums]",
-                    isCanvas ? "text-[15px]" : "text-[12.5px]"
+                    isCanvas ? "text-[17px]" : "text-[13px]"
                   )}
                 >
                   {s.v}
