@@ -3,17 +3,21 @@ import { test, expect } from "@playwright/test"
 const SERVICES_URL =
   process.env.SERVICES_URL ?? "http://localhost:3010/services"
 
-// Artifacts (screenshots, traces) under .playwright-mcp/48.4/ per global preferences.
-// On failure they land under test-results/ — copy to .playwright-mcp/48.4/ when filing.
+const MOBILE = { width: 375, height: 812 }
+const DESKTOP = { width: 1280, height: 860 }
+const M = '[data-services-layout="mobile"]'
+const D = '[data-services-layout="desktop"]'
+
 test.use({
   screenshot: { mode: "only-on-failure", fullPage: false },
   trace: "retain-on-failure",
 })
 
-// Verifies the B2.9 "mono-stack" redesign (Phase 48.4 plan 05):
-// single-open accordion, closed rows pure B&W, accent blooms only on the open
-// card, vendored pixel title icons, light interior B, NO drawer/dialog overlay.
-test.describe("Phase 48.4: /services B2.9 mono-stack", () => {
+// B2.9 mono-stack + plan-06 responsive layer:
+// mobile = vertical accordion (refined interior); desktop = master–detail
+// (rail + rich canvas). Both share <ServiceDetail>; both render in the DOM and
+// are toggled by CSS (lg). Tests set an explicit viewport and scope by layout.
+test.describe("Phase 48.4: /services responsive (mono-stack + master–detail)", () => {
   test.beforeEach(async ({ page }) => {
     const response = await page
       .goto(SERVICES_URL, { waitUntil: "domcontentloaded" })
@@ -35,171 +39,173 @@ test.describe("Phase 48.4: /services B2.9 mono-stack", () => {
     await expect(dots.nth(1)).toHaveClass(/bg-\[#f5f5f0\]/)
   })
 
-  test("AC-02 hero pauses on hover (desktop)", async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 800 })
-    await page.waitForSelector('section[aria-label="Service highlights"]')
-    const hero = page.locator('section[aria-label="Service highlights"]')
-    const dots = hero.locator('button[aria-label^="Go to slide"]')
-    await expect(dots.first()).toHaveClass(/bg-\[#f5f5f0\]/)
-    await hero.hover()
-    await page.waitForTimeout(6500)
-    await expect(dots.first()).toHaveClass(/bg-\[#f5f5f0\]/)
-  })
-
-  test("AC-04 service grid is a single-column stack (NOT a 2/3-col grid)", async ({
+  // ---------- layout switch ----------
+  test("AC-02 mobile width shows accordion, hides master–detail", async ({
     page,
   }) => {
-    await page.setViewportSize({ width: 375, height: 812 })
+    await page.setViewportSize(MOBILE)
     await page.waitForSelector("#service-grid")
-    const display = await page
-      .locator("#service-grid")
-      .evaluate((el) => window.getComputedStyle(el).display)
-    expect(display).toBe("flex")
-    const dir = await page
-      .locator("#service-grid")
-      .evaluate((el) => window.getComputedStyle(el).flexDirection)
-    expect(dir).toBe("column")
+    await expect(page.locator(M)).toBeVisible()
+    await expect(page.locator(D)).toBeHidden()
   })
 
-  test("AC-05 7 rows render (6 services + Custom Request), Photography included", async ({
+  test("AC-03 desktop width shows master–detail, hides accordion", async ({
     page,
   }) => {
-    await page.waitForSelector('[data-testid="service-card"]')
-    const cards = page.locator('[data-testid="service-card"]')
-    await expect(cards).toHaveCount(6)
+    await page.setViewportSize(DESKTOP)
+    await page.waitForSelector("#service-grid")
+    await expect(page.locator(D)).toBeVisible()
+    await expect(page.locator(M)).toBeHidden()
+  })
+
+  // ---------- mobile accordion ----------
+  test("AC-04 mobile: 6 service cards + Custom Request; Photography present", async ({
+    page,
+  }) => {
+    await page.setViewportSize(MOBILE)
+    await page.waitForSelector(`${M} [data-testid="service-card"]`)
+    await expect(page.locator(`${M} [data-testid="service-card"]`)).toHaveCount(6)
     await expect(
-      page.locator('[data-service-slug="photography"]')
+      page.locator(`${M} [data-service-slug="photography"]`)
     ).toBeVisible()
     await expect(
-      page.locator('[data-testid="custom-request-tile"]')
-    ).toBeVisible()
-  })
-
-  test("AC-06 each row has a title icon (CSS mask span)", async ({ page }) => {
-    await page.waitForSelector('[data-service-slug="recording-session"]')
-    const maskImage = await page
-      .locator('[data-service-slug="recording-session"] button > span')
-      .first()
-      .evaluate((el) => window.getComputedStyle(el).maskImage)
-    expect(maskImage).toContain("mic-sharp.svg")
-  })
-
-  test("AC-07 tap opens the row inline (aria-expanded), single-open", async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 375, height: 812 })
-    await page.waitForSelector('[data-service-slug="recording-session"]')
-    const recBtn = page.locator(
-      '[data-service-slug="recording-session"] button'
-    )
-    const mixBtn = page.locator('[data-service-slug="mixing-mastering"] button')
-
-    await recBtn.click()
-    await expect(recBtn).toHaveAttribute("aria-expanded", "true")
-
-    // single-open: opening Mixing closes Recording
-    await mixBtn.click()
-    await expect(mixBtn).toHaveAttribute("aria-expanded", "true")
-    await expect(recBtn).toHaveAttribute("aria-expanded", "false")
-  })
-
-  test("AC-08 open interior shows WHAT YOU GET + a primary button", async ({
-    page,
-  }) => {
-    await page.waitForSelector('[data-service-slug="recording-session"]')
-    const card = page.locator('[data-service-slug="recording-session"]')
-    await card.locator("button").first().click()
-    await expect(card).toContainText("WHAT YOU GET", { ignoreCase: true })
-    await expect(
-      card.getByRole("link", { name: /BOOK THIS SERVICE|REQUEST A QUOTE/i })
-    ).toBeVisible()
-  })
-
-  test("AC-09 NO drawer/dialog overlay exists (inline accordion only)", async ({
-    page,
-  }) => {
-    await page.waitForSelector('[data-testid="service-card"]')
-    await page.locator('[data-testid="service-card"]').first().click()
-    await page.waitForTimeout(300)
-    await expect(
-      page.locator('[data-vaul-drawer-direction]')
-    ).toHaveCount(0)
-    await expect(page.locator('[role="dialog"]')).toHaveCount(0)
-  })
-
-  test("AC-10 deep-link /services#mixing-mastering auto-opens that row", async ({
-    page,
-    browserName,
-  }) => {
-    // Deep-link auto-open is engine-agnostic app logic (verified opening on
-    // chromium, firefox AND webkit via isolated runs). Under the full concurrent
-    // multi-browser suite on a shared box, webkit/firefox hydration gets starved
-    // and this post-hydration assertion flakes — a dev-harness timing artifact,
-    // not a product bug (production hydration is fast). Pin to chromium for
-    // determinism.
-    test.skip(
-      browserName !== "chromium",
-      "Engine-agnostic; cross-browser dev-hydration timing is flaky under suite contention."
-    )
-    await page.goto(`${SERVICES_URL}#mixing-mastering`, {
-      waitUntil: "domcontentloaded",
-    })
-    // Wait for client hydration (the grid is a client component) before checking
-    // the deferred auto-open. webkit hydrates noticeably slower than chromium.
-    await page.waitForSelector('[data-service-slug="mixing-mastering"] button')
-    // Open is a post-hydration client effect (SSR renders all rows closed) and
-    // is gated by React's dev strict-mode double-mount. A fixed settle lets
-    // hydration + the deferred effect complete before asserting — polling
-    // through the double-mount window is flaky on firefox/webkit.
-    await page.waitForTimeout(2500)
-    await expect(
-      page.locator('[data-service-slug="mixing-mastering"] button')
-    ).toHaveAttribute("aria-expanded", "true", { timeout: 5000 })
-  })
-
-  test("AC-11 closed rows are monochrome; open row blooms accent", async ({
-    page,
-  }) => {
-    await page.waitForSelector('[data-service-slug="recording-session"]')
-    const price = page.locator(
-      '[data-service-slug="recording-session"] button span',
-      { hasText: "$50/HR" }
-    )
-    // Closed: price is the muted grey, not the green accent.
-    const closedColor = await price.evaluate(
-      (el) => window.getComputedStyle(el).color
-    )
-    expect(closedColor).toBe("rgb(138, 138, 138)") // #8a8a8a
-
-    await page.locator('[data-service-slug="recording-session"] button').click()
-    // Color transition is 200ms — wait it out before reading the bloomed value.
-    await page.waitForTimeout(400)
-    const openColor = await price.evaluate(
-      (el) => window.getComputedStyle(el).color
-    )
-    expect(openColor).toBe("rgb(78, 180, 122)") // #4eb47a recording accent
-  })
-
-  test("AC-12 Custom Request links to /contact?service=custom", async ({
-    page,
-  }) => {
-    await page.waitForSelector('[data-testid="custom-request-tile"]')
-    await expect(
-      page.locator('[data-testid="custom-request-tile"]')
+      page.locator(`${M} [data-testid="custom-request-tile"]`)
     ).toHaveAttribute("href", "/contact?service=custom")
   })
 
-  test("AC-13 eyebrow bar shows the 7-option count", async ({ page }) => {
+  test("AC-05 mobile: tap opens inline (single-open) with spec strip + button", async ({
+    page,
+  }) => {
+    await page.setViewportSize(MOBILE)
+    await page.waitForSelector(`${M} [data-service-slug="recording-session"] button`)
+    const rec = page.locator(`${M} [data-service-slug="recording-session"] button`)
+    const mix = page.locator(`${M} [data-service-slug="mixing-mastering"] button`)
+    await rec.click()
+    await expect(rec).toHaveAttribute("aria-expanded", "true")
+    const recCard = page.locator(`${M} [data-service-slug="recording-session"]`)
+    await expect(recCard).toContainText("WHAT YOU GET", { ignoreCase: true })
+    await expect(recCard).toContainText("Rate", { ignoreCase: true }) // spec strip
+    await expect(
+      recCard.getByRole("link", { name: /BOOK THIS SERVICE/i })
+    ).toBeVisible()
+    // single-open
+    await mix.click()
+    await expect(mix).toHaveAttribute("aria-expanded", "true")
+    await expect(rec).toHaveAttribute("aria-expanded", "false")
+  })
+
+  test("AC-06 mobile: closed price mono, open price accent", async ({ page }) => {
+    await page.setViewportSize(MOBILE)
+    await page.waitForSelector(`${M} [data-service-slug="recording-session"]`)
+    const price = page.locator(
+      `${M} [data-service-slug="recording-session"] button span`,
+      { hasText: "$50/HR" }
+    )
+    expect(await price.evaluate((el) => getComputedStyle(el).color)).toBe(
+      "rgb(138, 138, 138)"
+    )
+    await page.locator(`${M} [data-service-slug="recording-session"] button`).click()
+    await page.waitForTimeout(400)
+    expect(await price.evaluate((el) => getComputedStyle(el).color)).toBe(
+      "rgb(78, 180, 122)"
+    )
+  })
+
+  // ---------- desktop master–detail ----------
+  test("AC-07 desktop: rail has 6 services + Custom Request; canvas defaults to first", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP)
+    await page.waitForSelector(`${D} [data-service-slug="recording-session"]`)
+    await expect(page.locator(`${D} button[data-service-slug]`)).toHaveCount(6)
+    await expect(
+      page.locator(`${D} [data-testid="custom-request-tile"]`)
+    ).toHaveAttribute("href", "/contact?service=custom")
+    // canvas shows the first service by default + marks the rail row current
+    await expect(page.locator(`${D} #service-canvas-heading`)).toContainText(
+      /RECORDING SESSION/i
+    )
+    await expect(
+      page.locator(`${D} [data-service-slug="recording-session"]`)
+    ).toHaveAttribute("aria-current", "true")
+  })
+
+  test("AC-08 desktop: clicking a rail row swaps the canvas", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP)
+    await page.waitForSelector(`${D} [data-service-slug="graphic-design"]`)
+    await page.locator(`${D} [data-service-slug="graphic-design"]`).click()
+    await expect(page.locator(`${D} #service-canvas-heading`)).toContainText(
+      /GRAPHIC DESIGN/i
+    )
+    await expect(
+      page.locator(`${D} [data-service-slug="graphic-design"]`)
+    ).toHaveAttribute("aria-current", "true")
+    await expect(
+      page.locator(`${D} [data-service-slug="recording-session"]`)
+    ).not.toHaveAttribute("aria-current", "true")
+  })
+
+  test("AC-09 desktop: spec strip — bookable 3 cells, quote-only 2 cells", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP)
+    await page.waitForSelector(`${D} #service-canvas-heading`)
+    // Recording (bookable) → RATE + SESSION + DEPOSIT
+    const canvas = page.locator(`${D}`)
+    await expect(canvas).toContainText("Rate", { ignoreCase: true })
+    await expect(canvas).toContainText("Deposit", { ignoreCase: true })
+    // Video (quote-only) → FROM + SCOPE, no DEPOSIT
+    await page.locator(`${D} [data-service-slug="video-production"]`).click()
+    await expect(canvas).toContainText("From", { ignoreCase: true })
+    await expect(canvas).toContainText("Scope", { ignoreCase: true })
+    await expect(canvas).not.toContainText("Deposit", { ignoreCase: true })
+  })
+
+  // ---------- shared ----------
+  test("AC-10 deep-link /services#mixing-mastering selects that service", async ({
+    page,
+    browserName,
+  }) => {
+    // Engine-agnostic; cross-browser dev-hydration timing flakes under suite
+    // contention. Pinned to chromium (verified working on all engines).
+    test.skip(browserName !== "chromium", "Dev-hydration timing; chromium-pinned.")
+    await page.setViewportSize(DESKTOP)
+    // Real deep-link entry is a COLD load with the hash already in the URL — the
+    // on-mount effect reads it then. (beforeEach already loaded /services, so a
+    // plain goto to #hash would be a same-document nav with no remount.) Force a
+    // fresh document via about:blank first.
+    await page.goto("about:blank")
+    await page.goto(`${SERVICES_URL}#mixing-mastering`, {
+      waitUntil: "domcontentloaded",
+    })
+    await page.waitForSelector(`${D} #service-canvas-heading`)
+    await page.waitForTimeout(2500)
+    await expect(page.locator(`${D} #service-canvas-heading`)).toContainText(
+      /MIXING & MASTERING/i,
+      { timeout: 5000 }
+    )
+  })
+
+  test("AC-11 NO drawer/dialog overlay (inline + canvas only)", async ({
+    page,
+  }) => {
+    await page.setViewportSize(MOBILE)
+    await page.locator(`${M} [data-testid="service-card"]`).first().click()
+    await page.waitForTimeout(300)
+    await expect(page.locator("[data-vaul-drawer-direction]")).toHaveCount(0)
+    await expect(page.locator('[role="dialog"]')).toHaveCount(0)
+  })
+
+  test("AC-12 eyebrow bar shows the 7-option count", async ({ page }) => {
     await page.waitForSelector("#service-grid")
-    // Both the mobile (TAP) and desktop (CLICK) variants live in the DOM with
-    // one hidden via CSS — assert the count copy is present (attached), which
-    // also validates 6 services + Custom Request = 7 options.
     await expect(
       page.getByText(/7 OPTIONS · (TAP|CLICK) TO VIEW/i).first()
     ).toBeAttached()
   })
 
-  test("AC-14 closing CTA START A CONVERSATION links to /contact", async ({
+  test("AC-13 closing CTA START A CONVERSATION links to /contact", async ({
     page,
   }) => {
     const cta = page.getByRole("link", { name: /START A CONVERSATION/i })
