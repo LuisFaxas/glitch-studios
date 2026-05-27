@@ -163,7 +163,7 @@ export function ServiceGrid({ services }: ServiceGridProps) {
           className="relative flex overflow-hidden"
           style={{
             borderTop: `4px solid ${desktopAccent}`,
-            background: `radial-gradient(ellipse at 88% 0%, color-mix(in srgb, ${desktopAccent} 14%, transparent) 0%, transparent 58%), repeating-linear-gradient(0deg, transparent 0 4px, color-mix(in srgb, ${desktopAccent} 3%, transparent) 4px 5px), linear-gradient(160deg, #0b0b0b 0%, color-mix(in srgb, ${desktopAccent} 7%, #070707) 100%)`,
+            background: `radial-gradient(ellipse at 82% 46%, color-mix(in srgb, ${desktopAccent} 15%, transparent) 0%, transparent 56%), repeating-linear-gradient(90deg, transparent 0 15px, color-mix(in srgb, ${desktopAccent} 5%, transparent) 15px 16px), repeating-linear-gradient(0deg, transparent 0 15px, color-mix(in srgb, ${desktopAccent} 5%, transparent) 15px 16px), linear-gradient(150deg, #0b0b0b 0%, #070707 100%)`,
           }}
         >
           <ServiceDetail
