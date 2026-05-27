@@ -88,6 +88,7 @@ export const serviceTypeEnum = pgEnum("service_type", [
   "video_production",
   "sfx",
   "graphic_design",
+  "photography",
 ])
 
 export const postStatusEnum = pgEnum("post_status", [

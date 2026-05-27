@@ -17,6 +17,7 @@
     "db:migrate:phase28": "tsx --env-file=.env.local scripts/run-phase28-migration.ts",
     "db:migrate:phase29": "tsx --env-file=.env.local scripts/run-phase29-migration.ts",
     "db:seed:phase29-placeholders": "tsx --env-file=.env.local scripts/seed-phase29-placeholders.ts",
+    "db:migrate:phase48.4": "tsx --env-file=.env.local scripts/run-phase48-4-photography-migration.ts",
     "brand:render": "node brand-engine/render.mjs",
     "brand:list": "node brand-engine/render.mjs --list",
     "brand:all": "node brand-engine/render.mjs --all"
