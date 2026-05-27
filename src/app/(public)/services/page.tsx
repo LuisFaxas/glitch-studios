@@ -5,7 +5,6 @@ import { ServiceGrid } from "@/components/services/service-grid"
 import { ServicesHeroCarousel } from "@/components/services/services-hero-carousel"
 import { ComingSoonManifesto } from "@/components/services/coming-soon-manifesto"
 import { getBookingLive } from "@/lib/get-booking-live"
-import { getPortfolioForService } from "@/lib/services/portfolio-for-service"
 import Link from "next/link"
 import type { Metadata } from "next"
 
@@ -14,11 +13,11 @@ export const dynamic = "force-dynamic"
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Studio sessions, mixing & mastering, video production, SFX design, and graphic design services from Glitch Studios.",
+    "Studio sessions, mixing & mastering, SFX design, video production, photography, and graphic design services from Glitch Studios.",
   openGraph: {
     title: "Services | Glitch Studios",
     description:
-      "Studio sessions, mixing & mastering, video production, SFX design, and graphic design services from Glitch Studios.",
+      "Studio sessions, mixing & mastering, SFX design, video production, photography, and graphic design services from Glitch Studios.",
     type: "website",
   },
 }
@@ -43,6 +42,12 @@ function deliverablesFor(type: string): string[] {
     case "sfx":
     case "sound_design":
       return ["Source SFX bundle", "Mixed stems", "Revision pass"]
+    case "photography":
+      return [
+        "Studio or location shoot",
+        "Lit and retouched",
+        "Press + cover-ready exports",
+      ]
     default:
       return ["Service deliverables per your brief", "One revision round"]
   }
@@ -69,17 +74,6 @@ export default async function ServicesPage() {
   const configByServiceId = new Map(
     bookableConfigs.map((c) => [c.serviceId, c])
   )
-
-  const portfolioEntries = await Promise.all(
-    servicesList.map(async (s) => {
-      const items = await getPortfolioForService({
-        slug: s.slug,
-        type: s.type,
-      })
-      return [s.id, items] as const
-    })
-  )
-  const portfolioByServiceId = Object.fromEntries(portfolioEntries)
 
   const enrichedServices = servicesList.map((s) => {
     const cfg = configByServiceId.get(s.id)
@@ -113,10 +107,7 @@ export default async function ServicesPage() {
         </div>
       </div>
 
-      <ServiceGrid
-        services={enrichedServices}
-        portfolioByServiceId={portfolioByServiceId}
-      />
+      <ServiceGrid services={enrichedServices} />
 
       <section className="mt-12 md:mt-16 border border-[#222] bg-[#111] p-6 md:p-10">
         <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
