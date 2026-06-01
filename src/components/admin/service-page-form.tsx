@@ -16,6 +16,7 @@ const SERVICE_TYPES = [
   { value: "video_production", label: "Video Production" },
   { value: "sfx", label: "SFX" },
   { value: "graphic_design", label: "Graphic Design" },
+  { value: "photography", label: "Photography" },
 ] as const
 
 const serviceSchema = z.object({
@@ -28,6 +29,7 @@ const serviceSchema = z.object({
     "video_production",
     "sfx",
     "graphic_design",
+    "photography",
   ]),
   description: z.string().min(1, "Description is required"),
   shortDescription: z
@@ -54,7 +56,7 @@ interface ServiceData {
   id: string
   name: string
   slug: string
-  type: "studio_session" | "mixing" | "mastering" | "video_production" | "sfx" | "graphic_design"
+  type: "studio_session" | "mixing" | "mastering" | "video_production" | "sfx" | "graphic_design" | "photography"
   description: string
   shortDescription: string
   priceLabel: string

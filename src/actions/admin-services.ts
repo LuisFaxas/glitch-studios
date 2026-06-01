@@ -66,7 +66,7 @@ export async function getService(id: string) {
 interface ServiceFormData {
   name: string
   slug?: string
-  type: "studio_session" | "mixing" | "mastering" | "video_production" | "sfx" | "graphic_design"
+  type: "studio_session" | "mixing" | "mastering" | "video_production" | "sfx" | "graphic_design" | "photography"
   description: string
   shortDescription: string
   priceLabel: string

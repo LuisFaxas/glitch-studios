@@ -43,6 +43,11 @@ function getServiceStyle(serviceType: string): React.CSSProperties {
       }
     case "graphic_design":
       return { backgroundColor: "#444444" }
+    case "photography":
+      return {
+        background:
+          "repeating-linear-gradient(135deg, #333 0px, #333 2px, #222 2px, #222 6px)",
+      }
     default:
       return { backgroundColor: "#333333" }
   }

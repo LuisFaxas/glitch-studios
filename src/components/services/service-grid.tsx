@@ -2,68 +2,69 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 import { ServiceCard } from "./service-card"
-import { ServiceDetailOverlay } from "./service-detail-overlay"
-import type { PortfolioItemLite, Service } from "./service-detail-panel"
+import { ServiceDetail } from "./service-detail"
+import {
+  serviceIconUrl,
+  serviceAccent,
+  CUSTOM_REQUEST_ICON_URL,
+} from "./types"
+import type { Service } from "./types"
+import { formatPriceChip } from "@/lib/services/format-price-chip"
 
-export type { Service, PortfolioItemLite } from "./service-detail-panel"
+export type { Service, PortfolioItemLite } from "./types"
+
+const LINE = "#262626"
+const ICO_REST = "#d8d8d2"
+const CANVAS_HEADING_ID = "service-canvas-heading"
 
 interface ServiceGridProps {
   services: Service[]
-  portfolioByServiceId: Record<string, PortfolioItemLite[]>
 }
 
-export function ServiceGrid({
-  services,
-  portfolioByServiceId,
-}: ServiceGridProps) {
+export function ServiceGrid({ services }: ServiceGridProps) {
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
 
   // Deep-link auto-open. setTimeout(0) deferral is LOAD-BEARING per
-  // RESEARCH §Pitfall 6 + CLAUDE.md ranking-filter-safety rule — defers
-  // setState out of the native-event task that would otherwise cascade.
+  // RESEARCH §Pitfall 6 + CLAUDE.md ranking-filter-safety rule.
   useEffect(() => {
     if (typeof window === "undefined") return
     const hash = window.location.hash.slice(1)
     if (!hash || !services.some((s) => s.slug === hash)) return
-
-    const timeoutId = window.setTimeout(() => {
-      setSelectedSlug(hash)
-    }, 0)
-
+    const timeoutId = window.setTimeout(() => setSelectedSlug(hash), 0)
     return () => window.clearTimeout(timeoutId)
   }, [services])
 
-  const handleTileOpen = (slug: string) => {
+  // React onClick (not a native input/focus/visibility path) → sync setState safe.
+  const syncHash = (slug: string | null) => {
+    if (typeof window === "undefined") return
+    window.history.replaceState(
+      null,
+      "",
+      slug ? `#${slug}` : window.location.pathname
+    )
+  }
+  // Mobile accordion: toggle (can close → all-closed).
+  const handleToggle = (slug: string) => {
+    const next = selectedSlug === slug ? null : slug
+    setSelectedSlug(next)
+    syncHash(next)
+  }
+  // Desktop rail: always selects (canvas always shows one).
+  const handleSelect = (slug: string) => {
     setSelectedSlug(slug)
-    if (typeof window !== "undefined") {
-      window.history.replaceState(null, "", `#${slug}`)
-    }
+    syncHash(slug)
   }
 
-  const handleOverlayClose = () => {
-    setSelectedSlug(null)
-    if (typeof window !== "undefined") {
-      window.history.replaceState(null, "", window.location.pathname)
-    }
-  }
-
-  const selectedService = selectedSlug
-    ? (services.find((s) => s.slug === selectedSlug) ?? null)
-    : null
-
-  // Empty state — UI-SPEC §10 / UI-SVC-16. One tile spans the grid.
   if (services.length === 0) {
     return (
-      <section
-        id="service-grid"
-        className="grid grid-cols-2 gap-1 md:grid-cols-3"
-      >
-        <div className="col-span-2 md:col-span-3 border border-[#222] bg-[#111] py-16 px-6 flex flex-col items-center text-center gap-4">
+      <div id="service-grid" className="flex flex-col">
+        <div className="flex flex-col items-center gap-4 border border-[#262626] bg-[#0d0d0d] px-6 py-16 text-center">
           <h2 className="font-mono text-[20px] font-bold uppercase tracking-[0.05em] text-[#f5f5f0]">
             NO SERVICES LIVE YET
           </h2>
-          <p className="font-sans text-[14px] max-w-md text-[#888]">
+          <p className="max-w-md font-sans text-[14px] text-[#8a8a8a]">
             We&apos;re finishing the booking setup. In the meantime, send us a
             message and we&apos;ll get back to you about your project.
           </p>
@@ -74,91 +75,158 @@ export function ServiceGrid({
             CONTACT US
           </Link>
         </div>
-      </section>
+      </div>
     )
   }
 
-  const customRequestIndex = String(services.length + 1).padStart(2, "0")
+  // Desktop canvas always shows a service: the selected one, or the first.
+  const desktopService =
+    services.find((s) => s.slug === selectedSlug) ?? services[0]
+  const desktopAccent = serviceAccent(desktopService.slug)
 
   return (
-    <>
+    <div id="service-grid">
+      {/* ============ MOBILE — vertical accordion ============ */}
       <section
-        id="service-grid"
-        className="grid grid-cols-2 gap-1 md:grid-cols-3"
+        data-services-layout="mobile"
+        aria-label="Services"
+        className="flex flex-col lg:hidden"
       >
-        {services.map((service, i) => (
+        {services.map((service) => (
           <ServiceCard
             key={service.slug}
-            service={{
-              slug: service.slug,
-              name: service.name,
-              shortDescription: service.shortDescription,
-              priceLabel: service.priceLabel,
-              durationMinutes: service.durationMinutes,
-            }}
-            indexLabel={String(i + 1).padStart(2, "0")}
-            onOpen={handleTileOpen}
+            service={service}
+            iconUrl={serviceIconUrl(service.slug)}
+            accent={serviceAccent(service.slug)}
+            isOpen={selectedSlug === service.slug}
+            onToggle={handleToggle}
           />
         ))}
-        {/*
-          Custom Request tile at position N+1 (UI-SPEC §7, RESEARCH Open Question 3).
-          Rendered as a SIBLING <Link> (not a <ServiceCard>) because:
-            (a) click target differs — direct nav, NOT overlay open
-            (b) chip set is locked literals (CUSTOM + BY BRIEF), not formatted
-                from DB fields
-            (c) extracting a shared TileShell primitive for one extra tile is
-                over-engineering this phase
-          Visual styles mirror ServiceCard 1:1 to preserve "sixth equal option"
-          parity per UI-SPEC §7.
-        */}
-        <Link
-          href="/contact?service=custom"
-          data-testid="custom-request-tile"
-          className="group relative flex aspect-square w-full flex-col justify-between overflow-hidden md:aspect-auto md:min-h-[220px] border border-[#222] bg-[#111] p-3 md:p-5 text-left transition-colors duration-150 hover:border-[#444] hover:bg-[#1a1a1a] active:bg-[#0a0a0a] focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-[#f5f5f0] rounded-none"
+        <CustomRequestRow layout="mobile" />
+      </section>
+
+      {/* ============ DESKTOP — master–detail ============ */}
+      <section
+        data-services-layout="desktop"
+        aria-label="Services"
+        className="hidden min-h-[560px] grid-cols-[340px_1fr] border border-[#262626] lg:grid"
+      >
+        {/* rail */}
+        <div className="flex flex-col border-r border-[#262626] bg-[#0b0b0b]">
+          {services.map((service) => {
+            const sel = desktopService.slug === service.slug
+            const accent = serviceAccent(service.slug)
+            return (
+              <button
+                key={service.slug}
+                type="button"
+                data-service-slug={service.slug}
+                aria-current={sel ? "true" : undefined}
+                onClick={() => handleSelect(service.slug)}
+                className="grid h-[72px] grid-cols-[24px_1fr_auto] items-center gap-[14px] border-b border-[#262626] px-[20px] text-left transition-colors duration-150 last:border-b-0 hover:bg-[#101010] focus-visible:outline-1 focus-visible:outline-[#f5f5f0]"
+                style={
+                  sel
+                    ? { background: "#0d0d0d", boxShadow: `inset 3px 0 0 ${accent}` }
+                    : undefined
+                }
+              >
+                <span
+                  aria-hidden
+                  className="h-[24px] w-[24px] shrink-0 transition-colors duration-200 [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain]"
+                  style={{
+                    WebkitMaskImage: `url(${serviceIconUrl(service.slug)})`,
+                    maskImage: `url(${serviceIconUrl(service.slug)})`,
+                    backgroundColor: sel ? accent : ICO_REST,
+                  }}
+                />
+                <span
+                  className="truncate font-mono text-[12.5px] font-bold uppercase tracking-[0.04em]"
+                  style={{ color: sel ? "#fff" : "#f5f5f0" }}
+                >
+                  {service.name}
+                </span>
+                <span
+                  className="whitespace-nowrap font-mono text-[10.5px] font-bold uppercase tracking-[0.04em]"
+                  style={{ color: sel ? accent : "#8a8a8a" }}
+                >
+                  {formatPriceChip(service.priceLabel)}
+                </span>
+              </button>
+            )
+          })}
+          <CustomRequestRow layout="desktop" />
+        </div>
+
+        {/* canvas — stable labelled region; content swaps with selection */}
+        <div
+          aria-labelledby={CANVAS_HEADING_ID}
+          className="relative flex overflow-hidden"
           style={{
-            backgroundImage:
-              "radial-gradient(rgba(245,245,240,0.025) 1px, transparent 1px)",
-            backgroundSize: "8px 8px",
+            borderTop: `4px solid ${desktopAccent}`,
+            background: `radial-gradient(ellipse at 82% 46%, color-mix(in srgb, ${desktopAccent} 15%, transparent) 0%, transparent 56%), repeating-linear-gradient(90deg, transparent 0 15px, color-mix(in srgb, ${desktopAccent} 5%, transparent) 15px 16px), repeating-linear-gradient(0deg, transparent 0 15px, color-mix(in srgb, ${desktopAccent} 5%, transparent) 15px 16px), linear-gradient(150deg, #0b0b0b 0%, #070707 100%)`,
           }}
         >
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-0 z-10 bg-[#f5f5f0]/10 opacity-0 group-hover:opacity-100 group-hover:animate-glitch-hover motion-reduce:hidden"
+          <ServiceDetail
+            service={desktopService}
+            iconUrl={serviceIconUrl(desktopService.slug)}
+            accent={desktopAccent}
+            variant="canvas"
+            headingId={CANVAS_HEADING_ID}
           />
-          <div className="relative z-20 flex w-full items-start justify-between">
-            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-[#555]">
-              {customRequestIndex}
-            </span>
-            <span
-              aria-hidden
-              className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity duration-150 font-mono text-[14px] text-[#555] tracking-[0.2em]"
-            >
-              ··
-            </span>
-          </div>
-          <div className="relative z-20 flex flex-col gap-1">
-            <h3 className="font-mono font-bold uppercase tracking-[0.05em] text-[#f5f5f0] text-[16px] leading-[1.1] md:text-[22px] md:leading-[1.15]">
-              CUSTOM REQUEST
-            </h3>
-            <p className="font-sans text-[#888] text-[11px] line-clamp-1 md:text-[13px] md:line-clamp-2">
-              Anything we didn&apos;t list. Tell us what you need.
-            </p>
-          </div>
-          <div className="relative z-20 flex flex-wrap gap-1">
-            <span className="rounded-none border border-[#333] bg-[#222] px-1.5 py-0.5 font-mono text-[11px] uppercase text-[#f5f5f0] md:px-2 md:py-1">CUSTOM</span>
-            <span className="rounded-none border border-[#333] bg-[#222] px-1.5 py-0.5 font-mono text-[11px] uppercase text-[#f5f5f0] md:px-2 md:py-1">BY BRIEF</span>
-          </div>
-        </Link>
+        </div>
       </section>
-      <ServiceDetailOverlay
-        service={selectedService}
-        portfolioItems={
-          selectedService
-            ? (portfolioByServiceId[selectedService.id] ?? [])
-            : []
-        }
-        onClose={handleOverlayClose}
+    </div>
+  )
+}
+
+// Custom Request — same closed-row look, link variant. Monochrome (never opens).
+// Rendered once per layout (mobile row / desktop rail row).
+function CustomRequestRow({ layout }: { layout: "mobile" | "desktop" }) {
+  const isMobile = layout === "mobile"
+  return (
+    <Link
+      href="/contact?service=custom"
+      data-testid="custom-request-tile"
+      className={cn(
+        "relative grid items-center gap-[13px] border-[#262626] bg-[#0d0d0d] transition-[border-color,background] duration-200 hover:border-[#3a3a3a] hover:bg-[#121212] focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-[#f5f5f0]",
+        isMobile
+          ? "-mt-px grid-cols-[22px_1fr_auto_12px] border px-[18px] py-[17px]"
+          : "h-[72px] grid-cols-[24px_1fr_auto] border-t px-[20px]"
+      )}
+      style={
+        isMobile ? { borderTopWidth: 4, borderTopColor: LINE, minHeight: 56 } : undefined
+      }
+    >
+      <span
+        aria-hidden
+        className={cn(
+          "shrink-0 bg-[#d8d8d2] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain]",
+          isMobile ? "h-[22px] w-[22px]" : "h-[24px] w-[24px]"
+        )}
+        style={{
+          WebkitMaskImage: `url(${CUSTOM_REQUEST_ICON_URL})`,
+          maskImage: `url(${CUSTOM_REQUEST_ICON_URL})`,
+        }}
       />
-    </>
+      <span
+        className={cn(
+          "min-w-0 truncate font-mono font-bold uppercase tracking-[0.05em] text-[#f5f5f0]",
+          isMobile ? "text-[13px]" : "text-[12.5px]"
+        )}
+      >
+        CUSTOM REQUEST
+      </span>
+      {isMobile && (
+        <span className="whitespace-nowrap font-mono text-[11px] font-bold uppercase tracking-[0.05em] text-[#8a8a8a]">
+          BY BRIEF
+        </span>
+      )}
+      <span
+        aria-hidden
+        className="justify-self-end font-mono text-[12px] text-[#8a8a8a]"
+      >
+        →
+      </span>
+    </Link>
   )
 }

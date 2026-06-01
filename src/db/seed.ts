@@ -125,7 +125,7 @@ async function seed() {
           "Social media cutdowns included",
         ],
         ctaText: "Start a Project",
-        sortOrder: 2,
+        sortOrder: 3,
       },
       {
         name: "SFX Design",
@@ -144,7 +144,26 @@ async function seed() {
           "Delivered in multiple formats",
         ],
         ctaText: "Request SFX",
-        sortOrder: 3,
+        sortOrder: 2,
+      },
+      {
+        name: "Photography",
+        slug: "photography",
+        type: "photography",
+        description:
+          "Press shots, cover art, and behind-the-scenes photography. Shot in-studio or on location, lit and retouched to release standard, and delivered in print- and web-ready formats.",
+        shortDescription:
+          "Press shots, cover art, and behind-the-scenes photography.",
+        priceLabel: "From $250/project",
+        features: [
+          "Studio or on-location shoot",
+          "Professional lighting setup",
+          "Retouching included",
+          "Press- and cover-ready exports",
+          "Print- and web-optimized files",
+        ],
+        ctaText: "Get a Quote",
+        sortOrder: 4,
       },
       {
         name: "Graphic Design",
@@ -162,7 +181,7 @@ async function seed() {
           "Print-ready and web-optimized files",
         ],
         ctaText: "Get Design Help",
-        sortOrder: 4,
+        sortOrder: 5,
       },
     ]
     const insertedServices = await db
