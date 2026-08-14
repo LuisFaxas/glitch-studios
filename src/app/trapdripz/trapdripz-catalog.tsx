@@ -161,9 +161,9 @@ export function TrapDripzCatalog({ logoSrc, products }: TrapDripzCatalogProps) {
 
       <section className="mx-auto max-w-5xl px-4 pb-3 pt-3">
         <div className="text-center">
-          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#40e0ff]">Curated heat. Verified in hand. Priced to move.</p>
+          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#40e0ff]">Clean finds. Real pics. No cap.</p>
           <p className="mx-auto mt-1 max-w-sm text-[10px] leading-4 text-zinc-500">
-            {products.length} listings · {totalPhotos} real photos · tap any piece for sizing, condition, and market notes.
+            {products.length} listings · {totalPhotos} photos · tap any piece for size, condition, and notes.
           </p>
         </div>
 
