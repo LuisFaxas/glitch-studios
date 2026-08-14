@@ -151,7 +151,7 @@ export function TrapDripzCatalog({ logoSrc, products }: TrapDripzCatalogProps) {
               height={240}
               priority
               className={`rounded-[1.2rem] border border-white/10 bg-black object-cover shadow-[0_0_34px_rgba(255,46,116,.22)] transition-all duration-300 ease-out ${
-                scrolled ? "h-14 w-14 rounded-2xl" : "h-20 w-20"
+                scrolled ? "h-14 w-14 rounded-2xl" : "h-32 w-32 rounded-[1.65rem] sm:h-36 sm:w-36"
               }`}
             />
           </a>
@@ -160,9 +160,9 @@ export function TrapDripzCatalog({ logoSrc, products }: TrapDripzCatalogProps) {
 
       <section className="mx-auto max-w-5xl px-4 pb-3 pt-3">
         <div className="text-center">
-          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#40e0ff]">Verified photos · fair asks · fast browsing</p>
+          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#40e0ff]">Curated heat. Verified in hand. Priced to move.</p>
           <p className="mx-auto mt-1 max-w-sm text-[10px] leading-4 text-zinc-500">
-            {products.length} pieces · {totalPhotos} photos · designer, item, size, condition.
+            {products.length} listings · {totalPhotos} real photos · tap any piece for sizing, condition, and market notes.
           </p>
         </div>
 
@@ -257,11 +257,17 @@ function SelectControl({
 }
 
 function ProductCard({ product, priority, onOpen }: { product: Product; priority: boolean; onOpen: () => void }) {
+  const [activeImage, setActiveImage] = useState(0)
+
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault()
       onOpen()
     }
+  }
+
+  const moveImage = (direction: -1 | 1) => {
+    setActiveImage((current) => (current + direction + product.images.length) % product.images.length)
   }
 
   return (
@@ -273,48 +279,84 @@ function ProductCard({ product, priority, onOpen }: { product: Product; priority
       className="group overflow-hidden rounded-[1.45rem] border border-white/10 bg-[#101219] shadow-2xl shadow-black/35 outline-none transition duration-200 active:scale-[0.985] focus-visible:border-[#40e0ff]/70 focus-visible:ring-2 focus-visible:ring-[#40e0ff]/20"
       aria-label={`Open listing for ${product.name}`}
     >
-      <div className="relative bg-black/45">
-        <div className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="relative aspect-[3/4] overflow-hidden bg-black/45">
+        <div
+          className="flex h-full transition-transform duration-300 ease-out"
+          style={{ transform: `translateX(-${activeImage * 100}%)` }}
+        >
           {product.images.map((image, index) => (
             <Image
               key={image}
               src={`/trapdripz/${image}`}
               alt={`${product.name} thumbnail ${index + 1}`}
               width={520}
-              height={520}
+              height={700}
               sizes="(max-width: 640px) 48vw, 260px"
               priority={priority && index === 0}
-              className="aspect-[4/3] w-full shrink-0 snap-center bg-white object-cover"
+              className="h-full w-full shrink-0 bg-white object-cover"
             />
           ))}
         </div>
+
+        {product.images.length > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation()
+                moveImage(-1)
+              }}
+              className="absolute left-1.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/65 text-lg font-black text-white backdrop-blur transition active:scale-95"
+              aria-label={`Previous photo for ${product.name}`}
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation()
+                moveImage(1)
+              }}
+              className="absolute right-1.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/65 text-lg font-black text-white backdrop-blur transition active:scale-95"
+              aria-label={`Next photo for ${product.name}`}
+            >
+              ›
+            </button>
+          </>
+        )}
+
         <div className="pointer-events-none absolute bottom-2 left-2 rounded-full border border-white/10 bg-black/70 px-2 py-1 text-[10px] font-black text-white backdrop-blur">
-          {product.images.length} photos
+          {activeImage + 1}/{product.images.length}
         </div>
-        <div className="pointer-events-none absolute bottom-2 right-2 flex gap-1">
+        <div className="absolute bottom-2 right-2 flex gap-1">
           {product.images.slice(0, 5).map((image, index) => (
-            <span key={image} className={`h-1.5 w-1.5 rounded-full ${index === 0 ? "bg-white" : "bg-white/35"}`} />
+            <button
+              type="button"
+              key={image}
+              onClick={(event) => {
+                event.stopPropagation()
+                setActiveImage(index)
+              }}
+              className={`h-2 w-2 rounded-full transition ${index === activeImage ? "bg-white" : "bg-white/35"}`}
+              aria-label={`Show photo ${index + 1} for ${product.name}`}
+            />
           ))}
         </div>
       </div>
 
       <div className="p-3">
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0">
-            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[#ff2e74]">{product.designer}</p>
-            <h2 className="mt-1 line-clamp-2 text-[13px] font-black leading-[1.08] tracking-[-0.045em] text-white sm:text-base">{product.shortName}</h2>
-          </div>
+        <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[#ff2e74]">{product.designer}</p>
+        <h2 className="mt-1 line-clamp-2 w-full text-[13px] font-black leading-[1.08] tracking-[-0.045em] text-white sm:text-base">{product.shortName}</h2>
+        <div className="mt-2 flex items-center justify-between gap-2">
+          <p className="text-[11px] font-bold leading-4 text-zinc-400">{product.category} · {product.sizeFilters.join("/")}</p>
           <p className="shrink-0 text-lg font-black tracking-[-0.05em] text-[#f5c542]">{product.ask}</p>
         </div>
-        <div className="mt-3 space-y-1 text-[11px] font-bold leading-4 text-zinc-400">
-          <p>{product.category} · {product.sizeFilters.join("/")}</p>
-          <p className="line-clamp-1">{product.condition}</p>
-        </div>
+        <p className="mt-1 line-clamp-1 text-[11px] font-bold leading-4 text-zinc-500">{product.condition}</p>
         <div className="mt-3 flex items-center justify-between gap-2">
           <span className="rounded-full border border-[#40e0ff]/20 bg-[#40e0ff]/10 px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-[#8ff0ff]">
             {product.verification}
           </span>
-          <span className="text-[10px] font-black uppercase tracking-[0.14em] text-zinc-500">Tap</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.14em] text-zinc-500">Details</span>
         </div>
       </div>
     </article>
