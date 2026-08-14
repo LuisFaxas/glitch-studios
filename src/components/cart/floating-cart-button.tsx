@@ -1,10 +1,14 @@
 "use client"
 
 import { ShoppingCart } from "lucide-react"
+import { usePathname } from "next/navigation"
 import { useCart } from "@/components/cart/cart-provider"
 
 export function FloatingCartButton() {
   const { itemCount, isMounted, toggleCart } = useCart()
+  const pathname = usePathname()
+
+  if (pathname?.startsWith("/trapdripz")) return null
 
   return (
     <button
