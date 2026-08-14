@@ -1,7 +1,8 @@
 "use client"
 
 import Image from "next/image"
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent } from "react"
+import useEmblaCarousel from "embla-carousel-react"
+import { useCallback, useEffect, useMemo, useState, type KeyboardEvent } from "react"
 
 type Product = {
   id: string
@@ -257,19 +258,6 @@ function SelectControl({
 }
 
 function ProductCard({ product, priority, onOpen }: { product: Product; priority: boolean; onOpen: () => void }) {
-  const [activeImage, setActiveImage] = useState(0)
-  const pointerStartRef = useRef<{ x: number; y: number } | null>(null)
-  const suppressOpenRef = useRef(false)
-
-  const openIfNotSwiping = () => {
-    if (suppressOpenRef.current) {
-      suppressOpenRef.current = false
-      return
-    }
-
-    onOpen()
-  }
-
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault()
@@ -277,68 +265,17 @@ function ProductCard({ product, priority, onOpen }: { product: Product; priority
     }
   }
 
-  const handlePointerDown = (event: PointerEvent<HTMLElement>) => {
-    pointerStartRef.current = { x: event.clientX, y: event.clientY }
-    suppressOpenRef.current = false
-  }
-
-  const handlePointerMove = (event: PointerEvent<HTMLElement>) => {
-    if (!pointerStartRef.current) return
-
-    const deltaX = Math.abs(event.clientX - pointerStartRef.current.x)
-    const deltaY = Math.abs(event.clientY - pointerStartRef.current.y)
-
-    if (deltaX > 10 && deltaX > deltaY) suppressOpenRef.current = true
-  }
-
-  const syncActiveImage = (element: HTMLDivElement) => {
-    const imageIndex = Math.round(element.scrollLeft / element.clientWidth)
-    setActiveImage(Math.max(0, Math.min(product.images.length - 1, imageIndex)))
-  }
-
   return (
     <article
       role="button"
       tabIndex={0}
-      onClick={openIfNotSwiping}
+      onClick={onOpen}
       onKeyDown={handleKeyDown}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
       className="group overflow-hidden rounded-[1.45rem] border border-white/10 bg-[#101219] shadow-2xl shadow-black/35 outline-none transition duration-200 active:scale-[0.985] focus-visible:border-[#40e0ff]/70 focus-visible:ring-2 focus-visible:ring-[#40e0ff]/20"
       aria-label={`Open listing for ${product.name}`}
+      data-product-card={product.id}
     >
-      <div className="relative aspect-[3/4] overflow-hidden bg-black/45">
-        <div
-          onClick={(event) => {
-            if (suppressOpenRef.current) event.stopPropagation()
-          }}
-          onScroll={(event) => syncActiveImage(event.currentTarget)}
-          className="flex h-full snap-x snap-mandatory overflow-x-auto scroll-smooth touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          aria-label={`${product.name} thumbnail photo carousel. Swipe horizontally for more photos.`}
-        >
-          {product.images.map((image, index) => (
-            <Image
-              key={image}
-              src={`/trapdripz/${image}`}
-              alt={`${product.name} thumbnail ${index + 1}`}
-              width={520}
-              height={700}
-              sizes="(max-width: 640px) 48vw, 260px"
-              priority={priority && index === 0}
-              className="h-full w-full shrink-0 snap-center bg-white object-cover"
-            />
-          ))}
-        </div>
-
-        <div className="pointer-events-none absolute bottom-2 left-2 rounded-full border border-white/10 bg-black/70 px-2 py-1 text-[10px] font-black text-white backdrop-blur">
-          {activeImage + 1}/{product.images.length}
-        </div>
-        <div className="pointer-events-none absolute bottom-2 right-2 flex gap-1">
-          {product.images.slice(0, 5).map((image, index) => (
-            <span key={image} className={`h-2 w-2 rounded-full transition ${index === activeImage ? "bg-white" : "bg-white/35"}`} />
-          ))}
-        </div>
-      </div>
+      <ProductThumbnailCarousel product={product} priority={priority} />
 
       <div className="p-3">
         <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[#ff2e74]">{product.designer}</p>
@@ -356,6 +293,71 @@ function ProductCard({ product, priority, onOpen }: { product: Product; priority
         </div>
       </div>
     </article>
+  )
+}
+
+function ProductThumbnailCarousel({ product, priority }: { product: Product; priority: boolean }) {
+  const [activeImage, setActiveImage] = useState(0)
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: false, dragFree: false, containScroll: "trimSnaps" })
+
+  const syncActiveImage = useCallback(() => {
+    if (!emblaApi) return
+    setActiveImage(emblaApi.selectedScrollSnap())
+  }, [emblaApi])
+
+  useEffect(() => {
+    if (!emblaApi) return
+
+    emblaApi.on("select", syncActiveImage)
+    emblaApi.on("reInit", syncActiveImage)
+
+    return () => {
+      emblaApi.off("select", syncActiveImage)
+      emblaApi.off("reInit", syncActiveImage)
+    }
+  }, [emblaApi, syncActiveImage])
+
+  return (
+    <div
+      className="relative aspect-[3/4] overflow-hidden bg-black/45"
+      onClick={(event) => {
+        event.preventDefault()
+        event.stopPropagation()
+      }}
+    >
+      <div
+        ref={emblaRef}
+        className="h-full cursor-grab select-none overflow-hidden touch-pan-y active:cursor-grabbing"
+        aria-label={`${product.name} thumbnail photo carousel. Swipe horizontally for more photos.`}
+        data-thumbnail-carousel={product.id}
+      >
+        <div className="flex h-full">
+          {product.images.map((image, index) => (
+            <div key={image} className="relative h-full min-w-0 flex-[0_0_100%]">
+              <Image
+                src={`/trapdripz/${image}`}
+                alt={`${product.name} thumbnail ${index + 1}`}
+                width={520}
+                height={700}
+                draggable={false}
+                sizes="(max-width: 640px) 48vw, 260px"
+                priority={priority && index === 0}
+                className="h-full w-full bg-white object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="pointer-events-none absolute bottom-2 left-2 rounded-full border border-white/10 bg-black/70 px-2 py-1 text-[10px] font-black text-white backdrop-blur" data-photo-counter={product.id}>
+        {activeImage + 1}/{product.images.length}
+      </div>
+      <div className="pointer-events-none absolute bottom-2 right-2 flex gap-1">
+        {product.images.slice(0, 5).map((image, index) => (
+          <span key={image} className={`h-2 w-2 rounded-full transition ${index === activeImage ? "bg-white" : "bg-white/35"}`} />
+        ))}
+      </div>
+    </div>
   )
 }
 
