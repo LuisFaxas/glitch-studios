@@ -16,6 +16,7 @@ type Product = {
   askValue: number
   sku: string
   color: string
+  colorFilters?: string[]
   size: string
   sizeFilters: string[]
   condition: string
@@ -41,9 +42,36 @@ type FilterState = {
   category: string
   size: string
   condition: string
+  color: string
 }
 
 const allValue = "All"
+
+const colorFamilies = [
+  ["Black", ["black"]],
+  ["Blue", ["blue", "aqua", "aquatone", "royal"]],
+  ["Brown", ["brown", "orewood", "taupe"]],
+  ["Cream", ["cream", "sail", "beige", "light orewood"]],
+  ["Gold", ["gold", "metallic gold", "light curry"]],
+  ["Green", ["green"]],
+  ["Grey", ["grey", "gray", "cement", "pewter", "silver"]],
+  ["Orange", ["orange", "taxi", "safety orange"]],
+  ["Pink", ["pink"]],
+  ["Red", ["red", "cardinal", "chile", "true red", "varsity red", "university red"]],
+  ["White", ["white"]],
+  ["Yellow", ["yellow", "pollen"]],
+] as const
+
+function getProductColorFilters(product: Product) {
+  if (product.colorFilters?.length) return product.colorFilters
+
+  const normalizedColor = product.color.toLowerCase()
+  const matches = colorFamilies
+    .filter(([, terms]) => terms.some((term) => normalizedColor.includes(term)))
+    .map(([label]) => label)
+
+  return matches.length > 0 ? matches : ["Mixed"]
+}
 
 export function TrapDripzCatalog({ logoSrc, products }: TrapDripzCatalogProps) {
   const [scrolled, setScrolled] = useState(false)
@@ -54,6 +82,7 @@ export function TrapDripzCatalog({ logoSrc, products }: TrapDripzCatalogProps) {
     category: allValue,
     size: allValue,
     condition: allValue,
+    color: allValue,
   })
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const totalPhotos = products.reduce((sum, product) => sum + product.images.length, 0)
@@ -89,6 +118,7 @@ export function TrapDripzCatalog({ logoSrc, products }: TrapDripzCatalogProps) {
       categories: unique(products.map((product) => product.category)),
       sizes: unique(products.flatMap((product) => product.sizeFilters)),
       conditions: unique(products.map((product) => product.condition)),
+      colors: unique(products.flatMap((product) => getProductColorFilters(product))),
     }
   }, [products])
 
@@ -108,8 +138,9 @@ export function TrapDripzCatalog({ logoSrc, products }: TrapDripzCatalogProps) {
         const categoryHit = filters.category === allValue || product.category === filters.category
         const sizeHit = filters.size === allValue || product.sizeFilters.includes(filters.size)
         const conditionHit = filters.condition === allValue || product.condition === filters.condition
+        const colorHit = filters.color === allValue || getProductColorFilters(product).includes(filters.color)
 
-        return queryHit && designerHit && categoryHit && sizeHit && conditionHit
+        return queryHit && designerHit && categoryHit && sizeHit && conditionHit && colorHit
       })
       .sort((a, b) => {
         switch (sort) {
@@ -134,7 +165,7 @@ export function TrapDripzCatalog({ logoSrc, products }: TrapDripzCatalogProps) {
 
   const resetFilters = () => {
     setQuery("")
-    setFilters({ designer: allValue, category: allValue, size: allValue, condition: allValue })
+    setFilters({ designer: allValue, category: allValue, size: allValue, condition: allValue, color: allValue })
     setSort("featured")
   }
 
@@ -177,7 +208,7 @@ export function TrapDripzCatalog({ logoSrc, products }: TrapDripzCatalogProps) {
             className="h-10 w-full rounded-2xl border border-white/10 bg-black/55 px-3 text-xs font-bold text-white outline-none transition placeholder:text-zinc-600 focus:border-[#40e0ff]/60 focus:ring-2 focus:ring-[#40e0ff]/15"
           />
 
-          <div className="mt-2 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="mt-2 flex flex-wrap items-center gap-2">
             <SelectControl label="Sort" value={sort} onChange={(value) => setSort(value as SortKey)} options={[
               ["featured", "Featured"],
               ["newest", "Newest"],
@@ -189,6 +220,7 @@ export function TrapDripzCatalog({ logoSrc, products }: TrapDripzCatalogProps) {
             <SelectControl label="Designer" value={filters.designer} onChange={(value) => setFilters((current) => ({ ...current, designer: value }))} options={filterOptions.designers.map((value) => [value, value])} />
             <SelectControl label="Item" value={filters.category} onChange={(value) => setFilters((current) => ({ ...current, category: value }))} options={filterOptions.categories.map((value) => [value, value])} />
             <SelectControl label="Size" value={filters.size} onChange={(value) => setFilters((current) => ({ ...current, size: value }))} options={filterOptions.sizes.map((value) => [value, value])} />
+            <SelectControl label="Color" value={filters.color} onChange={(value) => setFilters((current) => ({ ...current, color: value }))} options={filterOptions.colors.map((value) => [value, value])} />
             <SelectControl label="Condition" value={filters.condition} onChange={(value) => setFilters((current) => ({ ...current, condition: value }))} options={filterOptions.conditions.map((value) => [value, value])} />
           </div>
 
@@ -240,12 +272,12 @@ function SelectControl({
   className?: string
 }) {
   return (
-    <label className={`flex h-10 shrink-0 items-center gap-2 rounded-2xl border border-white/10 bg-black/55 px-3 ${className}`}>
-      <span className="text-[9px] font-black uppercase tracking-[0.16em] text-zinc-500">{label}</span>
+    <label className={`inline-flex h-10 w-fit max-w-full items-center gap-2 rounded-2xl border border-white/10 bg-black/55 px-3 ${className}`}>
+      <span className="shrink-0 text-[9px] font-black uppercase tracking-[0.16em] text-zinc-500">{label}</span>
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-8 min-w-16 bg-transparent text-xs font-black text-white outline-none"
+        className="h-8 w-auto max-w-[9.5rem] bg-transparent text-xs font-black text-white outline-none"
       >
         {options.map(([optionValue, optionLabel]) => (
           <option key={optionValue} value={optionValue} className="bg-black text-white">
@@ -436,3 +468,4 @@ function ProductModal({ product, onClose }: { product: Product; onClose: () => v
     </div>
   )
 }
+
