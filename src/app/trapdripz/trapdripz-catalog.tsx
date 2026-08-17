@@ -208,7 +208,7 @@ export function TrapDripzCatalog({ logoSrc, products }: TrapDripzCatalogProps) {
             className="h-10 w-full rounded-2xl border border-white/10 bg-black/55 px-3 text-xs font-bold text-white outline-none transition placeholder:text-zinc-600 focus:border-[#40e0ff]/60 focus:ring-2 focus:ring-[#40e0ff]/15"
           />
 
-          <div className="mt-2 flex flex-wrap items-center gap-2">
+          <div className="-mx-2 mt-2 flex flex-nowrap items-center gap-2 overflow-x-auto px-2 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <SelectControl label="Sort" value={sort} onChange={(value) => setSort(value as SortKey)} options={[
               ["featured", "Featured"],
               ["newest", "Newest"],
@@ -272,12 +272,12 @@ function SelectControl({
   className?: string
 }) {
   return (
-    <label className={`inline-flex h-10 w-fit max-w-full items-center gap-2 rounded-2xl border border-white/10 bg-black/55 px-3 ${className}`}>
+    <label className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-2xl border border-white/10 bg-black/55 px-3 ${className}`}>
       <span className="shrink-0 text-[9px] font-black uppercase tracking-[0.16em] text-zinc-500">{label}</span>
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-8 w-auto max-w-[9.5rem] bg-transparent text-xs font-black text-white outline-none"
+        className="h-8 w-[4.75rem] truncate bg-transparent text-xs font-black text-white outline-none"
       >
         {options.map(([optionValue, optionLabel]) => (
           <option key={optionValue} value={optionValue} className="bg-black text-white">
