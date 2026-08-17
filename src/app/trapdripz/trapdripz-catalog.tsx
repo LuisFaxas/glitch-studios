@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import useEmblaCarousel from "embla-carousel-react"
-import { useCallback, useEffect, useMemo, useState, type KeyboardEvent } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent, type TouchEvent } from "react"
 
 type Product = {
   id: string
@@ -307,7 +307,7 @@ function ProductCard({ product, priority, onOpen }: { product: Product; priority
       aria-label={`Open listing for ${product.name}`}
       data-product-card={product.id}
     >
-      <ProductThumbnailCarousel product={product} priority={priority} />
+      <ProductThumbnailCarousel product={product} priority={priority} onOpen={onOpen} />
 
       <div className="p-3">
         <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[#ff2e74]">{product.designer}</p>
@@ -328,8 +328,9 @@ function ProductCard({ product, priority, onOpen }: { product: Product; priority
   )
 }
 
-function ProductThumbnailCarousel({ product, priority }: { product: Product; priority: boolean }) {
+function ProductThumbnailCarousel({ product, priority, onOpen }: { product: Product; priority: boolean; onOpen: () => void }) {
   const [activeImage, setActiveImage] = useState(0)
+  const thumbnailPointerRef = useRef<{ x: number; y: number; moved: boolean } | null>(null)
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: false, dragFree: false, containScroll: "trimSnaps" })
 
   const syncActiveImage = useCallback(() => {
@@ -349,13 +350,35 @@ function ProductThumbnailCarousel({ product, priority }: { product: Product; pri
     }
   }, [emblaApi, syncActiveImage])
 
+  const handleThumbnailPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    thumbnailPointerRef.current = { x: event.clientX, y: event.clientY, moved: false }
+  }
+
+  const handleThumbnailPointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    const start = thumbnailPointerRef.current
+    if (!start) return
+
+    if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > 8) {
+      start.moved = true
+    }
+  }
+
+  const handleThumbnailClick = (event: MouseEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const wasDrag = thumbnailPointerRef.current?.moved ?? false
+    thumbnailPointerRef.current = null
+
+    if (!wasDrag) onOpen()
+  }
+
   return (
     <div
       className="relative aspect-[3/4] overflow-hidden bg-black/45"
-      onClick={(event) => {
-        event.preventDefault()
-        event.stopPropagation()
-      }}
+      onClickCapture={handleThumbnailClick}
+      onPointerDownCapture={handleThumbnailPointerDown}
+      onPointerMoveCapture={handleThumbnailPointerMove}
     >
       <div
         ref={emblaRef}
@@ -394,11 +417,65 @@ function ProductThumbnailCarousel({ product, priority }: { product: Product; pri
 }
 
 function ProductModal({ product, onClose }: { product: Product; onClose: () => void }) {
+  const scrollBodyRef = useRef<HTMLDivElement | null>(null)
+  const dragStartRef = useRef<{ x: number; y: number; startedAtTop: boolean } | null>(null)
+  const [dragY, setDragY] = useState(0)
+  const [isDraggingDown, setIsDraggingDown] = useState(false)
+
+  const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    if (event.touches.length !== 1) return
+
+    const touch = event.touches[0]
+    dragStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      startedAtTop: (scrollBodyRef.current?.scrollTop ?? 0) <= 0,
+    }
+    setDragY(0)
+    setIsDraggingDown(false)
+  }
+
+  const handleTouchMove = (event: TouchEvent<HTMLDivElement>) => {
+    const start = dragStartRef.current
+    if (!start || event.touches.length !== 1) return
+
+    const touch = event.touches[0]
+    const deltaX = touch.clientX - start.x
+    const deltaY = touch.clientY - start.y
+    const isMostlyVerticalDown = deltaY > 10 && deltaY > Math.abs(deltaX) * 1.2
+
+    if (!start.startedAtTop || !isMostlyVerticalDown) return
+
+    event.preventDefault()
+    setIsDraggingDown(true)
+    setDragY(Math.min(deltaY, 220))
+  }
+
+  const handleTouchEnd = () => {
+    const shouldClose = isDraggingDown && dragY > 90
+
+    dragStartRef.current = null
+    setIsDraggingDown(false)
+    setDragY(0)
+
+    if (shouldClose) onClose()
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/76 px-3 pb-3 pt-10 backdrop-blur-sm sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={`${product.name} details`} onClick={onClose}>
-      <div className="max-h-[92vh] w-full max-w-3xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#0c0d12] shadow-2xl shadow-black" onClick={(event) => event.stopPropagation()}>
+      <div
+        className={`max-h-[92vh] w-full max-w-3xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#0c0d12] shadow-2xl shadow-black ${isDraggingDown ? "" : "transition-transform duration-200 ease-out"}`}
+        data-product-modal-panel="true"
+        style={{ transform: dragY ? `translateY(${dragY}px)` : undefined }}
+        onClick={(event) => event.stopPropagation()}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
+      >
         <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
           <div>
+            <div className="mb-2 h-1 w-12 rounded-full bg-white/20 sm:hidden" aria-hidden="true" />
             <p className="text-[10px] font-black uppercase tracking-[0.24em] text-[#ff2e74]">{product.designer} · {product.category}</p>
             <p className="mt-1 text-sm font-black text-white">Full listing</p>
           </div>
@@ -407,7 +484,7 @@ function ProductModal({ product, onClose }: { product: Product; onClose: () => v
           </button>
         </div>
 
-        <div className="max-h-[calc(92vh-68px)] overflow-y-auto">
+        <div ref={scrollBodyRef} className="max-h-[calc(92vh-68px)] overflow-y-auto overscroll-contain">
           <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto bg-black/45 p-3">
             {product.images.map((image, index) => (
               <Image
