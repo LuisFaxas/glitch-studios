@@ -4,6 +4,7 @@ import { CategoryTile } from "@/components/tech/category-tile"
 import { TechHero } from "@/components/tech/tech-hero"
 import { TechNewsletter } from "@/components/home/tech-newsletter"
 
+export const dynamic = "force-dynamic"
 export const metadata: Metadata = {
   title: "Categories — Glitch Tech",
   description: "Browse Glitch Tech reviews by product category.",

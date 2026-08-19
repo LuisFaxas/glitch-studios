@@ -204,25 +204,33 @@ export interface GlitchmarkBaselineRow {
  * (Phase 28 — GLITCHMARK-06).
  */
 export async function getGlitchmarkBaselines(): Promise<GlitchmarkBaselineRow[]> {
-  const rows = await db
-    .select({
-      id: techBenchmarkTests.id,
-      name: techBenchmarkTests.name,
-      discipline: techBenchmarkTests.discipline,
-      direction: techBenchmarkTests.direction,
-      unit: techBenchmarkTests.unit,
-      referenceScore: techBenchmarkTests.referenceScore,
-    })
-    .from(techBenchmarkTests)
-    .where(isNotNull(techBenchmarkTests.referenceScore))
-    .orderBy(asc(techBenchmarkTests.discipline), asc(techBenchmarkTests.name))
+  try {
+    const rows = await db
+      .select({
+        id: techBenchmarkTests.id,
+        name: techBenchmarkTests.name,
+        discipline: techBenchmarkTests.discipline,
+        direction: techBenchmarkTests.direction,
+        unit: techBenchmarkTests.unit,
+        referenceScore: techBenchmarkTests.referenceScore,
+      })
+      .from(techBenchmarkTests)
+      .where(isNotNull(techBenchmarkTests.referenceScore))
+      .orderBy(asc(techBenchmarkTests.discipline), asc(techBenchmarkTests.name))
 
-  return rows.map((r) => ({
-    id: r.id,
-    name: r.name,
-    discipline: r.discipline,
-    direction: r.direction as "higher_is_better" | "lower_is_better",
-    unit: r.unit,
-    referenceScore: String(r.referenceScore ?? ""),
-  }))
+    return rows.map((r) => ({
+      id: r.id,
+      name: r.name,
+      discipline: r.discipline,
+      direction: r.direction as "higher_is_better" | "lower_is_better",
+      unit: r.unit,
+      referenceScore: String(r.referenceScore ?? ""),
+    }))
+  } catch (error) {
+    console.warn(
+      "[methodology] database unavailable for GlitchMark baselines; rendering empty baseline table",
+      error,
+    )
+    return []
+  }
 }

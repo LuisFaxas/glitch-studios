@@ -37,20 +37,29 @@ export const getLeaderboardForBenchmark = unstable_cache(
     const spec = RUBRIC_V1_1[rubricKey]
     if (!spec) return null
 
-    const [testRow] = await db
-      .select({
-        id: techBenchmarkTests.id,
-        referenceScore: techBenchmarkTests.referenceScore,
-      })
-      .from(techBenchmarkTests)
-      .where(
-        and(
-          eq(techBenchmarkTests.discipline, spec.discipline),
-          eq(techBenchmarkTests.mode, spec.mode),
-          eq(techBenchmarkTests.name, spec.name),
-        ),
+    let testRow: { id: string; referenceScore: unknown } | undefined
+    try {
+      ;[testRow] = await db
+        .select({
+          id: techBenchmarkTests.id,
+          referenceScore: techBenchmarkTests.referenceScore,
+        })
+        .from(techBenchmarkTests)
+        .where(
+          and(
+            eq(techBenchmarkTests.discipline, spec.discipline),
+            eq(techBenchmarkTests.mode, spec.mode),
+            eq(techBenchmarkTests.name, spec.name),
+          ),
+        )
+        .limit(1)
+    } catch (error) {
+      console.warn(
+        `[benchmark-leaderboard] database unavailable for ${rubricKey}; rendering empty benchmark page`,
+        error,
       )
-      .limit(1)
+      return { rubricKey, spec, referenceScore: null, rows: [] }
+    }
 
     if (!testRow) {
       return { rubricKey, spec, referenceScore: null, rows: [] }

@@ -11,6 +11,7 @@ import { LeaderboardEmptyState } from "@/components/tech/leaderboard-empty-state
 import { TechHero } from "@/components/tech/tech-hero"
 import { ChevronRight } from "lucide-react"
 
+export const dynamic = "force-dynamic"
 interface PageProps {
   params: Promise<{ slug: string }>
 }

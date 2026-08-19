@@ -11,16 +11,16 @@ import {
 import { getLeaderboardForBenchmark } from "@/lib/tech/benchmark-leaderboard"
 import { type BenchmarkDiscipline, type RubricTestSpec } from "@/lib/tech/rubric-map"
 
-export const dynamic = "force-static"
+export const dynamic = "force-dynamic"
 export const revalidate = 60
-export const dynamicParams = false
+export const dynamicParams = true
 
 interface PageProps {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  return getAllBenchmarkSlugs().map((slug) => ({ slug }))
+  return []
 }
 
 const DISCIPLINE_LABEL: Record<BenchmarkDiscipline, string> = {

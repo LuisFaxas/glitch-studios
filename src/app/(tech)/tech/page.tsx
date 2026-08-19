@@ -14,6 +14,7 @@ import { HomepageScrollWatcher } from "@/components/home/homepage-scroll-watcher
 import { SplashOverlay } from "@/components/home/splash-overlay"
 import { getSplashMode } from "@/lib/get-splash-mode"
 
+export const dynamic = "force-dynamic"
 export const metadata: Metadata = {
   title: "Glitch Tech",
   description:

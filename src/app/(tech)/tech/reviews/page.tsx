@@ -10,6 +10,7 @@ import { ReviewsLoadMore } from "@/components/tech/reviews-load-more"
 import { TechHero } from "@/components/tech/tech-hero"
 import { TechNewsletter } from "@/components/home/tech-newsletter"
 
+export const dynamic = "force-dynamic"
 export const metadata: Metadata = {
   title: "Reviews — Glitch Tech",
   description:

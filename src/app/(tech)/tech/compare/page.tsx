@@ -8,6 +8,7 @@ import { ComparePageClient } from "@/components/tech/compare-page-client"
 import { TechHero } from "@/components/tech/tech-hero"
 import { TechNewsletter } from "@/components/home/tech-newsletter"
 
+export const dynamic = "force-dynamic"
 export const metadata: Metadata = {
   title: "Compare Products — Glitch Tech",
   description: "Side-by-side specs, benchmarks, and value comparison.",

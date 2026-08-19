@@ -9,7 +9,7 @@ import { MethodologyMedalLadder } from "@/components/tech/methodology-medal-ladd
 import { MethodologyGlitchmark } from "@/components/tech/methodology-glitchmark"
 import { getMethodologyData, getGlitchmarkBaselines } from "@/lib/tech/methodology"
 
-export const dynamic = "force-static"
+export const dynamic = "force-dynamic"
 export const revalidate = 3600
 
 export const metadata: Metadata = {

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic"
 // Phase 29.1 — replaces the original Phase 29 implementation with a permanent
 // redirect. New canonical URL is /tech/rankings/[slug] (D-04/D-06).
 import { permanentRedirect } from "next/navigation"

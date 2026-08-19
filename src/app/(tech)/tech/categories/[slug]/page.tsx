@@ -15,6 +15,7 @@ import { CategoryProductTile } from "@/components/tech/category-product-tile"
 import { TechHero } from "@/components/tech/tech-hero"
 import { TechNewsletter } from "@/components/home/tech-newsletter"
 
+export const dynamic = "force-dynamic"
 export const revalidate = 60
 
 interface Props {

@@ -27,6 +27,7 @@ import { RelatedReviewsCarousel } from "@/components/tech/related-reviews-carous
 import { TechNewsletter } from "@/components/home/tech-newsletter"
 import type { PublicProductSpec } from "@/lib/tech/queries"
 
+export const dynamic = "force-dynamic"
 export const revalidate = 60
 
 interface Props {
